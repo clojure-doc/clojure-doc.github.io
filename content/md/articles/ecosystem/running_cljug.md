@@ -70,7 +70,7 @@ Looking for meeting ideas? Here's some ideas....
  * Work through a [Code Kata](http://codekata.pragprog.com/)
  * Implement a game (Tic-Tac-Toe, Rock-Paper-Scissors, Checkers, Othello, etc)
  * Build a web site for your group in Clojure and deploy it to Heroku!
- * Review and expand [Clojure documentation](http://clojure-doc.org) guides
+ * Review and expand [Clojure documentation](https://clojure-doc.github.io) guides
  * Look through the [Clojure JIRA](http://dev.clojure.org/jira/secure/Dashboard.jspa) for bugs to work on
 
 And some tips:

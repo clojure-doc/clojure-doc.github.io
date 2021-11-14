@@ -140,11 +140,11 @@ a protocol is via the `clojure.core/extend-protocol`:
 Protocol functions are used just like regular Clojure functions:
 
 ``` clojure
-(protocol-of (URI. "http://clojure-doc.org")) ;= "http"
-(protocol-of (URL. "http://clojure-doc.org")) ;= "http"
+(protocol-of (URI. "https://clojure-doc.github.io")) ;= "http"
+(protocol-of (URL. "https://clojure-doc.github.io")) ;= "http"
 
-(path-of (URL. "http://clojure-doc.org/articles/content.html")) ;= "/articles/content.html"
-(path-of (URI. "http://clojure-doc.org/articles/content.html")) ;= "/articles/content.html"
+(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content.html"
+(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content.html"
 ```
 
 ### Using Protocols From Different Namespaces

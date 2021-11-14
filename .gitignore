@@ -1,1 +1,5 @@
+.clj-kondo/.cache
+.cpcache
+.lsp/.cache
+.portal/vs-code.edn
 /public/

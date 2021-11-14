@@ -29,7 +29,7 @@
   <div class='col-md-4'>
     <h2>Contributor-friendly</h2>
     <p>
-      This material is not covered by the Clojure Contributor Agreement and is developed using <a href="https://github.com/clojuredocs/cds#how-to-contribute">pull-requests on GitHub</a>.
+      This material is not covered by the Clojure Contributor Agreement and is developed using <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">pull-requests on GitHub</a>.
     </p>
   </div>
 </div>
