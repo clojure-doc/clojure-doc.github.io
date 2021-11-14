@@ -13,9 +13,9 @@ core.typed is an optional type system for Clojure.
 
 `(clojure.core.typed/cf t)` type checks the form `t`.
 
-See the [Quick Guide](quick_guide.html).
+See the [Quick Guide](quick_guide/).
 
-## [Rationale](rationale.html)
+## [Rationale](rationale/)
 
 Why core.typed exists, what can it do for you?
 
@@ -24,29 +24,29 @@ Why core.typed exists, what can it do for you?
 If you are new to core.typed, gradual type systems, or even types in general, and want to learn how
 core.typed can help verify your programs, start here.
 
-### [Introduction and Motivation](start/introduction_and_motivation.html)
+### [Introduction and Motivation](start/introduction_and_motivation/)
 
 We discuss some theory and design goals of core.typed.
 
-### [Annotations](start/annotations.html)
+### [Annotations](start/annotations/)
 
 Where and how to annotate your code to help core.typed check your code.
 
-### [Types](types.html)
+### [Types](types/)
 
 Syntax and descriptions of core.typed types.
 
-### [Polymorphic Functions, Bounds and Higher-kinded Variables](poly_fn.html)
+### [Polymorphic Functions, Bounds and Higher-kinded Variables](poly_fn/)
 
-### [Filters](filters.html)
+### [Filters](filters/)
 
 An overview of filters for occurrence typing.
 
-### [Datatypes and Protocols](mm_protocol_datatypes.html)
+### [Datatypes and Protocols](mm_protocol_datatypes/)
 
 Typing definitions and usages of Clojure datatypes and protocols.
 
-### [Looping constructs](loops.html)
+### [Looping constructs](loops/)
 
 core.typed provides several wrapper macros for common looping constructs.
 
@@ -64,7 +64,7 @@ A fun diversion playing with holes.
 
 ### [IRC Bot](https://github.com/frenchy64/Parjer)
 
-## [Limitations](limitations.html) - Known issues
+## [Limitations](limitations/) - Known issues
 
 ## Documentation Contributors
 

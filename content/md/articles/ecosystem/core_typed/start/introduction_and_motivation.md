@@ -87,4 +87,4 @@ So for best results, couple core.typed with all the usual testing/verification t
 
 There are some details to keep in mind when using core.typed before you jump in to use it.
 
-Read the [Quick Guide](../Quick Guide.html), and keep a copy handy when you follow along the rest of the tutorial.
+Read the [Quick Guide](../quick_guide), and keep a copy handy when you follow along the rest of the tutorial.

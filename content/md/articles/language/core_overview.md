@@ -1490,12 +1490,12 @@ Please see the [Namespace guide](/articles/language/namespaces/)
 <a id="ref_desc"></a>
 ### ref, atom, var, agent
 
-Please see the [Concurrency and Parallelism Guide](articles/language/concurrency_and_parallelism.html)
+Please see the [Concurrency and Parallelism Guide](/articles/language/concurrency_and_parallelism/)
 
 <a id="deref_desc"></a>
 ### deref, swap!, reset!, dosync, alter, commute, binding
 
-Please see the [Concurrency and Parallelism Guide](articles/language/concurrency_and_parallelism.html)
+Please see the [Concurrency and Parallelism Guide](/articles/language/concurrency_and_parallelism/)
 
 ## Contributors
 

@@ -8,8 +8,8 @@ little webapp that displays some (x, y) locations from a database,
 letting you add more locations as well.
 
 It's assumed that you're already somewhat familiar with Clojure. If
-not, see the [Getting Started](getting_started.html) and
-[Introduction](introduction.html) guides.
+not, see the [Getting Started](getting_started/) and
+[Introduction](introduction/) guides.
 
 This work is licensed under a <a rel="license"
 href="http://creativecommons.org/licenses/by/3.0/">Creative Commons

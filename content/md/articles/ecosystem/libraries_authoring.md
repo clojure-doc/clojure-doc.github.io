@@ -7,8 +7,8 @@ Clojure 1.4 and Leiningen 2.0-previewX, and requires you have git
 installed (though very little familiarity with git is required).
 
 It's assumed that you're already somewhat familiar with Clojure. If
-not, see the [Getting Started](getting_started.html) and
-[Introduction](introduction.html) guides.
+not, see the [Getting Started](getting_started/) and
+[Introduction](introduction/) guides.
 
 For the purposes of this guide, the library we'll be making is named
 "[trivial-library-example](https://clojars.org/trivial-library-example)".
