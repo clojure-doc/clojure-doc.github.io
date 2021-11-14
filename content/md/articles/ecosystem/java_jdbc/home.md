@@ -1,8 +1,9 @@
 {:title "java.jdbc - Getting Started"
  :layout :page}
 
-This guide is intended to help you use Clojure's JDBC wrapper, the `java.jdbc`
-Contrib library.
+This guide is intended to help you the Clojure Contrib JDBC wrapper: `clojure.java.jdbc`
+
+**A modern JDBC wrapper has since been written (by the same author/maintainer) -- read about [`next.jdbc` on cljdoc.org](cljdoc.org/d/com.github.seancorfield/next.jdbc/)**
 
 ## Contents
 
@@ -268,7 +269,7 @@ specify the filename:
 [reference]: http://clojure.github.io/java.jdbc/
 [korma]: http://sqlkorma.com
 
-[overview]: home.html
-[using-sql]: using_sql.html
-[using-ddl]: using_ddl.html
-[reusing-connections]: reusing_connections.html
+[overview]: home
+[using-sql]: using_sql
+[using-ddl]: using_ddl
+[reusing-connections]: reusing_connections

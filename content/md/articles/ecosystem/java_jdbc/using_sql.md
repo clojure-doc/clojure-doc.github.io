@@ -12,7 +12,7 @@
 
 Here are some examples of using `java.jdbc` to manipulate data with SQL.
 These examples assume a simple table called `fruit` (see [Using DDL and
-Metadata](using_ddl.html)). These examples all assume the following in your
+Metadata](using_ddl/)). These examples all assume the following in your
 `ns` declaration:
 
 ```clojure
@@ -586,7 +586,7 @@ For general transformations of Clojure values to SQL values, extending
 function is called with a single argument: the Clojure value. By default
 `sql-value` just returns its argument.
 
-[overview]: home.html
-[using-sql]: using_sql.html
-[using-ddl]: using_ddl.html
-[reusing-connections]: reusing_connections.html
+[overview]: home
+[using-sql]: using_sql
+[using-ddl]: using_ddl
+[reusing-connections]: reusing_connections

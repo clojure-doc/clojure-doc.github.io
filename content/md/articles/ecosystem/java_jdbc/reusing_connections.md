@@ -167,7 +167,7 @@ application, you won't need `pooled-db` or `db-connection`. You'll just create
 `(pool db-spec)` as part of your application's initialization and pass it
 around as part of your system configuration.
 
-[overview]: home.html
-[using-sql]: using_sql.html
-[using-ddl]: using_ddl.html
-[reusing-connections]: reusing_connections.html
+[overview]: home
+[using-sql]: using_sql
+[using-ddl]: using_ddl
+[reusing-connections]: reusing_connections
