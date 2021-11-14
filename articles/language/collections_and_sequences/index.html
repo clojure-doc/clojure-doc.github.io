@@ -58,7 +58,7 @@
     </div>
     
     <p>This guide covers:</p><ul><li>Collections in Clojure</li><li>Sequences in Clojure</li><li>Core collection types</li><li>Key operations on collections and sequences</li><li>Other topics related to collections and sequences</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure provides a number of powerful abstractions including <em>collections</em> and <em>sequences</em>.
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure provides a number of powerful abstractions including <em>collections</em> and <em>sequences</em>.
 When working with Clojure,
 many operations are expressed as a series of operations on collections or sequences.</p><p>Most of Clojure's core library treats collections and sequences the same way, although
 sometimes a distinction has to be made (e.g. with lazy infinite sequences).</p><p><code>clojure.core</code> provides many fundamental operations on collections, such as: <code>map</code>, <code>filter</code>,
@@ -530,7 +530,7 @@ is not safe of data structures are shared between threads.</p><p>To create an im
 </code></pre><p>In conclusion: use transients only as an optimization technique and only
 after profiling and identifying hot spots in your code. Guessing is the
 shortest way we know to blowing the performance.</p><h2 id="custom-collections-and-sequences">Custom Collections and Sequences</h2><p>It is possible to develop custom collection types in Clojure or Java and have
-<code>clojure.core</code> functions work on them just like they do on builtin types.</p><p>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></p><h2 id="wrapping-up">Wrapping Up</h2><p>When working with Clojure, it is common to operate and transform collections and sequences.
+<code>clojure.core</code> functions work on them just like they do on builtin types.</p><p>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p><h2 id="wrapping-up">Wrapping Up</h2><p>When working with Clojure, it is common to operate and transform collections and sequences.
 Clojure's core library unify operations on collections and sequences where possible.
 This extends to Java collections, arrays and iterable objects for seamless interoperability.</p><p>Most of the time, whenever you need a function that transforms sequences, chances are, there is
 one already that does that in <code>clojure.core</code> or you can compose more than one <code>clojure.core</code> function

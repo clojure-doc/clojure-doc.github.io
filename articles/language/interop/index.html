@@ -58,7 +58,7 @@
     </div>
     
     <p>This guide covers:</p><ul><li>How to instantiate Java classes</li><li>How to invoke Java methods</li><li>How to extend Java classes with proxy</li><li>How to implement Java interfaces with reify</li><li>How to generate Java classes with gen-class</li><li>Other topics related to interop</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure was designed to be a hosted language that directly interoperates with its host platform (JVM, CLR and so on).
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure was designed to be a hosted language that directly interoperates with its host platform (JVM, CLR and so on).
 Clojure code is compiled to JVM bytecode. For method calls on Java objects, Clojure compiler
 will try to emit the same bytecode <code>javac</code> would produce.</p><p>It is possible to implement interfaces, extend and generate Java classes in Clojure.</p><p>Clojure also provides convenient functions and macros that make consuming of Java libraries
 easier and often more concise than it would be in Java code.</p><h2 id="imports">Imports</h2><p>Java classes can be referenced either using their fully-qualified names (FQNs) such as
@@ -144,7 +144,7 @@ the same way as fields, except on enum classes and not objects:</p><pre><code cl
 </code></pre><h2 id="determining-classes-of-java-objects">Determining Classes of Java Objects</h2><p>To get class of a particular value, pass it to <code>clojure.core/class</code>:</p><pre><code class="clojure">(class 1)       ; ⇒ java.lang.Long
 (class 1.0)     ; ⇒ java.lang.Double
 (class "docs")  ; ⇒ java.lang.String
-(class (java.net.URI. "http://github.com"))  ; ⇒ java.net.URI
+(class (java.net.URI. "https://github.com"))  ; ⇒ java.net.URI
 </code></pre><p>As this example demonstrates, Clojure strings are JVM strings, integer literals are compiled
 as longs and floating point literals are compiled as doubles.</p><p>You can also use <code>clojure.core/type</code> to return either the class of the
 Java object, or the <code>:type</code> metadata if it exists:</p><pre><code class="clojure">(def foo (with-meta [1 2 3] {:type :bar}))
@@ -250,7 +250,7 @@ that delegates to a Clojure function:</p><pre><code class="clojure">(let [f   (f
               (f)))]
         (.run obj))  ; ⇒ nil
 ;; outputs "Executed from a function"
-</code></pre><p>TBD: more realistic examples | <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></p><h2 id="clojure-functions-implement-runnable-and-callable">Clojure Functions Implement Runnable and Callable</h2><p>Note that Clojure functions implement <code>java.lang.Runnable</code> and
+</code></pre><p>TBD: more realistic examples | <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p><h2 id="clojure-functions-implement-runnable-and-callable">Clojure Functions Implement Runnable and Callable</h2><p>Note that Clojure functions implement <code>java.lang.Runnable</code> and
 <code>java.util.concurrent.Callable</code> directly so you can pass functions to
 methods found in various classes from the <code>java.util.concurrent</code> package.</p><p>For example, to run a function in a new thread:</p><pre><code class="clojure">(let [t (Thread. (fn []
                    (println "I am running in a separate thread")))]
@@ -466,7 +466,7 @@ we may want to encode:</p><pre><code class="clojure">(extend java.net.URL
 ;;     :userInfo ""}
 </code></pre><h2 id="using-intrinsic-locks-synchronized-in-clojure">Using Intrinsic Locks ("synchronized") in Clojure</h2><p>Every object on the JVM has an <em>intrinsic lock</em> (also referred to as <em>monitor lock</em>
 or simply <em>monitor</em>). While very rarely necessary, Clojure provides support for
-operations that acquire intrinsic lock of a mutable Java object.</p><p>This is covered in the <a href="/articles/language/concurrency_and_parallelism/#using_intrinsic_locks_synchronized_in_clojure">Concurrency and Parallelism guide</a>.</p><h2 id="wrapping-up">Wrapping Up</h2><p>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a> (original author)
+operations that acquire intrinsic lock of a mutable Java object.</p><p>This is covered in the <a href="/articles/language/concurrency_and_parallelism/#using_intrinsic_locks_synchronized_in_clojure">Concurrency and Parallelism guide</a>.</p><h2 id="wrapping-up">Wrapping Up</h2><p>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a> (original author)
 Lee Hinman <a href="mailto:lee@writequit.org">lee@writequit.org</a>
 gsnewmark <a href="mailto:gsnewmark@meta.ua">gsnewmark@meta.ua</a></p>
 

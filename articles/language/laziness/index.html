@@ -59,7 +59,7 @@
     
     <p>This guide covers:</p><ul><li>What are lazy sequences</li><li>Pitfalls with lazy sequences</li><li>How to create functions that produce lazy sequences</li><li>How to force evaluation</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
-stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on
+stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
 Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure is not a <a href="http://en.wikipedia.org/wiki/Lazy_evaluation">lazy language</a>.</p><p>However, Clojure supports <em>lazily evaluated sequences</em>. This means that sequence elements are not
 available ahead of time and produced as the result of a computation. The computation
 is performed as needed. Evaluation of lazy sequences is known as <em>realization</em>.</p><p>Lazy sequences can be infinite (e.g. the sequence of Fibonacci numbers, a sequence of
