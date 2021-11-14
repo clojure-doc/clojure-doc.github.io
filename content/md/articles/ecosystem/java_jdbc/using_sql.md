@@ -586,7 +586,7 @@ For general transformations of Clojure values to SQL values, extending
 function is called with a single argument: the Clojure value. By default
 `sql-value` just returns its argument.
 
-[overview]: home
-[using-sql]: using_sql
-[using-ddl]: using_ddl
-[reusing-connections]: reusing_connections
+[overview]: ../home
+[using-sql]: ../using_sql
+[using-ddl]: ../using_ddl
+[reusing-connections]: ../reusing_connections

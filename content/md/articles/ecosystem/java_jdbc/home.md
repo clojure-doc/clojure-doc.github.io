@@ -269,7 +269,7 @@ specify the filename:
 [reference]: http://clojure.github.io/java.jdbc/
 [korma]: http://sqlkorma.com
 
-[overview]: home
-[using-sql]: using_sql
-[using-ddl]: using_ddl
-[reusing-connections]: reusing_connections
+[overview]: ../home
+[using-sql]: ../using_sql
+[using-ddl]: ../using_ddl
+[reusing-connections]: ../reusing_connections

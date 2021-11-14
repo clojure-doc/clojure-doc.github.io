@@ -110,7 +110,7 @@ Both `with-db-metadata` and `metadata-result` can accept an options hash map
 which will be passed through various `java.jdbc` functions (`get-connections`
 for the former and `result-set-seq` for the latter).
 
-[overview]: home
-[using-sql]: using_sql
-[using-ddl]: using_ddl
-[reusing-connections]: reusing_connections
+[overview]: ../home
+[using-sql]: ../using_sql
+[using-ddl]: ../using_ddl
+[reusing-connections]: ../reusing_connections
