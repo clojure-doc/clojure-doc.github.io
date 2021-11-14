@@ -15,7 +15,7 @@ This work is licensed under a <a rel="license"
 href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
-Github](https://github.com/clojuredocs/guides).
+Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 This guide uses Clojure 1.5, as well as current versions of the
 component libraries noted below.

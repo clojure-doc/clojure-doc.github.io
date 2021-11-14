@@ -1,7 +1,7 @@
 {:title "Table of Contents"
  :layout :page}
 
-[The content](https://github.com/clojuredocs/guides) is a categorized and
+[The content](https://github.com/clojure-doc/clojure-doc.github.io) is a categorized and
 manifold collection of documentation guides for the Clojure programming language and
 its ecosystem.
 
@@ -382,7 +382,7 @@ and are copyright their respective primary author(s).
 
 ## Tell Us What You Think!
 
-Please take a moment to tell us what you think about this guide [on Twitter](https://twitter.com/clojuredocs) or the [Clojure mailing list](https://groups.google.com/group/clojure).
+Please take a moment to tell us what you think about this guide on the [Clojurians Slack `#clojure-doc` channel](https://clojurians.slack.com/archives/C02M6N5C137) or the [Clojure mailing list](https://groups.google.com/group/clojure).
 
 Let us know what was unclear or what has not been covered. Maybe you do not like the guide style or grammar or discover spelling mistakes.
 Reader feedback is key to making the documentation better.

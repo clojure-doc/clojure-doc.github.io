@@ -9,7 +9,7 @@ This guide covers:
  * How to create your own data types that behave like core Clojure data types
 
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images & stylesheets). The source is available [on Github](https://github.com/clojuredocs/guides).
+(including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
 
@@ -335,9 +335,9 @@ TBD: an example that demonstrates deriving
 
 ## How To Create Custom Data Type That Core Functions Can Work With
 
-TBD: [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)
+TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)
 
 
 ## Wrapping Up
 
-TBD: [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)
+TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)

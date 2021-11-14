@@ -10,7 +10,7 @@ This work is licensed under a <a rel="license"
 href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
-Github](https://github.com/clojuredocs/guides).
+Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 
 
@@ -31,7 +31,7 @@ discourage you.
 If some parts are not clear, please ask for clarification [on the
 mailing
 list](https://groups.google.com/forum/?fromgroups#!forum/clojure) or
-[file an issue](https://github.com/clojuredocs/guides/issues) on GitHub.
+[file an issue](https://github.com/clojure-doc/clojure-doc.github.io/issues) on GitHub.
 We will work hard on making this guide easy to follow with edits and
 images to illustrate the concepts.
 

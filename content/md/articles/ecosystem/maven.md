@@ -49,7 +49,7 @@ configuration.
 ## Maven and Clojure
 
 Clojure's support in Maven is provided by
-[clojure-maven-plugin](http://github.com/talios/clojure-maven-plugin), that is available
+[clojure-maven-plugin](https://github.com/talios/clojure-maven-plugin), that is available
 in Maven's central repository, so it always available. (Besides `clojure-maven-plugin`,
 there is also [Zi](https://github.com/pallet/zi) plugin, that was developed as part of
 [Pallet](http://palletops.com/) project. In contrast to `clojure-maven-plugin` it's
@@ -57,7 +57,7 @@ written in Clojure, and more tightly integrated with Clojure-specific subsystems
 Marginalia, Ritz, etc.)
 
 As a base for your projects you can use `pom.xml` file from
-[clojure-maven-example](http://github.com/talios/clojure-maven-example) project.
+[clojure-maven-example](https://github.com/talios/clojure-maven-example) project.
 
 If you already have `pom.xml` in your project, then to enable this plugin, you will need to
 add following code into `<plugins>` section of `pom.xml`:
@@ -307,9 +307,9 @@ main goal of it is creation of special DSL (Domain Specificl Language) using dif
 languages (Clojure, Scala, Groovy) for description of Maven's configurations (for Clojure
 this language is almost the same as language implemented in Leiningen).
 
-Other examples of using Maven with Clojure you can find in different projects: [Incanter](http://github.com/liebke/incanter/tree/1.0.x)
-(as example of project, consisting from several modules), [labrepl](http://github.com/relevance/labrepl) and
-the [clojure-maven-example](http://github.com/talios/clojure-maven-example).
+Other examples of using Maven with Clojure you can find in different projects: [Incanter](https://github.com/liebke/incanter/tree/1.0.x)
+(as example of project, consisting from several modules), [labrepl](https://github.com/relevance/labrepl) and
+the [clojure-maven-example](https://github.com/talios/clojure-maven-example).
 
 
 ## Where To Learn More

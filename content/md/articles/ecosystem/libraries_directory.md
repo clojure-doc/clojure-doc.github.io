@@ -18,7 +18,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
   * [useful](https://github.com/flatland/useful) ([at clojars](https://clojars.org/org.flatland/useful))
 
-  * [ClojureWerkz Support](http://github.com/clojurewerkz/support) ([at clojars](https://clojars.org/clojurewerkz/support))
+  * [ClojureWerkz Support](https://github.com/clojurewerkz/support) ([at clojars](https://clojars.org/clojurewerkz/support))
 
   * [medley](https://github.com/weavejester/medley) ([at clojars](https://clojars.org/medley))
 
@@ -99,7 +99,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
   * [clj-pdf](https://clojars.org/clj-pdf): a library for easily generating PDFs from Clojure
 
-  * [Pantomime](http://github.com/michaelklishin/pantomime) ([at clojars](https://clojars.org/pantomime)): a tiny Clojure library that deals with Internet media types (MIME types) and content type detection
+  * [Pantomime](https://github.com/michaelklishin/pantomime) ([at clojars](https://clojars.org/pantomime)): a tiny Clojure library that deals with Internet media types (MIME types) and content type detection
 
   * [data.csv](https://github.com/clojure/data.csv): a CSV parser
 
@@ -171,7 +171,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
   * [Crouton](https://clojars.org/crouton): A Clojure wrapper for the JSoup HTML and XML parser that handles real world inputs
 
-  * [Crawlista](http://github.com/michaelklishin/crawlista) ([at clojars](https://clojars.org/clojurewerkz/crawlista)): a support library for applications that crawl the Web
+  * [Crawlista](https://github.com/michaelklishin/crawlista) ([at clojars](https://clojars.org/clojurewerkz/crawlista)): a support library for applications that crawl the Web
 
   * [TagSoup](http://home.ccil.org/~cowan/XML/tagsoup/): a tool for parsing html as it's found in the wild: poor, nasty, and brutish.
 
@@ -187,7 +187,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### URIs, URLs
 
-  * [Urly](http://github.com/michaelklishin/urly) ([at clojars](https://clojars.org/clojurewerkz/urly)): unifies `java.net.URL`, `java.net.URI` and string URIs, provides parsing and manipulation helpers
+  * [Urly](https://github.com/michaelklishin/urly) ([at clojars](https://clojars.org/clojurewerkz/urly)): unifies `java.net.URL`, `java.net.URI` and string URIs, provides parsing and manipulation helpers
 
   * [Exploding Fish](https://github.com/wtetzner/exploding-fish) ([at clojars](https://clojars.org/org.bovinegenius/exploding-fish)): a URI library for Clojure
 
@@ -260,7 +260,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### Apache Cassandra
 
-  * [Cassaforte](http://github.com/clojurewerkz/cassaforte) ([at clojars](https://clojars.org/clojurewerkz/cassaforte)): A young Clojure client for Apache Cassandra
+  * [Cassaforte](https://github.com/clojurewerkz/cassaforte) ([at clojars](https://clojars.org/clojurewerkz/cassaforte)): A young Clojure client for Apache Cassandra
 
   * [clj-hector](https://github.com/pingles/clj-hector) ([at clojars](https://clojars.org/org.clojars.paul/clj-hector)): A simple Clojure client for Cassandra that wraps Hector
 

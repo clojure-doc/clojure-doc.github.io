@@ -11,7 +11,7 @@ This guide covers:
  * Other topics related to interop
 
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images & stylesheets). The source is available [on Github](https://github.com/clojuredocs/guides).
+(including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
 
@@ -253,7 +253,7 @@ To get class of a particular value, pass it to `clojure.core/class`:
 (class 1)       ; ⇒ java.lang.Long
 (class 1.0)     ; ⇒ java.lang.Double
 (class "docs")  ; ⇒ java.lang.String
-(class (java.net.URI. "http://github.com"))  ; ⇒ java.net.URI
+(class (java.net.URI. "https://github.com"))  ; ⇒ java.net.URI
 ```
 
 As this example demonstrates, Clojure strings are JVM strings, integer literals are compiled
@@ -504,7 +504,7 @@ that delegates to a Clojure function:
 ;; outputs "Executed from a function"
 ```
 
-TBD: more realistic examples | [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)
+TBD: more realistic examples | [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)
 
 
 ## Clojure Functions Implement Runnable and Callable
@@ -946,7 +946,7 @@ This is covered in the [Concurrency and Parallelism guide](/articles/language/co
 
 ## Wrapping Up
 
-TBD: [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)
+TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)
 
 
 ## Contributors

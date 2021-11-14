@@ -11,7 +11,7 @@ This guide covers:
  * Various Community sites about Clojure (subreddit, etc)
 
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images & stylesheets). The source is available [on Github](https://github.com/clojuredocs/guides).
+(including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 
 ## Clojure Mailing Lists
@@ -129,5 +129,5 @@ how core development is handled.
 Coordination of development efforts happen on the development mailing list, on the Confluence wiki,
 and make use of the [JIRA bug and issue tracker](http://dev.clojure.org/jira/browse/CLJ).
 
-Although Clojure and the contrib libraries all have homes [at GitHub](http://github.com/clojure),
+Although Clojure and the contrib libraries all have homes [at GitHub](https://github.com/clojure),
 **pull-requests are not accepted**. All core development happens via JIRA, patches and the Confluence wiki.

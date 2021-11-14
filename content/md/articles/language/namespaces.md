@@ -11,7 +11,7 @@ This guide covers:
  * Namespaces and their relation to code compilation in Clojure
 
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images & stylesheets). The source is available [on Github](https://github.com/clojuredocs/guides).
+(including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 
 ## What Version of Clojure Does This Guide Cover?
@@ -251,7 +251,7 @@ need it, it is a good idea to let `(:use ...)` go.
 
 ### The :gen-class Helper Form
 
-*TBD: [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)*
+*TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)*
 
 
 ### Documentation and Metadata
@@ -321,7 +321,7 @@ instead.
 
 ## Namespaces and Class Generation
 
-*TBD: [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)*
+*TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)*
 
 
 ## Namespaces and Code Compilation in Clojure
@@ -424,13 +424,13 @@ means that compilation was triggered from the REPL and not a Clojure source file
 
 ## Temporarily Overriding Vars in Namespaces
 
-*TBD: [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)*
+*TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)*
 
 
 
 ## Getting Information About and Programmatically Manipulating Namespaces
 
-*TBD: [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute)*
+*TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)*
 
 
 
