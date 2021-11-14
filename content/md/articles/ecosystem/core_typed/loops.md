@@ -1,4 +1,4 @@
-{:title "Looping constructs"
+{:title "core.typed - Looping constructs"
  :layout :page}
 
 Due to limitations in core.typed's inference, we require using "typed" versions

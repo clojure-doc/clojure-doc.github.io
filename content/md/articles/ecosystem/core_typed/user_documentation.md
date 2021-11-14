@@ -1,4 +1,4 @@
-{:title "core.typed User Documentation"
+{:title "core.typed - User Documentation"
  :layout :page}
 
 # Usage

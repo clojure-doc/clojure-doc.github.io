@@ -1,4 +1,4 @@
-{:title "Annotations"
+{:title "core.typed - Annotations"
  :layout :page}
 
 core.typed requires a moderate amount of assistance from the user to help infer types.

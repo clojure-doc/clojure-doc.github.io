@@ -1,4 +1,4 @@
-{:title "Polymorphic Functions"
+{:title "core.typed - Polymorphic Functions"
  :layout :page}
 
 core.typed supports polymorphic function types. They allow us to specify

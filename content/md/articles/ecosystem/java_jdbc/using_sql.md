@@ -1,4 +1,4 @@
-{:title "Manipulating data with SQL"
+{:title "java.jdbc - Manipulating data with SQL"
  :layout :page}
 
 ## Contents

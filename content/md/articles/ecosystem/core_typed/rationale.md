@@ -1,4 +1,4 @@
-{:title "Rationale"
+{:title "core.typed - Rationale"
  :layout :page}
 
 Static typing has well known benefits. For example, statically typed languages catch many common

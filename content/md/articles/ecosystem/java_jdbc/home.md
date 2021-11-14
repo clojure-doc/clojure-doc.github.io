@@ -1,4 +1,4 @@
-{:title "Using java.jdbc"
+{:title "java.jdbc - Getting Started"
  :layout :page}
 
 This guide is intended to help you use Clojure's JDBC wrapper, the `java.jdbc`

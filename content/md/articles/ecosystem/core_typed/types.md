@@ -1,4 +1,4 @@
-{:title "core.typed Types"
+{:title "core.typed - Types"
  :layout :page}
 
 ## Common types

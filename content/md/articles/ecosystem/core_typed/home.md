@@ -1,4 +1,4 @@
-{:title "core.typed User Documentation Home"
+{:title "core.typed - User Documentation Home"
  :layout :page}
 
 core.typed is an optional type system for Clojure.

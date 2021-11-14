@@ -1,4 +1,4 @@
-{:title "Getting Started: Introduction and Motivation"
+{:title "core.typed - Getting Started: Introduction and Motivation"
  :layout :page}
 
 core.typed is an optional type system for Clojure. If you are interesting in how core.typed

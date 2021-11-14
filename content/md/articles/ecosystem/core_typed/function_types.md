@@ -1,4 +1,4 @@
-{:title "Functions"
+{:title "core.typed - Functions"
  :layout :page}
 
 - Function types are quite different from Typed Racket

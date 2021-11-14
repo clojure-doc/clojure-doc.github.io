@@ -1,4 +1,4 @@
-{:title "core.typed Quick Guide"
+{:title "core.typed - Quick Guide"
  :layout :page}
 
 ## Design choices

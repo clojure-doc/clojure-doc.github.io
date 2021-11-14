@@ -1,4 +1,4 @@
-{:title "core.typed User Documentation Home"
+{:title "core.typed - Protocols"
  :layout :page}
 
 ## Annotating Protocols

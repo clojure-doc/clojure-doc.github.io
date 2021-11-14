@@ -1,4 +1,4 @@
-{:title "Using DDL and Metadata"
+{:title "java.jdbc - Using DDL and Metadata"
  :layout :page}
 
 ## Contents

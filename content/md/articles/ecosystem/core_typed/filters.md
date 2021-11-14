@@ -1,4 +1,4 @@
-{:title "Filters"
+{:title "core.typed - Filters"
  :layout :page}
 
 core.typed includes an implementation of occurrence typing, which helps the type

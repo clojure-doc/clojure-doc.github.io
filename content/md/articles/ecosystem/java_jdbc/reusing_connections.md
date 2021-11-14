@@ -1,4 +1,4 @@
-{:title "How to reuse database connections"
+{:title "java.jdbc - How to reuse database connections"
  :layout :page}
 
 ## Contents
