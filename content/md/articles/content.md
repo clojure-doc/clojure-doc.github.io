@@ -21,12 +21,12 @@ Note that the editing environments are listed in alphabetical order and indicate
 that Emacs is still the most popular editing environment, followed by Cursive, Vim, and Atom.
 
 
-### [Getting Started](/articles/tutorials/getting_started.html)
+### [Getting Started](/articles/tutorials/getting_started/)
 
 If you're new to Clojure, this is a good place to start.
 
 
-### [Introduction](/articles/tutorials/introduction.html)
+### [Introduction](/articles/tutorials/introduction/)
 
 A swift introduction to the Clojure language, covering most of the
 basics.
@@ -39,15 +39,15 @@ The ProtoREPL package for Clojure development in Atom.
 
 The user guide for Cursive, the Clojure plugin for IntelliJ.
 
-### [Eclipse for Clojure Development](/articles/tutorials/eclipse.html)
+### [Eclipse for Clojure Development](/articles/tutorials/eclipse/)
 
 A brief introduction to Counterclockwise, a Clojure plugin for Eclipse.
 
-### [Emacs for Clojure Development](/articles/tutorials/emacs.html)
+### [Emacs for Clojure Development](/articles/tutorials/emacs/)
 
 A brief introduction to Emacs, Clojure mode, CIDER and Clojure development workflow with Emacs.
 
-### [Vim for Clojure Development](/articles/tutorials/vim_fireplace.html)
+### [Vim for Clojure Development](/articles/tutorials/vim_fireplace/)
 
 A brief introduction to Clojure development in Vim with fireplace.vim.
 
@@ -57,7 +57,7 @@ A brief introduction to Clojure development in Vim with fireplace.vim.
 
 ## Language Guides
 
-### [Functions](/articles/language/functions.html)
+### [Functions](/articles/language/functions/)
 
 Functions are at the heart of Clojure.
 
@@ -71,7 +71,7 @@ This guide covers:
  * Other topics related to functions
 
 
-### [clojure.core Overview](/articles/language/core_overview.html) (incomplete)
+### [clojure.core Overview](/articles/language/core_overview/) (incomplete)
 
 `clojure.core` is the core Clojure library.
 
@@ -82,7 +82,7 @@ This guide covers:
  * Key vars of `clojure.core`
 
 
-### [Interoperability with Java](/articles/language/interop.html)
+### [Interoperability with Java](/articles/language/interop/)
 
 The Clojure language implementation is symbiotic with its host
 platform (the JVM), providing direct interoperability.
@@ -97,7 +97,7 @@ This guide covers:
  * Other topics related to interop
 
 
-### [Namespaces](/articles/language/namespaces.html)
+### [Namespaces](/articles/language/namespaces/)
 
 Namespaces organize Clojure functions.
 
@@ -112,7 +112,7 @@ This guide covers:
  * How code compilation works in Clojure
 
 
-### [Polymorphism: Protocols and Multimethods](/articles/language/polymorphism.html)
+### [Polymorphism: Protocols and Multimethods](/articles/language/polymorphism/)
 
 This guide covers:
 
@@ -122,7 +122,7 @@ This guide covers:
  * How to create your own data types that behave like core Clojure data types
 
 
-### [Collections and Sequences](/articles/language/collections_and_sequences.html)
+### [Collections and Sequences](/articles/language/collections_and_sequences/)
 
 This guide covers:
 
@@ -133,7 +133,7 @@ This guide covers:
  * Other topics related to collections and sequences
 
 
-### [Concurrency & Parallelism](/articles/language/concurrency_and_parallelism.html)
+### [Concurrency & Parallelism](/articles/language/concurrency_and_parallelism/)
 
 This guide covers:
 
@@ -146,7 +146,7 @@ This guide covers:
  * Other topics related to concurrency and runtime parallelism
 
 
-### [Macros and Metaprogramming](/articles/language/macros.html)
+### [Macros and Metaprogramming](/articles/language/macros/)
 
 This guide covers:
 
@@ -155,7 +155,7 @@ This guide covers:
  * Other topics related to metaprogramming
 
 
-### [Laziness and Lazy Sequences](/articles/language/laziness.html) (incomplete)
+### [Laziness and Lazy Sequences](/articles/language/laziness/) (incomplete)
 
 This guide covers:
 
@@ -165,7 +165,7 @@ This guide covers:
  * Pitfalls with lazy sequences
 
 
-### [Glossary](/articles/language/glossary.html)
+### [Glossary](/articles/language/glossary/)
 
 This guide includes definitons of various Clojure-related terminology.
 
@@ -173,7 +173,7 @@ This guide includes definitons of various Clojure-related terminology.
 
 ## The Clojure Ecosystem
 
-### [Books](/articles/ecosystem/books.html)
+### [Books](/articles/ecosystem/books/)
 
 This guide covers:
 
@@ -194,18 +194,18 @@ This guide covers:
  * How to compile your code and dependencies into a single JAR for deployment ("überjar")
  * How to share (publish) a library
 
-### [Maven for Clojure Development](/articles/ecosystem/maven.html)
+### [Maven for Clojure Development](/articles/ecosystem/maven/)
 
 This guide covers:
 
  * An overview of Apache Maven
  * Maven Clojure plugin
 
-### [Clojure Library Directory](/articles/ecosystem/libraries_directory.html)
+### [Clojure Library Directory](/articles/ecosystem/libraries_directory/)
 
 A curated and highly opinionated categorized directory of available Clojure libraries and tools.
 
-### [Clojure Community](/articles/ecosystem/community.html)
+### [Clojure Community](/articles/ecosystem/community/)
 
 This guide covers:
 
@@ -214,13 +214,13 @@ This guide covers:
  * Local Clojure user groups
  * Other Clojure community resources
 
-### [core.typed](/articles/ecosystem/core_typed/home.html)
+### [core.typed](/articles/ecosystem/core_typed/home/)
 
  * What is Clojure core.typed
  * core.typed documentation, tutorials, and guides.
 
 
-### [java.jdbc](/articles/ecosystem/java_jdbc/home.html)
+### [java.jdbc](/articles/ecosystem/java_jdbc/home/)
 
 This guide covers:
 
@@ -233,7 +233,7 @@ This guide covers:
  * Where to go beyond java.jdbc
 
 
-### [Library Development and Distribution](/articles/ecosystem/libraries_authoring.html)
+### [Library Development and Distribution](/articles/ecosystem/libraries_authoring/)
 
 This guide covers:
 
@@ -269,13 +269,13 @@ This guide covers:
  * How to distribute plugins
 
 
-### [Documentation Tools](/articles/ecosystem/generating_documentation.html)
+### [Documentation Tools](/articles/ecosystem/generating_documentation/)
 
  * Tools for generating documentation from docstrings and other project
 metadata.
 
 
-### [Data Processing (Overview)](/articles/ecosystem/data_processing.html) (TBD)
+### [Data Processing (Overview)](/articles/ecosystem/data_processing/) (TBD)
 
 This guide covers:
 
@@ -284,7 +284,7 @@ This guide covers:
 
 
 
-### [Clojure User Groups](/articles/ecosystem/user_groups.html)
+### [Clojure User Groups](/articles/ecosystem/user_groups/)
 
 This guide covers:
 
@@ -294,18 +294,18 @@ This guide covers:
 
 ## Tutorials and Cookbooks
 
-### [Basic Web Development](/articles/tutorials/basic_web_development.html)
+### [Basic Web Development](/articles/tutorials/basic_web_development/)
 
 A brief tutorial/walkthrough of building a small web app using Ring,
 Compojure, Hiccup, and H2.
 
-### [Parsing XML in Clojure](/articles/tutorials/parsing_xml_with_zippers.html)
+### [Parsing XML in Clojure](/articles/tutorials/parsing_xml_with_zippers/)
 
 This guide covers:
 
  * How to parse XML in Clojure with zippers (`clojure.data.zip`)
 
-### [Growing a DSL with Clojure](/articles/tutorials/growing_a_dsl_with_clojure.html)
+### [Growing a DSL with Clojure](/articles/tutorials/growing_a_dsl_with_clojure/)
 
 How to create a simple DSL with Clojure.
 
@@ -316,7 +316,7 @@ Includes introductions to:
  * Metaprogramming and the "Code as data" philosophy
 
 
-### [Strings](/articles/cookbooks/strings.html)
+### [Strings](/articles/cookbooks/strings/)
 
 This cookbook covers:
 
@@ -326,12 +326,12 @@ This cookbook covers:
  * How to work with context-free grammars
  * How to format text
 
-### [Mathematics](/articles/cookbooks/math.html)
+### [Mathematics](/articles/cookbooks/math/)
 
 Includes coverage of facilities for doing math with Clojure.
 
 
-### [Data Structures](/articles/cookbooks/data_structures.html) (TBD)
+### [Data Structures](/articles/cookbooks/data_structures/) (TBD)
 
 This cookbook covers:
 
@@ -341,7 +341,7 @@ This cookbook covers:
  * Sets
  * Generic operations on sequences
 
-### [Files and Directories](/articles/cookbooks/files_and_directories.html)
+### [Files and Directories](/articles/cookbooks/files_and_directories/)
 
 This cookbook covers:
 
@@ -354,7 +354,7 @@ This cookbook covers:
  * Other operations on files and directories
 
 
-### [Date and Time](/articles/cookbooks/date_and_time.html) (TBD)
+### [Date and Time](/articles/cookbooks/date_and_time/) (TBD)
 
 This guide covers:
 
@@ -364,7 +364,7 @@ This guide covers:
 
 
 
-### [Middleware](/articles/cookbooks/middleware.html) (incomplete)
+### [Middleware](/articles/cookbooks/middleware/) (incomplete)
 
 This guide covers:
 
