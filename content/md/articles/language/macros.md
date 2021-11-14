@@ -56,7 +56,7 @@ bytecode. That bytecode is executed at *run time*.
 
 Clojure code is compiled when it is loaded with `clojure.core/load` or `clojure.core/require`
 or can be ahead of time (AOT compilation) using tools such as [Leiningen](http://leiningen.org)
-or the [Clojure Maven plugin](/articles/ecosystem/maven.html).
+or the [Clojure Maven plugin](/articles/ecosystem/maven/).
 
 
 ## Clojure Reader

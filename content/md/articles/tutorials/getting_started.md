@@ -124,7 +124,7 @@ Other getting started documentation you might find useful:
 
 ## Next Stop
 
-Next stop: [the basic Clojure language tutorial](/articles/tutorials/introduction.html).
+Next stop: [the basic Clojure language tutorial](/articles/tutorials/introduction/).
 
 
 

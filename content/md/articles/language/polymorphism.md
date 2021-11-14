@@ -143,8 +143,8 @@ Protocol functions are used just like regular Clojure functions:
 (protocol-of (URI. "https://clojure-doc.github.io")) ;= "http"
 (protocol-of (URL. "https://clojure-doc.github.io")) ;= "http"
 
-(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content.html"
-(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content.html"
+(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
+(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
 ```
 
 ### Using Protocols From Different Namespaces

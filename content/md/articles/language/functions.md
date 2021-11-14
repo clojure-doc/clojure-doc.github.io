@@ -398,14 +398,14 @@ that satisfy a condition (a predicate). In Clojure, this function is called `clo
 
 In the example above, `clojure.core/filter` takes `clojure.core/even?` as an argument.
 
-`clojure.core` has dozens of other higher-order functions. The most commonly used ones are covered in [clojure.core Overview](/articles/language/core_overview.html).
+`clojure.core` has dozens of other higher-order functions. The most commonly used ones are covered in [clojure.core Overview](/articles/language/core_overview/).
 
 
 ## Private Functions
 
 Functions in Clojure can be private to their namespace.
 
-They are covered in more detail in the [Namespaces](/articles/language/namespaces.html) guide.
+They are covered in more detail in the [Namespaces](/articles/language/namespaces/) guide.
 
 
 ## Keywords as Functions

@@ -29,7 +29,7 @@ download from NNTP servers. In this tutorial we will take a basic NZB
 document and turn it into a Clojure map.
 
 Let us start by creating a new project (for details on using
-Leiningen, see [this guide](/articles/tutorials/leiningen.html):
+Leiningen, see [this guide](/articles/tutorials/leiningen/):
 
 ```bash
 $ lein new nzb

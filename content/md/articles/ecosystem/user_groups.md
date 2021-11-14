@@ -4,7 +4,7 @@
 This guide covers Clojure User Groups (CLJUGs) around the world. If you want to add a new user group,
 please see our [How to Contribute](https://github.com/clojuredocs/guides#how-to-contribute) guide.
 
-If you are looking to start a new Clojure User Group (CLJUG), see  [How to run your own Clojure User Group](/articles/ecosystem/running_cljug.html)
+If you are looking to start a new Clojure User Group (CLJUG), see  [How to run your own Clojure User Group](/articles/ecosystem/running_cljug/)
 and feel free to submit a link to your CLJUG site or mailing list once you have it going.
 
 

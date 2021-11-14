@@ -107,12 +107,12 @@ has structural sharing (for efficiency reasons) but semantically is a separate i
 
 #### Maps As Functions
 
-Maps in Clojure can be used as functions on their keys. See the [Functions guide](/articles/language/functions.html#maps_as_functions)
+Maps in Clojure can be used as functions on their keys. See the [Functions guide](/articles/language/functions/#maps_as_functions)
 for more information.
 
 #### Keywords As Functions
 
-Keywords in Clojure can be used as functions on maps. See the [Functions guide](/articles/language/functions.html#keywords_as_functions)
+Keywords in Clojure can be used as functions on maps. See the [Functions guide](/articles/language/functions/#keywords_as_functions)
 for more information.
 
 
@@ -182,7 +182,7 @@ in Ruby metaprogramming is *primarily* about producing strings while in Clojure 
 *data structures* (mostly *lists*). For sophisticated DSLs, producing data structures directly lets
 developers avoid a lot of incidental complexity that string generation brings along.
 
-This topic is covered in detail in the [Macros and Metaprogramming](/articles/language/macros.html).
+This topic is covered in detail in the [Macros and Metaprogramming](/articles/language/macros/).
 
 
 ### Sets
@@ -204,7 +204,7 @@ Commas can be used to separate set elements (Clojure compiler treats the as whit
 
 #### Sets As Functions
 
-Sets in Clojure can be used as functions on their elements. See the [Functions guide](/articles/language/functions.html#sets_as_functions)
+Sets in Clojure can be used as functions on their elements. See the [Functions guide](/articles/language/functions/#sets_as_functions)
 for more information.
 
 
@@ -329,7 +329,7 @@ the difference between them is what they return on a single element sequence:
 *Lazy sequences* are produced by performing computation or I/O. They can be infinite
 or not have exact length (e.g. a sequence of all powers of 2 or an audio stream).
 
-Lazy sequences is an broad topic and covered in the [Laziness](/articles/language/laziness.html) guide.
+Lazy sequences is an broad topic and covered in the [Laziness](/articles/language/laziness/) guide.
 
 
 
@@ -348,7 +348,7 @@ follow the principle of least surprise. In real world projects, however, the dif
 algorithmic complexity and other runtime characteristics of various collection types often cannot
 be ignored. Keep this in mind.
 
-You can find more information in the [clojure.core Overview](/articles/language/core_overview.html) and [Clojure cheatsheet](http://clojure.org/cheatsheet).
+You can find more information in the [clojure.core Overview](/articles/language/core_overview/) and [Clojure cheatsheet](http://clojure.org/cheatsheet).
 
 
 ### count

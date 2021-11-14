@@ -56,8 +56,8 @@ This example basically demonstrates the lexical scoping of the let form.
 Let bindings are immutable and can be destructured.
 
 See: Sections about destructuring in
-[Introduction](/articles/tutorials/introduction.html#destructuring) and
-[Functions](/articles/language/functions.html#destructuring-of-function-arguments)
+[Introduction](/articles/tutorials/introduction/#destructuring) and
+[Functions](/articles/language/functions/#destructuring-of-function-arguments)
 pages.
 
 
@@ -1483,7 +1483,7 @@ See: [dissoc](#dissoc_desc)
 <a id="ns_desc"></a>
 ### ns, require, use, import, refer
 
-Please see the [Namespace guide](/articles/language/namespaces.html)
+Please see the [Namespace guide](/articles/language/namespaces/)
 
 ## Reference Types
 

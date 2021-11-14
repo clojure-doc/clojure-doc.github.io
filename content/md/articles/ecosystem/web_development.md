@@ -30,7 +30,7 @@ with Clojure, listed roughly by size.
 
 Perhaps the simplest and most minimal setup is to use only Ring and
 Compojure. To get started, see the [basic web development
-tutorial](/articles/tutorials/basic_web_development.html).
+tutorial](/articles/tutorials/basic_web_development/).
 
 
 
@@ -116,7 +116,7 @@ different from most other languages' templating libraries.
 ## See Also
 
   * the [web development section of the library
-    directory](/articles/ecosystem/libraries_directory.html#web_development).
+    directory](/articles/ecosystem/libraries_directory/#web_development).
 
   * [The Clojure Web Stack and the CRUD Stack](http://brehaut.net/blog/2012/clojure_web_and_the_crud_stack)
 

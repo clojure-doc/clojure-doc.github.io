@@ -1061,7 +1061,7 @@ Executors are most often instantiated using static methods of the `java.util.con
 ```
 
 In the example above, we create a new fixed size thread pool with 16 threads
-and submit a Clojure function for execution. Clojure functions [implement Runnable and Callable](/articles/language/interop.html#clojure_functions_implement_runnable_and_callable)
+and submit a Clojure function for execution. Clojure functions [implement Runnable and Callable](/articles/language/interop/#clojure_functions_implement_runnable_and_callable)
 interfaces and can be submitted for execution, however, because `ExecutorService#submit`
 is an overloaded method, to avoid reflection warnings, we cast the function
 to `java.util.concurrent.Callable`.

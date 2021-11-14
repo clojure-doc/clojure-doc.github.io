@@ -52,7 +52,7 @@ Date  ; ⇒ java.util.Date
   (:import java.util.Date))
 ```
 
-More about the `ns` macro can be found in the article on [Clojure namespaces](/articles/language/namespaces.html).
+More about the `ns` macro can be found in the article on [Clojure namespaces](/articles/language/namespaces/).
 
 Dynamic (at runtime) imports are usually only used in the REPL and cases when there are multiple implementations of a particular
 protocol/service/feature and it is not possible to tell which one should be used until run time.
@@ -940,7 +940,7 @@ Every object on the JVM has an *intrinsic lock* (also referred to as *monitor lo
 or simply *monitor*). While very rarely necessary, Clojure provides support for
 operations that acquire intrinsic lock of a mutable Java object.
 
-This is covered in the [Concurrency and Parallelism guide](/articles/language/concurrency_and_parallelism.html#using_intrinsic_locks_synchronized_in_clojure).
+This is covered in the [Concurrency and Parallelism guide](/articles/language/concurrency_and_parallelism/#using_intrinsic_locks_synchronized_in_clojure).
 
 
 

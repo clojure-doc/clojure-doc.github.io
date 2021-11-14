@@ -208,7 +208,7 @@ one record to start us off with:
 and hit `ctrl-d` to exit.
 
 For more about how to use the database functions, see the
-[Using java.jdbc](/articles/ecosystem/java_jdbc/home.html) on this site.
+[Using java.jdbc](/articles/ecosystem/java_jdbc/home/) on this site.
 
 
 

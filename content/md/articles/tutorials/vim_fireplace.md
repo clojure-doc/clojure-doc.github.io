@@ -90,7 +90,7 @@ It is also recommended to have a cheat sheet handy when starting out so you have
 ## Basics
 
 Let's go through the process of creating a simple project to demonstrate some of fireplace.vim's capabilities.
-Because this author is a little lazy, we'll use the same example as the [emacs tutorial](/articles/tutorials/emacs.html). That is, a simple
+Because this author is a little lazy, we'll use the same example as the [emacs tutorial](/articles/tutorials/emacs/). That is, a simple
 command-line argument parser.
 
 First, we'll need a new project:
