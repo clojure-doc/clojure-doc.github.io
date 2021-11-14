@@ -12,7 +12,7 @@
  :blog-prefix                  ""
  :rss-name                     "feed.xml"
  :rss-filters                  ["cryogen"]
- :recent-posts                 3
+ :recent-posts                 0
  :post-date-format             "yyyy-MM-dd"
  :archive-group-format         "yyyy MMMM"
  :sass-src                     []
