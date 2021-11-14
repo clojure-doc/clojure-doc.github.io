@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Using java.jdbc</title>
+    
+
+<meta name="description" content="This guide is intended to help you use Clojure&#39;s JDBC wrapper, the java.jdbc
+Contrib library.Contents">
+
+<meta property="og:description" content="This guide is intended to help you use Clojure&#39;s JDBC wrapper, the java.jdbc
+Contrib library.Contents">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/ecosystem/java_jdbc/home/" />
+<meta property="og:title" content="Using java.jdbc" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/ecosystem/java_jdbc/home/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Using java.jdbc</h2>
+    </div>
+    
+    <p>This guide is intended to help you use Clojure's JDBC wrapper, the <code>java.jdbc</code>
+Contrib library.</p><h2 id="contents">Contents</h2><ul><li><a href="home.html">Overview</a></li><li><a href="using_sql.html">Using SQL</a></li><li><a href="using_ddl.html">Using DDL</a></li><li><a href="reusing_connections.html">Reusing Connections</a></li></ul><h2 id="overview">Overview</h2><p><code>java.jdbc</code> is intended to be a low-level Clojure wrapper around various Java
+JDBC drivers and supports a wide range of databases. The <a href="https://github.com/clojure/java.jdbc/"><code>java.jdbc</code> source is
+on GitHub</a> and there is a dedicated <a href="https://groups.google.com/forum/#!forum/clojure-java-jdbc">java.jdbc mailing
+list</a>. The detailed <a href="http://clojure.github.io/java.jdbc/"><code>java.jdbc</code> reference</a> is
+automatically generated from the <code>java.jdbc</code> source.</p><p>Generally, when using <code>java.jdbc</code>, you will set up a data source as a "database
+spec" and pass that to the various CRUD (create, read, update, delete)
+functions that <code>java.jdbc</code> provides. These operations are detailed within the
+<a href="using_sql.html">Using SQL</a> page, but a quick overview is provided by the
+walkthrough below.</p><p>By default, each operation opens a connection and executes the SQL inside a
+transaction. You can also run multiple operations against the same connection,
+either within a transaction or via connection pooling, or just with a shared
+connection. You can read more about reusing connections on the <a href="reusing_connections.html">Reusing
+Connections</a> page.</p><h2 id="higher-level-dsl-and-migration-libraries">Higher-level DSL and migration libraries</h2><p>If you need more abstraction than the <code>java.jdbc</code> wrapper provides, you may want
+to consider using a library that provides a DSL. All of the following libraries
+are built on top of <code>java.jdbc</code> and provide such abstraction:</p><ul><li><a href="https://github.com/jkk/honeysql">HoneySQL</a></li><li><a href="https://github.com/r0man/sqlingvo">SQLingvo</a></li><li><a href="http://sqlkorma.com">Korma</a></li><li><a href="https://github.com/walkable-server/walkable">Walkable</a></li></ul><p>In particular, <a href="http://sqlkorma.com">Korma</a> goes beyond a SQL DSL to provide "entities" and
+"relationships" (in the style of classical Object-Relational Mappers, but
+without the pain).</p><p>Another common need with SQL is for database migration libraries. Some of the
+more popular options are:</p><ul><li><a href="https://github.com/macourtney/drift">Drift</a></li><li><a href="https://github.com/pjstadig/migratus">Migratus</a></li><li><a href="https://github.com/weavejester/ragtime">Ragtime</a></li></ul><h2 id="a-brief-javajdbc-walkthrough">A brief <code>java.jdbc</code> walkthrough</h2><h3 id="setting-up-a-data-source">Setting up a data source</h3><p>A "database spec" is a Clojure map that specifies how to access the data
+source. Most commonly, you specify the database type, the database name,
+and the username and password. For example,</p><pre><code class="clojure">(def db-spec
+  {:dbtype "mysql"
+   :dbname "mydb"
+   :user "myaccount"
+   :password "secret"})
+</code></pre><p>See <a href="#database-support"><strong>Database Support</strong></a> below for a complete list of
+databases and drivers supported by <code>java.jdbc</code> out of the box.</p><h3 id="a-hello-world-query">A "Hello World" Query</h3><p>Querying the database can be as simple as:</p><pre><code class="clojure">(ns dbexample
+  (:require [clojure.java.jdbc :as jdbc]))
+
+(def db-spec ... ) ;; see above
+
+(jdbc/query db-spec ["SELECT 3*5 AS result"])
+=&gt; {:result 15}
+</code></pre><p>Of course, we will want to do more with our database than have it perform
+simple calculations. Once we can successfully connect to it, we will likely
+want to create tables and manipulate data.</p><h3 id="creating-tables">Creating tables</h3><p><code>java.jdbc</code> provides <code>create-table-ddl</code> and <code>drop-table-ddl</code> to generate basic
+<code>CREATE TABLE</code> and <code>DROP TABLE</code> DDL strings. Anything beyond that can be
+constructed manually as a string.</p><pre><code class="clojure">(ns dbexample
+  (:require [clojure.java.jdbc :as jdbc]))
+
+(def db-spec ... ) ;; see above
+
+(def fruit-table-ddl
+  (jdbc/create-table-ddl :fruit
+                         [[:name "varchar(32)"]
+                          [:appearance "varchar(32)"]
+                          [:cost :int]
+                          [:grade :real]]))
+</code></pre><p>We can use the function <code>db-do-commands</code> to create our table and indexes in a
+single transaction:</p><pre><code class="clojure">(jdbc/db-do-commands db-spec
+                     [fruit-table-ddl
+                      "CREATE INDEX name_ix ON fruit ( name );"])
+</code></pre><p>For more details on DDL functionality within <code>java.jdbc</code>, see the <a href="using_ddl.html">Using DDL and
+Metadata Guide</a>.</p><h3 id="querying-the-database">Querying the database</h3><p>The four basic CRUD operations <code>java.jdbc</code> provides are:</p><pre><code class="clojure">(jdbc/insert! db-spec :table {:col1 42 :col2 "123"})               ;; Create
+(jdbc/query   db-spec ["SELECT * FROM table WHERE id = ?" 13])     ;; Read
+(jdbc/update! db-spec :table {:col1 77 :col2 "456"} ["id = ?" 13]) ;; Update
+(jdbc/delete! db-spec :table ["id = ?" 13])                        ;; Delete
+</code></pre><p>The table name can be specified as a string or a keyword.</p><p><code>insert!</code> takes a single record in hash map form to insert. <code>insert!</code> can also
+take a vector of column names (as strings or keywords), followed by a vector of
+column values to insert into those respective columns, much like an <code>INSERT</code>
+statement in SQL. Entries in the map that have the value <code>nil</code> will cause
+<code>NULL</code> values to be inserted into the corresponding columns.</p><p>If you wish to insert multiple rows (in hash map form) at once, you can use
+<code>insert-multi!</code>; however, <code>insert-multi!</code> will write a separate insertion
+statement for each row, so it is suggested you use the column-based form of
+<code>insert-multi!</code> over the row-based form. Passing multiple column values to
+<code>insert-multi!</code> will generate a single batched insertion statement and yield
+better performance.</p><p><code>query</code> allows us to run selection queries on the database. Since you provide
+the query string directly, you have as much flexibility as you like to perform
+complex queries.</p><p><code>update!</code> takes a map of columns to update, with their new values, and a SQL
+clause used to select which rows to update (prepended by <code>WHERE</code> in the
+generated SQL). As with <code>insert!</code>, <code>nil</code> values in the map cause the
+corresponding columns to be set to <code>NULL</code>.</p><p><code>delete!</code> takes a SQL clause used to select which rows to delete, similar to
+<code>update!</code>.</p><p>By default, the table name and column names are converted to strings
+corresponding to the keyword names in the underlying SQL. We can control how we
+transform keywords into SQL names using an optional <code>:entities</code> argument which
+is described in more detail in the <a href="using_sql.html">Using SQL</a> section.</p><h3 id="dropping-our-tables">Dropping our tables</h3><p>To clean out the database from our example, we can generate a the command to
+drop the fruit table:</p><pre><code class="clojure">(def drop-fruit-table-ddl (jdbc/drop-table-ddl :fruit))
+</code></pre><p>Ensure you tear down your tables and indexes in the opposite order of creation:</p><pre><code class="clojure">(jdbc/db-do-commands db-spec
+                     ["DROP INDEX name_ix;"
+                      drop-fruit-table-ddl])
+</code></pre><p>These are all the commands we need to write a simple migration for our database!</p><h2 id="database-support">Database Support</h2><p>Out of the box, <code>java.jdbc</code> understands the following <code>:dbtype</code> values (with
+their default class names):</p><ul><li><code>"derby"</code> - <code>org.apache.derby.jdbc.EmbeddedDriver</code></li><li><code>"h2"</code> - <code>org.h2.Driver</code></li><li><code>"h2:mem"</code> - <code>org.h2.Driver</code></li><li><code>"hsqldb"</code> or <code>"hsql"</code> - <code>org.hsqldb.jdbcDriver</code></li><li><code>"jtds:sqlserver"</code> or <code>"jtds"</code> - <code>net.sourceforge.jtds.jdbc.Driver</code></li><li><code>"mysql"</code> - <code>com.mysql.jdbc.Driver</code></li><li><code>"oracle:oci"</code> - <code>oracle.jdbc.OracleDriver</code></li><li><code>"oracle:thin"</code> or <code>"oracle"</code> - <code>oracle.jdbc.OracleDriver</code></li><li><code>"postgresql"</code> or <code>"postgres"</code> - <code>org.postgresql.Driver</code></li><li><code>"pgsql"</code> - <code>com.impossibl.postgres.jdbc.PGDriver</code></li><li><code>"redshift"</code> - <code>com.amazon.redshift.jdbc.Driver</code></li><li><code>"sqlite"</code> - <code>org.sqlite.JDBC</code></li><li><code>"sqlserver"</code> - <code>"mssql"</code> - <code>com.microsoft.sqlserver.jdbc.SQLServerDriver</code></li></ul><p>You must specify the appropriate JDBC driver dependency in your project -- these
+drivers are not included with <code>java.jdbc</code>.</p><p>You can overide the default class name by specifying <code>:classname</code> as well as
+<code>:dbtype</code>.</p><p>For databases that require a hostname or IP address, <code>java.jdbc</code> assumes
+<code>"127.0.0.1"</code> but that can be overidden with the <code>:host</code> option.</p><p>For databases that require a port, <code>java.jdbc</code> has the following defaults,
+which can be overridden with the <code>:port</code> option:</p><ul><li>Microsoft SQL Server - 1433</li><li>MySQL - 3306</li><li>Oracle - 1521</li><li>PostgreSQL - 5432</li></ul><p>Some databases require a different format for the "database spec". Here is an example
+that was required for an in-memory <a href="http://www.h2database.com">H2 database</a> prior
+to <code>java.jdbc</code> release 0.7.6:</p><pre><code class="clojure">(def db-spec
+  {:classname   "org.h2.Driver"
+   :subprotocol "h2:mem"                  ; the prefix `jdbc:` is added automatically
+   :subname     "demo;DB_CLOSE_DELAY=-1"  ; `;DB_CLOSE_DELAY=-1` very important!!!
+                    ; http://www.h2database.com/html/features.html#in_memory_databases
+   :user        "sa"                      ; default "system admin" user
+   :password    ""                        ; default password =&gt; empty string
+  })
+</code></pre><p>This is the most general form of database spec, that allows you to control each
+piece of the JDBC connection URL that would be created.</p><p>Note: as of <code>java.jdbc</code> 0.7.6, in-memory H2 databases are supported directly
+via the simple spec form:</p><pre><code class="clojure">(def db-spec
+  {:dbtype "h2:mem"
+   :dbname "mydb"})
+</code></pre><p>For file-based databases, such as H2, Derby, SQLite etc, the <code>:dbname</code> will
+specify the filename:</p><pre><code class="clojure">(def db-spec
+  {:dbtype "h2"
+   :dbname "/path/to/my/database"})
+</code></pre><h2 id="more-detailed-javajdbc-documentation">More detailed <code>java.jdbc</code> documentation</h2><ul><li><a href="using_sql.html">Using SQL:</a> a more detailed guide on using SQL with <code>java.jdbc</code></li><li><a href="using_ddl.html">Using DDL:</a> how to create your tables using the <code>java.jdbc</code> DDL</li><li><a href="reusing_connections.html">Reusing Connections:</a> how to reuse your database
+connections</li></ul>
+
+    <div id="prev-next">
+        
+        <a href="/articles/ecosystem/java_jdbc/connection_pooling/">&laquo; Connection Pooling</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article) &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

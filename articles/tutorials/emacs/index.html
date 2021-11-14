@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Clojure with Emacs</title>
+    
+
+<meta name="description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.What Version of Clojure Does This Guide Cover?">
+
+<meta property="og:description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.What Version of Clojure Does This Guide Cover?">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/tutorials/emacs/" />
+<meta property="og:title" content="Clojure with Emacs" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/tutorials/emacs/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Clojure with Emacs</h2>
+    </div>
+    
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+Attribution 3.0 Unported License</a> (including images &amp;
+stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on
+Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5+ and Emacs 24+ for MS Windows and Linux,
+and Emacs 26+ for macOS. Earlier Clojure and Emacs releases
+are not supported by these instructions.</p><h2 id="overview">Overview</h2><p>Emacs has traditionally been one of the best development environments
+for functional languages and Lisps in particular. This guide will
+explain how to get it installed, and give an example of a basic
+workflow to use while developing a simple library.</p><h2 id="installing-emacs">Installing Emacs</h2><h3 id="macos">macOS</h3><p>The easiest way to get going with Emacs on macOS is to
+use <a href="https://brew.sh">Homebrew</a>. Instructions for installing Homebrew
+are provided on the landing page, and requirements (such as Xcode) are
+listed on the <a href="https://docs.brew.sh/Installation">installation details</a>
+page.</p><p>Once brew is installed, you can install Emacs using:</p><pre><code class="bash">$ brew cask install emacs
+</code></pre><p>This will install Emacs into your <code>/Applications/Emacs.app</code> folder and
+provide a symlink to the application as <code>/usr/local/bin/emacs</code>.</p><p>After installing, Emacs can be launched the same as other Mac applications
+<em>or</em> from the terminal via:</p><pre><code class="bash">$ emacs
+</code></pre><h3 id="debianubuntu">Debian/Ubuntu</h3><p>Newer Debian-based systems (post-wheezy) ship Emacs 24 in apt:</p><pre><code class="bash">$ sudo apt install emacs24
+</code></pre><h3 id="archantergos">Arch/Antergos</h3><p>The latest version of Emacs(<em>i.e.</em> v25.1) is available in Arch's official repositories.</p><pre><code class="bash">$ sudo pacman -S emacs
+</code></pre><p>On older systems you can add unofficial package sources for <code>emacs-snapshot</code>,
+either for <a href="http://emacs.naquadah.org/">Debian</a> or
+<a href="https://launchpad.net/~cassou/+archive/emacs">Ubuntu</a>.</p><h3 id="ms-windows">MS Windows</h3><p>You can find Emacs for Windows in the <a href="http://ftp.gnu.org/pub/gnu/emacs/windows/">FSF FTP
+directory</a>.</p><p>Download the file named <code>emacs-24.1-bin-i386.zip</code> and unzip it in a new folder.
+Avoid folder with spaces in their names such as <code>C:\Documents and Settings</code>.
+Prefer folder names such as <code>C:\emacs-24.1</code>.</p><p><a href="http://support.microsoft.com/kb/310519#tocHeadRef">Create an environment variable</a>
+with name HOME and value equal to the location of your home folder; in Windows
+XP, it's <code>C:\Documents and Settings\YourUsername</code>, in Windows 7, it's
+<code>C:\Users\YourUsername</code>. With this variable set, you can use the tilde character
+(<code>~</code>) to type the name of a file under your home folder and Emacs will expand
+its full path.</p><p>The following section describes Emacs configuration using the folder <code>.emacs.d</code>.
+When using Emacs in Windows, you should create this folder under your home
+folder. In Windows XP, that will be the folder <code>C:\Documents and Settings\YourUsername\.emacs.d</code>; in Windows 7, that will be the folder
+<code>C:\Users\YourUsername\.emacs.d</code>.</p><h2 id="configuring-emacs">Configuring Emacs</h2><p>So Emacs is installed, but running it now would be a somewhat
+barebones experience and not particularly useful for Clojure
+development.</p><h3 id="manual-setup">Manual setup</h3><p>Emacs can be configured through a folder in your home folder called
+<a href="http://www.emacswiki.org/emacs/DotEmacsDotD">~/.emacs.d</a>, and
+configuration options are pretty much endless. To help you through
+this, Phil Hagelberg has created a small library enables a few
+non-intrusive helpful features called
+<a href="https://github.com/technomancy/better-defaults">better-defaults</a>
+which might be useful if you are not already an Emacs pro.</p><p>Most Emacs packages are kept at <a href="http://melpa.milkbox.net">MELPA</a>,
+the community package host. Add this code to your config in
+<code>~/.emacs.d/init.el</code> to tell Emacs to look there:</p><p>For the stable repository:</p><pre><code class="cl">(require 'package)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(package-initialize)
+</code></pre><p>For the latest packages:</p><pre><code class="cl">(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+</code></pre><p>Run <code>M-x package-refresh-contents</code> to pull in the package listing.</p><p><code>M-x</code> means <code>meta-x</code>, and meta is mapped to the alt key on most keyboards,
+though Mac OS X usually maps it to the command key.</p><p>You'll need to install the following packages:</p><ul><li><a href="https://github.com/clojure-emacs/clojure-mode">clojure-mode</a> - a major mode for editing Clojure and ClojureScript code</li><li><a href="https://github.com/clojure-emacs/cider">CIDER</a> - a Clojure interactive development environment and REPL for Emacs</li><li><a href="https://github.com/bbatsov/projectile">projectile</a>(optional) - for navigating inside your projects swiftly</li></ul><p>Before continuing any further you should briefly consult their documentation.</p><p>You can either install each package one-by-one with <code>M-x package-install</code> or specify all your packages in Emacs Lisp as part of
+your configuration file. This is helpful if you take your dotfiles to
+a new machine; you don't have to remember everything you've installed
+by hand.</p><pre><code class="cl">(defvar my-packages '(better-defaults
+                      projectile
+                      clojure-mode
+                      cider))
+
+(dolist (p my-packages)
+  (unless (package-installed-p p)
+    (package-install p)))
+</code></pre><p>Put the code above in <code>~/.emacs.d/init.el</code> and run it with <code>M-x eval-buffer</code>.</p><p>A lot of warnings will likely whizz by as it installs and compiles
+packages. Unless you have any actual <em>errors</em> this is all fine.</p><p>To look at the other packages available for installation you can
+invoke <code>M-x package-list-packages</code>. To manually install a package,
+move the point to line of the package with the keyboard and press 'i'
+for 'install'. After selecting all the packages you are interested in,
+press 'x' for 'eXecute' to install.</p><h3 id="preconfigured-setup">Preconfigured setup</h3><p>There are also some ready-made Emacs configurations that are optimized
+for Clojure development -
+<a href="https://github.com/bbatsov/prelude">Prelude</a>(developed by the
+maintainer of CIDER and clojure-mode) and
+<a href="https://github.com/overtone/emacs-live">Emacs Live</a>.</p><p>If you want a more powerful Emacs setup you should definitely check them out.</p><h3 id="basics">Basics</h3><p>The first thing you should do without question, is to go through the
+built-in Emacs tutorial. To do this press <code>C-h t</code> or hold down Control
+and press <code>h</code> and then press <code>t</code> by itself.</p><p>With that in mind, these are the basic keystrokes you're going to be
+using most often with the default binary of Emacs 24+:</p><pre><code>File/buffer/window commands
+C-x C-f     Find file
+C-x C-s     Save buffer
+C-x s       Save file (like save-as)
+C-x b       Switch buffer
+C-x k       Kill buffer
+C-x 1       Delete other windows
+C-x 0       Delete current window
+C-x 2       Split window horizontally
+C-x 3       Split window vertically
+
+Movement commands
+C-a         Beginning of line
+C-e         End of line
+C-n         Next line (down)
+C-p         Previous line (up)
+C-b         Back (left)
+C-f         Forward (right)
+M-f         Forward a word
+M-b         Back a word
+C-v         Forward a page
+M-v         Back a page
+
+Edit commands
+C-d         Kill character
+M-d         Kill word
+M-delete    Kill word backwards
+
+Misc commands
+C-s         Regex search forwards
+C-r         Regex search backwards
+M-%         Query replace
+</code></pre><p>I should also mention the help commands:</p><pre><code>C-h t     Tutorial (goes over the basics)
+C-h b     Describe all current key bindings
+C-h m     Describe the current mode
+C-h a     Apropos - search the help for a term
+C-h k     Describe key
+</code></pre><p>I recommend going through the tutorial at least once as it will give
+you a good understanding of the navigation and movement commands.
+Another useful command you will use a lot is <code>M-x</code> which allows you to
+run any command. And there are a LOT. Apropos is very useful for
+searching for something <code>C-h a</code>.</p><p>So after doing the tutorial (you did do that, RIGHT? O_O) you can move
+around, open files, save files, etc., and are generally comfortable at
+the basics. There is an almost infinite amount of things to learn
+about Emacs, but those basics will get you a long way.</p><h2 id="creating-a-project">Creating a project</h2><p>Let's go through the process of creating a small sample clojure project
+and illustrate how Emacs helps makes us champions in the land of lisp.</p><p>The project we will be building is a trivially simple command line
+parser that will take the argument pairs given to it and turn them
+into a map of key-value pairs. The functionality is irrelevant and not
+particularly useful. It serves purely to illustrate the development
+flow.</p><p>If you don't have <a href="http://leiningen.org">Leiningen</a> yet, get it
+installed and then use it to create a new project:</p><pre><code class="bash">$ lein new command-line-args
+$ cd command-line-args
+</code></pre><p>Take a look at the project structure:</p><pre><code>+ doc
+  - intro.md
+- project.clj
+- README.md
++ src
+  + command_line_args
+    - core.clj
++ test
+  + command_line_args
+    - core_test.clj
+</code></pre><p>Should be fairly self-explanatory, though Leiningen's built-in tutorial
+(available via <code>lein help tutorial</code>) provides a detailed explanation of
+the project structure.</p><p>Let's start up a live REPL session.</p><pre><code>M-x cider-jack-in
+</code></pre><p>This should open up a new window looking at our <code>*cider-repl*</code> buffer.</p><p>First thing to do is add a simple test (in fact the only test we will
+be adding because by default, we get it right first time). Open the
+<code>core_test.clj</code> file inside of the test folder. Replace the test that
+is there with the following:</p><pre><code class="clojure">(deftest pairs-of-values
+   (let [args ["--server" "localhost"
+               "--port" "8080"
+               "--environment" "production"]]
+      (is (= {:server "localhost"
+              :port "8080"
+              :environment "production"}
+             (parse-args args)))))
+</code></pre><p>We are simply assigning a list of arguments as they would arrive from
+the command line to a local called args, and asserting that the
+return value from a function called <code>parse-args</code> is equal to those
+command line args turned into a simple map.</p><p>Compile the file with <code>C-c C-k</code>(<code>M-x cider-load-buffer</code>). We should get an error
+message at the bottom of the emacs window complaining that clojure can't find
+parse-args.  Let's try to fix the exception by opening <code>core.clj</code> (<code>C-x C-f</code>/<code>M-x find-file</code>) and adding the following definition:</p><pre><code class="clojure">(defn parse-args [args]
+  {})
+</code></pre><p>Compile this with <code>C-c C-k</code>, save it (<code>C-x C-s</code>/<code>M-x save-buffer</code>), switch back
+to the test buffer (<code>C-x b RET</code>/<code>M-x switch-to-buffer RET</code>) and try compiling
+again (<code>C-c C-k</code>). This time it will succeed, so try running the tests with
+<code>C-c C-t t</code>(<em>i.e</em> <code>M-x cider-test-run-test</code>) and you should get a test report
+buffer showing some failure information:</p><pre><code class="clojure">(not (= {:server "localhost",
+         :port "8080",
+         :environment "production"}
+        {}))
+</code></pre><p>Anyway, our map was empty as expected. Let's fix that:</p><pre><code class="clojure">(defn parse-args [args]
+  (apply hash-map args))
+</code></pre><p>Running our tests again we now get another error:</p><pre><code class="clojure">(not (= {:server "localhost",
+         :port "8080",
+         :environment "production"}
+        {"--port" "8080",
+         "--server" "localhost",
+         "--environment" "production"}))
+</code></pre><p>Whoops, our keys are just strings with the dashes still in place. We
+need to strip those off and turn them into keywords:</p><pre><code class="clojure">(defn parse-args [args]
+  (into {} (map (fn [[k v]] [(keyword (.replace k "--" "")) v])
+                (partition 2 args))))
+</code></pre><p>And re-running the tests in the test buffer we are all happy. If we
+had multiple test files we can run them all from the CLI using:</p><pre><code class="bash">$ lein test
+</code></pre><p>Re-running all the tests from Leiningen can be a good sanity check
+before you wrap up work on a feature or branch since there are some
+cases where developing from a REPL can give misleading results. For
+instance, if you delete a function definition but still call it from
+other functions, you won't notice until your process is restarted.</p><p>So that is an extremely simple example of a workflow using Emacs with
+<code>clojure-mode</code> and <code>cider-test</code>.</p><h2 id="using-the-repl">Using the REPL</h2><p>One thing we haven't looked at is how useful having an open running
+REPL in Emacs can be for development. If you still have your project
+open, split the window (<code>C-x 2</code> (horizontally) or <code>C-x 3</code> (vertically)) in
+two so you have the <code>core.clj</code> and <code>*cider-repl*</code> buffers open.
+Let's say you are editing the core.clj and you want to play around with
+the functions as you define them. Looking at <code>parse-args</code> you have
+decided you want to pull out the anonymous function to be a named
+function <code>keywordize</code>.</p><p>First load and compile the buffer into the REPL process with <code>C-c C-k</code>. Change the namespace of the REPL buffer to the one of the file
+you're in with <code>C-c M-n</code>. Now switch to the REPL window with <code>C-x o</code>.</p><p>You now have access to the functions in this namespace that were
+defined when you compiled the file. Try it:</p><pre><code>command-line-args.core&gt; (parse-args '("key" "value"))
+{:key "value"}
+</code></pre><p>Let's go ahead and create our new function in <code>core.clj</code>:</p><pre><code class="clojure">(defn keywordize [kvp]
+  (let [[k v] kvp]
+    [(keyword (.replace k "--" "")) v]))
+
+(defn parse-args [args]
+  (into {} (map keywordize (partition 2 args))))
+</code></pre><p>Now we have a couple of options, we could re-compile the whole file again
+(<code>C-c C-k</code>) or we could evaluate each function on its own by going to the end
+of the s-exp and using <code>C-x C-e</code>(<em>i.e.</em> <code>cider-eval-last-sexp</code>) which sends the
+s-exp to the running REPL. Now switching back to the core.clj namespace
+(<code>C-c M-n</code>) and switching back to the REPL buffer we can try out our
+<code>keywordize</code> function:</p><pre><code>command-line-args.core&gt; (keywordize ["--oh" "hai"])
+[:oh "hai"]
+</code></pre><p>If your REPL is starting to get cluttered you can <code>M-x cider-repl-clear-buffer</code>
+to clear by first switching to the REPL buffer. The ability to continually
+change the code and play around with it is one of the things that makes Emacs
+and a lisp a great combination for development.</p><p>If you find yourself wanting to repeat a command you just typed at the
+REPL, you can use <code>M-p</code> scroll back through history and <code>M-n</code> to go
+forwards. Also, all of the Emacs editing commands are available in the
+REPL, which is great.</p><p>A handy clojure function to use in the REPL is <code>clojure.repl/doc</code> which
+gives you the docstring for a given function:</p><pre><code>command-line-args.core&gt; (use 'clojure.repl)
+nil
+command-line-args.core&gt; (doc println)
+-------------------------
+clojure.core/println
+([&amp; more])
+  Same as print followed by (newline)
+nil
+</code></pre><p>However there is a shortcut <code>C-c C-d d</code> when your cursor is over a
+function name. This will show the Clojure (or Javadoc) doc in a new window. If
+instead you want to jump to the source of the function you can use
+<code>M-.</code>, which is awesome. This works on your own functions as well as
+those which come from third-party libraries. Use <code>M-,</code> to pop the
+stack and return to where you were. For all the definitions in a
+single file you can use <code>M-x imenu</code> to list them and jump to one.</p><p>When you are finished with the REPL (or if for some reason it has
+gotten into a bad state), you can simply kill the <code>*cider-repl*</code>
+buffer by typing <code>M-x cider-quit</code> and re-run <code>cider-jack-in</code> to start another.</p><h2 id="appendix">Appendix</h2><p><a href="http://stable.melpa.org/#/getting-started">MELPA documentation</a></p><p>CIDER keyboard shortcuts can be found in <a href="https://github.com/clojure-emacs/cider#keyboard-shortcuts">CIDER documentation</a>.</p><h2 id="contributors">Contributors</h2><p><a href="http://blog.gaz-jones.com">Gareth Jones</a>, 2012 (original author)</p><p>Thanks to <a href="http://technomancy.us/">Phil Hagelberg</a>, <a href="http://cleancode.se/">Mikael
+Sundberg</a>, and <a href="http://jakemccrary.com/">Jake
+McCrary</a> for suggestions for improvements to
+the original blog posts from which this guide was created.</p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/tutorials/eclipse/">&laquo; Starting with Eclipse and Counterclockwise For Clojure Development</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/tutorials/getting_started/">Getting Started with Clojure &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

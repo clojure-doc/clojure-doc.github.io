@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Working with Files and Directories in Clojure</title>
+    
+
+<meta name="description" content="This cookbook covers working with files and directories from Clojure,
+using functions in the clojure.java.io namespace as well as parts of
+the JDK via interoperability.This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.">
+
+<meta property="og:description" content="This cookbook covers working with files and directories from Clojure,
+using functions in the clojure.java.io namespace as well as parts of
+the JDK via interoperability.This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/cookbooks/files_and_directories/" />
+<meta property="og:title" content="Working with Files and Directories in Clojure" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/cookbooks/files_and_directories/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Working with Files and Directories in Clojure</h2>
+    </div>
+    
+    <p>This cookbook covers working with files and directories from Clojure,
+using functions in the <code>clojure.java.io</code> namespace as well as parts of
+the JDK via interoperability.</p><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+Attribution 3.0 Unported License</a> (including images &amp;
+stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on
+Github</a>.</p><h2 id="preliminaries">Preliminaries</h2><p>Note that for the examples below, "io" is an alias for
+clojure.java.io. That is, it's assumed your <code>ns</code> macro contains:</p><pre><code class="clojure">(:require [clojure.java.io :as io])
+</code></pre><p>or else in the repl you've loaded it:</p><pre><code class="clojure">(require '[clojure.java.io :as io])
+</code></pre><h2 id="recipes">Recipes</h2><h3 id="read-a-file-into-one-long-string">Read a file into one long string</h3><pre><code class="clojure">(def a-long-string (slurp "foo.txt"))
+</code></pre><p>Note, you can pass urls to <code>slurp</code> as well. See also <a href="http://clojuredocs.org/clojure_core/clojure.core/slurp">slurp at
+Clojuredocs</a>.</p><h3 id="read-a-file-one-line-at-a-time">Read a file one line at a time</h3><p>Suppose you'd like to call <code>my-func</code> on every line in a file,
+and return the resulting sequence:</p><pre><code class="clojure">(with-open [rdr (io/reader "foo.txt")]
+  (doall (map my-func (line-seq rdr))))
+</code></pre><p>The <code>doall</code> is needed because the <code>map</code> call is lazy. The lines that
+<code>line-seq</code> gives you have no trailing newlines (and empty lines in the
+file will yield empty strings ("")).</p><h3 id="write-a-long-string-out-to-a-new-file">Write a long string out to a new file</h3><pre><code class="clojure">(spit "foo.txt"
+      "A long
+multi-line string.
+Bye.")
+</code></pre><p>Overwrites the file if it already exists. To append, use</p><pre><code class="clojure">(spit "foo.txt" "file content" :append true)
+</code></pre><h3 id="write-a-file-one-line-at-a-time">Write a file one line at a time</h3><p>Suppose you'd like to write out every item in a vector, one item per
+line:</p><pre><code class="clojure">(with-open [wrtr (io/writer "foo.txt")]
+  (doseq [i my-vec]
+    (.write wrtr (str i "\n"))))
+</code></pre><h3 id="check-if-a-file-exists">Check if a file exists</h3><pre><code class="clojure">(.exists (io/file "filename.txt"))
+</code></pre><p>Is it a directory? :</p><pre><code class="clojure">(.isDirectory (io/file "path/to/something"))
+</code></pre><p>An io/file is a java.io.File object (a file or a directory). You can
+call a number of functions on it, including:</p><pre><code>exists        Does the file exist?
+isDirectory   Is the File object a directory?
+getName       The basename of the file.
+getParent     The dirname of the file.
+getPath       Filename with directory.
+mkdir         Create this directory on disk.
+</code></pre><p>To read about more available methods, see <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html">the java.io.File
+docs</a>.</p><h3 id="get-a-list-of-the-files-and-dirs-in-a-given-directory">Get a list of the files and dirs in a given directory</h3><p>As <code>File</code> objects:</p><pre><code class="clojure">(.listFiles (io/file "path/to/some-dir"))
+</code></pre><p>Same, but just the <em>names</em> (strings), not File objects:</p><pre><code class="clojure">(.list (io/file "path/to/some-dir"))
+</code></pre><p>The results of those calls are seqable.</p><h2 id="see-also">See also</h2><ul><li><a href="https://github.com/Raynes/fs">https://github.com/Raynes/fs</a></li><li>the I/O section of the <a href="http://clojure.org/cheatsheet">cheatsheet</a></li></ul>
+
+    <div id="prev-next">
+        
+        <a href="/articles/cookbooks/date_and_time/">&laquo; Date and Time</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/cookbooks/math/">Mathematics with Clojure &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

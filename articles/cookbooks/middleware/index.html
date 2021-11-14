@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Middleware in Clojure</title>
+    
+
+<meta name="description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.What is Middleware?">
+
+<meta property="og:description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.What is Middleware?">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/cookbooks/middleware/" />
+<meta property="og:title" content="Middleware in Clojure" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/cookbooks/middleware/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Middleware in Clojure</h2>
+    </div>
+    
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+Attribution 3.0 Unported License</a> (including images &amp;
+stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on
+Github</a>.</p><h2 id="what-is-middleware">What is Middleware?</h2><p>Middleware in Clojure is a common design pattern for threading a
+<em>request</em> through a series of functions designed to operate on it as
+well as threading the <em>response</em> through the same series of functions.</p><p>Middleware is used in many Clojure projects such as
+<a href="https://github.com/mmcgrana/ring">Ring</a>,
+<a href="https://github.com/dakrone/clj-http">clj-http</a> and
+<a href="TODO">something else here</a>.</p><h2 id="the-client-function">The <code>client</code> function</h2><p>The base of all middleware in Clojure is the <code>client</code> function, which
+takes a request object (usually a Clojure map) and returns a response
+object (also usually a Clojure map).</p><p>For example, let's use a <code>client</code> function that pulls some keys out of
+a map request and does an HTTP GET on a site:</p><pre><code class="clojure">(ns middleware.example
+  (:require [clj-http.client :as http]))
+
+(defn client [request]
+  (http/get (:site request) (:options request)))
+</code></pre><p>To use the client method, call it like so (response shortened to fit
+here):</p><pre><code class="clojure">(client {:site "http://www.aoeu.com" :options {}})
+;; ⇒ {:status 200, :headers {...}, :request-time 3057, :body "..."}
+</code></pre><p>Now that a client function exists, middleware can be wrapped around it
+to change the <em>request</em>, the <em>response</em>, or both.</p><p>Let's start with a middleware function that doesn't do anything. We'll
+call it the <code>no-op</code> middleware:</p><pre><code class="clojure">;; It is standard convention to name middleware wrap-&lt;something&gt;
+(defn wrap-no-op
+  ;; the wrapping function takes a client function to be used...
+  [client-fn]
+  ;; ...and returns a function that takes a request...
+  (fn [request]
+    ;; ...that calls the client function with the request
+    (client-fn request)))
+</code></pre><p>So how is this middleware used? First, it must be 'wrapped' around the
+existing client function:</p><pre><code class="clojure">(def new-client (wrap-no-op client))
+
+;; Now new-client can be used just like the client function:
+(new-client {:site "http://www.aoeu.com" :options {}})
+;; ⇒ {:status 200, :headers {...}, :request-time 3057, :body "..."}
+</code></pre><p>It works! Now it's not very exiting because it doesn't do anything
+yet, so let's add another middleware wrapper that does something more
+exiting.</p><p>Let's add a middleware function that automatically changes all "HTTP"
+requests into "HTTPS" requests. Again, we need a function that returns
+another function, so we can end up with a new method to call:</p><pre><code class="clojure">(defn wrap-https
+  [client-fn]
+  (fn [request]
+    (let [site (:site request)
+          new-site (.replaceAll site "http:" "https:")
+          new-request (assoc request :site new-site)]
+      (client-fn new-request))))
+</code></pre><p>The <code>wrap-https</code> middleware can be tested again by creating a new
+client function:</p><pre><code class="clojure">(def https-client (wrap-https client))
+
+;; Notice the :trace-redirects key shows that HTTPS was used instead
+;; of HTTP
+(https-client {:site "http://www.google.com" :options {}})
+;; ⇒ {:trace-redirects ["https://www.google.com"],
+;;    :status 200,
+;;    :headers {...},
+;;    :request-time 3057,
+;;    :body "..."}
+</code></pre><p>Middleware can be tested independently of the client function by
+providing the identity function (or any other function that returns a
+map). For example, we can see the <code>wrap-https</code> middleware returns the
+clojure map with the :site changed from 'http' to 'https':</p><pre><code class="clojure">((wrap-https identity) {:site "http://www.example.com"})
+;; ⇒ {:site "https://www.example.com"}
+</code></pre><h2 id="combining-middleware">Combining middleware</h2><p>In the previous example, we showed how to create and use middleware,
+but what about using multiple middleware functions? Let's define one
+more middleware so we have a total of three to work with. Here's the
+source for a middleware function that adds the current data to the
+response map:</p><pre><code class="clojure">(defn wrap-add-date
+  [client]
+  (fn [request]
+    (let [response (client request)]
+      (assoc response :date (java.util.Date.)))))
+</code></pre><p>And again, we can test it without using any other functions using
+<code>identity</code> as the client function:</p><pre><code class="clojure">((wrap-add-date identity) {})
+;; ⇒ {:date #inst "2012-11-09T12:41:05.171-00:00"}
+</code></pre><p>Middleware is useful on its own, but where it becomes truly more
+useful is in combining middleware together. Here's what a new client
+function looks like combining all the middleware:</p><pre><code class="clojure">(def my-client (wrap-add-date (wrap-https (wrap-no-op client))))
+
+(my-client {:site "http://www.google.com"})
+;; ⇒ {:date #inst "2012-11-09T12:43:39.451-00:00",
+;;    :cookies {...},
+;;    :trace-redirects ["https://www.google.com/"],
+;;    :request-time 1634,
+;;    :status 200,
+;;    :headers {...},
+;;    :body "..."}
+</code></pre><p>(The response map has been edited to take less space where you see
+'...')</p><p>Here we can see that the <code>wrap-https</code> middleware has successfully
+turned the request for http://www.google.com into one for
+https://www.google.com, additionally the <code>wrap-add-date</code> middleware
+has added the :date key with the date the request happened. (the
+<code>wrap-no-op</code> middleware did execute, but since it didn't do anything,
+there's no output to tell)</p><p>This is a good start, but adding middleware can be expressed in a much
+cleaner and clearer way by using Clojure's threading macro, <code>-&gt;</code>. The
+<code>my-client</code> definition from above can be expressed like this:</p><pre><code class="clojure">(def my-client
+  (-&gt; client
+      wrap-no-op
+      wrap-https
+      wrap-add-date))
+
+(my-client {:site "http://www.google.com"})
+;; ⇒ {:date #inst "2012-11-09T12:47:32.130-00:00",
+;;    :cookies {...},
+;;    :trace-redirects ["https://www.google.com/"],
+;;    :request-time 1630,
+;;    :status 200,
+;;    :headers {...},
+;;    :body "..."}
+</code></pre><p>Something else to keep in mind is that middleware expressed in this
+way will be executed <em>from the bottom up</em>, so in this case,
+<code>wrap-add-date</code> will call <code>wrap-https</code>, which in turn calls
+<code>wrap-no-op</code>, which finally calls the <code>client</code> function.</p><p>For an example of combining a large amount of middleware, see
+<a href="https://github.com/dakrone/clj-http/blob/5534950b5ed48e3bc7285f0e956444ea832399da/src/clj_http/client.clj#L542-567">clj-http's
+client.clj</a>
+file</p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/cookbooks/math/">&laquo; Mathematics with Clojure</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/cookbooks/strings/">Strings &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

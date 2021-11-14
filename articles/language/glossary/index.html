@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Clojure Terminology Guide</title>
+    
+
+<meta name="description" content="A glossary of terminology specific to Clojure. Terms
+are listed in alphabetical order.Terms">
+
+<meta property="og:description" content="A glossary of terminology specific to Clojure. Terms
+are listed in alphabetical order.Terms">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/language/glossary/" />
+<meta property="og:title" content="Clojure Terminology Guide" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/glossary/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Clojure Terminology Guide</h2>
+    </div>
+    
+    <p>A glossary of terminology specific to Clojure. Terms
+are listed in alphabetical order.</p><h2 id="terms">Terms</h2><h3 id="arity">arity</h3><p>The number of arguments a function takes is its arity.  If it's
+written to take a variable number of args, it's referred to as
+<a href="#variadic">variadic</a>.</p><p>Functions can have multiple arity (for example, a function might have
+2 different bodies: one for when 2 args are passed, and another when 3
+args are passed).</p><h3 id="binding-form">binding-form</h3><p>Could mean one of two things:</p><ol><li><p>the expression you're binding to in a
+<a href="#let_binding">let-binding</a>. It might be a simple name, or it
+might be a data structure used for
+<a href="#destructuring">destructuring</a>.</p></li><li><p>Clojure provides the <code>binding</code> macro, used for setting the
+thread-local value of a dynamic var. The whole expression (form)
+is sometimes referred to as the "binding <a href="#form">form</a>".</p></li></ol><h3 id="classpath">classpath</h3><p>The search path used by the JVM to locate classes which are not
+part of the Java standard class library. May include jar files.</p><h3 id="comparator">comparator</h3><p>A function that takes two args and compares them.  Returns -1, 0, or 1
+depending whether the first arg is less than, equal to or greater than
+the second.  The stock comparator that Clojure.core comes with is
+<code>compare</code>.</p><h3 id="coordinates">coordinates</h3><p>The "group-id/artifact-id version-string" identifier used in your
+project.clj to indicate a particular dependency.</p><p>See also <a href="#libspec">libspec</a>.</p><h3 id="destructuring">destructuring</h3><p>The handy trick used in a <a href="#let_binding">let-binding</a> to "unpack" the
+values from a data structure into the locals you're going to use.  See
+also <a href="#binding-form">binding-form</a> and <a href="functions.html#destructuring_of_function_arguments">the destructuring section in
+the functions
+guide</a>.</p><h3 id="dereference">dereference</h3><p>To get the value of a reference type. You can use the <code>deref</code> function
+for this, or else some syntactic sugar: <code>@some-ref-type</code>.</p><h3 id="entry">entry</h3><p>A key/value pair in a map. Try <code>(type (first {:a 1 :b 2}))</code> and see
+that it returns <code>clojure.lang.MapEntry</code>.</p><h3 id="evaluator">evaluator</h3><p><em>todo</em></p><h3 id="form">form</h3><p>A valid s-expression. For example: <code>(+ 1 1)</code> and <code>(defn foo [x] (* x x))</code>.</p><h3 id="head-retention">head retention</h3><p><a href="#lazy">Lazy</a> sequences are still <a href="#persistence">persistent</a>. If you
+make <em>another</em> data structure using one, the original lazy sequence
+will be kept around and not garbage-collected. If the lazy sequence in
+infinite, and grows very large, it can cause performance problems or
+even an out-of-memory error. Accidentally keeping around a lazy
+sequence like this is referred to as "head retention".</p><h3 id="homoiconicity">homoiconicity</h3><p>Where the code and the data is represented by the same structure.
+This allows the code to be treated as data, and the data to be treated
+as code. This feature of Clojure, and other Lisps, allows for
+macros in the language, since they can operate on code as a data
+structure, and to return a transformation of that structure to
+be the representation of new code.</p><h3 id="idempotent">idempotent</h3><p>An operation that when given the same inputs will produce the same
+result when called one or more times. An idempotent function may
+produce a side effect, such a updating a ref or an atom, but will
+only produce the side effect once. An idempotent function is
+different than a pure function, in that a pure function will
+produce no side effects.</p><h3 id="identity">identity</h3><p>A logical entity in your program that may change over time --- it may
+take on different states at different times, but it still means the
+same logical entity. Clojure uses <a href="#reference_types">reference types</a>
+to represent identities.  This is not to be confused with the <code>identity</code> function that just returns the argument given to it.</p><h3 id="implicit-do">implicit do</h3><p>The bodies of some expressions act like <code>do</code> in that you can include
+multiple expressions in them, and the expressions will be evaluated in
+the order they appear, with the resulting value of the body being the
+last expression evaluated. Forms that do this include: <code>when</code>,
+<code>when-let</code>, <code>fn</code>, <code>defn</code>, <code>let</code>, <code>loop</code>, and <code>try</code>.</p><h3 id="intern">intern</h3><p>A method of storing values or immutable data structures as a single
+copy of the item, allowing for more space-efficiency, and possibly
+time-efficiency, with the trade off of requiring more time being
+required when interning the item. When the string "clojure" is interned,
+all instances of the string "clojure" will reference the exact same
+instance, instead of having multiple string objects with the same value
+of "clojure".</p><h3 id="keyword">keyword</h3><p>A Clojure scalar data type whose literal syntax looks <code>:like</code> <code>:this</code>.
+They are like numbers and strings in that they evaluate to themselves,
+and are most often seen being used as keys in <a href="#map">hash-maps</a>.</p><p>See also <a href="#namespaced_keyword">namespaced keyword</a></p><p>The term is also used when talking about functions that take "keyword
+arguments", for example, something like: <code>(my-func :speed 42 :mass 2)</code>
+(as opposed to <code>(my-func {:speed 42 :mass 2})</code>).</p><h3 id="lazy">lazy</h3><p>Clojure can (and often does) create sequences for you that aren't
+fully computed. Upon casual inspection they <em>look</em> just like a regular
+list, but particular values in them are only computed the moment you
+ask for them --- not sooner.</p><p>This has the added benefit that you can easily create infinite
+sequences that don't consume infinite memory.</p><p>Many of the built-in Clojure functions return lazy sequences.</p><p>See also <a href="#realize">realize</a>.</p><h3 id="let-binding">let-binding</h3><p>AKA, "binding vector", or just "bindings": in a <code>let</code> (and expressions
+that work like let, for example, <code>defn</code>, <code>loop</code>, <code>loop</code>, &amp; <code>fn</code>), the
+vector that comes first where you specify lexical bindings.</p><p>See also <a href="#binding_form">binding form</a></p><h3 id="libspec">libspec</h3><p><em>todo</em></p><h3 id="macro">macro</h3><p>A special type of function which is transforms a S-Expression read in
+and applies a transformation to the S-Expression resulting in a new
+form.  This process is called macro-expansion, and is done as part
+of the Clojure reader.</p><h3 id="map">map</h3><p>Either refers to the built in <code>map</code> function, or else means "a
+hash-map object".</p><h3 id="memoization">memoization</h3><p>The ability to cache a result of a function call by given arguments,
+and return the result without having to do the calculation again.
+Memoization is a time-space trade off in that more memory is used
+to store the results of a function call to be able to return the
+value instead of having to keep spending time doing the calculation
+involved in the function.</p><h3 id="metadata">metadata</h3><p>An extra map that you can attach to a collection value (or a symbol),
+which contains data about the data you're attaching it to. Use <code>meta</code>
+to see the metadata of a given value.</p><h3 id="namespaced-keyword">namespaced keyword</h3><p>When you put two colons in front of a keyword's name --- for example
+::foo --- it is a so-called "namespaced keyword", and is expanded by
+the reader to become :current-namespace/foo.</p><h3 id="nullipotent">nullipotent</h3><p>An operation with no side effects.  The result of calling the function
+one or more times is the same as if it was never called.  Queries are
+typically good examples of functions that are nullipotent, as they
+do not modify the state of the object or structure they are queried
+against.</p><h3 id="persistence">persistence</h3><p>See the <a href="../tutorials/introduction.html#values_immutability_and_persistence">relevant section of the
+introduction</a>.</p><h3 id="predicate">predicate</h3><p>A function taking one or more args and returning a boolean (<code>true</code> or
+<code>false</code>). Its name typically ends with a question mark. Some examples:
+<code>nil?</code>, <code>zero?</code>, <code>string?</code>.</p><h3 id="pure-function">pure function</h3><p>A function that given the same inputs will always produce the same
+result. A pure function also does not have any observable side effects
+and cannot depend on any outside state, other than that which was given
+as arguments to the function. A pure function's result also cannot change
+during the execution of the program or between executions of the program,
+as the dependency on outside state can lead to changes in the result of
+the function.  Pure functions are also
+<a href="#referential-transparency">referentially transparent.</a></p><h3 id="reader">reader</h3><p><em>todo</em></p><h3 id="reader-macro">reader macro</h3><p>Syntax that the Clojure reader recognizes as special syntactic sugar,
+for example, <code>#""</code>, <code>#{}</code>, quoting, etc.</p><h3 id="realize">realize</h3><p>When the next value in a <a href="#lazy">lazy</a> sequence is accessed for the
+first time, and is computed so as to made available, it is said to
+have been "realized".  This term is also used to refer to the status of <a href="concurrency_and_parallelism.html#promises">promises</a>, <a href="concurrency_and_parallelism.html#futures">futures</a>, and <a href="concurrency_and_parallelism.html#delays">delays</a>.  That is, if a promise (for example) is realized then that means its value has been delivered and is accessible via <a href="#dereference">dereferencing</a>.</p><h3 id="reference-types">reference types</h3><p>Vars, atoms, refs, and agents are all reference types. They are
+mutable in the sense that you can change to what value they refer, and
+Clojure provides thread-safe mechanisms for doing so.</p><h3 id="referential-transparency">referential transparency</h3><p>An expression that will always return the same result for the values
+given, and can be substituted for the resulting value, without
+effecting the program.  The advantage of referential transparent
+expressions is that they can be memoized, and be the subject of
+various compilier optimizations.</p><h3 id="reify">reify</h3><p><em>todo</em></p><h3 id="repl">REPL</h3><p>Short for: "Read, Eval, Print, Loop".  The REPL reads in text through
+the <a href="#reader">reader</a> transforming it into a Clojure data structure,
+<a href="#evaluator">evaluates</a> the data structure as code, prints the result
+of the evaluation, and loops back waiting to read the next input string.</p><h3 id="rest-args">rest args</h3><p>The extra args passed to a <a href="#variadic">variadic</a> function, for example
+if <code>my-func</code> were defined like <code>(defn my-func [a b &amp; more] ...)</code>, then
+called like <code>(my-func 1 2 3 4 5)</code>, then 3, 4, &amp; 5 are the "rest args".</p><h3 id="s-expression">s-expression</h3><p>Short for Symbolic Expression. A S-Expression is a data structure able
+to represent both simple datastructes such as literals, or complex data
+structures such as nested expressions. Due to their versatile nature,
+S-Expressions are able to represent both data in Clojure, as well as
+the Clojure code itself, allowing Clojure to be a
+<a href="#homoiconicity">homoiconic</a> language.</p><h3 id="state">state</h3><p>The <a href="#value">value</a> that a given <a href="#identity">identity</a> may have at a
+given time.  When you change the state of an identity, you're changing
+to which value it refers. Clojure uses values to represent states.</p><h3 id="stm-software-transactional-memory">STM (Software Transactional Memory)</h3><p>Software Transactional Memory (STM) is a concurrency control method to
+coordinate and control access to shared storage as an alternative to
+lock-based synchronization. Clojure's STM uses multiversion concurrency
+control (MVCC) as an alternative to lock-based transactions, as well as
+ensuring changes are made atomically, consistently, and in
+isolation. It does this by taking a snapshot of the ref, making the
+changes in isolation to the snapshot, and apply the result. If the STM
+detects that another transaction has made an update to the ref, the
+current transaction will be forced to retry.</p><h3 id="symbol">symbol</h3><p>An identifier that refers to vars or local values.</p><h3 id="tagged-literals">tagged literals</h3><p>(Formerly called "reader literals".)</p><p>Some literals begin with a hash mark "#" (so-called "dispatch
+macros"); for example, <code>#{}</code> for sets and <code>#""</code> for regex
+literals. Starting with Clojure 1.4, you can create your own
+#-prefixed literal which causes the reader to parse the form
+following it using a function or macro of your own
+choosing/devising. It's in this way that you can <em>tag</em> a literal to be
+handled specially by the reader.</p><p>For more info, see <a href="http://clojure.org/reader">the "Tagged Literals" section of the reader
+doc</a>.</p><h3 id="threading-macros">threading macros</h3><p>The thread-first (<code>-&gt;</code>) and thread-last (<code>-&gt;&gt;</code>) macros.  "Threading"
+refers to how they pass values to each subsequent argument in the
+macro, not concurrency.</p><h3 id="thrush">thrush</h3><p>A combinator. Not the same thing as the <a href="#threading-macros">thread-first
+macro</a>.  More info at
+<a href="http://blog.fogus.me/2010/09/28/thrush-in-clojure-redux/">http://blog.fogus.me/2010/09/28/thrush-in-clojure-redux/</a> if you're
+curious.</p><h3 id="transaction">transaction</h3><p><em>todo</em></p><h3 id="type-erasure">type erasure</h3><p>Java-related: Java generics allow you to specify a type for a
+collection.  This way you don't have to cast every object you pull out
+of an ArrayList like in the old days. This is a courtesy of the java
+compiler. The java runtime doesn't know about generics --- the
+compiler does all the checking for you, then the type information is
+discarded at runtime. In Clojure, this discarding is referred to as
+type erasure.</p><h3 id="value">value</h3><p>An immutable object, such as the number 1, the character <code>\a</code>, the
+string "hello", or the vector <code>[1 2 3]</code>. In Clojure, all scalars and
+built-in core data structures are values.</p><h3 id="variadic">variadic</h3><p>A function that can take a variable number of arguments.
+See also <a href="#rest_args">rest args</a>.</p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/language/functions/">&laquo; Functions in Clojure</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/language/interop/">Clojure interoperability with Java &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

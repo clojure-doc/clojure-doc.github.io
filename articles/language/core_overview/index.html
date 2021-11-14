@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Overview of clojure.core, the standard Clojure library</title>
+    
+
+<meta name="description" content="This guide covers:">
+
+<meta property="og:description" content="This guide covers:">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/language/core_overview/" />
+<meta property="og:title" content="Overview of clojure.core, the standard Clojure library" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/core_overview/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Overview of clojure.core, the standard Clojure library</h2>
+    </div>
+    
+    <p>This guide covers:</p><ul><li>Key functions of <code>clojure.core</code></li><li>Key macros of <code>clojure.core</code></li><li>Key vars of <code>clojure.core</code></li><li>Essential special forms</li></ul><p>This guide is <strong>by no means comprehensive</strong> and does not try to explain each function/macro/form in depth. It is an overview,
+the goal is to briefly explain the purpose of each item and provide links to other articles with more information.</p><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="binding">Binding</h2><p><a id="let_desc"></a></p><h3 id="let">let</h3><pre><code class="clojure">(let [bindings*] exprs*)
+</code></pre><p><code>let</code> takes a vector of symbol value pairs followed by a variable number of expressions.</p><p><code>let</code> allows binding of locals (roughly equivalent to variables in many other languages) and defines an explicit scope for those bindings.</p><p>The body of a <code>let</code> statement also provides an implicit <code>do</code> that allows for multiple statements in the body of <code>let</code>.</p><p>A basic example:</p><pre><code class="clojure">(let [x 1 y 2]
+  (println x y))
+;; ⇒ 1 2
+</code></pre><p>Let can be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.</p><p>This example basically demonstrates the lexical scoping of the let form.</p><pre><code class="clojure">(let [x 1]
+  (println x) ; prints 1
+  (let [x 2]
+    (println x))) ; prints 2
+</code></pre><p>Let bindings are immutable and can be destructured.</p><p>See: Sections about destructuring in
+<a href="/articles/tutorials/introduction.html#destructuring">Introduction</a> and
+<a href="/articles/language/functions.html#destructuring-of-function-arguments">Functions</a>
+pages.</p><p><a id="def_desc"></a></p><h3 id="def">def</h3><pre><code class="clojure">(def symbol doc-string? init?)
+</code></pre><p><code>def</code> takes a symbol and an optional init value.</p><p>If an init value is supplied, the root binding of the var is assigned to that value. Redefining a var with an init value will re-assign the root binding.</p><p>A root binding is a value that is shared across all threads.</p><p>The <code>let</code> form is the preferred method of creating local bindings. It is strongly suggested to prefer it where possible, and never use <code>def</code> within another form.</p><pre><code class="clojure">;; TBD - reference to var documentation, basic example
+;; TBD - metadata
+</code></pre><p><a id="declare_desc"></a></p><h3 id="declare">declare</h3><pre><code class="clojure">([&amp; names])
+</code></pre><p><code>declare</code> takes a variable number of symbols.</p><p><code>declare</code> provides a simple way of creating 'forward declarations'. <code>declare</code> defs the supplied symbols with no init values. This allows for referencing of a var before it has been supplied a value.</p><p>There are much better methods of value-based dispatch or code architecture in general, but this presents a simple situation forward declarations would be necessary.</p><pre><code class="clojure">(declare func&lt;10 func&lt;20)
+
+;; without declare you will receive an error similar to:
+;; "Unable to resolve symbol: func10 in this context"
+
+(defn func&lt;10 [x]
+  (cond
+   (&lt; x 10) (func&lt;10 (inc x))
+   (&lt; x 20) (func&lt;20 x)
+   :else "too far!"))
+
+(defn func&lt;20 [x]
+  (cond
+   (&lt; x 10) (func&lt;10 x)
+   (&lt; x 20) "More than 10, less than 20"
+   :else "too far!"))
+</code></pre><p>No matter which order you put func&lt;10 and func&lt;20 in, there will be a reference to a var that does not yet exist when the compiler does the initial evaluation of top-level forms.</p><p><code>declare</code> defines the var with no binding so that the the var exists when it is referenced later in the code.</p><p><a id="defn_desc"></a></p><h3 id="defn">defn</h3><pre><code class="clojure">([name doc-string? attr-map? [params*] prepost-map? body] [name doc-string? attr-map? ([params*] prepost-map? body) + attr-map?])
+</code></pre><p><code>defn</code> takes a symbol, an optional doc string, an optional meta-data
+map, a vector of arguments and a variable number of expressions.</p><p><code>defn</code> is the primary way of defining functions. It allows for
+convenient definition of metadata about its argslist and documentation
+(docstrings). <code>defn</code> inherently allows for quick documentation of
+functions that can be retrieved with <code>doc</code>. This feature should be
+used almost universally.</p><p>Without <code>defn</code>, a var would be directly bound to a function definition
+and explicit metadata about the doc string and argslits would be added
+manually.</p><pre><code class="clojure">(def func (fn [x] x))
+
+;; same as:
+(defn func [x]
+  x)
+
+;; with metadata added by defn
+(def ^{:doc "documentation!"} ^{:arglists '([x])} func (fn [x] x))
+
+;;same as
+(defn func
+  "documentation!"
+  [x]
+  x)
+</code></pre><pre><code class="clojure">;; TBD - link to doc and metadata
+</code></pre><h2 id="branching">Branching</h2><p><a id="if_desc"></a></p><h3 id="if">if</h3><pre><code class="clojure">(if test then else?)
+</code></pre><p><code>if</code> takes 2 expressions, and an optional third.</p><p><code>if</code> is the primary method of conditional execution and other conditionals are built upon <code>if</code>.</p><p>If the return value of the first expression is anything except nil or false, the second expression is evaluated and the result returned..</p><p>If a third expression is provided, when the first expression returns nil or false the third expression is evaluated and returned.</p><pre><code class="clojure">(if 0 "second") ; 0 is a 'true' value. Only false or nil are 'false'
+"second"
+
+(if nil "second" "third")
+;; ⇒ "third"
+
+(if (&lt; 10 9) "second" "third") ; (&lt; 9 10) returns false
+;; ⇒ "third"
+
+(if (seq '()) "second") ; seq returns nil for an empty sequence
+;; ⇒ nil
+
+(if (nil? (= 1 2)) "second" "third") ; differentiate between nil and false if needed
+;; ⇒ "third"
+</code></pre><p><a id="when_desc"></a></p><h3 id="when">when</h3><pre><code class="clojure">([test &amp; body])
+</code></pre><p><code>when</code> takes 2 expressions.</p><p><code>when</code> provides an implicit do form that is evaluated if an expression returns true, otherwise nil is returned. <code>when</code> does not provide an 'else'.</p><pre><code class="clojure">(when (= 1 2) (print "hey") 10)
+;; ⇒ nil
+
+(when (&lt; 10 11) (print "hey") 10)
+;; hey
+;; ⇒ 10
+</code></pre><h3 id="for">for</h3><p>See: <a href="#for_desc">for</a></p><h3 id="doseq">doseq</h3><p>See: <a href="#doseq_desc">doseq</a></p><h2 id="looping">Looping</h2><p><a id="recur_desc"></a></p><h3 id="recur">recur</h3><pre><code class="clojure">(recur exprs*)
+</code></pre><p><code>recur</code> allows for self-recursion without consuming stack space proportional to the number of recursive calls made. Due to the lack of tail-call optimization on the JVM currently, this is the only method of recursion that does not consume excess stack space.</p><p><code>recur</code> takes a number of arguments identical to the point of recursion. <code>recur</code> will evaluate those arguments, rebind them at the point of recursion and resume execution at that point.</p><p>The point of recursion is the nearest <code>fn</code> or <code>loop</code> form determined lexically.</p><p><code>recur</code> must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined and.</p><p><code>recur</code> does not bind <code>&amp;</code> in variadic functions and in these situations an empty seq must be passed by <code>recur</code>.</p><pre><code class="clojure">(defn count-up
+  [result x y]
+  (if (= x y)
+    result
+    (recur (conj result x) (inc x) y)))
+;; ⇒ [0 1 2 3 4 5 6 7 8 9]
+</code></pre><p>Example: getting factorial of a positive integer:</p><pre><code class="clojure">(defn factorial
+  ([n]
+     (factorial n 1))
+  ([n acc]
+     (if (zero? n)
+       acc
+       (recur (dec n) (* n acc)))))
+
+(factorial 10)
+;; ⇒ 3628800
+</code></pre><p>TBD: more examples</p><p><a id="loop_desc"></a></p><h3 id="loop">loop</h3><pre><code class="clojure">(loop [bindings*] exprs*)
+</code></pre><p><code>loop</code> takes a vector of symbol value pairs followed by a variable number of expressions.</p><p><code>loop</code> establishes a recursion point for a <code>recur</code> expression inside its body. <code>loop</code> provides an implicit <code>let</code> for bindings.</p><p>The implicit <code>let</code> that <code>loop</code> provides binds each symbol to the init-expression. <code>recur</code> then binds new values when returning the execution point to <code>loop</code>.</p><pre><code class="clojure">(defn count-up
+  [start total]
+  (loop [result []
+         x start
+         y total]
+    (if (= x y)
+      result
+      (recur (conj result x) (inc x) y))))
+;; ⇒ [0 1 2 3 4 5 6 7 8 9]
+</code></pre><p>Example: getting factorial of a positive integer:</p><pre><code class="clojure">(defn factorial
+  [n]
+  (loop [n n
+         acc 1]
+    (if (zero? n)
+      acc
+      (recur (dec n) (* acc n)))))
+
+(factorial 10)
+;; ⇒ 3628800
+</code></pre><p>TBD: more examples</p><p><a id="trampoline_desc"></a></p><h3 id="trampoline">trampoline</h3><pre><code class="clojure">([f])
+([f &amp; args])
+</code></pre><p><code>trampoline</code> takes a function and a variable number of arguments to pass to that function.</p><p><code>trampoline</code> allows for mutual recursion without consuming stack space proportional to the number of recursive calls made.</p><p>If the return value of that function is a function, <code>trampoline</code> calls that function with no arguments. If the return value is not a function, <code>trampoline</code> simply returns that value.</p><p>Since <code>trampoline</code> calls the returned functions with no arguments, you must supply an anonymous function that takes no arguments and calls the function you wish to recur to. This is usually done with anonymous function literals <code>#()</code></p><pre><code class="clojure">(declare count-up1 count-up2) ;; see `declare` for why this is needed
+
+(defn count-up1
+  [result start total]
+  (if (= start total)
+    result
+    #(count-up2 (conj result start) (inc start) total))) ;; returns an anonymous function
+
+(defn count-up2 [result start total]
+  (if (= start total)
+    result
+    #(count-up1 (conj result start) (inc start) total))) ;; returns an anonymous function
+
+(trampoline count-up1 [] 0 10)
+;; ⇒ [0 1 2 3 4 5 6 7 8 9]
+</code></pre><p>TBD: a trivial example that would not be easily solved with self-recursion</p><p><a id="for_desc"></a></p><h3 id="for-1">for</h3><pre><code class="clojure">([seq-exprs body-expr])
+</code></pre><p><code>for</code> takes a vector of pairs of [binding collection].</p><p><code>for</code> allows for list comprehensions. <code>for</code>  assigns each sequential value in the collection to the binding form and evaluates them rightmost first. The results are returned in a lazy sequence.</p><p><code>for</code> allows for explicit let, when and while through use of ":let []" ":when (expression)" ":while (expression)" in the binding vector.</p><pre><code class="clojure">(for [x [1 2 3] y [4 5 6]]
+  [x y])
+;; ⇒ ([1 4] [1 5] [1 6] [2 4] [2 5] [2 6] [3 4] [3 5] [3 6])
+</code></pre><p>:when only evaluates the body when a true value is returned by the expression provided</p><pre><code class="clojure">(for [x [1 2 3] y [4 5 6]
+      :when (and
+             (even? x)
+             (odd? y))]
+  [x y])
+;; ⇒ ([2 5])
+</code></pre><p>:while evaluates the body until a non-true value is reached. Note that the rightmost collection is fully bound to y before a non-true value of (&lt; x 2) is reached. This demonstrates the order of the comprehension.</p><pre><code class="clojure">(for [x [1 2 3] y [4 5 6]
+      :while (&lt; x 2)]
+  [x y])
+;; ⇒ ([1 4] [1 5] [1 6])
+</code></pre><p><a id="doseq_desc"></a></p><h3 id="doseq-1">doseq</h3><pre><code class="clojure">([seq-exprs &amp; body])
+</code></pre><p><code>doseq</code> takes a vector of pairs of [binding collection].</p><p><code>doseq</code> is similar to <code>for</code> except it does not return a sequence of results. <code>doseq</code> is generally intended for execution of side-effects in the body, and thusly returns nil.</p><p><code>doseq</code> supports the same bindings as for - :let :when :while. For examples of these, see for.</p><pre><code class="clojure">(doseq [x [1 2 3] y [4 5 6]]
+  (println [x y]))
+
+;; [1 4][1 5][1 6][2 4][2 5][2 6][3 4][3 5][3 6]
+;; ⇒ nil
+</code></pre><p><a id="iterate_desc"></a></p><h3 id="iterate">iterate</h3><pre><code class="clojure">([f x])
+</code></pre><p><code>iterate</code> takes a function and an argument to the function.</p><p>A lazy sequence is returned consisting of the argument then each subsequent entry is the function evaluated with the previous entry in the lazy sequence.</p><pre><code class="clojure">TBD: Examples
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="reduce_desc"></a></p><h3 id="reduce">reduce</h3><pre><code class="clojure">([f coll])
+([f val coll])
+</code></pre><p><code>reduce</code> takes a function, an optional initial value and a collection.</p><p><code>reduce</code> takes the first item of the collection and either the second
+item of the collection or the provided initial value, then evaluates
+the function with those arguments. The function is then evaluated with
+that result and the next item in the collection. This is repeated
+until the collection is exhausted and the value of the final function
+call is returned.</p><pre><code class="clojure">TBD: examples
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="reductions_desc"></a></p><h3 id="reductions">reductions</h3><pre><code class="clojure">([f coll])
+([f val coll])
+</code></pre><p><code>reductions</code> takes a function, an optional initial value and a collection.</p><p><code>reductions</code> returns a lazy sequence consisting of the first item in
+the collection, or the provided initial value followed by the result
+of the function evaluated with the previous result and the next item
+in the collection.</p><pre><code class="clojure">TBD: examples
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="map_desc"></a></p><h3 id="map">map</h3><pre><code class="clojure">([f coll])
+([f c1 c2])
+([f c1 c2 c3])
+([f c1 c2 c3 &amp; colls])
+</code></pre><p><code>map</code> takes a function and one or more collections.  <code>map</code> passes an
+item from each collection, in order, to the function and returns a
+lazy sequence of the results.</p><p>The function provided to <code>map</code> must support an arity matching the
+number of collections passed. Due to this, when using more than one
+collection, map stops processing items when any collection runs out of
+items.</p><pre><code class="clojure">TBD: Examples
+</code></pre><p>TBD: Simple image accompaniment.</p><h2 id="collection-and-sequence-modification">Collection and Sequence Modification</h2><p><a id="conj_desc"></a></p><h3 id="conj">conj</h3><pre><code class="clojure">([coll x])
+([coll x &amp; xs])
+</code></pre><p><code>conj</code> takes a collection and a variable number of arguments.</p><p><code>conj</code> is short for "conjoin". As the name implies, <code>conj</code> returns the
+collection with those arguments added.</p><p>Adding items to a collection occurs at different places depending on
+the concrete type of collection.</p><p>List addition occurs at the beginning of the list. This is because
+accessing the head of the list is a constant time operation, and
+accessing the tail requires traversal of the entire list.</p><pre><code class="clojure">(conj '(1 2) 3)
+;; ⇒ (3 1 2)
+</code></pre><p>Vectors have constant time access across the entire data
+structure. `'conj' thusly appends to the end of a vector.</p><pre><code class="clojure">(conj [1 2] 3)
+;; ⇒ [1 2 3]
+</code></pre><p>Maps do not have guaranteed ordering, so the location that items are
+added is irrelevant. <code>conj</code> requires vectors of [key value] pairs to
+be added to the map.</p><pre><code class="clojure">(conj {:a 1 :b 2 :c 3} [:d 4])
+;; ⇒ {:d 4, :a 1, :c 3, :b 2}
+
+(conj {:cats 1 :dogs 2} [:ants 400] [:giraffes 13])
+;; ⇒ {:giraffes 13, :ants 400, :cats 1, :dogs 2}
+</code></pre><p>Sets also do not have guaranteed ordering. <code>conj</code> returns a set with
+the item added. As the concept of sets implies, added items will not
+duplicate equivalent items if they are present in the set.</p><pre><code class="clojure">(conj #{1 4} 5)
+;; ⇒ #{1 4 5}
+
+(conj #{:a :b :c} :b :c :d :e)
+;; ⇒ #{:a :c :b :d :e}
+</code></pre><p><a id="empty_desc"></a></p><h3 id="empty">empty</h3><pre><code class="clojure">([coll])
+</code></pre><p><code>empty</code> takes a collection</p><p><code>empty</code> returns an empty collection of the same type as the collection
+provided.</p><pre><code class="clojure">(empty [1 2 3])
+;; ⇒ []
+
+(empty {:a 1 :b 2 :c 3})
+;; ⇒ {}
+</code></pre><p><a id="assoc_desc"></a></p><h3 id="assoc">assoc</h3><pre><code class="clojure">([map key val])
+([map key val &amp; kvs])
+</code></pre><p><code>assoc</code> takes a key and a value and returns a collection of the same
+type as the supplied collection with the key mapped to the new value.</p><p><code>assoc</code> is similar to get in how it works with maps, records or
+vectors. When applied to a map or record, the same type is returned
+with the key/value pairs added or modified.  When applied to a vector,
+a vector is returned with the key acting as an index and the index
+being replaced by the value.</p><p>Since maps and records can not contain multiple equivalent keys,
+supplying <code>assoc</code> with a key/value that exists in the one will cause
+<code>assoc</code> to return modify the key at that value in the result and not
+duplicate the key.</p><pre><code class="clojure">(assoc {:a 1} :b 2)
+;; ⇒ {:b 2, :a 1}
+
+(assoc {:a 1 :b 45 :c 3} :b 2)
+;; ⇒ {:a 1, :c 3, :b 2}
+
+(defrecord Hand [index middle ring pinky thumb]) (assoc (Hand. 3 4 3.5
+2 2) :index 3.75) ;; ⇒ #user.Hand{:index 3.75, :middle 4, :ring 3.5,
+:pinky 2, :thumb 2} ``` When using `assoc` with a vector, the key is
+the index and the value is the value to assign to that index in the
+returned vector.  The key must be &lt;= (count vector) or a
+"IndexOutOfBoundsException" will occur. `assoc` can not be used to add
+an item to a vector.
+
+```clojure
+(assoc [1 2 76] 2 3) ;= [1 2 3]
+
+;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
+(assoc [1 2 3] 5 6) ;; IndexOutOfBoundsException   clojure.lang.PersistentVector.assocN (PersistentVector.java:136)
+</code></pre><p><a id="dissoc_desc"></a></p><h3 id="dissoc">dissoc</h3><pre><code class="clojure">([map])
+([map key])
+([map key &amp; ks])
+</code></pre><p><code>dissoc</code> takes a map and a variable number of keys.</p><p><code>dissoc</code> returns a map with the supplied keys, and subsequently their
+values, removed. Unlike <code>assoc</code>, <code>dissoc</code> does not work on
+vectors. When a record is provided, <code>dissoc</code> returns a map. For
+similar functionality with vectors, see <code>subvec</code> and <code>concat</code>.</p><pre><code class="clojure">(dissoc {:a 1 :b 2 :c 3} :b)
+;; ⇒ {:a 1, :c 3}
+
+(dissoc {:a 1 :b 14 :c 390 :d 75 :e 2 :f 51} :b :c :e)
+;; ⇒ {:a 1, :f 51, :d 75}
+
+;; note that a map is returned, not a record.
+(defrecord Hand [index middle ring pinky thumb])
+;; always be careful with the bandsaw!
+(dissoc (Hand. 3 4 3.5 2 2) :ring)
+;; ⇒ {:index 3, :middle 4, :pinky 2, :thumb 2}
+</code></pre><h2 id="information-about-a-collection-or-sequence">Information about a Collection or Sequence</h2><p><a id="count_desc"></a></p><h3 id="count">count</h3><pre><code class="clojure">([coll])
+</code></pre><p><code>count</code> takes a collection.</p><p>Returns a count of the number of items in a collection. An argument of nil returns 0.</p><pre><code class="clojure">(count "Hello")
+;; ⇒ 5
+
+(count [1 2 3 4 5 6 7])
+;; ⇒ 7
+
+(count nil)
+;; ⇒ 0
+</code></pre><p>Note that count does not return in constant time for all
+collections. This can be determined with <code>counted?</code>.  Keep in mind
+that lazy sequences must be realized to get a count of the items. This
+is often not intended and can cause a variety of otherwise cryptic
+errors.</p><pre><code class="clojure">(counted? "Hello")
+;; ⇒ false
+
+;; will be fully realized when using (count (range 10))
+(counted? (range 10))
+;; ⇒ false
+
+;; Constant time return of (count)
+(counted? [1 2 3 4 5])
+;; ⇒ true
+</code></pre><p><a id="empty?_desc"></a></p><h3 id="empty-1">empty?</h3><pre><code class="clojure">([coll])
+</code></pre><p><code>empty</code> takes a collection.</p><p><code>empty?</code> returns true if the collection has no items, or false if it has 1 or more items.</p><pre><code class="clojure">(empty? [])
+;; ⇒ true
+
+(empty? '(1 2 3))
+;; ⇒ false
+</code></pre><p>Do not confuse <code>empty?</code> with <code>empty</code>. This can be a source of great confusion:</p><pre><code class="clojure">(if (empty [1 2 3]) ;; empty returns an empty seq, which is true! use empty? here.
+  "It's empty"
+  "It's not empty")
+;; ⇒ "It's empty"
+</code></pre><p><a id="not-empty_desc"></a></p><h3 id="not-empty">not-empty</h3><pre><code class="clojure">([coll])
+</code></pre><p><code>not-empty</code> takes a collection.</p><p><code>not-empty</code> returns nil if the collection has no items. If the collection contains items, the collection is returned.</p><pre><code class="clojure">(not-empty '(:mice :elephants :children))
+;; ⇒ (:mice :elephants :children)
+
+(not-empty '())
+;; ⇒ nil
+</code></pre><h2 id="items-in-a-collection-or-sequence">Items in a Collection or Sequence</h2><p><a id="first_desc"></a></p><h3 id="first">first</h3><pre><code class="clojure">([coll])
+</code></pre><p><code>first</code> takes a collection.</p><p><code>first</code> returns the first item in the collection. <code>first</code> returns nil
+if the argument is empty or is nil.</p><p>Note that for collections that do not guarantee order like some maps
+and sets, the behaviour of <code>first</code> should not be relied on.</p><pre><code class="clojure">(first (range 10))
+;; ⇒ 0
+
+(first [:floor :piano :seagull])
+;; ⇒ :floor
+
+(first [])
+;; ⇒ nil
+</code></pre><p><a id="rest_desc"></a></p><h3 id="rest">rest</h3><pre><code class="clojure">([coll])
+</code></pre><p><code>rest</code> takes a collection.</p><p><code>rest</code> returns a seq of items starting with the second element in the
+collection. <code>rest</code> returns an empty seq if the collection only
+contains a single item.</p><p><code>rest</code> should also not be relied on when using maps and sets unless
+you are sure ordering is guaranteed.</p><pre><code class="clojure">(rest [13 1 16 -4])
+;; ⇒ (1 16 -4)
+
+(rest '(:french-fry))
+;; ⇒ '()
+</code></pre><p>The behaviour of <code>rest</code> should be contrasted with <code>next</code>. <code>next</code>
+returns nil if the collection only has a single item. This is
+important when considering "truthiness" of values since an empty seq
+is "true" but nil is not.</p><pre><code class="clojure">(if (rest '("stuff"))
+  (print "Does this print?")) ;; yes, it prints.
+
+
+;; NEVER FINISHES EXECUTION!
+;; "done" is never reached because (rest x) is always a "true" value
+(defn inf
+  [x]
+  (if (rest x)
+    (inf (rest x))
+    "done"))
+</code></pre><p><a id="get_desc"></a></p><h3 id="get">get</h3><pre><code class="clojure">([map key])
+([map key not-found])
+</code></pre><p><code>get</code> takes an associative collection, a sequence of keys and an optional default value.</p><p><code>get</code> returns the value for the specified key in a map or record,
+index of a vector or value in a set. If the key is not present, <code>get</code>
+returns nil or a supplied default value.</p><pre><code class="clojure">;; val of a key in a map
+(get {:a 1 :b 2 :c 3} :b)
+;; ⇒ 2
+
+;; index of a vector
+(get [10 15 20 25] 2)
+;; ⇒ 20
+
+;; in a set, returns the value itself if present
+(get #{1 10 100 2 20 200} 1)
+;; ⇒ 1
+
+;; returns nil if key is not present
+(get {:a 1 :b 2} :c)
+;; ⇒ nil
+
+;; vector does not have an _index_ of 4. nil is returned
+(get [1 2 3 4] 4)
+;; ⇒ nil
+
+(defrecord Hand [index middle ring pinky thumb])
+(get (Hand. 3 4 3.5 2 2) :index)
+;; ⇒ 3
+</code></pre><p><code>get</code> also supports a default return value supplied as the last argument.</p><pre><code class="clojure">;; index 4 does not exist. return default value
+(get [1 2 3 4] 4 "Not Found")
+;; ⇒ "Not Found"
+
+;; key :c does not exist, so return default value of 3
+(get {:a 1 :b 2} :c 3)
+;; ⇒ 3
+</code></pre><p><a id="contains?_desc"></a></p><h3 id="contains">contains?</h3><pre><code class="clojure">([coll key])
+</code></pre><p><code>contains?</code> takes a map and a key.</p><p><code>contains</code> returns true if the provided <em>key</em> is present in a
+collection. <code>contains</code> is similar to <code>get</code> in that vectors treat the
+key as an index. <code>contains</code> will always return false for lists.</p><pre><code class="clojure">(contains? {:a 1 :b 2 :c 3} :c)
+;; ⇒ true
+
+;; true if index 2 exists
+(contains? ["John" "Mary" "Paul"] 2)
+;; ⇒ true
+
+;; false if index 5 does not exist
+(contains? ["John" "Mary" "Paul"] 5)
+;; ⇒ false
+
+;; "Paul" does not exist as an index
+(contains? ["John" "Mary" "Paul"] "Paul")
+;; ⇒ false
+
+;; lists are not supported. contains? won't traverse a collection for a result.
+(contains? '(1 2 3) 0)
+;; ⇒ java.lang.IllegalArgumentException: contains? not supported on type: clojure.lang.PersistentList
+
+</code></pre><p><a id="keys_desc"></a></p><h3 id="keys">keys</h3><pre><code class="clojure">([map])
+</code></pre><p><code>keys</code> takes a map or record.</p><p><code>keys</code> returns a sequence of the keys in a map or record.</p><pre><code class="clojure">(keys {1 "one" 2 "two" 3 "three"})
+;; ⇒ (1 2 3)
+
+(defrecord Hand [index middle ring pinky thumb])
+(keys (Hand. 2 4 3 1 2))
+;; ⇒ (:index :middle :ring :pinky :thumb)
+</code></pre><p><a id="vals_desc"></a></p><h3 id="vals">vals</h3><pre><code class="clojure">([map])
+</code></pre><p><code>vals</code> takes a map or record.</p><p><code>vals</code> returns a sequence of vals in a map or record.</p><pre><code class="clojure">(vals {:meows 20 :barks 2 :moos 5})
+;; ⇒ (5 2 20)
+
+(defrecord Hand [index middle ring pinky thumb])
+(vals (Hand. 1 2 3 4 5))
+;; ⇒ (1 2 3 4 5)
+</code></pre><p><a id="take_desc"></a></p><h3 id="take">take</h3><pre><code class="clojure">([n coll])
+</code></pre><p><code>take</code> takes a number and a collection.</p><p><code>take</code> returns a lazy sequence starting with the first value of the
+collection and n sequential items after that.</p><p>If the number of items in the collection is less than the provided
+number, the entire collection is returned lazily.</p><pre><code class="clojure">TBD: example
+</code></pre><p><a id="drop_desc"></a></p><h3 id="drop">drop</h3><pre><code class="clojure">([n coll])
+</code></pre><p><code>drop</code> takes a number and a collection.</p><p><code>drop</code> returns a lazy sequence starting at the nth item of the collection.</p><pre><code class="clojure">TBD: example
+</code></pre><p><a id="take-while_desc"></a></p><h3 id="take-while">take-while</h3><pre><code class="clojure">([pred coll])
+</code></pre><p><code>take-while</code> takes a function that accepts a single-argument and a
+collection.</p><p><code>take-while</code> returns a lazy sequence of sequential items until the
+function returns nil/false value for that item.</p><pre><code class="clojure">TBD: example
+</code></pre><p><a id="drop-while_desc"></a></p><h3 id="drop-while">drop-while</h3><pre><code class="clojure">([pred coll])
+</code></pre><p>'drop-while` takes a function that accepts a single-argument and a
+collection.</p><p><code>drop-while</code> returns a lazy sequence starting at the first item in the
+collection that the function returns nil/false.</p><p><a id="filter_desc"></a></p><h3 id="filter">filter</h3><pre><code class="clojure">([pred coll])
+</code></pre><p><code>filter</code> takes a function that accepts a single argument and a
+collection.</p><p><code>filters</code> returns a lazy sequence of items that return <code>true</code> for the
+provided predicate. Contrast to <code>remove</code>.</p><pre><code class="clojure">(filter even? (range 10))
+;; ⇒ (0 2 4 6 8)
+
+(filter #(if (&lt; (count %) 5) %) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
+;; ⇒ ("Paul" "Rudd")
+</code></pre><p>When using sets with <code>filter</code>, remember that if nil or false is in the
+set and in the collection, then the predicate will return itself:
+<code>nil</code>.</p><p>In this example, when nil and false are tested with the predicate, the
+predicate returns nil. This is because if the item is present in the
+set it is returned. This will cause that item to /not/ be included in
+the returned lazy-sequence.</p><pre><code class="clojure">(filter #{:nothing :something nil} [:nothing :something :things :someone nil false :pigeons])
+;; ⇒ (:nothing :something)
+</code></pre><p><a id="keep_desc"></a></p><h3 id="keep">keep</h3><p><code>(keep f coll)</code></p><p><code>keep</code> takes a function that accepts a single argument and a
+collection.</p><p><code>keep</code> returns a lazy sequence of non-nil results of the function
+applied to each item in the collection in sequence.</p><pre><code class="clojure">TBD: examples
+</code></pre><p><a id="remove_desc"></a></p><h3 id="remove">remove</h3><pre><code class="clojure">([pred coll])
+</code></pre><p><code>remove</code> takes a function that accepts a single argument and a
+collection.</p><p><code>remove</code> returns a lazy sequence of items that return <code>false</code> or <code>nil</code>
+for the provided predicate. Contrast to <code>filter</code>.</p><pre><code class="clojure">(remove even? (range 10))
+;; ⇒ (1 3 5 7 9)
+
+;; relative complement. probably useless?
+(remove {:a 1 :b 2} [:h :k :z :b :s])
+;; ⇒ (:h :k :z :s)
+</code></pre><p>When using sets with <code>remove</code>, remember that if nil or false is in the
+set and in the collection, then the predicate will return itself:
+<code>nil</code>.  This will cause that item to be included in the returned lazy
+sequence.</p><p>In this example, when nil and false are tested with the predicate, the
+predicate returns nil. This is because if the item is present in the
+set it is returned.</p><pre><code class="clojure">(remove #{:nothing :something nil} [:nothing :something :things :someone nil false :pigeons])
+;; ⇒ (:things :someone nil false :pigeons)
+</code></pre><p><a id="some_desc"></a></p><h3 id="some">some</h3><pre><code class="clojure">([pred coll])
+</code></pre><p><code>some</code> takes a function that accepts a single argument and a collection.</p><p><code>some</code> will apply a predicate to each value in a collection until a
+non-false/nil result is returned then immediately return that result.</p><p>Since collections are "true" values, this makes it possible to return
+the first result itself rather than simply <code>true</code>.</p><pre><code class="clojure">(some even? [1 2 3 4 5])
+;; ⇒ true
+
+;; predicate returns the value rather than simply true
+(some #(if (even? %) %) [1 2 3 4 5])
+;; ⇒ 2
+</code></pre><p>Since maps can be used as functions, you can use a map as a
+predicate. This will return the value of the first key in the
+collection that is also in the map.</p><pre><code class="clojure">(some {:a 1 :b 5} [:h :k :d :b])
+;; ⇒ 5
+</code></pre><p>Sets can also be used as functions and will return the first item in
+the collection that is present in the set.</p><pre><code class="clojure">(some #{4} (range 20))
+;; ⇒ 4
+</code></pre><p><a id="every?_desc"></a></p><h3 id="every">every?</h3><pre><code class="clojure">([pred coll])
+</code></pre><p><code>every</code> takes a function that accepts a single argument and a collection.</p><p><code>every</code> returns true if the predicate returns true for every item in
+the collection, otherwise it returns false.</p><pre><code class="clojure">(every? even? (range 0 10 2))
+;; ⇒ true
+
+;; set can be used to see if collection only contains items in the set.
+(every? #{2 3 4} [2 3 4 2 3 4])
+;; ⇒ true
+</code></pre><h2 id="processing-collections-and-sequences">Processing Collections and Sequences</h2><p><a id="partition_desc"></a></p><h3 id="partition">partition</h3><pre><code class="clojure">([n coll])
+([n step coll])
+([n step pad coll])
+</code></pre><p><code>partition</code> takes a number, an optional step, an optional padding
+collection and a collection. If the padding collection is provided, a
+step must be provided.</p><p><code>partition</code> sequentially takes a provided number of items from the
+collection in sequence and puts them into lists. This lazy sequence of
+lists is returned.</p><p>If a step is provided, the lists in the returned lazy sequence start
+at offsets in the provided collection of that number items in the
+list.</p><p>If a padding collection is provided, the last item in the returned
+lazy sequence will be padded with the padding collection to achieve
+the desired partitioning size.</p><p>If there is no padding collection provided and there is not enough
+items to fill the last list in the returned lazy sequence, those items
+will be not used.</p><pre><code class="clojure">TBD: example
+</code></pre><p><a id="partition-all_desc"></a></p><h3 id="partition-all">partition-all</h3><pre><code class="clojure">([n coll])
+([n step coll])
+</code></pre><p><code>partition-all</code> takes a number, an optional step and a collection.</p><p><code>partition-all</code> sequentially takes a provided number of items from the
+collection in sequence and puts them into lists. This lazy sequence of
+lists is returned.</p><p>If a step is provided, the lists in the returned lazy sequence start
+at offsets in the provided collection of that number items in the
+list.</p><p>If there are not enough items to fill the last list in the returned
+lazy sequence, the remaining items will be used in the last list.</p><pre><code class="clojure">TBD: example
+</code></pre><h3 id="filter-1">filter</h3><p>See: <a href="filter_desc">filter</a></p><h3 id="remove-1">remove</h3><p>See: <a href="remove_desc">remove</a></p><h3 id="for-2">for</h3><p>See: <a href="for_desc">for</a></p><h3 id="map-1">map</h3><p>See: <a href="map_desc">map</a></p><h3 id="remove-2">remove</h3><p>See: <a href="remove_desc">remove</a></p><h3 id="empty-2">empty?</h3><p>See: <a href="empty?_desc">empty</a></p><h3 id="not-empty-1">not-empty</h3><p>See: <a href="not-empty_desc">not-empty</a></p><h2 id="function-composition-and-application">Function Composition and Application</h2><p><a id="juxt_desc"></a></p><h3 id="juxt">juxt</h3><pre><code class="clojure">([])
+([f])
+([f g])
+([f g h])
+([f1 f2 f3 &amp; fs])
+</code></pre><p><code>juxt</code> takes a variable number of functions.</p><p><code>juxt</code> returns a function that will return a vector consisting of the
+result of each of those functions to a provided argument.</p><pre><code class="clojure">TBD: examples
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="comp_desc"></a></p><h3 id="comp">comp</h3><pre><code class="clojure">([])
+([f])
+([f g])
+([f g h])
+([f1 f2 f3 &amp; fs])
+</code></pre><p><code>comp</code> takes a variable number of functions.</p><p><code>comp</code> returns a function that will return the result of applying the
+rightmost function to the provided argument, then the second rightmost
+function to the result of that etc.</p><pre><code class="clojure">TBD: examples
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="fnil_desc"></a></p><h3 id="fnil">fnil</h3><pre><code class="clojure">([f x])
+([f x y])
+([f x y z])
+</code></pre><p><code>fnil</code> takes a function and one to three arguments.</p><p><code>fnil</code> returns a function that replaces any nil arguments with the
+provided values. <code>fnil</code> only supports supports patching 3 arguments,
+but will pass any arguments beyond that un-patched.</p><pre><code class="clojure">(defn say-info [name location hobby]
+  (println name "is from" location "and enjoys" hobby))
+
+(def say-info-patched (fnil say-info "Someone" "an unknown location" "Clojure"))
+
+(say-info-patched nil nil nil)
+;; ⇒ Someone is from an unknown location and enjoys Clojure
+
+(say-info-patched "Robert" nil "giraffe migrations")
+;; ⇒ Robert is from an unknown location and enjoys giraffe migrations
+</code></pre><p><a id="apply_desc"></a></p><h3 id="apply">apply</h3><pre><code class="clojure">([f args] [f x args] [f x y args] [f x y z args] [f a b c d &amp; args])
+</code></pre><p><code>apply</code> takes a variable number of arguments and a collection.</p><p><code>apply</code> effectively unrolls the supplied args and a collection into a
+list of arguments to the supplied function.</p><pre><code class="clojure">(str ["Hel" "lo"])
+;; ⇒ "[\"Hel\" \"lo\"]" ;; not what we want, str is operating on the vector
+
+(apply str ["Hel" "lo"]) ;; same as (str "Hel" "lo")
+;; ⇒ "Hello"
+</code></pre><p><code>apply</code> prepends any supplied arguments to the form as well.</p><pre><code class="clojure">(map + [[1 2 3] [1 2 3]]) ;; This attempts to add 2 vectors with +
+;; ClassCastException   java.lang.Class.cast (Class.java:2990)
+
+(apply map + [[1 2 3] [1 2 3]]) ;; same as (map + [1 2 3] [1 2 3])
+;; ⇒ (2 4 6)
+
+(apply + 1 2 3 [4 5 6]) ;; same as  (+ 1 2 3 4 5 6)
+;; ⇒ 21
+</code></pre><p>Note that apply can not be used with macros.</p><p><a id="-_desc"></a></p><h3 id="-">-&gt;</h3><pre><code class="clojure">([x])
+([x form])
+([x form &amp; more])
+</code></pre><p><code>-&gt;</code> takes a value and optionally one or more expressions.</p><p><code>-&gt;</code> takes the first argument and inserts it as the second item in the
+next form, or creates a list with the first argument as the second
+item. The return value of that expression is inserted as the second
+item in the next form, making a list if necessary.  This continues
+until all expressions are evaluated and the final value is returned.</p><pre><code class="clojure">TBD: example
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="-_desc"></a></p><h3 id="--1">-&gt;&gt;</h3><pre><code class="clojure">([x])
+([x form])
+([x form &amp; more])
+</code></pre><p><code>-&gt;&gt;</code> takes a value and optionally one or more expressions.</p><p><code>-&gt;&gt;</code> takes the first argument and inserts it as the last item in the
+next form, or creates a list with the first argument as the last
+item. The return value of that expression is inserted as the last item
+in the next form, making a list if necessary.  This continues until
+all expressions are evaluated and the final value is returned.</p><p>TBD: Simple image accompaniment.</p><h2 id="associative-collections">Associative Collections</h2><p><a id="get-in_desc"></a></p><h3 id="get-in">get-in</h3><pre><code class="clojure">([m ks] [m ks not-found])
+</code></pre><p><code>get-in</code> takes an associative collection, a sequence of keys and an optional default value.</p><p><code>get-in</code> takes the first value in the sequence of keys and retrieves
+the value, then applies each subsequent key to to the most recently
+returned value and returns the final result. If any key is not present
+when evaluated then either nil, or a provided default value is
+returned.</p><pre><code class="clojure">user&gt; (get-in {:profile {:personal {:age 28}}} [:profile :personal :age])
+;= 28
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="update-in_desc"></a></p><h3 id="update-in">update-in</h3><pre><code class="clojure">([m [k &amp; ks] f &amp; args])
+</code></pre><p><code>update-in</code> takes an associative collection, a sequence of keys, a
+function and optional arguments to supply to that function.</p><p><code>update-in</code> takes the first value in the sequence of keys and
+retrieves the value, then applies each subsequent key to to the most
+recently returned value. The function and optional arguments are
+applied to the value and a new nested collection is returned with the
+key having the result of that function.</p><p><code>update-in</code> will create new hash-maps if a key in the sequence of keys
+does not exist. The returned collection will have a nested structure
+correlating to the provided sequence along with the result of the
+function and optional arguments as the value of the final key.</p><pre><code class="clojure">(update-in {:profile {:personal {:age 28}}} [:profile :personal :age] inc)
+;= {:profile {:personal {:age 29}}}
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="assoc-in_desc"></a></p><h3 id="assoc-in">assoc-in</h3><pre><code class="clojure">([m [k &amp; ks] v])
+</code></pre><p><code>assoc-in</code> takes an associative collection, a sequence of keys and a value.</p><p><code>assoc-in</code> takes the first value in the sequence of keys and retrieves
+the value, then applies each subsequent key to to the most recently
+returned value. The final key is assigned the provided value and a new
+nested collection is returned.</p><p><code>update-in</code> will create new hash-maps if a key in the sequence of keys
+does not exist. The returned collection will have a nested structure
+correlating to the provided sequence along with the provided value as
+the value of the final key.</p><pre><code class="clojure">user&gt; (assoc-in {:profile {:personal {:age 28}}} [:profile :personal :location] "Vancouver, BC")
+;= {:profile {:personal {:location "Vancouver, BC", :age 28}}}
+</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="select-keys_desc"></a></p><h3 id="select-keys">select-keys</h3><pre><code class="clojure">([map keyseq])
+</code></pre><p><code>select-keys</code> takes an associative collection and a sequence of keys.</p><p><code>select-keys</code> returns a map containing only the entries that have a
+key which is also present in the sequence of keys.</p><pre><code class="clojure">(select-keys {:a 1 :b 2 :c 3} [:a :b])
+;= {:b 2, :a 1}
+</code></pre><h3 id="keys-1">keys</h3><p>See: <a href="#keys_desc">keys</a></p><h3 id="vals-1">vals</h3><p>See: <a href="#vals_desc">vals</a></p><h3 id="get-1">get</h3><p>See: <a href="#get_desc">get</a></p><h3 id="assoc-1">assoc</h3><p>See: <a href="#assoc_desc">assoc</a></p><h3 id="dissoc-1">dissoc</h3><p>See: <a href="#dissoc_desc">dissoc</a></p><h2 id="namespace-functions">Namespace Functions</h2><p><a id="ns_desc"></a></p><h3 id="ns-require-use-import-refer">ns, require, use, import, refer</h3><p>Please see the <a href="/articles/language/namespaces.html">Namespace guide</a></p><h2 id="reference-types">Reference Types</h2><p><a id="ref_desc"></a></p><h3 id="ref-atom-var-agent">ref, atom, var, agent</h3><p>Please see the <a href="articles/language/concurrency_and_parallelism.html">Concurrency and Parallelism Guide</a></p><p><a id="deref_desc"></a></p><h3 id="deref-swap-reset-dosync-alter-commute-binding">deref, swap!, reset!, dosync, alter, commute, binding</h3><p>Please see the <a href="articles/language/concurrency_and_parallelism.html">Concurrency and Parallelism Guide</a></p><h2 id="contributors">Contributors</h2><p>Robert Randolph <a href="mailto:audiolabs@gmail.com">audiolabs@gmail.com</a> (original author)
+Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a>
+Nguyễn Hà Dương <a href="mailto:cmpitg@gmail.com">cmpitg@gmail.com</a></p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/language/concurrency_and_parallelism/">&laquo; Concurrency and Parallelism in Clojure</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/language/functions/">Functions in Clojure &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

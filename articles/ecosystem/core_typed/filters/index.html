@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Filters</title>
+    
+
+<meta name="description" content="core.typed includes an implementation of occurrence typing, which helps the type
+checker refine types according to control flow.Occurrence typing helps core.typed infer a very accurate type for this expression
+by recognising the semantics of predicates like symbol? and number?.">
+
+<meta property="og:description" content="core.typed includes an implementation of occurrence typing, which helps the type
+checker refine types according to control flow.Occurrence typing helps core.typed infer a very accurate type for this expression
+by recognising the semantics of predicates like symbol? and number?.">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/ecosystem/core_typed/filters/" />
+<meta property="og:title" content="Filters" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/ecosystem/core_typed/filters/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Filters</h2>
+    </div>
+    
+    <p>core.typed includes an implementation of occurrence typing, which helps the type
+checker refine types according to control flow.</p><p>Occurrence typing helps core.typed infer a very accurate type for this expression
+by recognising the semantics of predicates like <code>symbol?</code> and <code>number?</code>.</p><pre><code class="clojure">clojure.core.typed=&gt; (cf (let [a (ann-form 1 Any)]
+                           (cond
+                             (symbol? a) a
+                             (number? a) a)))
+(U clojure.lang.Symbol java.lang.Number nil)
+</code></pre><h2 id="filters">Filters</h2><p>core.typed collects more information than just types for each expression.</p><p>A structure called a filter set is also inferred. A filter set is a collection
+of two filters:</p><ul><li>a filter that is true if the expression is a true value, called the <code>then</code> filter</li><li>a filter that is true if the expression is a false value, called the <code>else</code> filter</li></ul><h3 id="trivial-filters">Trivial Filters</h3><p>There are two trivial filters:</p><ul><li><code>tt</code>, the trivially true filter</li><li><code>ff</code>, the impossible filter</li></ul><p>We can use <code>cf</code> to check the filters of expressions.</p><pre><code class="clojure">clojure.core.typed=&gt; (cf 1)
+[(Value 1) {:then tt, :else ff}]
+</code></pre><p>The second place of the result vector is the filter set inferred for the expression.
+<code>{:then tt, :else ff}</code> reads: the expression could be a true value, but it is impossible
+for it to be a false value. This of course aligns with the semantics of numbers in Clojure.</p><p>False values are never true:</p><pre><code class="clojure">clojure.core.typed=&gt; (cf nil)
+[nil {:then ff, :else tt}]
+</code></pre><h3 id="positive-and-negative-type-filters">Positive and Negative Type Filters</h3><p>Filters can hold information relating bindings to types.</p><p>A positive type filter refines a local binding to be a type.</p><p>This filter says that the local binding <code>a</code> is of type <code>Number</code>.</p><pre><code class="clojure">(is Number a)
+</code></pre><p>A negative type filter refines a local binding to <em>not</em> be a type.</p><p>This filter says that the local binding <code>a</code> is <em>not</em> of type <code>Number</code>.</p><pre><code class="clojure">(! Number a)
+</code></pre><h3 id="latent-filters">Latent Filters</h3><p>Filters almost never need to be written directly in normal code. <em>Latent</em> filters
+however are very useful, and provide the most useful information to core.typed.</p><p>A <em>latent filter set</em> is a filter set attached to a function type. It is latent
+because it is not used directly: instead when a function with a latent filter set
+is called, the filter set is instantiated in a way that makes sense in the current
+context before it is used like a normal filter.</p><h3 id="predicates">Predicates</h3><p>A very common place for a latent filters are in the types for predicates.</p><p>The type for <code>symbol?</code>, is</p><pre><code class="clojure">[Any -&gt; Boolean :filters {:then (is Symbol 0), :else (! Symbol 0)}]
+</code></pre><p>First, notice that latent type predicates can also take an integer as an identifier.
+The <code>0</code> represents the first argument of the function the latent filter set is attached to.</p><p>So the latent <code>then</code> filter <code>(is Symbol 0)</code> says the first argument to <code>symbol?</code> is of type <code>Symbol</code>
+if the whole expression is a true value. To retrieve a non-latent filter, the <code>0</code> is instantiated to
+the appropriate local binding.</p><pre><code>Note: Use `clojure.core.typed/print-filterset` to print the filter set of an expression.
+</code></pre><pre><code class="clojure">clojure.core.typed=&gt; (cf (let [a (ann-form 1 Any)]
+                           (print-filterset "symbol filters"
+                             (symbol? a))))
+"symbol filters"
+{:then (is clojure.lang.Symbol a), :else (! clojure.lang.Symbol a)}
+empty-object
+Flow tt
+boolean
+</code></pre><p>By printing the filter set of <code>(symbol? a)</code> we can see this in work, which
+has a non-latent filter set of <code>{:then (is clojure.lang.Symbol a), :else (! clojure.lang.Symbol a)}</code>.</p><h3 id="paths-and-objects">Paths and Objects</h3><p>TODO</p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/ecosystem/community/">&laquo; Clojure Community</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/ecosystem/core_typed/function_types/">Functions &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

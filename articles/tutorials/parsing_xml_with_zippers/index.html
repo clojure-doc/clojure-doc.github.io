@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Parsing XML in Clojure</title>
+    
+
+<meta name="description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.What Version of Clojure Does This Guide Cover?">
+
+<meta property="og:description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on
+Github.What Version of Clojure Does This Guide Cover?">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/tutorials/parsing_xml_with_zippers/" />
+<meta property="og:title" content="Parsing XML in Clojure" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/tutorials/parsing_xml_with_zippers/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Parsing XML in Clojure</h2>
+    </div>
+    
+    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+Attribution 3.0 Unported License</a> (including images &amp;
+stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on
+Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.4 and Leiningen 2.x.</p><h2 id="overview">Overview</h2><p>Try as you might, XML is difficult to avoid. This is particularly true
+in the Java ecosystem. This guide will show you how to parse XML with
+the minimum amount of pain using the excellent tools available in
+Clojure.</p><h2 id="parsing-nzb-files">Parsing NZB files</h2><p>For the purpose of the tutorial I have chosen a simple and fairly well
+known XML file format: NZB. An NZB file is used to describe files to
+download from NNTP servers. In this tutorial we will take a basic NZB
+document and turn it into a Clojure map.</p><p>Let us start by creating a new project (for details on using
+Leiningen, see <a href="/articles/tutorials/leiningen.html">this guide</a>:</p><pre><code class="bash">$ lein new nzb
+</code></pre><p>Now edit <code>project.clj</code> to contain the following:</p><pre><code class="clojure">(defproject nzb "0.1.0-SNAPSHOT"
+  :description ""
+  :url ""
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :dependencies [[org.clojure/clojure "1.4.0"]
+                 [org.clojure/data.zip "0.1.1"]])
+</code></pre><p>We are including a dependency on
+<a href="http://github.com/clojure/data.zip">clojure.data.zip</a>, which is a
+"system for filtering trees, and XML trees in particular".</p><p>Make a dir called <code>dev-resources</code> at the root of your project, and
+create a file named <code>example.nzb</code> inside of it. This will be the file
+we use to test our code (taken from
+<a href="http://en.wikipedia.org/wiki/NZB">wikipedia</a>). <code>dev-resources</code> is by
+convention the location to store file resources you use during
+development / testing.</p><p>Put the following XML in the example.nzb file:</p><pre><code class="xml">&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
+&lt;!-- &lt;!DOCTYPE nzb PUBLIC "-//newzBin//DTD NZB 1.1//EN" "http://www.newzbin.com/DTD/nzb/nzb-1.1.dtd"&gt; --&gt;
+&lt;nzb xmlns="http://www.newzbin.com/DTD/2003/nzb"&gt;
+ &lt;head&gt;
+   &lt;meta type="title"&gt;Your File!&lt;/meta&gt;
+   &lt;meta type="tag"&gt;Example&lt;/meta&gt;
+ &lt;/head&gt;
+ &lt;file poster="Joe Bloggs &amp;lt;bloggs@nowhere.example&amp;gt;" date="1071674882" subject="Here's your file!  abc-mr2a.r01 (1/2)"&gt;
+   &lt;groups&gt;
+     &lt;group&gt;alt.binaries.newzbin&lt;/group&gt;
+     &lt;group&gt;alt.binaries.mojo&lt;/group&gt;
+   &lt;/groups&gt;
+   &lt;segments&gt;
+     &lt;segment bytes="102394" number="1"&gt;123456789abcdef@news.newzbin.com&lt;/segment&gt;
+     &lt;segment bytes="4501" number="2"&gt;987654321fedbca@news.newzbin.com&lt;/segment&gt;
+   &lt;/segments&gt;
+ &lt;/file&gt;
+&lt;/nzb&gt;
+</code></pre><p><em><em>Note</em> The eagle eyed among you will notice that I have commented out the
+DOCTYPE declaration, as this causes an Exception to be thrown. I will
+show you how to get around this towards the end of the tutorial.</em></p><p>Let's write a high level test to illustrate more clearly what we are
+trying to do. Open up the <code>test/nzb/core_test.clj</code> file and make enter
+the following:</p><pre><code class="clojure">(ns nzb.core-test
+  (:use clojure.test
+        nzb.core)
+  (:require [clojure.java.io :as io]))
+
+(deftest test-nzb-&gt;map
+  (let [input (io/resource "example.nzb")]
+    (is (= {:meta {:title "Your File!"
+                   :tag "Example"}
+            :files [{:poster "Joe Bloggs &lt;bloggs@nowhere.example&gt;"
+                     :date 1071674882
+                     :subject "Here's your file!  abc-mr2a.r01 (1/2)"
+                     :groups ["alt.binaries.newzbin"
+                              "alt.binaries.mojo"]
+                     :segments [{:bytes 102394
+                                 :number 1
+                                 :id "123456789abcdef@news.newzbin.com"}
+                                {:bytes 4501
+                                 :number 2
+                                 :id "987654321fedbca@news.newzbin.com"}]}]}
+           (nzb-&gt;map input)))))
+</code></pre><p>This should be fairly self-explanatory, I have directly translated the
+XML into Clojure data structures of maps and vectors. If we were to
+just use the <code>clojure.xml</code> library to parse the NZB file, we get a
+tree based representation. For example:</p><pre><code class="clojure">(-&gt; "example.nzb" io/resource io/file xml/parse)
+{:tag :nzb,
+ :attrs {:xmlns "http://www.newzbin.com/DTD/2003/nzb"},
+ :content
+ [{:tag :head,
+   :attrs nil,
+   :content
+   [{:tag :meta, :attrs {:type "title"}, :content ["Your File!"]}
+    {:tag :meta, :attrs {:type "tag"}, :content ["Example"]}]}
+  {:tag :file,
+   :attrs
+   {:poster "Joe Bloggs &lt;bloggs@nowhere.example&gt;",
+    :date "1071674882",
+    :subject "Here's your file!  abc-mr2a.r01 (1/2)"},
+   :content
+   [{:tag :groups,
+     :attrs nil,
+     :content
+     [{:tag :group, :attrs nil, :content ["alt.binaries.newzbin"]}
+      {:tag :group, :attrs nil, :content ["alt.binaries.mojo"]}]}
+    {:tag :segments,
+     :attrs nil,
+     :content
+     [{:tag :segment,
+       :attrs {:bytes "102394", :number "1"},
+       :content ["123456789abcdef@news.newzbin.com"]}
+      {:tag :segment,
+       :attrs {:bytes "4501", :number "2"},
+       :content ["987654321fedbca@news.newzbin.com"]}]}]}]}
+</code></pre><p>That's great, and can sometimes be enough. But I would rather work
+with the representation I have in the test. To do that, we need a way
+of traversing this tree and picking out the pieces of information we
+require. The <code>clojure.zip</code> and <code>clojure.data.zip</code> libraries are
+perfect for this. The
+<a href="http://clojure.github.com/data.zip/">documentation</a> for the
+<code>data.zip</code> library on github is nice, but it initially left me a
+little confused as to how to go about using the library (not being
+familiar with zippers).</p><h3 id="a-simple-example">A Simple Example</h3><p>Zippers allow you to easily traverse a data structure. Let's play with
+it in a REPL and start with the root node of our NZB file:</p><pre><code class="clojure">(require '[clojure.java.io :as io])
+(require '[clojure.xml :as xml])
+(require '[clojure.zip :as zip])
+(require '[clojure.data.zip.xml :as zip-xml])
+
+(def root (-&gt; "example.nzb" io/resource io/file xml/parse zip/xml-zip))
+</code></pre><p>Now we have a zipper for the root element of our document, we can
+start traversing it for information. The two main functions we will
+use for this are <code>xml-&gt;</code> and <code>xml1-&gt;</code>. The former returns a sequence
+of items based on the predicates given to it, the latter returning the
+first matching item. As an example, let's get the meta data from the NZB
+document <code>root</code> and create a Clojure map:</p><pre><code class="clojure">(into {}
+      (for [m (zip-xml/xml-&gt; root :head :meta)]
+        [(keyword (zip-xml/attr m :type))
+         (zip-xml/text m)]))
+;; =&gt; {:title "Your File!", :tag "Example"}
+</code></pre><p>A couple of things are happening here. First of all we use <code>xml-&gt;</code> to
+return a sequence of <code>&lt;meta&gt;</code> tags that live under the <code>&lt;head&gt;</code> tag:</p><pre><code class="clojure">(zip-xml/xml-&gt; root :head :meta)
+</code></pre><p>We use the <code>for</code> list comprehension macro to evaluate each item in the
+sequence. For each item we find the contents of the <code>:type</code> attribute
+using the <code>attr</code> function:</p><pre><code class="clojure">(keyword (zip-xml/attr m :type))
+</code></pre><p>This returns us the contents of the attribute as a string, which we
+turn into a <code>keyword</code> to use as the key in the map. We then use the
+<code>text</code> function to get the textual contents of the meta tag:</p><pre><code class="clojure">(zip-xml/text m)
+</code></pre><p>We make a tuple of these values, and pass the resulting sequence to
+<code>into</code> to build the map.</p><h2 id="putting-it-together">Putting It Together</h2><p>Using only these functions, we can parse the raw XML into the Clojure
+data structure from our unit test. If you like, open
+<code>./src/nzb/core.clj</code>, and make the changes as you read along.</p><p>First let's define our <code>nzb-&gt;map</code> function from the test, and pull in
+the code we have already written for parsing the metadata of the NZB:</p><pre><code class="clojure">(ns nzb.core
+  (:require [clojure.xml :as xml]
+            [clojure.java.io :as io]
+            [clojure.zip :as zip]
+            [clojure.data.zip.xml :as zip-xml]))
+
+(defn meta-&gt;map
+  [root]
+  (into {}
+        (for [m (zip-xml/xml-&gt; root :head :meta)]
+          [(keyword (zip-xml/attr m :type))
+           (zip-xml/text m)])))
+
+(defn file-&gt;map
+  [file]
+  ;; TODO
+)
+
+(defn nzb-&gt;map
+  [input]
+  (let [root (-&gt; input
+                 io/input-stream
+                 xml/parse
+                 zip/xml-zip)]
+    {:meta  (meta-&gt;map root)
+     :files (mapv file-&gt;map (zip-xml/xml-&gt; root :file))}))
+</code></pre><p>The only new thing here is the use of <code>io/input-stream</code> to allow us to
+use anything as <code>input</code> that the <code>io/input-stream</code> supports. These are
+currently <code>OutputStream</code>, <code>File</code>, <code>URI</code>, <code>URL</code>, <code>Socket</code>, <code>byte array</code>, and <code>String</code> arguments. See the
+<a href="http://clojure.github.com/clojure/clojure.java.io-api.html">clojure.java.io</a>
+docs for details.</p><p>Now let's fill in the <code>file-&gt;map</code> function:</p><pre><code class="clojure">(defn segment-&gt;map
+  [seg]
+  {:bytes  (Long/valueOf (zip-xml/attr seg :bytes))
+   :number (Integer/valueOf (zip-xml/attr seg :number))
+   :id     (zip-xml/xml1-&gt; seg zip-xml/text)})
+
+(defn file-&gt;map
+  [file]
+  {:poster   (zip-xml/attr file :poster)
+   :date     (Long/valueOf (zip-xml/attr file :date))
+   :subject  (zip-xml/attr file :subject)
+   :groups   (vec (zip-xml/xml-&gt; file :groups :group zip-xml/text))
+   :segments (mapv segment-&gt;map
+                   (zip-xml/xml-&gt; file :segments :segment))})
+</code></pre><p>Again, nothing new. We simply pick out the pieces of the document we
+wish to process using a combination of the <code>xml1-&gt;</code>, <code>xml-&gt;</code>, <code>attr</code>,
+and <code>text</code> functions. Run the test, and it should pass.</p><h3 id="prevent-parsing-the-dtd">Prevent Parsing the DTD</h3><p>Interestingly, if we uncomment the DTD declaration in the
+<code>example.nzb</code> file, our code now explodes with an Exception:</p><pre><code>org.xml.sax.SAXParseException: The markup declarations contained or pointed to by the document type declaration must be well-formed
+</code></pre><p>We can fix this by swapping out the <code>SAXParserFactory</code> and setting a
+feature to not validate the DTD. Here's how:</p><p>Update the <code>ns</code> declaration to include some required classes:</p><pre><code class="clojure">(ns nzb.core
+  (:require [clojure.xml :as xml]
+            [clojure.java.io :as io]
+            [clojure.zip :as zip]
+            [clojure.data.zip.xml :as zip-xml])
+  (:import (javax.xml.parsers SAXParser SAXParserFactory)))
+</code></pre><p>Define a function to switch out the SAXParserFactory:</p><pre><code class="clojure">(defn startparse-sax
+  "Don't validate the DTDs, they are usually messed up."
+  [s ch]
+  (let [factory (SAXParserFactory/newInstance)]
+    (.setFeature factory "http://apache.org/xml/features/nonvalidating/load-external-dtd" false)
+    (let [^SAXParser parser (.newSAXParser factory)]
+      (.parse parser s ch))))
+</code></pre><p>Update our nzb-&gt;map definition to use it:</p><pre><code class="clojure">(defn nzb-&gt;map
+  [input]
+  (let [root (-&gt; input
+                 io/input-stream
+                 (xml/parse startparse-sax)
+                 zip/xml-zip)]
+    {:meta  (meta-&gt;map root)
+     :files (mapv file-&gt;map (zip-xml/xml-&gt; root :file))}))
+</code></pre><p>Yay, our test passes again.</p><h2 id="query-predicates">Query Predicates</h2><p>There are a few other useful functions in the <code>clojure.data.zip.xml</code>
+ns we haven't yet looked at, namely: <code>text=</code>, <code>attr=</code>, and <code>tag=</code>.
+These functions allow you to construct query predicates to run against
+a given node. As an example, let's pull out the first file segment
+from the <code>example.nzb</code> file using the <code>attr=</code> function:</p><pre><code class="clojure">(zip-xml/xml1-&gt; root
+                :file
+                :segments
+                :segment
+                (zip-xml/attr= :number "1"))
+                zip-xml/text)
+"123456789abcdef@news.newzbin.com"
+</code></pre><p>From the root node of the document we reach down into <code>:file</code>,
+<code>:segments</code>, and <code>:segment</code> in turn, then use the <code>attr=</code> query
+predicate to match a <code>:segment</code> with a value of <code>"1"</code>.</p><p>Interestingly enough, the other two query predicates have shortcuts
+for their use. You have already been using the <code>tag=</code> query predicate
+every time you use a keyword to locate a tag. To use the <code>text=</code>
+predicate easily, just use a string. For example, to retrieve the
+second <code>:segment</code> based on its content of
+<code>987654321fedbca@news.newzbin.com</code>:</p><pre><code class="clojure">(zip-xml/xml1-&gt; root
+                :file
+                :segments
+                :segment
+                "987654321fedbca@news.newzbin.com")
+;; ... the resulting node
+</code></pre><p>Finally, you can combine these query predicates to match multiple
+things on a given node by using a vector:</p><pre><code class="clojure">(zip-xml/xml1-&gt; root
+                :file
+                :segments
+                :segment
+                [(zip-xml/attr= :number "1")
+                 (zip-xml/attr= :bytes "102394")]
+                zip-xml/text)
+"123456789abcdef@news.newzbin.com"
+</code></pre><p>Here we are matching on both the <code>:number</code> attribute being <code>"1"</code>, and
+the <code>:bytes</code> attribute being <code>"102394"</code>. Obviously, you can use
+strings here to match against content too.</p><h2 id="creating-new-predicates">Creating New Predicates</h2><p>OK, now let's suppose we want to use some kind of numerical comparison
+in our XML (like we might do with XPath). As it stands, we have no way
+to do that with the built-in functions but we can easily define our
+own.</p><p>Let's start with a general function for comparing attribute values:</p><pre><code class="clojure">(defn attr-fn
+  [attrname f test-val &amp; [conv-fn]]
+  (fn [loc]
+    (let [conv-fn (or conv-fn identity)
+          val (conv-fn (zip-xml/attr loc attrname))]
+      (f val test-val))))
+</code></pre><p>This function takes an attribute name (<code>attrname</code>), a function for
+making a comparison (<code>f</code>), a value to test agains (<code>test-val</code>) and
+optionally a conversion function. Imagine our <code>example.nzb</code> file had
+100 segments, and we only wanted to get segments over 75. We could now
+achieve this using our general function:</p><pre><code class="clojure">(zip-xml/xml-&gt; root
+               :file
+               :segments
+               :segment
+               (attr-fn :number &gt; 75 #(Long/valueOf %))
+               zip-xml/text)
+</code></pre><p>Let's provide a helper for this to make the syntax clearer:</p><pre><code class="clojure">(defn attr&gt;
+  [attrname val]
+  (attr-fn attrname &gt; val #(Long/valueOf %)))
+
+(zip-xml/xml-&gt; doc
+               :file
+               :segments
+               :segment
+               (attr&gt; :number 75)
+               zip-xml/text)
+</code></pre><p>We could build a whole suite of helper functions for examining XML
+nodes, if we are unlucky enough to be required to do so :)</p><h2 id="conclusion">Conclusion</h2><p>I hope these simple examples have given you an idea of the ease with
+which you can process XML using Clojure, and how simple it is to
+extend the tools already provded in interesting directions.</p><h2 id="contributors">Contributors</h2><p><a href="http://blog.gaz-jones.com">Gareth Jones</a>, 2012 (original author)</p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/tutorials/introduction/">&laquo; Introduction to Clojure</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

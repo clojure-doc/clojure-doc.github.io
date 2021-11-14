@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Functions in Clojure</title>
+    
+
+<meta name="description" content="This guide covers:">
+
+<meta property="og:description" content="This guide covers:">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/language/functions/" />
+<meta property="og:title" content="Functions in Clojure" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/functions/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Functions in Clojure</h2>
+    </div>
+    
+    <p>This guide covers:</p><ul><li>How to define functions</li><li>How to invoke functions</li><li>Multi-arity functions</li><li>Variadic functions</li><li>Higher order functions</li><li>Other topics related to functions</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure is a functional programming language. Naturally, functions are very important part of Clojure.</p><h2 id="how-to-define-functions">How To Define Functions</h2><p>Functions are typically defined using the <a href="http://clojuredocs.org/clojure_core/clojure.core/defn">defn</a> macro:</p><pre><code class="clojure">(defn round
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre><p>Functions can have doc strings (documentation strings) and it is a good idea to document functions that
+are part of the public API:</p><pre><code class="clojure">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [d precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre><p>In Clojure, function arguments may have optional type hints:</p><pre><code class="clojure">(defn round
+  [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre><p>Type hints sometimes allow the compiler to avoid reflective method calls and/or produce significantly more efficient bytecode.
+However, as a rule of thumb, it is usually not necessary to use type hints. Start writing your code without them. The compiler
+is also free to ignore provided hints.</p><p>Functions can also define <em>preconditions</em> and <em>postconditions</em> that put restrictions on argument values and
+the value function returns:</p><pre><code class="clojure">(defn round
+  "Round down a double to the given precision (number of significant digits)"
+  [^double d ^long precision]
+  {:pre [(not-nil? d) (not-nil? precision)]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+</code></pre><p>In the example above, we use preconditions to check that both arguments are not nil. The <code>not-nil?</code> macro (or function) is not
+demonstrated in this example and assumed to be implemented elsewhere.</p><h2 id="anonymous-functions">Anonymous Functions</h2><p>Anonymous functions are defined using the <code>fn</code> special form:</p><pre><code class="clojure">(fn [x]
+  (* 2 x))
+</code></pre><p>Anonymous functions can be assigned to locals, passed between functions (higher order functions are covered later in this document)
+and returned from functions:</p><pre><code class="clojure">(let [f (fn [x]
+          (* 2 x))]
+  (map f (range 0 10)))
+</code></pre><p>There is also a reader macro for anonymous functions:</p><pre><code class="clojure">(let [f #(* 2 %)]
+  (map f (range 0 10)))
+</code></pre><p>The <code>%</code> in the example above means "the first argument". To refer to more than one argument, use <code>%1</code>, <code>%2</code> and so on:</p><pre><code class="clojure">;; an anonymous function that takes 3 arguments and adds them together
+(let [f #(+ %1 %2 %3)]
+  (f 1 2 3))
+</code></pre><p>Please <strong>use this reader macro sparingly</strong>; excessive use may lead to unreadable code.</p><h2 id="how-to-invoke-functions">How To Invoke Functions</h2><p>Functions are invoked by placing a function to the leading position (<em>the calling position</em>) of a list:</p><pre><code class="clojure">(format "Hello, %s" "world")
+</code></pre><p>This works also if you have a function stored in a local, a var or passed as an argument:</p><pre><code class="clojure">(let [f format]
+  (f "Hello, %s" "world"))
+</code></pre><p>Alternatively, you can call a function using <a href="http://clojuredocs.org/clojure_core/clojure.core/apply">clojure.core/apply</a></p><pre><code class="clojure">(apply format "Hello, %s" ["world"])
+
+(apply format "Hello, %s %s" ["Clojure" "world"])
+</code></pre><p><code>clojure.core/apply</code> is usually only necessary when calling variadic functions or having the list of arguments passed in
+as a collection.</p><h2 id="multi-arity-functions">Multi-arity Functions</h2><p>Functions in Clojure can have multiple <em>arities</em>, or sets of arguments:</p><pre><code class="clojure">(defn tax-amount
+  ([amount]
+     (tax-amount amount 35))
+  ([amount rate]
+     (Math/round (double (* amount (/ rate 100))))))
+</code></pre><p>In the example above, the version of the function that takes only one argument (so called <em>one-arity</em> or <em>1-arity</em> function)
+calls another version (<em>2-arity</em>) with a default parameter. This is a common use case for multiple arities: to have default
+argument values. Clojure is a hosted language and JVM (and JavaScript VMs, for that matter) does not support default argument
+values, however, it does support <em>method overloading</em> and Clojure takes advantage of this.</p><p>Arities in Clojure can only differ by the number of arguments, not types. This is because Clojure is strongly dynamically typed language and type information about
+parameters may or may not be available to the compiler.</p><p>A larger example:</p><pre><code class="clojure">(defn range
+  ([]
+    (range 0 Double/POSITIVE_INFINITY 1))
+  ([end]
+    (range 0 end 1))
+  ([start end]
+    (range start end 1))
+  ([start end step]
+    (comment Omitted for clarity)))
+</code></pre><h2 id="destructuring-of-function-arguments">Destructuring of Function Arguments</h2><p>Sometimes function arguments are data structures: vectors, sequences, maps. To access parts of such
+data structure, you may do something like this:</p><pre><code class="clojure">(defn currency-of
+  [m]
+  (let [currency (get m :currency)]
+    currency))
+</code></pre><p>For vector arguments:</p><pre><code class="clojure">(defn currency-of
+  [pair]
+  (let [amount   (first  pair)
+        currency (second pair)]
+    currency))
+</code></pre><p>However, this is boilerplate code that has little to do with what the function really does. Clojure
+lets developer <strong>destructure</strong> parts of arguments, for both maps and sequences.</p><h3 id="positional-destructuring">Positional Destructuring</h3><p>Destructuring over vectors (<strong>positional destructuring</strong>) works like this: you replace the argument
+with a vector that has "placeholders" (symbols) in positions you want to bind. For example, if the
+argument is known to be a pair and you need second argument, it would look like this:</p><pre><code class="clojure">(defn currency-of
+  [[amount currency]]
+  currency)
+</code></pre><p>In the example above the first element in the pair is bound to <code>amount</code> and the second one is bound to
+<code>currency</code>. So far so good. However, notice that we do not use the <code>amount</code> local. In that case, we can
+ignore it by replacing it with an underscore:</p><pre><code class="clojure">(defn currency-of
+  [[_ currency]]
+  currency)
+</code></pre><p>Destructuring can nest (destructure deeper than one level):</p><pre><code class="clojure">(defn first-first
+  [[[i _] _]]
+  i)
+</code></pre><p>While this article does not cover <code>let</code> and locals, it is worth demonstrating that positional destructuring works
+exactly the same way for let bindings:</p><pre><code class="clojure">(let [pair         [10 :gbp]
+      [_ currency] pair]
+  currency)
+</code></pre><h3 id="map-destructuring">Map Destructuring</h3><p>Destructuring over maps and records (<strong>map destructuring</strong>) works slightly differently:</p><pre><code class="clojure">(defn currency-of
+  [{currency :currency}]
+  currency)
+</code></pre><p>In this case example, we want to bind the value for key <code>:currency</code> to <code>currency</code>. Keys don't have to be
+keywords:</p><pre><code class="clojure">(defn currency-of
+  [{currency "currency"}]
+  currency)
+</code></pre><pre><code class="clojure">(defn currency-of
+  [{currency 'currency}]
+  currency)
+</code></pre><p>When destructuring multiple keys at once, it is more convenient to use a slightly different syntax:</p><pre><code class="clojure">(defn currency-of
+  [{:keys [currency amount]}]
+  currency)
+</code></pre><p>The example above assumes that map keys will be keywords and we are interested in two values: <code>currency</code>
+and <code>amount</code>. The same can be done for strings:</p><pre><code class="clojure">(defn currency-of
+  [{:strs [currency amount]}]
+  currency)
+</code></pre><p>and symbols:</p><pre><code class="clojure">(defn currency-of
+  [{:syms [currency amount]}]
+  currency)
+</code></pre><p>In practice, keywords are very commonly used for map keys so destructuring with <code>{:keys [...]}</code> is very common
+as well.</p><p>Map destructuring also lets us specify default values for keys that may be missing:</p><pre><code class="clojure">(defn currency-of
+  [{:keys [currency amount] :or {currency :gbp}}]
+  currency)
+</code></pre><p>This is very commonly used for implementing functions that take "extra options" (faking named arguments support).</p><p>Just like with positional destructuring, map destructuring works exactly the same way for let bindings:</p><pre><code class="clojure">(let [money               {:currency :gbp :amount 10}
+     {currency :currency} money]
+  currency)
+</code></pre><h2 id="variadic-functions">Variadic Functions</h2><p>Variadic functions are functions that take varying number of arguments (some arguments are optional). Two examples
+of such function in <code>clojure.core</code> are <code>clojure.core/str</code> and <code>clojure.core/format</code>:</p><pre><code class="clojure">(str "a" "b")      ; ⇒ "ab"
+(str "a" "b" "c")  ; ⇒ "abc"
+
+(format "Hello, %s" "world")               ; ⇒ "Hello, world"
+(format "Hello, %s %s" "Clojure" "world")  ; ⇒ "Hello, Clojure world"
+</code></pre><p>To define a variadic function, prefix optional arguments with an ampersand (<code>&amp;</code>):</p><pre><code class="clojure">(defn log
+  [message &amp; args]
+  (comment ...))
+</code></pre><p>In the example above, one argument is required and the rest is optional. Variadic functions
+are invoked as usual:</p><pre><code class="clojure">(defn log
+  [message &amp; args]
+  (println "args: " args))
+
+(log "message from " "192.0.0.76")
+</code></pre><p>Running the example above in the REPL produces:</p><pre><code class="clojure">user=&gt; (log "message from " "192.0.0.76")
+args:  (192.0.0.76)
+
+user=&gt; (log "message from " "192.0.0.76" "service:xyz")
+args:  (192.0.0.76 service:xyz)
+</code></pre><p>As you can see, optional arguments (<code>args</code>) are packed into a list.</p><h3 id="extra-arguments-aka-named-parameters">Extra Arguments (aka Named Parameters)</h3><p>Named parameters are achieved through the use of destructuring a variadic function.</p><p>Approaching named parameters from the standpoint of destructuring a variadic function allows for more clearly readable function invocations.  This is an example of named parameters:</p><pre><code class="clojure">(defn job-info
+  [&amp; {:keys [name job income] :or {job "unemployed" income "$0.00"}}]
+  (if name
+    [name job income]
+    (println "No name specified")))
+</code></pre><p>Using the function looks like this:</p><pre><code class="clojure">user=&gt; (job-info :name "Robert" :job "Engineer")
+["Robert" "Engineer" "$0.00"]
+
+user=&gt; (job-info :job "Engineer")
+No name specified
+</code></pre><p>Without the use of a variadic argument list, you would have to call the function with a single map argument such as <code>{:name "Robert" :job "Engineer}</code>.</p><p>Keyword default values are assigned by use of the <code>:or</code> keyword followed by a map of keywords to their default value.
+Keywords not present and not given a default will be nil.</p><h2 id="higher-order-functions">Higher Order Functions</h2><p>Higher-order functions (<em>HOFs</em>) are functions that take other functions as arguments. HOFs
+are an important functional programming technique and are quite commonly used in Clojure. One example
+of an HOF is a function that takes a function and a collection and returns a collection of elements
+that satisfy a condition (a predicate). In Clojure, this function is called <code>clojure.core/filter</code>:</p><pre><code class="clojure">(filter even? (range 0 10))  ; ⇒ (0 2 4 6 8)
+</code></pre><p>In the example above, <code>clojure.core/filter</code> takes <code>clojure.core/even?</code> as an argument.</p><p><code>clojure.core</code> has dozens of other higher-order functions. The most commonly used ones are covered in <a href="/articles/language/core_overview.html">clojure.core Overview</a>.</p><h2 id="private-functions">Private Functions</h2><p>Functions in Clojure can be private to their namespace.</p><p>They are covered in more detail in the <a href="/articles/language/namespaces.html">Namespaces</a> guide.</p><h2 id="keywords-as-functions">Keywords as Functions</h2><p>In Clojure, keywords can be used as functions. They take a map or record and look themselves up in it:</p><pre><code class="clojure">(:age {:age 27 :name "Michael"})  ; ⇒ 27
+</code></pre><p>This is commonly used with higher order functions:</p><pre><code class="clojure">(map :age [{:age 45 :name "Joe"} {:age 42 :name "Jill"} {:age 17 :name "Matt"}])  ; ⇒ (45 42 17)
+</code></pre><p>and the <code>-&gt;</code> macro:</p><pre><code class="clojure">(-&gt; [{:age 45 :name "Joe"} {:age 42 :name "Jill"}] first :name)  ; ⇒ "Joe"
+</code></pre><h2 id="maps-as-functions">Maps as Functions</h2><p>Clojure maps are also functions that take keys and look up values for them:</p><pre><code class="clojure">({:age 42 :name "Joe"} :name)     ; ⇒ "Joe"
+({:age 42 :name "Joe"} :age)      ; ⇒ 42
+({:age 42 :name "Joe"} :unknown)  ; ⇒ nil
+</code></pre><p>Note that this is <strong>not true</strong> for Clojure records, which are almost identical to maps in other
+cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="clojure">(#{1 2 3} 1)   ; ⇒ 1
+(#{1 2 3} 10)  ; ⇒ nil
+
+(#{:us :au :ru :uk} :uk)  ; ⇒ :uk
+(#{:us :au :ru :uk} :cn)  ; ⇒ nil
+</code></pre><p>This is often used to check if a value is in a set:</p><pre><code class="clojure">(when (countries :in)
+  (comment ...))
+
+(if (countries :in)
+  (comment Implement positive case)
+  (comment Implement negative case))
+</code></pre><p>because everything but <code>false</code> and <code>nil</code> evaluates to <code>true</code> in Clojure.</p><h2 id="clojure-functions-as-comparators">Clojure Functions As Comparators</h2><p>Clojure functions implement the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html">java.util.Comparator</a>
+interface and can be used as comparators.</p><h2 id="wrapping-up">Wrapping Up</h2><p>Functions are at the heart of Clojure. They are defined using the <code>defn</code> macro, can have multiple arities,
+be variadic and support parameter destructuring. Function arguments and return value can optionally be
+type hinted.</p><p>Functions are first class values and can be passed to other functions (called Higher Order Functions or HOFs).
+This is fundamental to functional programming techniques.</p><p>Several core data types behave like functions. When used reasonably, this can lead to more concise, readable
+code.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a>, 2012 (original author)</p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/language/core_overview/">&laquo; Overview of clojure.core, the standard Clojure library</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/language/glossary/">Clojure Terminology Guide &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

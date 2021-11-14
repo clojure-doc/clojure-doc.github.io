@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Clojure Namespaces and Vars</title>
+    
+
+<meta name="description" content="This guide covers:">
+
+<meta property="og:description" content="This guide covers:">
+
+<meta property="og:url" content="https://clojure-doc.github.io/articles/language/namespaces/" />
+<meta property="og:title" content="Clojure Namespaces and Vars" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/namespaces/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Clojure Namespaces and Vars</h2>
+    </div>
+    
+    <p>This guide covers:</p><ul><li>An overview of Clojure namespaces and vars</li><li>How to define namespaces</li><li>How to use functions in other namespaces</li><li><code>require</code>, <code>refer</code> and <code>use</code></li><li>Common compilation errors and typical problems that cause them</li><li>Namespaces and their relation to code compilation in Clojure</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojuredocs/guides">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure functions are organized into <em>namespaces</em>. Clojure namespaces
+are very similar to Java packages and Python modules. Namespaces are
+basically maps (dictionaries) that map names to <em>vars</em>. In many cases,
+those vars store functions in them.</p><h2 id="defining-a-namespace">Defining a Namespace</h2><p>Namespaces are usually defined using the <code>clojure.core/ns</code> macro. In its basic
+form, it takes a name as a symbol:</p><pre><code class="clojure">(ns superlib.core)
+</code></pre><p>Namespaces can have multiple segments, separated by a dot:</p><pre><code class="clojure">(ns megacorp.service.core)
+</code></pre><p>It is <strong>highly recommended</strong> to avoid using single segment namespaces
+(e.g. <code>superlib</code>) to avoid inconvenient conflicts other developers
+will have to work around. If a library or application belongs to an
+organization or a group of projects, the
+<code>[organization].[library|app].[group-of-functions]</code> pattern is
+recommended. For example:</p><pre><code class="clojure">(ns clojurewerkz.welle.kv)
+
+(ns megacorp.search.indexer.core)
+</code></pre><p>In addition, the <code>ns</code> macro takes a number of optional forms:</p><ul><li><code>(:require ...)</code></li><li><code>(:import ...)</code></li><li><code>(:use ...)</code></li><li><code>(:refer-clojure ...)</code></li><li><code>(:gen-class ...)</code></li></ul><p>These are just slightly more concise variants of <code>clojure.core/import</code>, <code>clojure.core/require</code>, et cetera.</p><h3 id="the-require-helper-form">The :require Helper Form</h3><p>The <code>:require</code> helper form is for setting up access to other Clojure
+namespaces from your code. For example:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require clojure.set))
+
+;; Now it is possible to do:
+;; (clojure.set/difference #{1 2 3} #{3 4 5})
+</code></pre><p>This will make sure the <code>clojure.set</code> namespace is loaded, compiled, and available as <code>clojure.set</code>
+(using its fully qualified name). It is possible (and common) to make a namespace available
+under an alias:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set :as cs]))
+
+;; Now it is possible to do:
+;; (cs/difference #{1 2 3} #{3 4 5})
+</code></pre><p>One more example with two required namespaces:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set  :as cs]
+            [clojure.walk :as walk]))
+</code></pre><h4 id="the-refer-option">The :refer Option</h4><p>To make functions in <code>clojure.set</code> available in the defined namespace via short names
+(i.e., their unqualified names, without the <code>clojure.set</code> or other prefix), you can tell Clojure compiler
+to <em>refer</em> to certain functions:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer [difference intersection]]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+</code></pre><p>The <code>:refer</code> feature of the <code>:require</code> form is new in Clojure 1.4.</p><p>It is possible to refer to all functions in a namespace (usually not necessary):</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set :refer :all]))
+
+;; Now it is possible to do:
+;; (difference #{1 2 3} #{3 4 5})
+</code></pre><h3 id="the-import-helper-form">The :import Helper Form</h3><p>The <code>:import</code> helper form is for setting up access to Java classes
+from your Clojure code. For example:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors))
+</code></pre><p>This will make sure the <code>java.util.concurrent.Executors</code> class is imported and can be used by its short
+name, <code>Executors</code>. It is possible to import multiple classes:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:import java.util.concurrent.Executors
+           java.util.concurrent.TimeUnit
+           java.util.Date))
+</code></pre><p>If multiple imported classes are in the same namespace (like in the example above),
+it is possible to avoid some duplication by using an <em>import list</em>. The first element
+of an import list is the package and other elements are class names in that package:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:import [java.util.concurrent Executors TimeUnit]
+           java.util.Date))
+</code></pre><p>Even though <em>import list</em> is called a list, it can be any Clojure collection (typically
+vectors are used).</p><h3 id="the-current-namespace">The Current Namespace</h3><p>Under the hood, Clojure keeps <strong>current namespace</strong> a special var, <a href="http://clojuredocs.org/clojure_core/clojure.core/*ns*">*ns*</a>.
+When vars are defined using the <a href="http://clojuredocs.org/clojure_core/clojure.core/def">def</a> special form, they are
+added to the current namespace.</p><h3 id="the-refer-clojure-helper-form">The :refer-clojure Helper Form</h3><p>Functions like <code>clojure.core/get</code> and macros like <code>clojure.core/defn</code> can be used without
+namespace qualification because they reside in the <code>clojure.core</code> namespace and Clojure
+compiler automatically <em>refers</em> all vars in it. Therefore, if your
+namespace defines a function with the same name (e.g. <code>find</code>), you will get a warning
+from the compiler, like this:</p><pre><code>WARNING: find already refers to: #'clojure.core/find in namespace: megacorp.profitd.scheduling, being replaced by: #'megacorp.profitd.scheduling/find
+</code></pre><p>This means that in the <code>megacorp.profitd.scheduling</code> namespace, <code>find</code> already refers to
+a value which happens to be <code>clojure.core/find</code>, but it is being replaced by a
+different value. Remember, Clojure is a very dynamic language and namespaces are
+basically maps, as far as the implementation goes. Most of the time, however,
+replacing vars like this is not intentional and Clojure compiler emits a warning.</p><p>To solve this problem, you can either rename your function, or else
+exclude certain <code>clojure.core</code> functions from being
+referred using the <code>(:refer-clojure ...)</code> form within the <code>ns</code>:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  "Finds a needle in the haystack."
+  [^String haystack]
+  (comment ...))
+</code></pre><p>In this case, to use <code>clojure.core/find</code>, you will have to use its fully
+qualified name: <code>clojure.core/find</code>:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find]))
+
+(defn find
+  "Finds a needle in the haystack."
+  [^String haystack]
+  (clojure.core/find haystack :needle))
+</code></pre><h3 id="the-use-helper-form">The :use Helper Form</h3><p>In Clojure versions before 1.4, there was no <code>:refer</code> support for the
+<code>(:require ...)</code> form. Instead, a separate form was used: <code>(:use ...)</code>:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling-test
+  (:use clojure.test))
+</code></pre><p>In the example above, <strong>all</strong> functions in <code>clojure.test</code> are made available
+in the current namespace. This practice (known as "naked use") works for <code>clojure.test</code> in
+test namespaces, but in general not a good idea. <code>(:use ...)</code> supports limiting
+functions that will be referred:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling-test
+  (:use clojure.test :only [deftest testing is]))
+</code></pre><p>which is a pre-1.4 alternative of</p><pre><code class="clojure">(ns megacorp.profitd.scheduling-test
+  (:require clojure.test :refer [deftest testing is]))
+</code></pre><p>It is highly recommended to use <code>(:require ...)</code> (optionally with <code>... :refer [...]</code>) on Clojure 1.4
+and later releases. <code>(:use ...)</code> is a thing of the past and now that
+<code>(:require ...)</code> with <code>:refer</code> is capable of doing the same thing when you
+need it, it is a good idea to let <code>(:use ...)</code> go.</p><h3 id="the-gen-class-helper-form">The :gen-class Helper Form</h3><p><em>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></em></p><h3 id="documentation-and-metadata">Documentation and Metadata</h3><p>Namespaces can have documentation strings. You can add one with the optional
+<code>ns</code> macro parameter:</p><pre><code class="clojure">(ns superlib.core
+  "Core functionality of Superlib.
+
+   Other parts of Superlib depend on functions and macros in this namespace."
+  (:require [clojure.set :refer [union difference]]))
+</code></pre><p>or metadata:</p><pre><code class="clojure">(ns ^{:doc "Core functionality of Superlib.
+            Other parts of Superlib depend on functions and macros in this namespace."
+      :author "Joe Smith"}
+   superlib.core
+  (:require [clojure.set :refer [union difference]]))
+</code></pre><p>Metadata can contain any additional keys such as <code>:author</code> which may be of use to various tools
+(such as <a href="https://clojars.org/codox">Codox</a>, <a href="https://clojars.org/cadastre">Cadastre</a>, or <a href="https://clojars.org/lein-clojuredocs">lein-clojuredocs</a>).</p><h2 id="how-to-use-functions-from-other-namespaces-in-the-repl">How to Use Functions From Other Namespaces in the REPL</h2><p>The <code>ns</code> macro is how you usually require functions from other namespaces.
+However, it is not very convenient in the REPL. For that case, the <code>clojure.core/require</code> function
+can be used directly:</p><pre><code class="clojure">;; Will be available as clojure.set, e.g. clojure.set/difference.
+(require 'clojure.set)
+
+;; Will be available as io, e.g. io/resource.
+(require '[clojure.java.io :as io])
+</code></pre><p>It takes a quoted <em><a href="glossary.html#libspec">libspec</a></em>. The libspec is either a namespace name or
+a collection (typically a vector) of <code>[name :as alias]</code> or <code>[name :refer [fns]]</code>:</p><pre><code class="clojure">(require '[clojure.set :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+</code></pre><p>The <code>:as</code> and <code>:refer</code> options can be used together:</p><pre><code class="clojure">(require '[clojure.set :as cs :refer [difference]])
+
+(difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
+(cs/union #{1 2 3} #{3 4 5 6})    ; ⇒ #{1 2 3 4 5 6}
+</code></pre><p><code>clojure.core/use</code> does the same thing as <code>clojure.core/require</code> but with the
+<code>:refer</code> option (as discussed above). It is not generally recommended to use <code>use</code> with Clojure
+versions starting with 1.4. Use <code>clojure.core/require</code> with <code>:refer</code>
+instead.</p><h2 id="namespaces-and-class-generation">Namespaces and Class Generation</h2><p><em>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></em></p><h2 id="namespaces-and-code-compilation-in-clojure">Namespaces and Code Compilation in Clojure</h2><p>Clojure is a compiled language: code is compiled when it is loaded (usually with <code>clojure.core/require</code>).</p><p>A namespace can contain vars or be used purely to extend protocols, add multimethod implementations,
+or conditionally load other libraries (e.g. the most suitable JSON parser or key/value store implementation).
+In all cases, to trigger compilation, you need to require the namespace.</p><h2 id="private-vars">Private Vars</h2><p>Vars (and, in turn, functions defined with <code>defn</code>) can be private. There are two equivalent ways to
+specify that a function is private: either via metadata or by using the <code>defn-</code> macro:</p><pre><code class="clojure">(ns megacorp.superlib)
+
+;;
+;; Implementation
+;;
+
+(def ^{:private true}
+  source-name "supersource")
+
+(defn- data-stream
+  [source]
+  (comment ...))
+</code></pre><h2 id="constant-vars">Constant Vars</h2><p>Vars can be constant. This is done by setting the <code>:const</code> metadata key to <code>true</code>. This
+will cause Clojure compiler to compile it as a constant:</p><pre><code class="clojure">(ns megacorp.epicgame)
+
+;;
+;; Implementation
+;;
+
+(def ^{:const true}
+  default-score 100)
+</code></pre><h2 id="how-to-look-up-and-invoke-a-function-by-name">How to Look up and Invoke a Function by Name</h2><p>It is possible to look up a function in particular namespace by-name with <code>clojure.core/ns-resolve</code>. This takes
+quoted names of the namespace and function. The returned value can be used just like any other
+function, for example, passed as an argument to a higher order function:</p><pre><code class="clojure">(ns-resolve 'clojure.set 'difference)  ; ⇒ #'clojure.set/difference
+
+(let [f (ns-resolve 'clojure.set 'difference)]
+   (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
+</code></pre><h2 id="compiler-exceptions">Compiler Exceptions</h2><p>This section describes some common compilation errors.</p><h3 id="classnotfoundexception">ClassNotFoundException</h3><p>This exception means that JVM could not load a class. It is either misspelled or not on the
+<a href="glossary.html#classpath">classpath</a>.
+Potentially your project has unsatisfied dependency (some dependencies may be optional).</p><p>Example:</p><pre><code class="clojure">user=&gt; (import java.uyil.concurrent.TimeUnit)
+ClassNotFoundException java.uyil.concurrent.TimeUnit  java.net.URLClassLoader$1.run (URLClassLoader.java:366)
+</code></pre><p>In the example above, <code>java.uyil.concurrent.TimeUnit</code> should have been <code>java.util.concurrent.TimeUnit</code>.</p><h3 id="compilerexception-javalangruntimeexception-no-such-var">CompilerException java.lang.RuntimeException: No such var</h3><p>This means that somewhere in the code a non-existent var is used. It may be a typo, an
+incorrect macro-generated var name or a similar issue. Example:</p><pre><code class="clojure">user=&gt; (clojure.java.io/resouce "thought_leaders_quotes.csv")
+CompilerException java.lang.RuntimeException: No such var: clojure.java.io/resouce, compiling:(NO_SOURCE_PATH:1)
+</code></pre><p>In the example above, <code>clojure.java.io/resouce</code> should have been <code>clojure.java.io/resource</code>. <code>NO_SOURCE_PATH</code>
+means that compilation was triggered from the REPL and not a Clojure source file.</p><h2 id="temporarily-overriding-vars-in-namespaces">Temporarily Overriding Vars in Namespaces</h2><p><em>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></em></p><h2 id="getting-information-about-and-programmatically-manipulating-namespaces">Getting Information About and Programmatically Manipulating Namespaces</h2><p><em>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></em></p><h2 id="wrapping-up">Wrapping Up</h2><p>Namespaces are basically maps (dictionaries) that map names to
+vars. In many cases, those vars store functions in them.</p><p>This implementation lets Clojure have many of its highly dynamic
+features at a very reasonable runtime overhead cost. For example, vars
+in namespaces can be temporarily altered for unit testing purposes.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a> (original author)</p>
+
+    <div id="prev-next">
+        
+        <a href="/articles/language/macros/">&laquo; Clojure Macros and Metaprogramming</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/ecosystem/books/">Books about Clojure and ClojureScript</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/filters/">Filters</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/function_types/">Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/home/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/limitations/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/loops/">Looping constructs</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/mm_protocol_datatypes/">core.typed User Documentation Home</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/poly_fn/">Polymorphic Functions</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/quick_guide/">core.typed Quick Guide</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/rationale/">Rationale</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/annotations/">Annotations</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/start/introduction_and_motivation/">Getting Started: Introduction and Motivation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/types/">core.typed Types</a></li>
+                    
+                    <li><a href="/articles/ecosystem/core_typed/user_documentation/">core.typed User Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/data_processing/">Data Processing (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/connection_pooling/">Connection Pooling</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/name_mapping/">(outdated article)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/reusing_connections/">How to reuse database connections</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_ddl/">Using DDL and Metadata</a></li>
+                    
+                    <li><a href="/articles/ecosystem/java_jdbc/using_sql/">Manipulating data with SQL</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    
+                    <li><a href="/articles/ecosystem/libraries_directory/">A Directory of Clojure Libraries</a></li>
+                    
+                    <li><a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects</a></li>
+                    
+                    <li><a href="/articles/ecosystem/running_cljug/">Running a Clojure User Group</a></li>
+                    
+                    <li><a href="/articles/ecosystem/user_groups/">Clojure User Groups</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Collections and Sequences in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Concurrency and Parallelism in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Overview of clojure.core, the standard Clojure library</a></li>
+                    
+                    <li><a href="/articles/language/functions/">Functions in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/glossary/">Clojure Terminology Guide</a></li>
+                    
+                    <li><a href="/articles/language/interop/">Clojure interoperability with Java</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Laziness in Clojure</a></li>
+                    
+                    <li><a href="/articles/language/macros/">Clojure Macros and Metaprogramming</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Clojure Namespaces and Vars</a></li>
+                    
+                    <li><a href="/articles/language/polymorphism/">Polymorphism in Clojure: Protocols and Multimethods</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/eclipse/">Starting with Eclipse and Counterclockwise For Clojure Development</a></li>
+                    
+                    <li><a href="/articles/tutorials/emacs/">Clojure with Emacs</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/vim_fireplace/">Clojure with Vim and fireplace.vim</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts/2021-11-14-clojure-doc/">Clojure Guides | Getting Started With Clojure | Clojure Tutorials</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2021 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
