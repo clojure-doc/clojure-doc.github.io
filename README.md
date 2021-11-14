@@ -4,7 +4,7 @@ An assorted collection of tutorials, guides, and other documentation
 (by various authors) for the Clojure programming language and its
 ecosystem. [Read the guides online](https://clojure-doc.github.io).
 
-> Note: due to loss of access to the original infrastructure hosting https://clojure-doc.github.io, this is a reboot of that site using [Cryogen](http://cryogenweb.org/) and hosted as a GitHub organization website. _Sean Corfield, November 14th, 2021._
+> Note: due to loss of access to the original infrastructure hosting http://clojure-doc.org, this is a reboot of that site using [Cryogen](http://cryogenweb.org/) and hosted as a GitHub organization website. _Sean Corfield, November 14th, 2021._
 
 ## Goals
 
