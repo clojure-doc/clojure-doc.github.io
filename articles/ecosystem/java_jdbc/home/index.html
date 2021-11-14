@@ -58,18 +58,18 @@
         <h2>java.jdbc - Getting Started</h2>
     </div>
     
-    <p>This guide is intended to help you the Clojure Contrib JDBC wrapper: <code>clojure.java.jdbc</code></p><p><strong>A modern JDBC wrapper has since been written (by the same author/maintainer) -- read about <a href="cljdoc.org/d/com.github.seancorfield/next.jdbc/"><code>next.jdbc</code> on cljdoc.org</a></strong></p><h2 id="contents">Contents</h2><ul><li><a href="home">Overview</a></li><li><a href="using_sql">Using SQL</a></li><li><a href="using_ddl">Using DDL</a></li><li><a href="reusing_connections">Reusing Connections</a></li></ul><h2 id="overview">Overview</h2><p><code>java.jdbc</code> is intended to be a low-level Clojure wrapper around various Java
+    <p>This guide is intended to help you the Clojure Contrib JDBC wrapper: <code>clojure.java.jdbc</code></p><p><strong>A modern JDBC wrapper has since been written (by the same author/maintainer) -- read about <a href="cljdoc.org/d/com.github.seancorfield/next.jdbc/"><code>next.jdbc</code> on cljdoc.org</a></strong></p><h2 id="contents">Contents</h2><ul><li><a href="../home">Overview</a></li><li><a href="../using_sql">Using SQL</a></li><li><a href="../using_ddl">Using DDL</a></li><li><a href="../reusing_connections">Reusing Connections</a></li></ul><h2 id="overview">Overview</h2><p><code>java.jdbc</code> is intended to be a low-level Clojure wrapper around various Java
 JDBC drivers and supports a wide range of databases. The <a href="https://github.com/clojure/java.jdbc/"><code>java.jdbc</code> source is
 on GitHub</a> and there is a dedicated <a href="https://groups.google.com/forum/#!forum/clojure-java-jdbc">java.jdbc mailing
 list</a>. The detailed <a href="http://clojure.github.io/java.jdbc/"><code>java.jdbc</code> reference</a> is
 automatically generated from the <code>java.jdbc</code> source.</p><p>Generally, when using <code>java.jdbc</code>, you will set up a data source as a "database
 spec" and pass that to the various CRUD (create, read, update, delete)
 functions that <code>java.jdbc</code> provides. These operations are detailed within the
-<a href="using_sql">Using SQL</a> page, but a quick overview is provided by the
+<a href="../using_sql">Using SQL</a> page, but a quick overview is provided by the
 walkthrough below.</p><p>By default, each operation opens a connection and executes the SQL inside a
 transaction. You can also run multiple operations against the same connection,
 either within a transaction or via connection pooling, or just with a shared
-connection. You can read more about reusing connections on the <a href="reusing_connections">Reusing
+connection. You can read more about reusing connections on the <a href="../reusing_connections">Reusing
 Connections</a> page.</p><h2 id="higher-level-dsl-and-migration-libraries">Higher-level DSL and migration libraries</h2><p>If you need more abstraction than the <code>java.jdbc</code> wrapper provides, you may want
 to consider using a library that provides a DSL. All of the following libraries
 are built on top of <code>java.jdbc</code> and provide such abstraction:</p><ul><li><a href="https://github.com/jkk/honeysql">HoneySQL</a></li><li><a href="https://github.com/r0man/sqlingvo">SQLingvo</a></li><li><a href="http://sqlkorma.com">Korma</a></li><li><a href="https://github.com/walkable-server/walkable">Walkable</a></li></ul><p>In particular, <a href="http://sqlkorma.com">Korma</a> goes beyond a SQL DSL to provide "entities" and
@@ -109,7 +109,7 @@ constructed manually as a string.</p><pre><code class="clojure">(ns dbexample
 single transaction:</p><pre><code class="clojure">(jdbc/db-do-commands db-spec
                      [fruit-table-ddl
                       "CREATE INDEX name_ix ON fruit ( name );"])
-</code></pre><p>For more details on DDL functionality within <code>java.jdbc</code>, see the <a href="using_ddl">Using DDL and
+</code></pre><p>For more details on DDL functionality within <code>java.jdbc</code>, see the <a href="../using_ddl">Using DDL and
 Metadata Guide</a>.</p><h3 id="querying-the-database">Querying the database</h3><p>The four basic CRUD operations <code>java.jdbc</code> provides are:</p><pre><code class="clojure">(jdbc/insert! db-spec :table {:col1 42 :col2 "123"})               ;; Create
 (jdbc/query   db-spec ["SELECT * FROM table WHERE id = ?" 13])     ;; Read
 (jdbc/update! db-spec :table {:col1 77 :col2 "456"} ["id = ?" 13]) ;; Update
@@ -132,7 +132,7 @@ corresponding columns to be set to <code>NULL</code>.</p><p><code>delete!</code>
 <code>update!</code>.</p><p>By default, the table name and column names are converted to strings
 corresponding to the keyword names in the underlying SQL. We can control how we
 transform keywords into SQL names using an optional <code>:entities</code> argument which
-is described in more detail in the <a href="using_sql">Using SQL</a> section.</p><h3 id="dropping-our-tables">Dropping our tables</h3><p>To clean out the database from our example, we can generate a the command to
+is described in more detail in the <a href="../using_sql">Using SQL</a> section.</p><h3 id="dropping-our-tables">Dropping our tables</h3><p>To clean out the database from our example, we can generate a the command to
 drop the fruit table:</p><pre><code class="clojure">(def drop-fruit-table-ddl (jdbc/drop-table-ddl :fruit))
 </code></pre><p>Ensure you tear down your tables and indexes in the opposite order of creation:</p><pre><code class="clojure">(jdbc/db-do-commands db-spec
                      ["DROP INDEX name_ix;"
@@ -161,7 +161,7 @@ via the simple spec form:</p><pre><code class="clojure">(def db-spec
 specify the filename:</p><pre><code class="clojure">(def db-spec
   {:dbtype "h2"
    :dbname "/path/to/my/database"})
-</code></pre><h2 id="more-detailed-javajdbc-documentation">More detailed <code>java.jdbc</code> documentation</h2><ul><li><a href="using_sql">Using SQL:</a> a more detailed guide on using SQL with <code>java.jdbc</code></li><li><a href="using_ddl">Using DDL:</a> how to create your tables using the <code>java.jdbc</code> DDL</li><li><a href="reusing_connections">Reusing Connections:</a> how to reuse your database
+</code></pre><h2 id="more-detailed-javajdbc-documentation">More detailed <code>java.jdbc</code> documentation</h2><ul><li><a href="../using_sql">Using SQL:</a> a more detailed guide on using SQL with <code>java.jdbc</code></li><li><a href="../using_ddl">Using DDL:</a> how to create your tables using the <code>java.jdbc</code> DDL</li><li><a href="../reusing_connections">Reusing Connections:</a> how to reuse your database
 connections</li></ul>
 
     <div id="prev-next">

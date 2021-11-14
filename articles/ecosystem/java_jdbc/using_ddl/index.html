@@ -58,7 +58,7 @@
         <h2>java.jdbc - Using DDL and Metadata</h2>
     </div>
     
-    <h2 id="contents">Contents</h2><ul><li><a href="home">Overview</a></li><li><a href="using_sql">Using SQL</a></li><li><a href="using_ddl">Using DDL</a></li><li><a href="reusing_connections">Reusing Connections</a></li></ul><h2 id="using-ddl">Using DDL</h2><p>DDL operations can be executed using the <code>db-do-commands</code> function. The general
+    <h2 id="contents">Contents</h2><ul><li><a href="../home">Overview</a></li><li><a href="../using_sql">Using SQL</a></li><li><a href="../using_ddl">Using DDL</a></li><li><a href="../reusing_connections">Reusing Connections</a></li></ul><h2 id="using-ddl">Using DDL</h2><p>DDL operations can be executed using the <code>db-do-commands</code> function. The general
 approach is:</p><pre><code class="clojure">(jdbc/db-do-commands db-spec [sql-command-1 sql-command-2 .. sql-command-n])
 </code></pre><p>The commands are executed as a single, batched statement, wrapped in a
 transaction. If you want to avoid the transaction, use this approach:</p><pre><code class="clojure">(jdbc/db-do-commands db-spec false [sql-command-1 sql-command-2 .. sql-command-n])
