@@ -147,7 +147,7 @@ one record to start us off with:</p><pre><code class="clojure">(require '[clojur
   (jdbc/insert! conn :locations
     {:x 8 :y 9}))
 </code></pre><p>and hit <code>ctrl-d</code> to exit.</p><p>For more about how to use the database functions, see the
-<a href="/articles/ecosystem/java_jdbc/home.html">Using java.jdbc</a> on this site.</p><h2 id="set-up-your-routes">Set up your routes</h2><p>In the default <code>src/my_webapp/handler.clj</code> file you're provided, we
+<a href="/articles/ecosystem/java_jdbc/home/">Using java.jdbc</a> on this site.</p><h2 id="set-up-your-routes">Set up your routes</h2><p>In the default <code>src/my_webapp/handler.clj</code> file you're provided, we
 specify our webapp's <em>routes</em> inside the <code>defroutes</code> macro. That is,
 we assign a function to handle each of the url paths we'd like to
 support, and then at the end provide a "not found" page for any other

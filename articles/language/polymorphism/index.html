@@ -134,8 +134,8 @@ a protocol is via the <code>clojure.core/extend-protocol</code>:</p><pre><code c
 </code></pre><p>Protocol functions are used just like regular Clojure functions:</p><pre><code class="clojure">(protocol-of (URI. "https://clojure-doc.github.io")) ;= "http"
 (protocol-of (URL. "https://clojure-doc.github.io")) ;= "http"
 
-(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content.html"
-(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content.html"
+(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
+(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
 </code></pre><h3 id="using-protocols-from-different-namespaces">Using Protocols From Different Namespaces</h3><p>Protocol functions are required and used the same way as regular protocol functions. Consider a
 namespace that looks like this</p><pre><code class="clojure">(ns superlib.url-like
   (:import [java.net URL URI]))

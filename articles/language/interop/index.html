@@ -73,7 +73,7 @@ referenced by short names:</p><pre><code class="clojure">java.util.Date  ; ⇒ j
 Date  ; ⇒ java.util.Date
 </code></pre><p><code>ns</code> macro supports imports, too:</p><pre><code class="clojure">(ns myservice.main
   (:import java.util.Date))
-</code></pre><p>More about the <code>ns</code> macro can be found in the article on <a href="/articles/language/namespaces.html">Clojure namespaces</a>.</p><p>Dynamic (at runtime) imports are usually only used in the REPL and cases when there are multiple implementations of a particular
+</code></pre><p>More about the <code>ns</code> macro can be found in the article on <a href="/articles/language/namespaces/">Clojure namespaces</a>.</p><p>Dynamic (at runtime) imports are usually only used in the REPL and cases when there are multiple implementations of a particular
 protocol/service/feature and it is not possible to tell which one should be used until run time.</p><h3 id="automatic-imports-for-javalang">Automatic Imports For java.lang.*</h3><p>Classes from the <code>java.lang</code> package are automatically imported. For example, you can use <code>String</code> or <code>Math</code>
 without explicitly importing them:</p><pre><code class="clojure">(defn http-uri?
   [^String uri]
@@ -470,7 +470,7 @@ we may want to encode:</p><pre><code class="clojure">(extend java.net.URL
 ;;     :userInfo ""}
 </code></pre><h2 id="using-intrinsic-locks-synchronized-in-clojure">Using Intrinsic Locks ("synchronized") in Clojure</h2><p>Every object on the JVM has an <em>intrinsic lock</em> (also referred to as <em>monitor lock</em>
 or simply <em>monitor</em>). While very rarely necessary, Clojure provides support for
-operations that acquire intrinsic lock of a mutable Java object.</p><p>This is covered in the <a href="/articles/language/concurrency_and_parallelism.html#using_intrinsic_locks_synchronized_in_clojure">Concurrency and Parallelism guide</a>.</p><h2 id="wrapping-up">Wrapping Up</h2><p>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a> (original author)
+operations that acquire intrinsic lock of a mutable Java object.</p><p>This is covered in the <a href="/articles/language/concurrency_and_parallelism/#using_intrinsic_locks_synchronized_in_clojure">Concurrency and Parallelism guide</a>.</p><h2 id="wrapping-up">Wrapping Up</h2><p>TBD: <a href="https://github.com/clojuredocs/guides#how-to-contribute">How to Contribute</a></p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a> (original author)
 Lee Hinman <a href="mailto:lee@writequit.org">lee@writequit.org</a>
 gsnewmark <a href="mailto:gsnewmark@meta.ua">gsnewmark@meta.ua</a></p>
 
