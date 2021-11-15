@@ -15,7 +15,7 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 ## Preliminaries
 
 Note that for the examples below, "io" is an alias for
-clojure.java.io. That is, it's assumed your `ns` macro contains:
+`clojure.java.io`. That is, it's assumed your `ns` macro contains:
 
 ``` clojure
 (:require [clojure.java.io :as io])
