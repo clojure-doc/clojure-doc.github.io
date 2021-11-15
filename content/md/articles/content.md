@@ -31,9 +31,9 @@ If you're new to Clojure, this is a good place to start.
 A swift introduction to the Clojure language, covering most of the
 basics.
 
-### [Atom for Clojure Development](https://atom.io/packages/proto-repl)
+### [Atom for Clojure Development](https://atom.io/packages/chlorine)
 
-The ProtoREPL package for Clojure development in Atom.
+The Chlorine package for Clojure development in Atom (via a Socket REPL).
 
 ### [IntelliJ / Cursive for Clojure Development](https://cursive-ide.com/userguide/)
 
@@ -51,7 +51,12 @@ A brief introduction to Emacs, Clojure mode, CIDER and Clojure development workf
 
 A brief introduction to Clojure development in Vim with fireplace.vim.
 
+### [VS Code for Clojure Development](https://calva.io/)
 
+The Calva extension for Clojure development in VS Code (via nREPL).
+
+See also [Clover for VS Code](https://marketplace.visualstudio.com/items?itemName=mauricioszabo.clover)
+for Clojure development in VS Code (via a Socket REPL).
 
 
 
