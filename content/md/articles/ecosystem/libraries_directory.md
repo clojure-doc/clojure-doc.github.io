@@ -16,7 +16,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### General
 
-  * [useful](https://github.com/flatland/useful) ([at clojars](https://clojars.org/org.flatland/useful))
+  * [useful](https://github.com/clj-commons/useful) ([at clojars](https://clojars.org/org.flatland/useful))
 
   * [ClojureWerkz Support](https://github.com/clojurewerkz/support) ([at clojars](https://clojars.org/clojurewerkz/support))
 
@@ -288,7 +288,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
  * [Lamina](https://github.com/ztellman/lamina) ([at clojars](https://clojars.org/lamina)): event-driven workflows in Clojure
 
- * [Aleph](https://github.com/ztellman/aleph) ([at clojars](https://clojars.org/aleph)): asynchronous communication in Clojure
+ * [Aleph](https://github.com/clj-commons/aleph) ([at clojars](https://clojars.org/aleph)): asynchronous communication in Clojure
 
 
 ## Application Servers
@@ -370,7 +370,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 File I/O is covered by the JDK and commonly used via `clojure.java.io` functions.
 
-  * [fs](https://clojars.org/fs): utilities for working with the file system
+  * [fs](https://github.com/clj-commons/fs) ([at clojars](https://clojars.org/clj-commons/fs)): utilities for working with the file system
   * [nio](https://github.com/pjstadig/nio): Clojure library for working with for Java NIO classes
 
 
