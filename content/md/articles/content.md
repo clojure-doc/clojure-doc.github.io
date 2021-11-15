@@ -35,7 +35,7 @@ basics.
 
 The ProtoREPL package for Clojure development in Atom.
 
-### [Cursive for Clojure Development](https://cursive-ide.com/userguide/)
+### [IntelliJ / Cursive for Clojure Development](https://cursive-ide.com/userguide/)
 
 The user guide for Cursive, the Clojure plugin for IntelliJ.
 
