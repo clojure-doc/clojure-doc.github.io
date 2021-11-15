@@ -74,7 +74,7 @@ the JDK via interoperability.</p><p>This work is licensed under a <a rel="licens
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
 Github</a>.</p><h2 id="preliminaries">Preliminaries</h2><p>Note that for the examples below, "io" is an alias for
-clojure.java.io. That is, it's assumed your <code>ns</code> macro contains:</p><pre><code class="clojure">(:require [clojure.java.io :as io])
+<code>clojure.java.io</code>. That is, it's assumed your <code>ns</code> macro contains:</p><pre><code class="clojure">(:require [clojure.java.io :as io])
 </code></pre><p>or else in the repl you've loaded it:</p><pre><code class="clojure">(require '[clojure.java.io :as io])
 </code></pre><h2 id="recipes">Recipes</h2><h3 id="read-a-file-into-one-long-string">Read a file into one long string</h3><pre><code class="clojure">(def a-long-string (slurp "foo.txt"))
 </code></pre><p>Note, you can pass urls to <code>slurp</code> as well. See also <a href="http://clojuredocs.org/clojure_core/clojure.core/slurp">slurp at
