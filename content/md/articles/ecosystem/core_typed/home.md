@@ -13,7 +13,7 @@ core.typed is an optional type system for Clojure.
 
 `(clojure.core.typed/cf t)` type checks the form `t`.
 
-See the [Quick Guide](quick_guide/).
+See the [Quick Guide](../quick_guide/).
 
 ## [Rationale](../rationale/)
 
