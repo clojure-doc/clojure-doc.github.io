@@ -26,18 +26,17 @@ CDS is not concerned with providing the API reference; only tutorials, guides, a
 linking to other relevant resources.
 
 
-
 ## Structure
 
 CDS is structured as a number of guides. They broadly fall into 4 categories:
 
-  * Tutorials
-  * Language guides
-  * Tool guides
-  * Cookbooks
+  * Essentials
+  * Foundamentals
+  * Ecosystem & Tools
+  * Tutorials & Cookbooks
 
 
-### Tutorials
+### Essentials
 
 These guides are for complete newcomers and should include a lot of hand holding. They don't assume any
 previous familiarity with Clojure, the JVM, the JVM tool ecosystem, functional programming, immutability, and so on.
@@ -45,9 +44,10 @@ previous familiarity with Clojure, the JVM, the JVM tool ecosystem, functional p
 Target audience: newcomers to the language.
 
 
-### Language guides
+### Foundamentals
 
-These guides are more in-depth, focused on various aspects of the language and interoperability.
+These guides are more in-depth, focused on various aspects of the core language.
+
 Examples of such guides include:
 
   * Sequences
@@ -69,12 +69,9 @@ ClojureSphere, ClojureWerkz, Flatland and so on.
 Target audience: all developers using or interested in the language.
 
 
-
 ### Cookbooks
 
 Concise Clojure example code, categorized by subject.
-
-
 
 
 ## How To Contribute
