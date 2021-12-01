@@ -32,8 +32,8 @@ linking to other relevant resources.
 CDS is structured as a number of guides. They broadly fall into 4 categories:
 
   * Tutorials
-  * Language guides
-  * Tool guides
+  * Language Guides
+  * Ecosystem & Tools
   * Cookbooks
 
 
