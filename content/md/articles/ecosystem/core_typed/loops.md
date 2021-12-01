@@ -1,5 +1,5 @@
 {:title "core.typed - Looping constructs"
- :layout :page}
+ :layout :page :page-index 3700}
 
 Due to limitations in core.typed's inference, we require using "typed" versions
 of several core forms.

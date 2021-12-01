@@ -1,5 +1,5 @@
 {:title "Running a Clojure User Group"
- :layout :page}
+ :layout :page :page-index 3980}
 
 ## About this tutorial
 

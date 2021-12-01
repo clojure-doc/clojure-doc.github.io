@@ -1,4 +1,5 @@
 {:title "Clojure interoperability with Java"
+ :page-index 2500
  :layout :page}
 
 This guide covers:

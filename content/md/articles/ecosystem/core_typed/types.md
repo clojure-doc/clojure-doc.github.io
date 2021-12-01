@@ -1,5 +1,5 @@
 {:title "core.typed - Types"
- :layout :page}
+ :layout :page :page-index 3700}
 
 ## Common types
 

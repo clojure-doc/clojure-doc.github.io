@@ -1,4 +1,5 @@
 {:title "Laziness in Clojure"
+ :page-index 2400
  :layout :page}
 
 This guide covers:

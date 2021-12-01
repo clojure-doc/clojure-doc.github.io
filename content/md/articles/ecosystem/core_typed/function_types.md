@@ -1,5 +1,5 @@
 {:title "core.typed - Functions"
- :layout :page}
+ :layout :page :page-index 3700}
 
 - Function types are quite different from Typed Racket
   - anything can implement the `IFn` interface

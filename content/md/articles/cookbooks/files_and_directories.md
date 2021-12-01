@@ -1,5 +1,5 @@
 {:title "Working with Files and Directories in Clojure"
- :layout :page}
+ :layout :page :page-index 4400}
 
 This cookbook covers working with files and directories from Clojure,
 using functions in the `clojure.java.io` namespace as well as parts of

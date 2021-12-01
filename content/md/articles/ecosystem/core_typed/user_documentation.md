@@ -1,5 +1,5 @@
 {:title "core.typed - User Documentation"
- :layout :page}
+ :layout :page :page-index 3700}
 
 # Usage
 

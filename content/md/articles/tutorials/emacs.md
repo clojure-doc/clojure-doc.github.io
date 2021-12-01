@@ -1,4 +1,5 @@
 {:title "Clojure with Emacs"
+ :page-index 1200
  :layout :page}
 
 This work is licensed under a <a rel="license"

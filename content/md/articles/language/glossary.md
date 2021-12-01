@@ -1,4 +1,5 @@
 {:title "Clojure Terminology Guide"
+ :page-index 2900
  :layout :page}
 
 A glossary of terminology specific to Clojure. Terms

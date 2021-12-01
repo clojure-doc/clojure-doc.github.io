@@ -1,5 +1,5 @@
 {:title "Strings"
- :layout :page}
+ :layout :page :page-index 4100}
 
 This cookbook covers working with strings in Clojure using built-in
 functions, standard and contrib libraries, and parts of the JDK via

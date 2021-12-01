@@ -1,5 +1,5 @@
 {:title "Mathematics with Clojure"
- :layout :page}
+ :layout :page :page-index 4200}
 
 This cookbook covers working with mathematics in Clojure, using
 built-in functions, contrib libraries, and parts of the JDK via

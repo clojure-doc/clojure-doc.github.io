@@ -1,5 +1,5 @@
 {:title "Books about Clojure and ClojureScript"
- :layout :page}
+ :layout :page :page-index 3990}
 
 This guide covers:
 

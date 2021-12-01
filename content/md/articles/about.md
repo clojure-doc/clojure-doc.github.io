@@ -1,4 +1,5 @@
 {:title "About"
+ :page-index 0
  :layout :page}
 
 CDS (Clojure Documentation Site) is a community documentation project for the Clojure programming language. It is not affiliated with

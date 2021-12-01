@@ -1,4 +1,5 @@
 {:title "Clojure Namespaces and Vars"
+ :page-index 2100
  :layout :page}
 
 This guide covers:

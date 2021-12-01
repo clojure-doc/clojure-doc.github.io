@@ -1,5 +1,5 @@
 {:title "Clojure User Groups"
- :layout :page}
+ :layout :page :page-index 3970}
 
 This guide covers Clojure User Groups (CLJUGs) around the world. If you want to add a new user group,
 please see our [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute) guide.

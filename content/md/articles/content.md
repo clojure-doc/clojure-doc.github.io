@@ -1,4 +1,5 @@
 {:title "Table of Contents"
+ :page-index 1
  :layout :page}
 
 [The content](https://github.com/clojure-doc/clojure-doc.github.io) is a categorized and

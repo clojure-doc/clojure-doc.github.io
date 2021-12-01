@@ -1,5 +1,5 @@
 {:title "A Directory of Clojure Libraries"
- :layout :page}
+ :layout :page :page-index 3000}
 
 This is a categorized and annotated directory of available Clojure
 libraries and tools. This directory is **not comprehensive and is necessarily highly opinionated**.

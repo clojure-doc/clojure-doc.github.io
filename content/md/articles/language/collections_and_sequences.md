@@ -1,4 +1,5 @@
 {:title "Collections and Sequences in Clojure"
+ :page-index 2200
  :layout :page}
 
 This guide covers:

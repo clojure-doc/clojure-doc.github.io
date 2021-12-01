@@ -1,4 +1,5 @@
 {:title "Clojure Macros and Metaprogramming"
+ :page-index 2600
  :layout :page}
 
 This guide covers:

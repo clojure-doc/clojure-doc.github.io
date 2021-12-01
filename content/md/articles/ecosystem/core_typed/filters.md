@@ -1,5 +1,5 @@
 {:title "core.typed - Filters"
- :layout :page}
+ :layout :page :page-index 3700}
 
 core.typed includes an implementation of occurrence typing, which helps the type
 checker refine types according to control flow.

@@ -1,4 +1,5 @@
 {:title "Introduction to Clojure"
+ :page-index 1100
  :layout :page}
 
 This guide covers:

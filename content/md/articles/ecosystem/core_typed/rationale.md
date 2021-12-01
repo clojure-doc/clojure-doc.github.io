@@ -1,5 +1,5 @@
 {:title "core.typed - Rationale"
- :layout :page}
+ :layout :page :page-index 3700}
 
 Static typing has well known benefits. For example, statically typed languages catch many common
 programming errors at the earliest time possible: compile time.

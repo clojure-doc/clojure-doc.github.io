@@ -1,5 +1,5 @@
 {:title "Generating Documentation"
- :layout :page}
+ :layout :page :page-index 3200}
 
 This guide notes some commonly-used tools for generating project
 documentation.

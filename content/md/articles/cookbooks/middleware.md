@@ -1,5 +1,5 @@
 {:title "Middleware in Clojure"
- :layout :page}
+ :layout :page :page-index 4500}
 
 This work is licensed under a <a rel="license"
 href="http://creativecommons.org/licenses/by/3.0/">Creative Commons

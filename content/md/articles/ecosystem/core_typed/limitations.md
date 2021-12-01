@@ -1,5 +1,5 @@
 {:title "core.typed - Limitations"
- :layout :page}
+ :layout :page :page-index 3700}
 
 ## Namespace management
 

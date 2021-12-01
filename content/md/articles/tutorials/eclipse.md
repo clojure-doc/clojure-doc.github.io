@@ -1,4 +1,5 @@
 {:title "Starting with Eclipse and Counterclockwise For Clojure Development"
+ :page-index 1400
  :layout :page}
 
 This guide covers:

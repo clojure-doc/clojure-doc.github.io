@@ -1,4 +1,5 @@
 {:title "Functions in Clojure"
+ :page-index 2300
  :layout :page}
 
 This guide covers:

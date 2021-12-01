@@ -1,4 +1,5 @@
 {:title "Overview of clojure.core, the standard Clojure library"
+ :page-index 2000
  :layout :page}
 
 This guide covers:

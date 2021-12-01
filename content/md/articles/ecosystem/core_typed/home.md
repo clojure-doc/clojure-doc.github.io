@@ -1,5 +1,5 @@
 {:title "core.typed - User Documentation Home"
- :layout :page}
+ :layout :page :page-index 3700}
 
 core.typed is an optional type system for Clojure.
 
