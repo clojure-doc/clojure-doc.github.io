@@ -44,8 +44,8 @@ only tutorials, guides, and linking to other relevant resources.
 CDS is structured as a number of guides. They broadly fall into 4 categories:
 
   * [Tutorials](content/#clojure_tutorials)
-  * [Language guides](content/#clojure_language_guides)
-  * [Tool guides](content/#the_clojure_ecosystem)
+  * [Language Guides](content/#clojure_language_guides)
+  * [Ecosystem & Tools](content/#the_clojure_ecosystem)
   * [Cookbooks](content/#cookbooks)
 
 

@@ -10,8 +10,8 @@ We recognize that different Clojure users have different level of expertise
 and separates content into several groups:
 
  * [Essentials](#essentials)
- * [Core language guides](#language-guides)
- * [The Ecosystem](#the-clojure-ecosystem) (tools, libraries, community, books) guides
+ * [Language Guides](#language-guides)
+ * [Ecosystem & Tools](#the-clojure-ecosystem) (tools, libraries, community, books) guides
  * [Tutorials & Cookbooks](#tutorials-and-cookbooks)
 
 

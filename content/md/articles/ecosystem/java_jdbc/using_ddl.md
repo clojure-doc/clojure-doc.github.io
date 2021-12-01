@@ -1,5 +1,5 @@
 {:title "java.jdbc - Using DDL and Metadata"
- :layout :page :page-index 3520}
+ :layout :page :page-index 8520}
 
 ## Contents
 
