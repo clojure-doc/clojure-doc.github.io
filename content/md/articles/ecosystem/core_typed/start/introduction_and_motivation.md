@@ -1,5 +1,5 @@
 {:title "core.typed - Getting Started: Introduction and Motivation"
- :layout :page :page-index 3700}
+ :layout :page :page-index 3710}
 
 core.typed is an optional type system for Clojure. If you are interesting in how core.typed
 can help you verify your programs as correct, read on.

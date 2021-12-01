@@ -1,5 +1,5 @@
 {:title "core.typed - Protocols"
- :layout :page :page-index 3700}
+ :layout :page :page-index 3740}
 
 ## Annotating Protocols
 

@@ -1,5 +1,5 @@
 {:title "core.typed - Quick Guide"
- :layout :page :page-index 3700}
+ :layout :page :page-index 3702}
 
 ## Design choices
 

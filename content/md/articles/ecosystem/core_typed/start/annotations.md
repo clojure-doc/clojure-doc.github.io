@@ -1,5 +1,5 @@
 {:title "core.typed - Annotations"
- :layout :page :page-index 3700}
+ :layout :page :page-index 3715}
 
 core.typed requires a moderate amount of assistance from the user to help infer types.
 

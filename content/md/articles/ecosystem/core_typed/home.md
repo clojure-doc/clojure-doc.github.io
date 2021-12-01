@@ -51,6 +51,7 @@ Typing definitions and usages of Clojure datatypes and protocols.
 core.typed provides several wrapper macros for common looping constructs.
 
 ### Dotted Functions
+
 ### Java Classes, Arrays and Interop
 
 ## Miscellaneous Tutorials
