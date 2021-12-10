@@ -3,3 +3,4 @@
 .lsp/.cache
 .portal/vs-code.edn
 /public/
+/target/
