@@ -69,14 +69,12 @@ when its computation is completed, it becomes <em>fully realized</em>.</p><p>Whe
 <em>force evaluation</em> (force realization).</p><h2 id="benefits-of-lazy-sequences">Benefits of Lazy Sequences</h2><p>Lazy sequences have two main benefits:</p><ul><li>They can be infinite</li><li>Full realization of interim results can be avoided</li></ul><h2 id="producing-lazy-sequences">Producing Lazy Sequences</h2><p>Lazy sequences are produced by functions. Such functions either use the <code>clojure.core/lazy-seq</code> macro
 or other functions that produce lazy sequences.</p><p><code>clojure.core/lazy-seq</code> accepts one or more forms that produce a sequence of <code>nil</code> (when the sequence
 is fully realized) and returns a seqable data structure that invokes the body the first time
-the value is needed and then caches the result.</p><p>For example, the following function produces a lazy sequence of random UUIDs strings:</p><pre><code class="clojure">(import java.util.UUID)
-
-(defn uuid-seq
+the value is needed and then caches the result.</p><p>For example, the following function produces a lazy sequence of random UUIDs strings:</p><pre><code class="klipse-clojure nohighlight">(defn uuid-seq
   []
   (lazy-seq
-   (cons (str (UUID/randomUUID))
+   (cons (str (random-uuid))
          (uuid-seq))))
-</code></pre><p>Another example:</p><pre><code class="clojure">(defn fib-seq
+</code></pre><p>Another example:</p><pre><code class="klipse-clojure nohighlight">(defn fib-seq
   "Returns a lazy sequence of Fibonacci numbers"
   ([]
      (fib-seq 0 1))
@@ -85,45 +83,25 @@ the value is needed and then caches the result.</p><p>For example, the following
       (cons b (fib-seq b (+ a b))))))
 </code></pre><p>Both examples use <code>clojure.core/cons</code> which prepends an element to a sequence. The sequence
 can in turn be lazy, which both of the examples rely on.</p><p>Even though both of these sequences are infinite, taking first N elements from each does
-return successfully:</p><pre><code class="clojure">(take 3 (uuid-seq))
-;= ("8da1b70e-7d4d-4972-b4af-48ed248c5568" "b0bc5c2c-f5ff-4733-b3ce-b0499a1a0ccc" "26d52a65-cde5-4d57-bf7f-97e3440fb3a5")
-
-(take 10 (fib-seq))
-l= (1 1 2 3 5 8 13 21 34 55)
-
-(take 20 (fib-seq))
-;= (1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765)
+return successfully:</p><pre><code class="klipse-clojure nohighlight">(take 3 (uuid-seq))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 10 (fib-seq))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 20 (fib-seq))
 </code></pre><h2 id="realizing-lazy-sequences-forcing-evaluation">Realizing Lazy Sequences (Forcing Evaluation)</h2><p>Lazy sequences can be forcefully realized with <code>clojure.core/dorun</code> and
 <code>clojure.core/doall</code>. The difference between the two is that <code>dorun</code>
 throws away all results and is supposed to be used for side effects,
-while <code>doall</code> returns computed values:</p><pre><code class="clojure">(dorun (map inc [1 2 3 4]))
-;= nil
-
-(doall (map inc [1 2 3 4]))
-;= (2 3 4 5)
+while <code>doall</code> returns computed values:</p><pre><code class="klipse-clojure nohighlight">(dorun (map inc [1 2 3 4]))
+</code></pre><pre><code class="klipse-clojure nohighlight">(doall (map inc [1 2 3 4]))
 </code></pre><h2 id="commonly-used-functions-that-produce-lazy-sequences">Commonly Used Functions That Produce Lazy Sequences</h2><p>Multiple frequently used <code>clojure.core</code> functions return lazy sequences,
 most notably:</p><ul><li><code>map</code></li><li><code>filter</code></li><li><code>remove</code></li><li><code>range</code></li><li><code>take</code></li><li><code>take-while</code></li><li><code>drop</code></li><li><code>drop-while</code></li></ul><p>The following example uses several of these functions to return 10 first
-even numbers in the range of [0, n):</p><pre><code class="clojure">(take 10 (filter even? (range 0 100)))
-;= (0 2 4 6 8 10 12 14 16 18)
+even numbers in the range of [0, n):</p><pre><code class="klipse-clojure nohighlight">(take 10 (filter even? (range 0 100)))
 </code></pre><p>Several functions in <code>clojure.core</code> are designed to produce lazy
-sequences:</p><ul><li><code>repeat</code></li><li><code>iterate</code></li><li><code>cycle</code></li></ul><p>For example:</p><pre><code class="clojure">(take 3 (repeat "ha"))
-;= ("ha" "ha" "ha")
-
-(take 5 (repeat "ha"))
-;= ("ha" "ha" "ha" "ha" "ha")
-
-(take 3 (cycle [1 2 3 4 5]))
-;= (1 2 3)
-
-(take 10 (cycle [1 2 3 4 5]))
-;= (1 2 3 4 5 1 2 3 4 5)
-
-(take 3 (iterate (partial + 1) 1))
-;= (1 2 3)
-
-(take 5 (iterate (partial + 1) 1))
-;= (1 2 3 4 5)
-</code></pre><h2 id="lazy-sequences-chunking">Lazy Sequences Chunking</h2><p>There are two fundamental strategies for implementing lazy sequences:</p><ul><li>Realize elements one-by-one</li><li>Realize elements in groups (chunks, batches)</li></ul><p>In Clojure 1.1+, lazy sequences are <em>chunked</em> (realized in chunks).</p><p>For example, in the following code</p><pre><code class="clojure">(take 10 (range 1 1000000000000))
+sequences:</p><ul><li><code>repeat</code></li><li><code>iterate</code></li><li><code>cycle</code></li></ul><p>For example:</p><pre><code class="klipse-clojure nohighlight">(take 3 (repeat "ha"))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 5 (repeat "ha"))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 3 (cycle [1 2 3 4 5]))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 10 (cycle [1 2 3 4 5]))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 3 (iterate (partial + 1) 1))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 5 (iterate (partial + 1) 1))
+</code></pre><h2 id="lazy-sequences-chunking">Lazy Sequences Chunking</h2><p>There are two fundamental strategies for implementing lazy sequences:</p><ul><li>Realize elements one-by-one</li><li>Realize elements in groups (chunks, batches)</li></ul><p>In Clojure 1.1+, lazy sequences are <em>chunked</em> (realized in chunks).</p><p>For example, in the following code</p><pre><code class="klipse-clojure nohighlight">(take 10 (range 1 1000000000000))
 </code></pre><p>one-by-one realization would realize one element 10 times. With chunked sequences,
 elements are realized ahead of time in chunks (32 elements at a time).</p><p>This reduces the number of realizations and, for many common workloads, improves
 efficiency of lazy sequences.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a>, 2013 (original author)</p>
@@ -269,6 +247,12 @@ efficiency of lazy sequences.</p><h2 id="contributors">Contributors</h2><p>Micha
 <script src="/js/highlight.pack.js" type="application/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-
+ <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css">
+<script>
+window.klipse_settings = {
+  "selector" : ".klipse-clojure"
+};
+</script>
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin/js/klipse_plugin.js"></script> 
 </body>
 </html>
