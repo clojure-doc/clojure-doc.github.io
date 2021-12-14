@@ -229,12 +229,11 @@ the rest of your code is compiled. Certain Clojure built-ins like
 <code>let</code>, <code>def</code>, and <code>if</code> are written as special forms which are
 hard-coded into the compiler rather than macros, but this is an
 implementation detail; the effect is the same.</p><p>This tutorial does not discuss macros further.</p><h3 id="quoting">Quoting</h3><p>If for whatever reason you'd rather Clojure <em>not</em> treat something like
-<code>(+ 1 2 3)</code> as a function call, you can "quote" it like so:</p><pre><code class="clojure">'(+ 1 2 3)
-;; ⇒ (+ 1 2 3)
+<code>(+ 1 2 3)</code> as a function call, you can "quote" it like so:</p><pre><code class="klipse-clojure nohighlight">'(+ 1 2 3)
 </code></pre><p>This causes Clojure to then regard it simply as a 4-element list;
 the first element of which is the symbol for some function.  Reasons
 for wanting to do this will become clearer later on.</p><h2 id="let-and-locals">Let and Locals</h2><p>When you want some lexically-scoped named values to use in a section
-of your code, you can use the <code>let</code> expression:</p><pre><code class="clojure">(let [width     10
+of your code, you can use the <code>let</code> expression:</p><pre><code class="klipse-clojure nohighlight">(let [width     10
       height    20
       thickness 2]
   (println "hello from inside the `let`.")
@@ -247,11 +246,10 @@ along with their values.</p><blockquote><p><strong>Formatting note:</strong> You
 lining up the values used in the binding vector, as we've done
 above with 10, 20, and 2.</p></blockquote><p>These local names are symbols that refer directly to the values you
 set them to.</p><p>You can re-set the symbols in the binding vector multiple times
-(building it up into the value you need), if you find it useful:</p><pre><code class="clojure">(let [x 2
+(building it up into the value you need), if you find it useful:</p><pre><code class="klipse-clojure nohighlight">(let [x 2
       x (* x x)
       x (+ x 1)]
   x)
-;; ⇒ 5
 </code></pre><p>The <code>let</code> expression itself evaluates to the last expression in its
 body.  You can put other things inside the <code>let</code> (like our <code>println</code>
 expression, in the previous example), but the overall value of the
@@ -261,7 +259,7 @@ use its value for anything --- we only care about its <em>side-effects</em>
 <a href="#side-effects">Side-Effects</a> shortly.</p></blockquote><h2 id="namespaces">Namespaces</h2><p>Clojure uses <em>namespaces</em> to organize function names into groups
 and to keep them from colliding with other function names.
 All function names live in a namespace. All the core functions
-we've been using thus far are in the clojure.core namespace:</p><pre><code class="clojure">(clojure.core/println "hi")
+we've been using thus far are in the clojure.core namespace:</p><pre><code class="klipse-clojure nohighlight">(clojure.core/println "hi")
 </code></pre><p>That's the fully-qualified name of <code>println</code>. You'd normally have to
 use the fully-qualified name for functions (or else use an alias to
 the namespace --- covered in a moment), but Clojure makes all the
@@ -275,7 +273,7 @@ underscores in your directory names instead of dashes).</p><p>It's most common f
 namespace, and often comprise one <em>library</em>. At the top of your source
 file, you write <code>(ns whatever)</code> and that declares the namespace for
 the rest of the file.</p><p>In the repl, you can make use of libraries --- and at the same time
-provide a handy alias for them --- by <em>requiring</em> them like so:</p><pre><code class="clojure">(require '[clojure.string :as str])
+provide a handy alias for them --- by <em>requiring</em> them like so:</p><pre><code class="klipse-clojure nohighlight">(require '[clojure.string :as str])
 </code></pre><p>Now we can use all the functions in the clojure.string library by
 prefixing them with "str/". We'll do exactly this in the section below
 on <a href="#functions-for-working-with-strings">Functions for working with
@@ -503,13 +501,13 @@ greater than the second arg. The main one is <code>compare</code>.</p><h2 id="va
 a <em>Var</em>. The symbol "<code>the-answer</code>" refers to that var which itself
 refers to the value 42:</p><p>the-answer (a symbol) → a var → 42 (a value).</p><p>When Clojure sees "<code>the-answer</code>", it automatically looks up the var,
 then from there finds and returns the value 42.</p><p>Recall that <a href="#let-and-locals">locals</a> don't involve vars at all:
-those symbols refer directly to their values.</p><h2 id="functions-defining-your-own">Functions: Defining Your Own</h2><p>You can create a function using <code>fn</code>, and give it a name using <code>def</code>:</p><pre><code class="clojure">(def my-func
+those symbols refer directly to their values.</p><h2 id="functions-defining-your-own">Functions: Defining Your Own</h2><p>You can create a function using <code>fn</code>, and give it a name using <code>def</code>:</p><pre><code class="klipse-clojure nohighlight">(def my-func
   (fn [a b]
     (println "adding them!")
     (+ a b)))
 </code></pre><p>As you might guess, this actually creates the symbol <code>my-func</code> which
 refers to a var which itself refers to the function (which is a
-value). Call it:</p><pre><code class="clojure">(my-func 10 20)   ; Returns/evaluates-to 30.
+value). Call it:</p><pre><code class="klipse-clojure nohighlight">(my-func 10 20)
 </code></pre><p>But for creating top-level functions, it's more convenient to use
 <code>defn</code> (which uses <code>def</code> under the hood):</p><pre><code class="clojure">(defn my-func
   "Docstring goes here."
@@ -585,12 +583,11 @@ it evaluates to a value, use <code>do</code>:</p><pre><code class="clojure">(do
   (get-engine-temperature))
 </code></pre><p>There are a handful of functions/macros/special-forms in Clojure for
 making use of side-effects, and they are spelled with a "do" at the
-beginning. Try these on for size:</p><pre><code class="clojure">(def my-items ["shirt" "coat" "hat"])
+beginning. Try these on for size:</p><pre><code class="klipse-clojure nohighlight">(def my-items ["shirt" "coat" "hat"])
 
 (doseq [i my-items]
   (println i))
-
-(dotimes [i 10]
+</code></pre><pre><code class="klipse-clojure nohighlight">(dotimes [i 10]
   (println "counting:" i))
 </code></pre><p>There's also <code>dorun</code> and <code>doall</code>, both of which are discussed below in
 the section on <a href="#laziness">Laziness</a>.</p><p>We say that <code>let</code> expressions and function bodies (and also <code>loop</code>
@@ -678,44 +675,32 @@ subsections that follow, we've left out the corresponding links to
 clojuredocs for the given functions, but you'll probably want to read
 the docs and see the examples there to get the full story for each.</p><h3 id="map">map</h3><p>With <code>map</code> you can apply a function to every value in a collection.
 The result is a new collection. You can often use <code>map</code> instead of
-manually looping over a collection. Some examples using <code>map</code>:</p><pre><code class="clojure">(map inc [10 20 30])     ; ⇒ (11 21 31)
-(map str [10 20 30])     ; ⇒ ("10" "20" "30")
-;; You can define the function to be used on-the-fly:
+manually looping over a collection. Some examples using <code>map</code>:</p><pre><code class="klipse-clojure nohighlight">(map inc [10 20 30])
+</code></pre><pre><code class="klipse-clojure nohighlight">(map str [10 20 30])
+</code></pre><pre><code class="klipse-clojure nohighlight">;; You can define the function to be used on-the-fly:
 (map (fn [x] (str "=" x "=")) [10 20 30])
-;; ⇒ ("=10=" "=20=" "=30=")
-
-;; And `map` knows how to apply the function you give it
+</code></pre><pre><code class="klipse-clojure nohighlight">;; And `map` knows how to apply the function you give it
 ;; to multiple collections in a coordinated way:
 (map (fn [x y] (str x y)) [:a :b :c] [1 2 3])
-;; ⇒ (":a1" ":b2" ":c3")
 </code></pre><p>When working on more than one collection at a time, <code>map</code> is smart
-enough to stop when the shorter of the colls runs out of items:</p><pre><code class="clojure">(map (fn [x y] (str x y)) [:a :b :c] [1 2 3 4 5 6 7])
-;; ⇒ (":a1" ":b2" ":c3")
+enough to stop when the shorter of the colls runs out of items:</p><pre><code class="klipse-clojure nohighlight">(map (fn [x y] (str x y)) [:a :b :c] [1 2 3 4 5 6 7])
 </code></pre><h3 id="filter-and-remove">filter and remove</h3><p>Use <code>filter</code> with a predicate function to pare down a collection to
-just the values for which <code>(the-pred the-value)</code> returns true:</p><pre><code class="clojure">(filter odd? (range 10))
-;; ⇒ (1 3 5 7 9)
+just the values for which <code>(the-pred the-value)</code> returns true:</p><pre><code class="klipse-clojure nohighlight">(filter odd? (range 10))
 </code></pre><p>Use <code>remove</code> for the opposite effect (which amounts to <em>removing</em> the
-items for which <code>(pred val)</code> returns true):</p><pre><code class="clojure">(remove odd? (range 10))
-;; ⇒ (0 2 4 6 8)
+items for which <code>(pred val)</code> returns true):</p><pre><code class="klipse-clojure nohighlight">(remove odd? (range 10))
 </code></pre><p>You will often find yourself using these functions instead
 of writing loops like in imperative languages.</p><h3 id="apply">apply</h3><p><code>apply</code> is for when you have a function which takes individual args,
 for example, <code>max</code>, but the values you'd like to pass to it are in a
-collection. <code>apply</code> "unpacks" the items in the coll:</p><pre><code class="clojure">(max 1 5 2 8 3)
-;; ⇒ 8
-(max [1 5 2 8 3]) ;; ERROR
-(apply max [1 5 2 8 3])
-;; ⇒ 8
+collection. <code>apply</code> "unpacks" the items in the coll:</p><pre><code class="klipse-clojure nohighlight">(max 1 5 2 8 3)
+</code></pre><pre><code class="clojure">(max [1 5 2 8 3]) ;; ERROR
+</code></pre><pre><code class="klipse-clojure nohighlight">(apply max [1 5 2 8 3])
 </code></pre><p>A nice feature of <code>apply</code> is that you can supply extra args which
-you'd like to be treated as if they were part of the collection:</p><pre><code class="clojure">(apply max 4 55 [1 5 2 8 3])
-;; ⇒ 55
+you'd like to be treated as if they were part of the collection:</p><pre><code class="klipse-clojure nohighlight">(apply max 4 55 [1 5 2 8 3])
 </code></pre><h3 id="for">for</h3><p><code>for</code> is for generating collections from scratch (again, without
 needing to resort to manually looping). <code>for</code> is similar to Python's
-"list comprehensions". Some examples of using <code>for</code>:</p><pre><code class="clojure">(for [i (range 10)] i)
-;; ⇒ (0 1 2 3 4 5 6 7 8 9)
-(for [i (range 10)] (* i i))
-;; ⇒ (0 1 4 9 16 25 36 49 64 81)
-(for [i (range 10) :when (odd? i)] [i (str "&lt;" i "&gt;")])
-;; ⇒ ([1 "&lt;1&gt;"] [3 "&lt;3&gt;"] [5 "&lt;5&gt;"] [7 "&lt;7&gt;"] [9 "&lt;9&gt;"])
+"list comprehensions". Some examples of using <code>for</code>:</p><pre><code class="klipse-clojure nohighlight">(for [i (range 10)] i)
+</code></pre><pre><code class="klipse-clojure nohighlight">(for [i (range 10)] (* i i))
+</code></pre><pre><code class="klipse-clojure nohighlight">(for [i (range 10) :when (odd? i)] [i (str "&lt;" i "&gt;")])
 </code></pre><p>Notice we snuck a "<code>:when (odd? i)</code>" in there. <code>for</code> even supports a
 <code>:let</code> modifier in there to set up your values before getting to the
 body of the <code>for</code> expression.</p><h3 id="reduce">reduce</h3><p><code>reduce</code> is a gem. You use it to apply a function to the first and
@@ -729,11 +714,10 @@ result you just got and the 3rd item in the coll. Then the result of
 ;; → 6 + 4   [5]
 ;; → 10      [5]
 ;; → 10 + 5
-;; ⇒  15
+;; =&gt; 5
 </code></pre><p>And, of course, you can supply your own function if you like:</p><pre><code class="clojure">(reduce (fn [x y] ...) [...])
 </code></pre><p>A nice additional feature of <code>reduce</code> is that you can supply a value
-for it to start off with:</p><pre><code class="clojure">(reduce + 10 [1 2 3 4 5])
-;; ⇒ 25
+for it to start off with:</p><pre><code class="klipse-clojure nohighlight">(reduce + 10 [1 2 3 4 5])
 </code></pre><p>This by itself is pretty handy. But it gets even better. Since you can
 supply an initial argument, and you can supply your own function, you
 can use a <em>data structure</em> as that initial argument and have your
@@ -752,41 +736,31 @@ function "build it up" as you go. For example:</p><pre><code class="clojure">(re
 function is a fairly common pattern (and once again allows us to
 avoid looping and manipulations of anything mutable).</p><h3 id="partial-comp-and-iterate">partial, comp, and iterate</h3><p>With <code>partial</code> you can create a function which wraps another one and
 passes it some standard arguments every time, along with the ones you
-supply right when you call it. For example:</p><pre><code class="clojure">(defn lots-of-args [a b c d] (str/join "-" [a b c d]))
-;; ⇒ #'user/lots-of-args
-(lots-of-args 10 20 30 40)
-;; ⇒ "10-20-30-40"
-(def fewer-args (partial lots-of-args 10 20 30))
-;; ⇒ #'user/fewer-args
-(fewer-args 40)
-;; ⇒ "10-20-30-40"
-(fewer-args 99)
-;; ⇒ "10-20-30-99"
+supply right when you call it. For example:</p><pre><code class="klipse-clojure nohighlight">(defn lots-of-args [a b c d] (str/join "-" [a b c d]))
+</code></pre><pre><code class="klipse-clojure nohighlight">(lots-of-args 10 20 30 40)
+</code></pre><pre><code class="klipse-clojure nohighlight">(def fewer-args (partial lots-of-args 10 20 30))
+</code></pre><pre><code class="klipse-clojure nohighlight">(fewer-args 40)
+</code></pre><pre><code class="klipse-clojure nohighlight">(fewer-args 99)
 </code></pre><p><code>comp</code> is for composing a function from other ones. That is, <code>(comp foo bar baz)</code> gives you a function that will first call baz on
 whatever you pass it, then bar on the result of that, then foo on the
 result of <em>that</em>, and finally returns the result.  Here's a silly
-example:</p><pre><code class="clojure">(defn wrap-in-stars  [s] (str "*" s "*"))
-(defn wrap-in-equals [s] (str "=" s "="))
-(defn wrap-in-ats    [s] (str "@" s "@"))
-
-(def wrap-it (comp wrap-in-ats
+example:</p><pre><code class="klipse-clojure nohighlight">(defn wrap-in-stars  [s] (str "*" s "*"))
+</code></pre><pre><code class="klipse-clojure nohighlight">(defn wrap-in-equals [s] (str "=" s "="))
+</code></pre><pre><code class="klipse-clojure nohighlight">(defn wrap-in-ats    [s] (str "@" s "@"))
+</code></pre><pre><code class="klipse-clojure nohighlight">(def wrap-it (comp wrap-in-ats
                    wrap-in-equals
                    wrap-in-stars))
-
-(wrap-it "hi")
-;; ⇒ "@=*hi*=@"
-;; Which is the same as:
+</code></pre><pre><code class="klipse-clojure nohighlight">(wrap-it "hi")
+</code></pre><pre><code class="klipse-clojure nohighlight">;; Which is the same as:
 (wrap-in-ats (wrap-in-equals (wrap-in-stars "hi")))
-;; ⇒ "@=*hi*=@"
 </code></pre><p><code>(iterate foo x)</code> yields an infinite lazy list consisting
 of:</p><pre><code class="clojure">(x
  (foo x)
  (foo (foo x))
  (foo (foo (foo x)))
  ...)
-</code></pre><p>To just take the first, say, 5 values from an infinite list, try this:</p><pre><code class="clojure">(defn square [x] (* x x))
-(take 5 (iterate square 2))
-;; ⇒ (2 4 16 256 65536)
+</code></pre><p>To just take the first, say, 5 values from an infinite list, try this:</p><pre><code class="klipse-clojure nohighlight">(defn square [x] (* x x))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 5 (iterate square 2))
 </code></pre><h2 id="looping-and-recursion">Looping and Recursion</h2><p>As you've seen in the previous section, looping is often just handled
 by various built-in functions such as <code>map</code>, <code>filter</code>, and <code>reduce</code>.
 You should use those whenever you can. For times when you need more
@@ -797,13 +771,12 @@ body of the <code>loop</code> expression you exit at some point with what you
 have or else loop again. When you loop again, you call the loop (using
 <code>recur</code>) as if it's a function, passing new values in for the ones you
 previously set up in the binding vector. The loop calling itself like
-this is called <em>recursion</em>. Here's a trivial example:</p><pre><code class="clojure">(loop [accum []
+this is called <em>recursion</em>. Here's a trivial example:</p><pre><code class="klipse-clojure nohighlight">(loop [accum []
        i     1]
   (if (= i 10)
     accum
     (recur (conj accum i)
            (inc i))))
-;; ⇒ [1 2 3 4 5 6 7 8 9]
 </code></pre><p>The state in this loop is carried in the <code>accum</code> vector, which we
 update each time through the loop. <code>i</code> is the counter, and we finally
 exit the loop (which evaluates to <code>accum</code>) when i equals 10.</p><p><code>accum</code> could be any other data structure, and that call <code>(conj accum i)</code> could be any expression that yields a new data structure to take
@@ -821,14 +794,10 @@ one, for now). Here, the <code>my-atom</code> symbol refers to a var which refer
 to the atom.</p><p>Although you <em>still</em> can't literally change the value of the atom, you
 <em>can</em> swap in a new hashmap value for it any time you like. To retrieve
 the value of the atom, you "deref" it, or just use the shorter "@"
-syntax. Here's an (atom-specific) example:</p><pre><code class="clojure">(def my-atom (atom {:foo 1}))
-;; ⇒ #'user/my-atom
-@my-atom
-;; ⇒ {:foo 1}
-(swap! my-atom update-in [:foo] inc)
-;; ⇒ {:foo 2}
-@my-atom
-;; ⇒ {:foo 2}
+syntax. Here's an (atom-specific) example:</p><pre><code class="klipse-clojure nohighlight">(def my-atom (atom {:foo 1}))
+</code></pre><pre><code class="klipse-clojure nohighlight">@my-atom
+</code></pre><pre><code class="klipse-clojure nohighlight">(swap! my-atom update-in [:foo] inc)
+</code></pre><pre><code class="klipse-clojure nohighlight">@my-atom
 </code></pre><p>... and we've just changed the state of the atom. (Note, <code>swap!</code> is a
 function used only for atoms. There are other specific functions for
 working with the other reference types.)</p><p>The point of having reference types is that, in your programs, you may
@@ -988,6 +957,12 @@ multimethods, and Java interop.</p><h2 id="contributors">Contributors</h2><p>Joh
 <script src="/js/highlight.pack.js" type="application/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-
+ <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css">
+<script>
+window.klipse_settings = {
+  "selector" : ".klipse-clojure"
+};
+</script>
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin/js/klipse_plugin.js"></script> 
 </body>
 </html>
