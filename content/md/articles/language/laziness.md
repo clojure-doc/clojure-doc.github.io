@@ -67,6 +67,17 @@ For example, the following function produces a lazy sequence of random UUIDs str
          (uuid-seq))))
 ```
 
+> Note: the `random-uuid` function is available in ClojureScript and was introduced into Clojure
+in version 1.11 Alpha 3. Prior to that, you needed to use Java interop:
+
+```clojure
+(defn uuid-seq
+  []
+  (lazy-seq
+   (cons (str (java.util.UUID/randomUUID))
+         (uuid-seq))))
+```
+
 Another example:
 
 ```klipse-clojure
