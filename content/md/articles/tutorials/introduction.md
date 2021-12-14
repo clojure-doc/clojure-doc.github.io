@@ -1,5 +1,6 @@
 {:title "Introduction to Clojure"
  :page-index 1100
+ :klipse true
  :layout :page}
 
 This guide covers:
@@ -391,9 +392,8 @@ This tutorial does not discuss macros further.
 If for whatever reason you'd rather Clojure *not* treat something like
 `(+ 1 2 3)` as a function call, you can "quote" it like so:
 
-``` clojure
+```klipse-clojure
 '(+ 1 2 3)
-;; ⇒ (+ 1 2 3)
 ```
 
 This causes Clojure to then regard it simply as a 4-element list;
@@ -408,7 +408,7 @@ for wanting to do this will become clearer later on.
 When you want some lexically-scoped named values to use in a section
 of your code, you can use the `let` expression:
 
-``` clojure
+```klipse-clojure
 (let [width     10
       height    20
       thickness 2]
@@ -432,12 +432,11 @@ set them to.
 You can re-set the symbols in the binding vector multiple times
 (building it up into the value you need), if you find it useful:
 
-``` clojure
+```klipse-clojure
 (let [x 2
       x (* x x)
       x (+ x 1)]
   x)
-;; ⇒ 5
 ```
 
 The `let` expression itself evaluates to the last expression in its
@@ -460,7 +459,7 @@ and to keep them from colliding with other function names.
 All function names live in a namespace. All the core functions
 we've been using thus far are in the clojure.core namespace:
 
-``` clojure
+```klipse-clojure
 (clojure.core/println "hi")
 ```
 
@@ -485,7 +484,7 @@ the rest of the file.
 In the repl, you can make use of libraries --- and at the same time
 provide a handy alias for them --- by *requiring* them like so:
 
-``` clojure
+```klipse-clojure
 (require '[clojure.string :as str])
 ```
 
@@ -919,7 +918,7 @@ those symbols refer directly to their values.
 
 You can create a function using `fn`, and give it a name using `def`:
 
-``` clojure
+```klipse-clojure
 (def my-func
   (fn [a b]
     (println "adding them!")
@@ -930,8 +929,8 @@ As you might guess, this actually creates the symbol `my-func` which
 refers to a var which itself refers to the function (which is a
 value). Call it:
 
-``` clojure
-(my-func 10 20)   ; Returns/evaluates-to 30.
+```klipse-clojure
+(my-func 10 20)
 ```
 
 But for creating top-level functions, it's more convenient to use
@@ -1067,12 +1066,13 @@ There are a handful of functions/macros/special-forms in Clojure for
 making use of side-effects, and they are spelled with a "do" at the
 beginning. Try these on for size:
 
-``` clojure
+```klipse-clojure
 (def my-items ["shirt" "coat" "hat"])
 
 (doseq [i my-items]
   (println i))
-
+```
+```klipse-clojure
 (dotimes [i 10]
   (println "counting:" i))
 ```
@@ -1247,25 +1247,27 @@ With `map` you can apply a function to every value in a collection.
 The result is a new collection. You can often use `map` instead of
 manually looping over a collection. Some examples using `map`:
 
-``` clojure
-(map inc [10 20 30])     ; ⇒ (11 21 31)
-(map str [10 20 30])     ; ⇒ ("10" "20" "30")
+```klipse-clojure
+(map inc [10 20 30])
+```
+```klipse-clojure
+(map str [10 20 30])
+```
+```klipse-clojure
 ;; You can define the function to be used on-the-fly:
 (map (fn [x] (str "=" x "=")) [10 20 30])
-;; ⇒ ("=10=" "=20=" "=30=")
-
+```
+```klipse-clojure
 ;; And `map` knows how to apply the function you give it
 ;; to multiple collections in a coordinated way:
 (map (fn [x y] (str x y)) [:a :b :c] [1 2 3])
-;; ⇒ (":a1" ":b2" ":c3")
 ```
 
 When working on more than one collection at a time, `map` is smart
 enough to stop when the shorter of the colls runs out of items:
 
-``` clojure
+```klipse-clojure
 (map (fn [x y] (str x y)) [:a :b :c] [1 2 3 4 5 6 7])
-;; ⇒ (":a1" ":b2" ":c3")
 ```
 
 
@@ -1274,17 +1276,15 @@ enough to stop when the shorter of the colls runs out of items:
 Use `filter` with a predicate function to pare down a collection to
 just the values for which `(the-pred the-value)` returns true:
 
-``` clojure
+```klipse-clojure
 (filter odd? (range 10))
-;; ⇒ (1 3 5 7 9)
 ```
 
 Use `remove` for the opposite effect (which amounts to *removing* the
 items for which `(pred val)` returns true):
 
-``` clojure
+```klipse-clojure
 (remove odd? (range 10))
-;; ⇒ (0 2 4 6 8)
 ```
 
 You will often find yourself using these functions instead
@@ -1298,20 +1298,21 @@ of writing loops like in imperative languages.
 for example, `max`, but the values you'd like to pass to it are in a
 collection. `apply` "unpacks" the items in the coll:
 
-``` clojure
+```klipse-clojure
 (max 1 5 2 8 3)
-;; ⇒ 8
+```
+```clojure
 (max [1 5 2 8 3]) ;; ERROR
+```
+```klipse-clojure
 (apply max [1 5 2 8 3])
-;; ⇒ 8
 ```
 
 A nice feature of `apply` is that you can supply extra args which
 you'd like to be treated as if they were part of the collection:
 
-``` clojure
+```klipse-clojure
 (apply max 4 55 [1 5 2 8 3])
-;; ⇒ 55
 ```
 
 
@@ -1321,13 +1322,14 @@ you'd like to be treated as if they were part of the collection:
 needing to resort to manually looping). `for` is similar to Python's
 "list comprehensions". Some examples of using `for`:
 
-``` clojure
+```klipse-clojure
 (for [i (range 10)] i)
-;; ⇒ (0 1 2 3 4 5 6 7 8 9)
+```
+```klipse-clojure
 (for [i (range 10)] (* i i))
-;; ⇒ (0 1 4 9 16 25 36 49 64 81)
+```
+```klipse-clojure
 (for [i (range 10) :when (odd? i)] [i (str "<" i ">")])
-;; ⇒ ([1 "<1>"] [3 "<3>"] [5 "<5>"] [7 "<7>"] [9 "<9>"])
 ```
 
 Notice we snuck a "`:when (odd? i)`" in there. `for` even supports a
@@ -1343,7 +1345,7 @@ second items in a coll and get a result. Then you apply it to the
 result you just got and the 3rd item in the coll. Then the result of
 *that* and the 4th. And so on.  The process looks something like this:
 
-``` clojure
+```clojure
 (reduce + [1 2 3 4 5])
 ;; → 1 + 2   [3 4 5]
 ;; → 3       [3 4 5]
@@ -1352,7 +1354,7 @@ result you just got and the 3rd item in the coll. Then the result of
 ;; → 6 + 4   [5]
 ;; → 10      [5]
 ;; → 10 + 5
-;; ⇒  15
+;; => 5
 ```
 
 And, of course, you can supply your own function if you like:
@@ -1364,9 +1366,8 @@ And, of course, you can supply your own function if you like:
 A nice additional feature of `reduce` is that you can supply a value
 for it to start off with:
 
-``` clojure
+```klipse-clojure
 (reduce + 10 [1 2 3 4 5])
-;; ⇒ 25
 ```
 
 This by itself is pretty handy. But it gets even better. Since you can
@@ -1400,17 +1401,20 @@ With `partial` you can create a function which wraps another one and
 passes it some standard arguments every time, along with the ones you
 supply right when you call it. For example:
 
-``` clojure
+```klipse-clojure
 (defn lots-of-args [a b c d] (str/join "-" [a b c d]))
-;; ⇒ #'user/lots-of-args
+```
+```klipse-clojure
 (lots-of-args 10 20 30 40)
-;; ⇒ "10-20-30-40"
+```
+```klipse-clojure
 (def fewer-args (partial lots-of-args 10 20 30))
-;; ⇒ #'user/fewer-args
+```
+```klipse-clojure
 (fewer-args 40)
-;; ⇒ "10-20-30-40"
+```
+```klipse-clojure
 (fewer-args 99)
-;; ⇒ "10-20-30-99"
 ```
 
 `comp` is for composing a function from other ones. That is, `(comp
@@ -1419,20 +1423,26 @@ whatever you pass it, then bar on the result of that, then foo on the
 result of *that*, and finally returns the result.  Here's a silly
 example:
 
-``` clojure
+```klipse-clojure
 (defn wrap-in-stars  [s] (str "*" s "*"))
+```
+```klipse-clojure
 (defn wrap-in-equals [s] (str "=" s "="))
+```
+```klipse-clojure
 (defn wrap-in-ats    [s] (str "@" s "@"))
-
+```
+```klipse-clojure
 (def wrap-it (comp wrap-in-ats
                    wrap-in-equals
                    wrap-in-stars))
-
+```
+```klipse-clojure
 (wrap-it "hi")
-;; ⇒ "@=*hi*=@"
+```
+```klipse-clojure
 ;; Which is the same as:
 (wrap-in-ats (wrap-in-equals (wrap-in-stars "hi")))
-;; ⇒ "@=*hi*=@"
 ```
 
 `(iterate foo x)` yields an infinite lazy list consisting
@@ -1448,10 +1458,11 @@ of:
 
 To just take the first, say, 5 values from an infinite list, try this:
 
-``` clojure
+```klipse-clojure
 (defn square [x] (* x x))
+```
+```klipse-clojure
 (take 5 (iterate square 2))
-;; ⇒ (2 4 16 256 65536)
 ```
 
 
@@ -1473,14 +1484,13 @@ have or else loop again. When you loop again, you call the loop (using
 previously set up in the binding vector. The loop calling itself like
 this is called *recursion*. Here's a trivial example:
 
-``` clojure
+```klipse-clojure
 (loop [accum []
        i     1]
   (if (= i 10)
     accum
     (recur (conj accum i)
            (inc i))))
-;; ⇒ [1 2 3 4 5 6 7 8 9]
 ```
 
 The state in this loop is carried in the `accum` vector, which we
@@ -1532,15 +1542,17 @@ Although you *still* can't literally change the value of the atom, you
 the value of the atom, you "deref" it, or just use the shorter "@"
 syntax. Here's an (atom-specific) example:
 
-``` clojure
+```klipse-clojure
 (def my-atom (atom {:foo 1}))
-;; ⇒ #'user/my-atom
+```
+```klipse-clojure
 @my-atom
-;; ⇒ {:foo 1}
+```
+```klipse-clojure
 (swap! my-atom update-in [:foo] inc)
-;; ⇒ {:foo 2}
+```
+```klipse-clojure
 @my-atom
-;; ⇒ {:foo 2}
 ```
 
 ... and we've just changed the state of the atom. (Note, `swap!` is a
