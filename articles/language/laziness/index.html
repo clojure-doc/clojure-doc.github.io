@@ -74,6 +74,12 @@ the value is needed and then caches the result.</p><p>For example, the following
   (lazy-seq
    (cons (str (random-uuid))
          (uuid-seq))))
+</code></pre><blockquote><p>Note: the <code>random-uuid</code> function is available in ClojureScript and was introduced into Clojure
+in version 1.11 Alpha 3. Prior to that, you needed to use Java interop:</p></blockquote><pre><code class="clojure">(defn uuid-seq
+  []
+  (lazy-seq
+   (cons (str (java.util.UUID/randomUUID))
+         (uuid-seq))))
 </code></pre><p>Another example:</p><pre><code class="klipse-clojure nohighlight">(defn fib-seq
   "Returns a lazy sequence of Fibonacci numbers"
   ([]
