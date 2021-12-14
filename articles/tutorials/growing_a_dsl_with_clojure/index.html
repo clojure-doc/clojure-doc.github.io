@@ -71,186 +71,149 @@ fi
 ) ELSE (
   ECHO b
 )
-</code></pre><p>We might, for example, use this DSL to dynamically generate scripts to perform maintenance tasks on server farms.</p><h2 id="baby-steps-mapping-to-our-domain-language">Baby Steps: Mapping to Our Domain Language</h2><p>I like Bash, so let’s start with a Bash script generator.</p><p>To start, we need to expose some parallels between Clojure’s core types and our domain language.</p><p>So which Clojure types have simple analogues in Bash script?</p><p>Strings and numbers should just simply return their String representation, so we will start with those.</p><p>Let’s define a function <code>emit-bash-form</code> that takes a Clojure form and returns a string that represents the equivalent Bash script.</p><pre><code class="clojure">(defn emit-bash-form [a]
+</code></pre><p>We might, for example, use this DSL to dynamically generate scripts to perform maintenance tasks on server farms.</p><h2 id="baby-steps-mapping-to-our-domain-language">Baby Steps: Mapping to Our Domain Language</h2><p>I like Bash, so let’s start with a Bash script generator.</p><p>To start, we need to expose some parallels between Clojure’s core types and our domain language.</p><p>So which Clojure types have simple analogues in Bash script?</p><p>Strings and numbers should just simply return their String representation, so we will start with those.</p><p>Let’s define a function <code>emit-bash-form</code> that takes a Clojure form and returns a string that represents the equivalent Bash script.</p><pre style="visibility:hidden; height:0;"><code class="klipse-clojure nohighlight">
+(require '[chivorcam.core :refer [defmacro defmacfn]])
+</code></pre><pre><code class="klipse-clojure nohighlight">(defn emit-bash-form [a]
   "Returns a String containing the equivalent Bash script
   to its argument."
   (cond
-    (= (class a) java.lang.String) a
-    (= (class a) java.lang.Long) (str a)
-    (= (class a) java.lang.Double) (str a)
-    :else (throw (Exception. "Fell through"))))
-</code></pre><p>The <code>cond</code> expression handles cases for a <code>String</code>, <code>Long</code>, or <code>Double</code> argument, or throws an exception.</p><pre><code class="clojure">user=&gt; (emit-bash-form 1)
-"1"
-user=&gt; (emit-bash-form "a")
-"a"
-</code></pre><p>Now why did we chose to use a <code>Long</code> rather than an <code>Integer</code>? Under the hood, <a href="http://dev.clojure.org/display/doc/Documentation+for+1.3+Numerics">Clojure uses the <code>Long</code> datatype for numbers.</a></p><blockquote><p>Although it supports all primitives for the purposes of Java interoperability, pure Clojure uses only long and double. Clojure will seamlessly promote ints to longs and floats to doubles as needed.</p></blockquote><p>Quick and easy way to test this out.</p><pre><code class="clojure">user=&gt; (class 7)
-java.lang.Long
+    (string? a ) a
+    (number? a) (str a)
+    :else (throw (ex-info "Fell through" a))))
+</code></pre><p>The <code>cond</code> expression handles cases for strings and numbers or throws an exception.</p><pre><code class="klipse-clojure nohighlight">(emit-bash-form 1)
+</code></pre><pre><code class="klipse-clojure nohighlight">(emit-bash-form "a")
+</code></pre><pre><code class="klipse-clojure nohighlight">(emit-bash-form {})
 </code></pre><p>Now if we want to add some more dispatches, we just need to add a new clause to our <code>cond</code> expression.</p><h2 id="echo-and-print">Echo and Print</h2><p>Let’s add a feature.</p><p>Bash prints to the screen using <code>echo</code>. You’ve probably seen it if you’ve spent any time with a Linux shell.</p><pre><code class="sh">ambrose@ambrose-desktop&gt; echo asdf
 asdf
-</code></pre><p>clojure.core also contains a function <code>println</code> that has similar semantics to Bash's <code>echo</code>.</p><pre><code class="clojure">user=&gt; (println "asdf")
-asdf
-;=&gt; nil
-</code></pre><p>Wouldn’t it be cool if we could pass <code>(println "a")</code> to <code>emit-bash-form</code>?</p><pre><code class="clojure">user=&gt; (emit-bash-form (println "asdf"))
-asdf
-;=&gt; nil
+</code></pre><p>clojure.core also contains a function <code>println</code> that has similar semantics to Bash's <code>echo</code>.</p><pre><code class="klipse-clojure nohighlight">(println "asdf")
+</code></pre><p>Wouldn’t it be cool if we could pass <code>(println "a")</code> to <code>emit-bash-form</code>?</p><pre><code class="clojure">(emit-bash-form (println "asdf"))
 </code></pre><p>At first, this seems like asking the impossible.</p><p>To made an analogy with Java, imagine calling this Java code and expecting the first argument to equal <code>System.out.println("asdf")</code>.</p><pre><code class="java">foo( System.out.println("asdf") );
-</code></pre><p>(Let’s ignore the fact that <code>System.out.println(...)</code> returns a void).</p><p>Java evaluates the arguments before you can even blink, resulting in a function call to println. How can we stop this evaluation and return the raw code?</p><p>Indeed this is an impossible task in Java. Even if this were possible, what could we expect do with the raw code?(!)</p><p><code>System.out.println("asdf")</code> is not a Collection, so we can’t iterate over it; it is not a <code>String</code>, so we can’t partition it with regular expressions.</p><p>Whatever "type" the raw code <code>System.out.println("asdf")</code> has, it’s not meant to be known by anyone but compiler writers.</p><p>Lisp turns this notion on its head.</p><h2 id="lisp-code-is-data">Lisp Code Is Data</h2><p>A problem with raw code forms in Java (assuming it is possible to extract them) is the lack of facilities to interrogate them. How does Clojure get around this limitation?</p><p>To get to the actual raw code at all, Clojure provides a mechanism to stop evaluation via quote. Prepending a quote to a code form prevents its evaluation and returns the raw Clojure form.</p><pre><code class="clojure">user=&gt; '(println "a")
-;=&gt; (println "a")
-</code></pre><p>So what is the type of our result?</p><pre><code class="clojure">user=&gt; (class '(println "a"))
-;=&gt; clojure.lang.PersistentList
-</code></pre><p>We can now interrogate the raw code as if it were any old Clojure list (because it is!).</p><pre><code class="clojure">user=&gt; (first '(println "a"))
-;=&gt; println
-
-user=&gt; (second '(println "a"))
-;=&gt; "a"
+</code></pre><p>(Let’s ignore the fact that <code>System.out.println(...)</code> returns a void).</p><p>Java evaluates the arguments before you can even blink, resulting in a function call to println. How can we stop this evaluation and return the raw code?</p><p>Indeed this is an impossible task in Java. Even if this were possible, what could we expect do with the raw code?(!)</p><p><code>System.out.println("asdf")</code> is not a Collection, so we can’t iterate over it; it is not a <code>String</code>, so we can’t partition it with regular expressions.</p><p>Whatever "type" the raw code <code>System.out.println("asdf")</code> has, it’s not meant to be known by anyone but compiler writers.</p><p>Lisp turns this notion on its head.</p><h2 id="lisp-code-is-data">Lisp Code Is Data</h2><p>A problem with raw code forms in Java (assuming it is possible to extract them) is the lack of facilities to interrogate them. How does Clojure get around this limitation?</p><p>To get to the actual raw code at all, Clojure provides a mechanism to stop evaluation via quote. Prepending a quote to a code form prevents its evaluation and returns the raw Clojure form.</p><pre><code class="klipse-clojure nohighlight">'(println "a")
+</code></pre><p>So what is the type of our result?</p><pre><code class="klipse-clojure nohighlight">(type '(println "a"))
+</code></pre><p>It's a list!</p><p>We can now interrogate the raw code as if it were any old Clojure list (because it is!).</p><pre><code class="klipse-clojure nohighlight">(first '(println "a"))
+</code></pre><pre><code class="klipse-clojure nohighlight">(second '(println "a"))
 </code></pre><p>This is a result of Lisp’s remarkable property of code being data.</p><h2 id="a-little-closer-to-clojure">A Little Closer to Clojure</h2><p>Using quote, we can get halfway to a DSL that looks like Clojure code.</p><pre><code class="clojure">(emit-bash-form
   '(println "a"))
-</code></pre><p>Let’s add this feature to <code>emit-bash-form</code>. We need to add a new clause to the <code>cond</code> form. Which type should the dispatch value be?</p><pre><code class="clojure">user=&gt; (class '(println "a"))
-clojure.lang.PersistentList
-</code></pre><p>So let’s add a clause for <code>clojure.lang.PersistentList</code>.</p><pre><code class="clojure">(defn emit-bash-form [a]
+</code></pre><p>Let’s add this feature to <code>emit-bash-form</code>. We need to add a new clause to the <code>cond</code> form. Which type should the dispatch value be?</p><p>So let’s add a clause for lists.</p><pre><code class="klipse-clojure nohighlight">(defn emit-bash-form [a]
+  "Returns a String containing the equivalent Bash script
+  to its argument."
   (cond
-    (= (class a) clojure.lang.PersistentList)
+    (list? a) 
     (case (name (first a))
       "println" (str "echo " (second a)))
 
-    (= (class a) java.lang.String) a
-    (= (class a) java.lang.Long) (str a)
-    (= (class a) java.lang.Double) (str a)
-    :else (throw (Exception. "Fell through"))))
-</code></pre><p>As long as we remember to quote the argument, this is not bad.</p><pre><code class="clojure">user=&gt; (emit-bash-form '(println "a"))
-"echo a"
-user=&gt; (emit-bash-form '(println "hello"))
-"echo hello"
-</code></pre><h2 id="multimethods-to-abstract-the-dispatch">Multimethods to Abstract the Dispatch</h2><p>We’ve made a good start, but I think it’s time for some refactoring.</p><p>Currently, to extend our implementation we add to our function emit-bash-form. Eventually this function will be too large to manage; we need a mechanism to split this function into more manageable pieces.</p><p>Essentially emit-bash-form is dispatching on the type of its argument. This dispatch style is a perfect fit for an abstraction Clojure provides called a multimethod.</p><p>Let’s define a multimethod called emit-bash. Here is the complete multimethod.</p><pre><code class="clojure">(defmulti emit-bash
-  (fn [form]
-    (class form)))
+    (string? a) a
+    (number? a) (str a)
+    :else (throw (ex-info "Fell through" a))))
+</code></pre><p>As long as we remember to quote the argument, this is not bad.</p><pre><code class="klipse-clojure nohighlight">(emit-bash-form '(println "a"))
+</code></pre><pre><code class="klipse-clojure nohighlight">(emit-bash-form '(println "hello"))
+</code></pre><h2 id="multimethods-to-abstract-the-dispatch">Multimethods to Abstract the Dispatch</h2><p>We’ve made a good start, but I think it’s time for some refactoring.</p><p>Currently, to extend our implementation we add to our function emit-bash-form. Eventually this function will be too large to manage; we need a mechanism to split this function into more manageable pieces.</p><p>Essentially emit-bash-form is dispatching on the type of its argument. This dispatch style is a perfect fit for an abstraction Clojure provides called a multimethod.</p><p>Let’s define a multimethod called <code>emit-bash</code>.</p><p>The multimethod handles dispatch in a similar way to <code>cond</code>, but without having to actually write each case. Let’s compare this multimethod with our previous <code>cond</code> expression. <code>defmulti</code> is used to create a new multimethod, and associates it with a dispatch function.</p><pre><code class="klipse-clojure nohighlight">(defmulti emit-bash
+          (fn [form]
+            (cond
+              (list? form) :list
+              (string? form) :string
+              (number? form) :number
+              :else (throw (ex-info "Unknown type" form)))))
+</code></pre><p><code>defmethod</code> is used to add <em>methods</em> to an existing multimethod. Here <code>:string</code> is the <em>dispatch value</em>, and the method returns the form as is.</p><pre><code class="klipse-clojure nohighlight">(defmethod emit-bash
+  :string
+  [form]
+  form)
+</code></pre><p>Similar for numbers and lists:</p><pre><code class="klipse-clojure nohighlight">(defmethod emit-bash
+  :number
+  [form]
+  (str form))
 
 (defmethod emit-bash
-  clojure.lang.PersistentList
+  :list
   [form]
   (case (name (first form))
     "println" (str "echo " (second form))))
+</code></pre><p>Adding new methods has the same result as extending our <code>cond</code> expression, except:</p><ul><li>multimethods handle the dispatch, instead of writing it manually</li><li>anyone can extend the multimethod at any point, without disturbing existing code</li></ul><p>So how can we use <code>emit-bash</code>? Calling a multimethod is just like calling any Clojure function.</p><pre><code class="klipse-clojure nohighlight">(emit-bash '(println "a"))
+</code></pre><p>The dispatch is silently handled under the covers by the multimethod.</p><h2 id="extending-our-dsl-for-batch-script">Extending our DSL for Batch Script</h2><p>Let’s say I’m happy with the Bash implementation. I feel like starting a new implementation that generates Windows Batch script. Let’s define a new multimethod, emit-batch.</p><pre><code class="klipse-clojure nohighlight">(defmulti emit-batch
+          (fn [form]
+            (cond
+              (list? form) :list
+              (string? form) :string
+              (number? form) :number
+              :else (throw (ex-info "Unknown type" form)))))
 
-(defmethod emit-bash
-  java.lang.String
-  [form]
-  form)
-
-(defmethod emit-bash
-  java.lang.Long
-  [form]
-  (str form))
-
-(defmethod emit-bash
-  java.lang.Double
-  [form]
-  (str form))
-</code></pre><p>The multimethod handles dispatch in a similar way to <code>cond</code>, but without having to actually write each case. Let’s compare this multimethod with our previous <code>cond</code> expression. defmulti is used to create a new multimethod, and associates it with a dispatch function.</p><pre><code class="clojure">(defmulti emit-bash
-  (fn [form]
-    (class form)))
-</code></pre><p><code>defmethod</code> is used to add <em>methods</em> to an existing multimethod. Here <code>java.lang.String</code> is the <em>dispatch value</em>, and the method returns the form as is.</p><pre><code class="clojure">(defmethod emit-bash
-  java.lang.String
-  [form]
-  form)
-</code></pre><p>Adding new methods has the same result as extending our <code>cond</code> expression, except:</p><ul><li>multimethods handle the dispatch, instead of writing it manually</li><li>anyone can extend the multimethod at any point, without disturbing existing code</li></ul><p>So how can we use emit-bash? Calling a multimethod is just like calling any Clojure function.</p><pre><code class="clojure">user=&gt; (emit-bash '(println "a"))
-"echo a"
-</code></pre><p>The dispatch is silently handled under the covers by the multimethod.</p><h2 id="extending-our-dsl-for-batch-script">Extending our DSL for Batch Script</h2><p>Let’s say I’m happy with the Bash implementation. I feel like starting a new implementation that generates Windows Batch script. Let’s define a new multimethod, emit-batch.</p><pre><code class="clojure">(defmulti emit-batch
-  (fn [form] (class form)))
-
-(defmethod emit-batch clojure.lang.PersistentList
+(defmethod emit-batch 
+  :list
   [form]
   (case (name (first form))
     "println" (str "ECHO " (second form))
     nil))
 
-(defmethod emit-batch java.lang.String
+(defmethod emit-batch
+  :string
   [form]
   form)
 
-(defmethod emit-batch java.lang.Long
+(defmethod emit-batch
+  :number
   [form]
   (str form))
-
-(defmethod emit-batch java.lang.Double
-  [form]
-  (str form))
-</code></pre><p>We can now use emit-batch and emit-bash when we want Batch and Bash script output respectively.</p><pre><code class="clojure">user=&gt; (emit-batch '(println "a"))
-"ECHO a"
-user=&gt; (emit-bash '(println "a"))
+</code></pre><p>We can now use <code>emit-batch</code> and <code>emit-bash</code> when we want Batch and Bash script output respectively.</p><pre><code class="klipse-clojure nohighlight">(emit-batch '(println "a"))
+</code></pre><pre><code class="klipse-clojure nohighlight">(emit-bash '(println "a"))
 "echo a"
-</code></pre><h2 id="ad-hoc-hierarchies">Ad-hoc Hierarchies</h2><p>Comparing the two implementations reveals many similarities. In fact, the only dispatch that differs is clojure.lang.PersistentList!</p><p>Some form of implementation inheritance would come in handy here.</p><p>We can tackle this with a simple mechanism Clojure provides to define global, ad-hoc hierarchies.</p><p>When I say this mechanism is simple, I mean non-compound; inheritance is not compounded into the mechanism to define classes or namespaces but rather is a separate functionality.</p><p>Contrast this to languages like Java, where inheritance is tightly coupled with defining a hierarchy of classes.</p><p>We can derive relationships from names to other names, and between classes and names. Names can be symbols or keywords. This is both very general and powerful!</p><p>We will use <code>(derive child parent)</code> to establishes a parent/child relationship between two keywords. <code>isa?</code> returns <code>true</code> if the first argument is derived from the second in a global hierarchy.</p><pre><code class="clojure">user=&gt; (derive ::child ::parent)
-nil
+</code></pre><h2 id="ad-hoc-hierarchies">Ad-hoc Hierarchies</h2><p>Comparing the two implementations reveals many similarities. In fact, the only dispatch that differs is clojure.lang.PersistentList!</p><p>Some form of implementation inheritance would come in handy here.</p><p>We can tackle this with a simple mechanism Clojure provides to define global, ad-hoc hierarchies.</p><p>When I say this mechanism is simple, I mean non-compound; inheritance is not compounded into the mechanism to define classes or namespaces but rather is a separate functionality.</p><p>Contrast this to languages like Java, where inheritance is tightly coupled with defining a hierarchy of classes.</p><p>We can derive relationships from names to other names, and between classes and names. Names can be symbols or keywords. This is both very general and powerful!</p><p>We will use <code>(derive child parent)</code> to establishes a parent/child relationship between two keywords. <code>isa?</code> returns <code>true</code> if the first argument is derived from the second in a global hierarchy.</p><pre><code class="klipse-clojure nohighlight">(derive ::child ::parent)
 
-user=&gt; (isa? ::child ::parent)
-true
-</code></pre><p>Let’s define a hierarchy in which the Bash and Batch implementations are siblings.</p><pre><code class="clojure">(derive ::bash ::common)
+(isa? ::child ::parent)
+</code></pre><p>Let’s define a hierarchy in which the Bash and Batch implementations are siblings.</p><pre><code class="klipse-clojure nohighlight">(derive ::bash ::common)
 (derive ::batch ::common)
-</code></pre><p>Let’s test this hierarchy.</p><pre><code class="clojure">user=&gt; (parents ::bash)
-;=&gt; #{:user/common}
-
-user=&gt; (parents ::batch)
-;=&gt; #{:user/common}
-</code></pre><h2 id="utilizing-a-hierarchy-in-a-multimethod">Utilizing a Hierarchy in a Multimethod</h2><p>We can now define a new multimethod emit that utilizes our global hierarchy of names.</p><pre><code class="clojure">(defmulti emit
-  (fn [form]
-    [*current-implementation* (class form)]))
-</code></pre><p>The dispatch function returns a vector of two items: the current implementation (either <code>::bash</code> or <code>::batch</code>), and the class of our form (like <code>emit-bash</code>'s dispatch function).</p><p><code>*current-implementation*</code> is a dynamic var, which can be thought of as a thread-safe global variable.</p><pre><code class="clojure">(def ^{:dynamic true}
+</code></pre><p>Let’s test this hierarchy.</p><pre><code class="klipse-clojure nohighlight">(parents ::bash)
+</code></pre><pre><code class="klipse-clojure nohighlight">(parents ::batch)
+</code></pre><h2 id="utilizing-a-hierarchy-in-a-multimethod">Utilizing a Hierarchy in a Multimethod</h2><p>We can now define a new multimethod emit that utilizes our global hierarchy of names.</p><pre><code class="klipse-clojure nohighlight">(defmulti emit
+          (fn [form]
+            [*current-implementation*
+             (cond
+               (list? form) :list
+               (string? form) :string
+               (number? form) :number
+               :else (throw (ex-info "Unknown type" form)))]))
+</code></pre><p>The dispatch function returns a vector of two items: the current implementation (either <code>::bash</code> or <code>::batch</code>), and the class of our form (like <code>emit-bash</code>'s dispatch function).</p><p><code>*current-implementation*</code> is a dynamic var, which can be thought of as a thread-safe global variable.</p><pre><code class="klipse-clojure nohighlight">(def ^{:dynamic true}
   ;; The current script language implementation to generate
   *current-implementation*)
-</code></pre><p>In our hierarchy, <code>::common</code> is the parent, which means it should provide the methods in common with its children. Let's fill in these common implementations.</p><p>Remember the dispatch value is now a vector, notated with square brackets. In particular, in each defmethod the first vector is the dispatch value (the second vector is the list of formal parameters).</p><pre><code class="clojure">(defmethod emit [::common java.lang.String]
+</code></pre><p>In our hierarchy, <code>::common</code> is the parent, which means it should provide the methods in common with its children. Let's fill in these common implementations.</p><p>Remember the dispatch value is now a vector, notated with square brackets. In particular, in each defmethod the first vector is the dispatch value (the second vector is the list of formal parameters).</p><pre><code class="klipse-clojure nohighlight">(defmethod emit [::common :string]
   [form]
   form)
 
-(defmethod emit [::common java.lang.Long]
+(defmethod emit [::common :number]
   [form]
   (str form))
-
-(defmethod emit [::common java.lang.Double]
-  [form]
-  (str form))
-</code></pre><p>This should look familiar. The only methods that needs to be specialized are those for clojure.lang.PersistentList, as we identified earlier. Notice the first item in the dispatch value is <code>::bash</code> or <code>::batch</code> instead of <code>::common</code>.</p><pre><code class="clojure">(defmethod emit [::bash clojure.lang.PersistentList]
+</code></pre><p>This should look familiar. The only methods that needs to be specialized are those for clojure.lang.PersistentList, as we identified earlier. Notice the first item in the dispatch value is <code>::bash</code> or <code>::batch</code> instead of <code>::common</code>.</p><pre><code class="klipse-clojure nohighlight">(defmethod emit [::bash :list]
   [form]
   (case (name (first form))
     "println" (str "echo " (second form))
     nil))
 
-(defmethod emit [::batch clojure.lang.PersistentList]
+(defmethod emit [::batch :list]
   [form]
   (case (name (first form))
     "println" (str "ECHO " (second form))
     nil))
-</code></pre><p>The <code>::common</code> implementation is intentionally incomplete; it merely exists to manage any common methods between its children.</p><p>We can test emit by rebinding <code>*current-implementation*</code> to the implementation of our choice with binding.</p><pre><code class="clojure">user=&gt; (binding [*current-implementation* ::common]
+</code></pre><p>The <code>::common</code> implementation is intentionally incomplete; it merely exists to manage any common methods between its children.</p><p>We can test emit by rebinding <code>*current-implementation*</code> to the implementation of our choice with binding.</p><pre><code class="klipse-clojure nohighlight">(binding [*current-implementation* ::common]
          (emit "a"))
-"a"
-
-user=&gt; (binding [*current-implementation* ::batch]
-         (emit '(println "a")))
-"ECHO a"
-
-user=&gt; (binding [*current-implementation* ::bash]
-         (emit '(println "a")))
-"echo a"
-
-user=&gt; (binding [*current-implementation* ::common]
-         (emit '(println "a")))
-#&lt;CompilerException java.lang.IllegalArgumentException:
-No method in multimethod 'emit' for dispatch value:
-[:user/common clojure.lang.PersistentList] (REPL:31)&gt;
-</code></pre><p>Because we didn’t define an implementation for <code>[::common clojure.lang.PersistentList]</code>, the multimethod falls through and throws an Exception.</p><p>Multimethods offer great flexibility and power, but with power comes great responsibility. Just because we can put our multimethods all in one namespace doesn’t mean we should. If our DSL becomes any bigger, we would probably separate all Bash and Batch implementations into individual namespaces.</p><p>This small example, however, is a good showcase for the flexibility of decoupling namespaces and inheritance.</p><h2 id="icing-on-the-cake">Icing on the Cake</h2><p>We’ve built a nice, solid foundation for our DSL using a combination of multimethods, dynamic vars, and ad-hoc hierarchies, but it’s a bit of a pain to use.</p><pre><code class="clojure">(binding [*current-implementation* ::bash]
+</code></pre><pre><code class="klipse-clojure nohighlight">(binding [*current-implementation* ::batch]
+  (emit '(println "a")))
+</code></pre><pre><code class="klipse-clojure nohighlight">(binding [*current-implementation* ::bash]
+  (emit '(println "a")))
+</code></pre><pre><code class="klipse-clojure nohighlight">(binding [*current-implementation* ::common]
+  (emit '(println "a")))
+</code></pre><p>Because we didn’t define an implementation for <code>[::common :list]</code>, the multimethod falls through and throws an Exception.</p><p>Multimethods offer great flexibility and power, but with power comes great responsibility. Just because we can put our multimethods all in one namespace doesn’t mean we should. If our DSL becomes any bigger, we would probably separate all Bash and Batch implementations into individual namespaces.</p><p>This small example, however, is a good showcase for the flexibility of decoupling namespaces and inheritance.</p><h2 id="icing-on-the-cake">Icing on the Cake</h2><p>We’ve built a nice, solid foundation for our DSL using a combination of multimethods, dynamic vars, and ad-hoc hierarchies, but it’s a bit of a pain to use.</p><pre><code class="klipse-clojure nohighlight">(binding [*current-implementation* ::bash]
   (emit '(println "a")))
 </code></pre><p>Let’s eliminate the boilerplate. But where is it?</p><p>The binding expression is an good candidate. We can reduce the chore of rebinding <em>current-implementation</em> by introducing with-implementation (which we will define soon).</p><pre><code class="clojure">(with-implementation ::bash
   (emit '(println "a")))
 </code></pre><p>That’s an improvement. But there’s another improvement that’s not as obvious: the quote used to delay our form’s evaluation. Let’s use script, which we will define later, to get rid of this boilerplate:</p><pre><code class="clojure">(with-implementation ::bash
   (script
     (println "a")))
-</code></pre><p>This looks great, but how do we implement script? Clojure functions evaluate all their arguments before evaluating the function body, exactly the problem the quote was designed to solve.</p><p>To hide this detail we must wield one of Lisp’s most unique forms: the macro.</p><p>The macro’s main drawcard is that it doesn’t implicitly evaluate its arguments. This is a perfect fit for an implementation of script.</p><pre><code class="clojure">(defmacro script [form]
+</code></pre><p>This looks great, but how do we implement script? Clojure functions evaluate all their arguments before evaluating the function body, exactly the problem the quote was designed to solve.</p><p>To hide this detail we must wield one of Lisp’s most unique forms: the macro.</p><p>The macro’s main drawcard is that it doesn’t implicitly evaluate its arguments. This is a perfect fit for an implementation of script.</p><pre><code class="klipse-clojure nohighlight">(defmacro script [form]
   `(emit '~form))
-</code></pre><p>To get an idea what is happening, here’s what a call to script returns and then implicitly evaluates.</p><pre><code class="clojure">(script (println "a"))
-=&gt;
-(emit '(println "a"))
-</code></pre><p>It isn’t crucial that you understand the details, rather appreciate the role that macros play in cleaning up the syntax.</p><p>We will also implement with-implementation as a macro, but for different reasons than with script. To evaluate our script form inside a binding form we need to drop it in before evaluation.</p><pre><code class="clojure">(defmacro with-implementation
+</code></pre><p>To get an idea what is happening, here’s what a call to script returns and then implicitly evaluates.</p><pre><code class="klipse-clojure nohighlight">(macroexpand '(script (println "a")))
+</code></pre><p>It isn’t crucial that you understand the details, rather appreciate the role that macros play in cleaning up the syntax.</p><p>We will also implement with-implementation as a macro, but for different reasons than with script. To evaluate our script form inside a binding form we need to drop it in before evaluation.</p><pre><code class="klipse-clojure nohighlight">(defmacro with-implementation
   [impl &amp; body]
-  `(binding [*current-implementation* ~impl]
-    ~@body))
+  `(binding [cljs.user/*current-implementation* ~impl]
+     ~@body))
 </code></pre><p>Roughly, here is the lifecyle of our DSL, from the sugared wrapper to our unsugared foundations.</p><pre><code class="clojure">(with-implementation ::bash
   (script
     (println "a")))
@@ -262,6 +225,12 @@ No method in multimethod 'emit' for dispatch value:
 (binding [*current-implementation* ::bash]
   (emit
     '(println "a")))
+</code></pre><p>Let's see it in action for Bash:</p><pre><code class="klipse-clojure nohighlight">(with-implementation ::bash
+  (script
+    (println "a")))
+</code></pre><p>And for Windows:</p><pre><code class="klipse-clojure nohighlight">(with-implementation ::batch
+  (script
+    (println "a")))
 </code></pre><p>It’s easy to see how a few well-placed macros can put the sugar on top of strong foundations. Our DSL really looks like Clojure code!</p><h2 id="conclusion">Conclusion</h2><p>We have seen many of Clojure’s advanced features working in harmony in this DSL, even though we incrementally incorported many of them. Generally, Clojure helps us switch our implementation strategies with minimum fuss.</p><p>This is notable when you consider how much our DSL evolved.</p><p>We initially used a simple <code>cond</code> expression, which was converted into two multimethods, one for each implementation. As multimethods are just ordinary functions, the transition was seamless for any existing testing code. (In this case I renamed the function for clarity).</p><p>We then merged these multimethods, utilizing a global hierachy for inheritance and dynamic vars to select the current implementation.</p><p>Finally, we devised a pleasant syntactic interface with a two simple macros, eliminating that last bit of boilerplate that other languages would have to live with.</p><p>I hope you have enjoyed following the evolution of our little DSL. This DSL is based on a simplified version of <a href="https://github.com/pallet/stevedore">Stevedore</a> by <a href="http://hugoduncan.org/">Hugo Duncan</a>. If you are interested in how this DSL can be extended, you can do no better than browsing the source code of <a href="https://github.com/pallet/stevedore">Stevedore</a>.</p><h2 id="copyright">Copyright</h2><p>Copyright Ambrose Bonnaire-Sergeant, 2013</p>
 
     <div id="prev-next">
@@ -405,6 +374,12 @@ No method in multimethod 'emit' for dispatch value:
 <script src="/js/highlight.pack.js" type="application/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-
+ <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css">
+<script>
+window.klipse_settings = {
+  "selector" : ".klipse-clojure"
+};
+</script>
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin/js/klipse_plugin.js"></script> 
 </body>
 </html>
