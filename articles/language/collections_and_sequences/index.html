@@ -75,9 +75,9 @@ all collection implementations. They are</p><ul><li><code>=</code>: checks value
 keys must be comparable. There are several implementations of maps with
 different guarantees about ordering. Hash maps are typically instantiated with literals:</p><pre><code class="clojure">{:language "Clojure" :creator "Rich Hickey"}
 </code></pre><p>Commas can be used in map literals (Clojure compiler treats the comma as whitespace):</p><pre><code class="clojure">{:language "Clojure", :creator "Rich Hickey"}
-</code></pre><p><code>clojure.core/sorted-map</code> and <code>clojure.core/array-map</code> produce ordered maps:</p><pre><code class="klipse-clojure nohighlight">(sorted-map :language "Clojure" :creator "Rich Hickey") 
+</code></pre><p><code>clojure.core/sorted-map</code> and <code>clojure.core/array-map</code> produce ordered maps:</p><pre><code class="klipse-clojure nohighlight">(sorted-map :language "Clojure" :creator "Rich Hickey")
 ;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
-</code></pre><pre><code class="klipse-clojure nohighlight">(array-map :language "Clojure" :creator "Rich Hickey") 
+</code></pre><pre><code class="klipse-clojure nohighlight">(array-map :language "Clojure" :creator "Rich Hickey")
 ;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
 </code></pre><p>Unsurprisingly, map literals must contain an even number of forms (as many keys as values). Otherwise
 the code will not compile:</p><pre><code class="klipse-clojure nohighlight">{:language "Clojure" :creator}
@@ -201,10 +201,7 @@ added to the map.</p><pre><code class="klipse-clojure nohighlight">(conj {:a 1 :
 </code></pre><pre><code class="klipse-clojure nohighlight">;; vector does not have an _index_ of 4. nil is returned
 (get [1 2 3 4] 4)
 ;; ⇒ nil
-
-
-```klipse-clojure
-(defrecord Hand [index middle ring pinky thumb])
+</code></pre><pre><code class="klipse-clojure nohighlight">(defrecord Hand [index middle ring pinky thumb])
 (get (Hand. 3 4 3.5 2 2) :index)
 ;; ⇒ 3
 </code></pre><p><code>get</code> also supports a default return value supplied as the last argument.</p><pre><code class="klipse-clojure nohighlight">;; index 4 does not exist. return default value
@@ -221,10 +218,10 @@ added to the map.</p><pre><code class="klipse-clojure nohighlight">(conj {:a 1 :
 (assoc (Hand. 3 4 3.5 2 2) :index 3.75)
 ;; ⇒ #user.Hand{:index 3.75, :middle 4, :ring 3.5, :pinky 2, :thumb 2}
 </code></pre><p>When using <code>assoc</code> with a vector, the key is the index and the value is the value to assign to that index in the returned vector.
-The key must be &lt;= (count vector) or a "IndexOutOfBoundsException" will occur.</p><pre><code class="klipse-clojure nohighlight">(assoc [1 2 76] 2 3) ; ⇒ [1 2 3]
+The key must be &lt;= (count vector) or an index out of bounds error will occur.</p><pre><code class="klipse-clojure nohighlight">(assoc [1 2 76] 2 3) ; ⇒ [1 2 3]
 </code></pre><pre><code class="klipse-clojure nohighlight">;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
 (assoc [1 2 3] 5 6)
-;; IndexOutOfBoundsException   clojure.lang.PersistentVector.assocN (PersistentVector.java:136)
+;; the error here is slightly different in Clojure/Script
 </code></pre><p>When the key is equal to (count vector) <code>assoc</code> will add an item to the vector.</p><pre><code class="klipse-clojure nohighlight">(assoc [1 2 3] 3 4) ; ⇒ [1 2 3 4]
 </code></pre><h3 id="dissoc">dissoc</h3><p><code>dissoc</code> returns a map with the supplied keys, and subsequently their values, removed. Unlike <code>assoc</code>, <code>dissoc</code> does not work on vectors. When a record is provided, <code>dissoc</code> returns a map. For similar functionality with vectors, see <code>subvec</code> and <code>concat</code>.</p><pre><code class="klipse-clojure nohighlight">(dissoc {:a 1 :b 2 :c 3} :b)
 ;; ⇒ {:a 1, :c 3}
