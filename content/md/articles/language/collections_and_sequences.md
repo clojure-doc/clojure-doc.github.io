@@ -1,5 +1,6 @@
 {:title "Collections and Sequences in Clojure"
  :page-index 2200
+ :klipse true
  :layout :page}
 
 This guide covers:
@@ -87,17 +88,20 @@ Commas can be used in map literals (Clojure compiler treats the comma as whitesp
 
 `clojure.core/sorted-map` and `clojure.core/array-map` produce ordered maps:
 
-``` clojure
-(sorted-map :language "Clojure" :creator "Rich Hickey") ; ⇒ {:creator "Rich Hickey", :language "Clojure"}
+```klipse-clojure
+(sorted-map :language "Clojure" :creator "Rich Hickey") 
+;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
+```
 
-(array-map :language "Clojure" :creator "Rich Hickey")  ; ⇒ {:creator "Rich Hickey", :language "Clojure"}
+```klipse-clojure
+(array-map :language "Clojure" :creator "Rich Hickey") 
+;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
 ```
 
 Unsurprisingly, map literals must contain an even number of forms (as many keys as values). Otherwise
 the code will not compile:
 
-``` clojure
-;; fails with java.lang.RuntimeException: Map literal must contain an even number of forms
+```klipse-clojure
 {:language "Clojure" :creator}
 ```
 
@@ -148,7 +152,7 @@ is not.
 Lists in Clojure are special because they represent code forms, from function calls to macro calls to special forms.
 Code is data in Clojure and it is represented primarily as lists:
 
-``` clojure
+```klipse-clojure
 (empty? [])
 ```
 
@@ -156,15 +160,17 @@ First item on the list is said to be in the *calling position*.
 
 When used as "just" data structures, lists are typically instantiated with literals with quoting:
 
-``` clojure
+```klipse-clojure
 '(1 2 3 4)
+```
 
+```klipse-clojure
 '("clojure" "scala" "erlang" "f#" "haskell" "ocaml")
 ```
 
 Or you can explicitly use the `list` form:
 
-```clojure
+```klipse-clojure
 (list 1 2 3 4)
 ;; ⇒ (1 2 3 4)
 ```
@@ -172,7 +178,7 @@ Or you can explicitly use the `list` form:
 Commas can be used to separate list elements (Clojure compiler treats
 the comma as whitespace):
 
-``` clojure
+```klipse-clojure
 '("clojure", "scala", "erlang", "f#", "haskell", "ocaml")
 ```
 
@@ -191,15 +197,17 @@ This topic is covered in detail in the [Macros and Metaprogramming](/articles/la
 Sets are collections that offer efficient membership check operation and only allow each element to appear in the collection
 once. They are typically instantiated with literals:
 
-``` clojure
+```klipse-clojure
 #{1 2 3 4}
+```
 
+```klipse-clojure
 #{"clojure" "scala" "erlang" "f#" "haskell" "ocaml"}
 ```
 
 Commas can be used to separate set elements (Clojure compiler treats the as whitespace):
 
-``` clojure
+```klipse-clojure
 #{"clojure", "scala", "erlang", "f#", "haskell", "ocaml"}
 ```
 
@@ -213,13 +221,21 @@ for more information.
 
 The most common way of checking if an element is in a set is by using set as a function:
 
-``` clojure
-(#{1 2 3 4} 1)  ; ⇒ 1
-(#{1 2 3 4} 10) ; ⇒ nil
+```klipse-clojure
+(#{1 2 3 4} 1)
+;; ⇒ 1
+```
 
+```klipse-clojure
+(#{1 2 3 4} 10)
+;; ⇒ nil
+```
+
+```klipse-clojure
 (if (#{1 2 3 4} 1)
   :hit
-  :miss) ; ⇒ :hit
+  :miss)
+;; ⇒ :hit
 ```
 
 
@@ -257,21 +273,21 @@ and there are two ways to produce a sequence:
 
 `clojure.core/seq` takes a single argument and returns a sequential view over it:
 
-```clojure
+```klipse-clojure
 (seq [1 2 3])
 ;; ⇒ (1 2 3)
 ```
 
 When given an empty collection or sequence, `clojure.core/seq` returns nil:
 
-```clojure
+```klipse-clojure
 (seq [])
 ;; ⇒ nil
 ```
 
 this is commonly used in the following pattern:
 
-```clojure
+```klipse-clojure
 (if (seq xs)
   (comment "Do something with this sequence")
   (comment "Do something else"))
@@ -280,14 +296,14 @@ this is commonly used in the following pattern:
 Another function that constructs sequences is `clojure.core/cons`. It prepends values to the head of
 the given sequence:
 
-``` clojure
+```klipse-clojure
 (cons 0 (range 1 3))
 ;; ⇒ (0 1 2)
 ```
 
 `clojure.core/list*` does the same for a number of values:
 
-``` clojure
+```klipse-clojure
 (list* 0 1 (range 2 5))
 ;; ⇒ (0 1 2 3 4)
 ```
@@ -305,7 +321,7 @@ as linked cons cells (like in many other dialects of Lisp).
 `clojure.core/first` returns the first item in the sequence. `clojure.core/next` and `clojure.core/rest`
 return the rest:
 
-``` clojure
+```klipse-clojure
 (first (seq [1 2 3 4 5 6]))
 ;; ⇒ 1
 
@@ -315,9 +331,12 @@ return the rest:
 
 the difference between them is what they return on a single element sequence:
 
-``` clojure
+```klipse-clojure
 (rest (seq [:one]))
 ;; ⇒ ()
+```
+
+```klipse-clojure
 (next (seq [:one]))
 ;; ⇒ nil
 ```
@@ -356,13 +375,17 @@ You can find more information in the [clojure.core Overview](/articles/language/
 
 Returns a count of the number of items in a collection. An argument of nil returns 0.
 
-``` clojure
+```klipse-clojure
 (count "Hello")
 ;; ⇒ 5
+```
 
+```klipse-clojure
 (count [1 2 3 4 5 6 7])
 ;; ⇒ 7
+```
 
+```klipse-clojure
 (count nil)
 ;; ⇒ 0
 ```
@@ -371,14 +394,18 @@ Note that count does not return in constant time for all collections. This can b
 Keep in mind that lazy sequences must be realized to get a count of the items. This is often not intended and
 can cause a variety of otherwise cryptic errors.
 
-``` clojure
+```klipse-clojure
 (counted? "Hello")
 ;; ⇒ false
+```
 
+```klipse-clojure
 ;; will be fully realized when using (count (range 10))
 (counted? (range 10))
 ;; ⇒ false
+```
 
+```klipse-clojure
 ;; Constant time return of (count)
 (counted? [1 2 3 4 5])
 ;; ⇒ true
@@ -393,14 +420,14 @@ Adding items to a collection occurs at different places depending on the concret
 List addition occurs at the beginning of the list. This is because accessing the head of the list is a constant time operation, and accessing
 the tail requires traversal of the entire list.
 
-```clojure
+```klipse-clojure
 (conj '(1 2) 3)
 ;; ⇒ (3 1 2)
 ```
 
 Vectors have constant time access across the entire data structure. `'conj' thusly appends to the end of a vector.
 
-```clojure
+```klipse-clojure
 (conj [1 2] 3)
 ;; ⇒ [1 2 3]
 ```
@@ -408,20 +435,24 @@ Vectors have constant time access across the entire data structure. `'conj' thus
 Maps do not have guaranteed ordering, so the location that items are added is irrelevant. `conj` requires vectors of [key value] pairs to be
 added to the map.
 
-```clojure
+```klipse-clojure
 (conj {:a 1 :b 2 :c 3} [:d 4])
 ;; ⇒ {:d 4, :a 1, :c 3, :b 2}
+```
 
+```klipse-clojure
 (conj {:cats 1 :dogs 2} [:ants 400] [:giraffes 13])
 ;; ⇒ {:giraffes 13, :ants 400, :cats 1, :dogs 2}
 ```
 
 Sets also do not have guaranteed ordering. `conj` returns a set with the item added. As the concept of sets implies, added items will not duplicate equivalent items if they are present in the set.
 
-```clojure
+```klipse-clojure
 (conj #{1 4} 5)
 ;; ⇒ #{1 4 5}
+```
 
+```klipse-clojure
 (conj #{:a :b :c} :b :c :d :e)
 ;; ⇒ #{:a :c :b :d :e}
 ```
@@ -431,27 +462,36 @@ Sets also do not have guaranteed ordering. `conj` returns a set with the item ad
 `get` returns the value for the specified key in a map or record, index of a vector or value in a set. If the key is not present,
 `get` returns nil or a supplied default value.
 
-```clojure
+```klipse-clojure
 ;; val of a key in a map
 (get {:a 1 :b 2 :c 3} :b)
 ;; ⇒ 2
+```
 
+```klipse-clojure
 ;; index of a vector
 (get [10 15 20 25] 2)
 ;; ⇒ 20
+```
 
+```klipse-clojure
 ;; in a set, returns the value itself if present
 (get #{1 10 100 2 20 200} 1)
 ;; ⇒ 1
 
+```klipse-clojure
 ;; returns nil if key is not present
 (get {:a 1 :b 2} :c)
 ;; ⇒ nil
+```
 
+```klipse-clojure
 ;; vector does not have an _index_ of 4. nil is returned
 (get [1 2 3 4] 4)
 ;; ⇒ nil
 
+
+```klipse-clojure
 (defrecord Hand [index middle ring pinky thumb])
 (get (Hand. 3 4 3.5 2 2) :index)
 ;; ⇒ 3
@@ -459,11 +499,13 @@ Sets also do not have guaranteed ordering. `conj` returns a set with the item ad
 
 `get` also supports a default return value supplied as the last argument.
 
-```clojure
+```klipse-clojure
 ;; index 4 does not exist. return default value
 (get [1 2 3 4] 4 "Not Found")
 ;; ⇒ "Not Found"
+```
 
+```klipse-clojure
 ;; key :c does not exist, so return default value of 3
 (get {:a 1 :b 2} :c 3)
 ;; ⇒ 3
@@ -477,29 +519,38 @@ Sets also do not have guaranteed ordering. `conj` returns a set with the item ad
 
 Since maps and records can not contain multiple equivalent keys, supplying `assoc` with a key/value that exists in the one will cause `assoc` to return modify the key at that value in the result and not duplicate the key.
 
-```clojure
+```klipse-clojure
 (assoc {:a 1} :b 2)
 ;; ⇒ {:b 2, :a 1}
+```
 
+```klipse-clojure
 (assoc {:a 1 :b 45 :c 3} :b 2)
 ;; ⇒ {:a 1, :c 3, :b 2}
+```
 
+```klipse-clojure
 (defrecord Hand [index middle ring pinky thumb])
 (assoc (Hand. 3 4 3.5 2 2) :index 3.75)
 ;; ⇒ #user.Hand{:index 3.75, :middle 4, :ring 3.5, :pinky 2, :thumb 2}
 ```
+
 When using `assoc` with a vector, the key is the index and the value is the value to assign to that index in the returned vector.
 The key must be <= (count vector) or a "IndexOutOfBoundsException" will occur.
 
-```clojure
+```klipse-clojure
 (assoc [1 2 76] 2 3) ; ⇒ [1 2 3]
-
-;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
-(assoc [1 2 3] 5 6) ;; IndexOutOfBoundsException   clojure.lang.PersistentVector.assocN (PersistentVector.java:136)
 ```
+
+```klipse-clojure
+;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
+(assoc [1 2 3] 5 6)
+;; IndexOutOfBoundsException   clojure.lang.PersistentVector.assocN (PersistentVector.java:136)
+```
+
 When the key is equal to (count vector) `assoc` will add an item to the vector.
 
-```clojure
+```klipse-clojure
 (assoc [1 2 3] 3 4) ; ⇒ [1 2 3 4]
 ```
 
@@ -507,15 +558,19 @@ When the key is equal to (count vector) `assoc` will add an item to the vector.
 
 `dissoc` returns a map with the supplied keys, and subsequently their values, removed. Unlike `assoc`, `dissoc` does not work on vectors. When a record is provided, `dissoc` returns a map. For similar functionality with vectors, see `subvec` and `concat`.
 
-```clojure
+```klipse-clojure
 (dissoc {:a 1 :b 2 :c 3} :b)
 ;; ⇒ {:a 1, :c 3}
+```
 
+```klipse-clojure
 (dissoc {:a 1 :b 14 :c 390 :d 75 :e 2 :f 51} :b :c :e)
 ;; ⇒ {:a 1, :f 51, :d 75}
+```
 
+```klipse-clojure
 ;; note that a map is returned, not a record.
-(defrecord Hand [index middle ring pinky ring])
+(defrecord Hand [index middle ring pinky thumb])
 ;; always be careful with the bandsaw!
 (dissoc (Hand. 3 4 3.5 2 2) :ring)
 ;; ⇒ {:index 3, :middle 4, :pinky 2, :thumb 2}
@@ -527,13 +582,17 @@ When the key is equal to (count vector) `assoc` will add an item to the vector.
 
 Note that for collections that do not guarantee order like some maps and sets, the behaviour of `first` should not be relied on.
 
-```clojure
+```klipse-clojure
 (first (range 10))
 ;; ⇒ 0
+```
 
+```klipse-clojure
 (first [:floor :piano :seagull])
 ;; ⇒ :floor
+```
 
+```klipse-clojure
 (first [])
 ;; ⇒ nil
 ```
@@ -544,21 +603,25 @@ Note that for collections that do not guarantee order like some maps and sets, t
 
 `rest` should also not be relied on when using maps and sets unless you are sure ordering is guaranteed.
 
-```clojure
+```klipse-clojure
 (rest [13 1 16 -4])
 ;; ⇒ (1 16 -4)
+```
 
+```klipse-clojure
 (rest '(:french-fry))
 ;; ⇒ '()
 ```
 
 The behaviour of `rest` should be contrasted with `next`. `next` returns nil if the collection only has a single item. This is important when considering "truthiness" of values since an empty seq is "true" but nil is not.
 
-```clojure
+```klipse-clojure
 (if (rest '("stuff"))
-  (print "Does this print?")) ;; yes, it prints.
+  (println "Does this print?"))
+;; yes, it prints.
+```
 
-
+```clojure
 ;; NEVER FINISHES EXECUTION!!!
 ;; "done" is never reached because (rest x) is always a "true" value
 (defn inf
@@ -572,17 +635,19 @@ The behaviour of `rest` should be contrasted with `next`. `next` returns nil if 
 
 `empty?` returns true if the collection has no items, or false if it has 1 or more items.
 
-```clojure
+```klipse-clojure
 (empty? [])
 ;; ⇒ true
+```
 
+```klipse-clojure
 (empty? '(1 2 3))
 ;; ⇒ false
 ```
 
 Do not confuse `empty?` with `empty`. This can be a source of great confusion:
 
-```clojure
+```klipse-clojure
 (if (empty [1 2 3]) ;; empty returns an empty seq, which is true! use empty? here.
   "It's empty"
   "It's not empty")
@@ -593,10 +658,12 @@ Do not confuse `empty?` with `empty`. This can be a source of great confusion:
 
 `empty` returns an empty collection of the same type as the collection provided.
 
-```clojure
+```klipse-clojure
 (empty [1 2 3])
 ;; ⇒ []
+```
 
+```klipse-clojure
 (empty {:a 1 :b 2 :c 3})
 ;; ⇒ {}
 ```
@@ -605,10 +672,12 @@ Do not confuse `empty?` with `empty`. This can be a source of great confusion:
 
 `not-empty` returns nil if the collection has no items. If the collection contains items, the collection is returned.
 
-```clojure
+```klipse-clojure
 (not-empty '(:mice :elephants :children))
 ;; ⇒ (:mice :elephants :children)
+```
 
+```klipse-clojure
 (not-empty '())
 ;; ⇒ nil
 ```
@@ -617,22 +686,30 @@ Do not confuse `empty?` with `empty`. This can be a source of great confusion:
 
 `contains` returns true if the provided *key* is present in a collection. `contains` is similar to `get` in that vectors treat the key as an index. `contains` will always return false for lists.
 
-```clojure
+```klipse-clojure
 (contains? {:a 1 :b 2 :c 3} :c)
 ;; ⇒ true
+```
 
+```klipse-clojure
 ;; true if index 2 exists
 (contains? ["John" "Mary" "Paul"] 2)
 ;; ⇒ true
+```
 
+```klipse-clojure
 ;; false if index 5 does not exist
 (contains? ["John" "Mary" "Paul"] 5)
 ;; ⇒ false
+```
 
+```klipse-clojure
 ;; "Paul" does not exist as an index
 (contains? ["John" "Mary" "Paul"] "Paul")
 ;; ⇒ false
+```
 
+```klipse-clojure
 ;; lists are not supported. contains? won't traverse a collection for a result.
 (contains? '(1 2 3) 0)
 ;; ⇒ java.lang.IllegalArgumentException: contains? not supported on type: clojure.lang.PersistentList
@@ -644,10 +721,12 @@ Do not confuse `empty?` with `empty`. This can be a source of great confusion:
 
 Since collections are "true" values, this makes it possible to return the first result itself rather than simply `true`.
 
-```clojure
+```klipse-clojure
 (some even? [1 2 3 4 5])
 ;; ⇒ true
+```
 
+```klipse-clojure
 ;; predicate returns the value rather than simply true
 (some #(if (even? %) %) [1 2 3 4 5])
 ;; ⇒ 2
@@ -655,14 +734,14 @@ Since collections are "true" values, this makes it possible to return the first 
 
 Since maps can be used as functions, you can use a map as a predicate. This will return the value of the first key in the collection that is also in the map.
 
-```clojure
+```klipse-clojure
 (some {:a 1 :b 5} [:h :k :d :b])
 ;; ⇒ 5
 ```
 
 Sets can also be used as functions and will return the first item in the collection that is present in the set.
 
-```clojure
+```klipse-clojure
 (some #{4} (range 20))
 ;; ⇒ 4
 ```
@@ -671,10 +750,12 @@ Sets can also be used as functions and will return the first item in the collect
 
 `every` returns true if the predicate returns true for every item in the collection, otherwise it returns false.
 
-```clojure
+```klipse-clojure
 (every? even? (range 0 10 2))
 ;; ⇒ true
+```
 
+```klipse-clojure
 ;; set can be used to see if collection only contains items in the set.
 (every? #{2 3 4} [2 3 4 2 3 4])
 ;; ⇒ true
@@ -688,14 +769,18 @@ values.
 Essentially, you're creating a *mapping* from an old sequence of values
 to a new sequence of values.
 
-```clojure
+```klipse-clojure
 (def numbers
   (range 1 10))
 ;; ⇒ (1 2 3 4 5 6 7 8 9)
+```
 
+```klipse-clojure
 (map (partial * 2) numbers)
 ;; ⇒ (2 4 6 8 10 12 14 16 18)
+```
 
+```klipse-clojure
 (def scores
   {:clojure 10
    :scala 9
@@ -711,14 +796,18 @@ to a new sequence of values.
 function repeatedly with the sequence of values to *reduce* it to a
 single value.
 
-```clojure
+```klipse-clojure
 (def numbers
   (range 1 10))
 ;; ⇒ (1 2 3 4 5 6 7 8 9)
+```
 
+```klipse-clojure
 (reduce + numbers)
 ;; ⇒ 45
+```
 
+```klipse-clojure
 (def scores
   {:clojure 10
    :scala 9
@@ -726,7 +815,9 @@ single value.
 
 (reduce + (vals scores))
 ;; ⇒ 27
+```
 
+```klipse-clojure
 ;; Provide an initial value for the calculation
 (reduce + 10 (vals scores))
 ;; ⇒ 37
@@ -736,10 +827,12 @@ single value.
 
 `filter` returns a lazy sequence of items that return `true` for the provided predicate. Contrast to `remove`.
 
-```clojure
+```klipse-clojure
 (filter even? (range 10))
 ;; ⇒ (0 2 4 6 8)
+```
 
+```klipse-clojure
 (filter #(if (< (count %) 5) %) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
 ;; ⇒ ("Paul" "Rudd")
 ```
@@ -748,8 +841,9 @@ When using sets with `filter`, remember that if nil or false is in the set and i
 
 In this example, when nil and false are tested with the predicate, the predicate returns nil. This is because if the item is present in the set it is returned. This will cause that item to /not/ be included in the returned lazy-sequence.
 
-```clojure
-(filter #{:nothing :something nil} [:nothing :something :things :someone nil false :pigeons])
+```klipse-clojure
+(filter #{:nothing :something nil}
+       [:nothing :something :things :someone nil false :pigeons])
 ;; ⇒ (:nothing :something)
 ```
 
@@ -757,10 +851,12 @@ In this example, when nil and false are tested with the predicate, the predicate
 
 `remove` returns a lazy sequence of items that return `false` or `nil` for the provided predicate. Contrast to `filter`.
 
-```clojure
+```klipse-clojure
 (remove even? (range 10))
 ;; ⇒ (1 3 5 7 9)
+```
 
+```klipse-clojure
 ;; relative complement. probably useless?
 (remove {:a 1 :b 2} [:h :k :z :b :s])
 ;; ⇒ (:h :k :z :s)
@@ -771,8 +867,9 @@ This will cause that item to be included in the returned lazy sequence.
 
 In this example, when nil and false are tested with the predicate, the predicate returns nil. This is because if the item is present in the set it is returned.
 
-```clojure
-(remove #{:nothing :something nil} [:nothing :something :things :someone nil false :pigeons])
+```klipse-clojure
+(remove #{:nothing :something nil}
+        [:nothing :something :things :someone nil false :pigeons])
 ;; ⇒ (:things :someone nil false :pigeons)
 ```
 
@@ -783,10 +880,12 @@ applying the function on that initial value, then applies the function
 again on the resultant value, and repeats forever, lazily. Note that the
 function *iterates* on the value.
 
-```clojure
+```klipse-clojure
 (take 5 (iterate inc 1))
 ;; ⇒ (1 2 3 4 5)
+```
 
+```klipse-clojure
 (defn multiply-by-two
   [value]
   (* 2 value))
@@ -806,7 +905,7 @@ key is valid at each subsequent level of the nested data structure.
 If the sequence of keys does not lead to a valid path, `nil` is
 returned.
 
-```clojure
+```klipse-clojure
 (def family
   {:dad {:shirt 5
          :pants 6
@@ -816,19 +915,28 @@ returned.
          :book 3}
    :son {:toy 5
          :homework 1}})
+```
 
+```klipse-clojure
 (get-in family [:dad :shirt])
 ;; ⇒ 5
+```
 
+```klipse-clojure
 (get-in family [:mom :dress])
 ;; ⇒ {:work 6, :casual 7}
+```
 
+```klipse-clojure
 (get-in family [:mom :dress :casual])
 ;; ⇒ 7
+```
 
+```klipse-clojure
 (get-in family [:son :pants])
 ;; ⇒ nil
 
+```klipse-clojure
 (def locations
   [:office :home :school])
 
@@ -848,7 +956,7 @@ reference.
 The "update" function takes the old value and returns a new value which
 `update-in` uses in the new modified data structure.
 
-```clojure
+```klipse-clojure
 (def family
   {:dad {:shirt 5
          :pants 6
@@ -858,11 +966,17 @@ The "update" function takes the old value and returns a new value which
          :book 3}
    :son {:toy 5
          :homework 1}})
+```
 
+```klipse-clojure
 (update-in family [:dad :pants] inc)
-;; ⇒ {:son {:toy 5, :homework 1}, :mom {:dress {:work 6, :casual 7}, :book 3}, :dad {:shoes 4, :shirt 5, :pants 7}}
-;; Notice that "pants" gets incremented
 
+;; ⇒ {:son {:toy 5, :homework 1}, :mom {:dress {:work 6, :casual 7}, :book 3}, :dad {:shoes 4, :shirt 5, :pants 7}}
+```
+
+Notice that "pants" gets incremented
+
+```klipse-clojure
 (def locations
   [:office :home :school])
 
@@ -883,7 +997,7 @@ Note the difference between `update-in` and `assoc-in`: `update-in`
 takes a function that applies on the old value to return a new value,
 whereas `assoc-in` takes a new value as-is.
 
-```clojure
+```klipse-clojure
 (def family
   {:dad {:shirt 5
          :pants 6
@@ -893,10 +1007,14 @@ whereas `assoc-in` takes a new value as-is.
          :book 3}
    :son {:toy 5
          :homework 1}})
+```
 
+```klipse-clojure
 (assoc-in family [:son :crayon] 3)
 ;; ⇒ {:son {:toy 5, :crayon 3, :homework 1}, :mom {:dress {:work 6, :casual 7}, :book 3}, :dad {:shoes 4, :shirt 5, :pants 6}}
+```
 
+```klipse-clojure
 (def locations
   [:office :home :school])
 
@@ -908,10 +1026,12 @@ whereas `assoc-in` takes a new value as-is.
 
 `keys` returns a sequence of the keys in a map or record.
 
-```clojure
+```klipse-clojure
 (keys {1 "one" 2 "two" 3 "three"})
 ;; ⇒ (1 2 3)
+```
 
+```klipse-clojure
 (defrecord Hand [index middle ring pinky thumb])
 (keys (Hand. 2 4 3 1 2))
 ;; ⇒ (:index :middle :ring :pinky :thumb)
@@ -921,10 +1041,12 @@ whereas `assoc-in` takes a new value as-is.
 
 `vals` returns a sequence of vals in a map or record.
 
-```clojure
+```klipse-clojure
 (vals {:meows 20 :barks 2 :moos 5})
 ;; ⇒ (5 2 20)
+```
 
+```klipse-clojure
 (defrecord Hand [index middle ring pinky thumb])
 (vals (Hand. 1 2 3 4 5))
 ;; ⇒ (1 2 3 4 5)
@@ -934,7 +1056,7 @@ whereas `assoc-in` takes a new value as-is.
 
 `select-keys` is used to extract a subset of a map:
 
-```clojure
+```klipse-clojure
 (def family
   {:dad {:shirt 5
          :pant 6
@@ -944,10 +1066,14 @@ whereas `assoc-in` takes a new value as-is.
          :book 3}
    :son {:toy 5
          :homework 1}})
+```
 
+```klipse-clojure
 (select-keys family [:dad])
 ;; ⇒ {:dad {:shoes 4, :shirt 5, :pant 6}}
+```
 
+```klipse-clojure
 (select-keys family [:mom :son])
 ;; ⇒ {:son {:toy 5, :homework 1}, :mom {:dress {:work 6, :casual 7}, :book 3}}
 ```
@@ -956,17 +1082,24 @@ whereas `assoc-in` takes a new value as-is.
 
 `take` returns a lazy sequence of the first `n` items of a collection `coll`.
 
-```clojure
+```klipse-clojure
 (take 3 [1 3 5 7 9])
 ;; ⇒ (1 3 5)
+```
+
+```klipse-clojure
 (type (take 3 (range)))
 ;; ⇒ clojure.lang.LazySeq
 ```
+
 If there are fewer than `n` items in `coll`, all items will be returned.
 
-```clojure
+```klipse-clojure
 (take 5 [1 2 3])
 ;; ⇒ (1 2 3)
+```
+
+```klipse-clojure
 (take 3 nil)
 ;; ⇒ ()
 ```
@@ -975,11 +1108,17 @@ If there are fewer than `n` items in `coll`, all items will be returned.
 
 `drop` drops `n` items from a collection `coll` and returns a lazy sequence of the rest of it.
 
-```clojure
+```klipse-clojure
 (drop 3 '(0 1 2 3 4 5 6))
 ;; ⇒ (3 4 5 6)
+```
+
+```klipse-clojure
 (drop 2 [1 2])
 ;; ⇒ ()
+```
+
+```klipse-clojure
 (drop 2 nil)
 ;; ⇒ ()
 ```
@@ -989,7 +1128,7 @@ If there are fewer than `n` items in `coll`, all items will be returned.
 `take-while` returns a lazy sequence of items from a collection as long
 as the predicate returns `true` for each item:
 
-```clojure
+```klipse-clojure
 (take-while #(< % 5) (range))
 ;; ⇒ (0 1 2 3 4)
 ```
@@ -1000,7 +1139,7 @@ as the predicate returns `true` for each item:
 returns `false` for the item and when the first non-false item is found,
 it returns a lazy sequence from that item onwards:
 
-```clojure
+```klipse-clojure
 (drop-while #(< % 5) (range 10))
 ;; ⇒ (5 6 7 8 9)
 ```
@@ -1020,10 +1159,11 @@ technique after profiling.
 Transients are produced from immutable data structures using the `clojure.core/transient`
 function:
 
-``` clojure
+```klipse-clojure
 (let [m (transient {})]
   (assoc! m :key "value") ;; mutates the transient in place!
-  (count m)) ;; ⇒ 1
+  (count m))
+;; ⇒ 1
 ```
 
 Note that `clojure.core/transient` does not affect nested collections, for
@@ -1036,7 +1176,7 @@ is not safe of data structures are shared between threads.
 
 To create an immutable data structure out of a transient, use `clojure.core/persistent!`:
 
-``` clojure
+```klipse-clojure
 (let [m (transient {})]
         (assoc! m :key "value")
         (persistent! m)) ;; ⇒ {:key "value"}
