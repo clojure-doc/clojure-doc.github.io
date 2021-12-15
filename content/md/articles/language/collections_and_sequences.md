@@ -89,12 +89,12 @@ Commas can be used in map literals (Clojure compiler treats the comma as whitesp
 `clojure.core/sorted-map` and `clojure.core/array-map` produce ordered maps:
 
 ```klipse-clojure
-(sorted-map :language "Clojure" :creator "Rich Hickey") 
+(sorted-map :language "Clojure" :creator "Rich Hickey")
 ;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
 ```
 
 ```klipse-clojure
-(array-map :language "Clojure" :creator "Rich Hickey") 
+(array-map :language "Clojure" :creator "Rich Hickey")
 ;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
 ```
 
@@ -489,7 +489,7 @@ Sets also do not have guaranteed ordering. `conj` returns a set with the item ad
 ;; vector does not have an _index_ of 4. nil is returned
 (get [1 2 3 4] 4)
 ;; ⇒ nil
-
+```
 
 ```klipse-clojure
 (defrecord Hand [index middle ring pinky thumb])
@@ -536,7 +536,7 @@ Since maps and records can not contain multiple equivalent keys, supplying `asso
 ```
 
 When using `assoc` with a vector, the key is the index and the value is the value to assign to that index in the returned vector.
-The key must be <= (count vector) or a "IndexOutOfBoundsException" will occur.
+The key must be <= (count vector) or an index out of bounds error will occur.
 
 ```klipse-clojure
 (assoc [1 2 76] 2 3) ; ⇒ [1 2 3]
@@ -545,7 +545,7 @@ The key must be <= (count vector) or a "IndexOutOfBoundsException" will occur.
 ```klipse-clojure
 ;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
 (assoc [1 2 3] 5 6)
-;; IndexOutOfBoundsException   clojure.lang.PersistentVector.assocN (PersistentVector.java:136)
+;; the error here is slightly different in Clojure/Script
 ```
 
 When the key is equal to (count vector) `assoc` will add an item to the vector.
