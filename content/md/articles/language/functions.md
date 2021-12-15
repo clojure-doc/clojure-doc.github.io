@@ -1,5 +1,6 @@
 {:title "Functions in Clojure"
  :page-index 2300
+ :klipse true
  :layout :page}
 
 This guide covers:
@@ -88,7 +89,7 @@ Anonymous functions are defined using the `fn` special form:
 Anonymous functions can be assigned to locals, passed between functions (higher order functions are covered later in this document)
 and returned from functions:
 
-``` clojure
+```klipse-clojure
 (let [f (fn [x]
           (* 2 x))]
   (map f (range 0 10)))
@@ -96,14 +97,14 @@ and returned from functions:
 
 There is also a reader macro for anonymous functions:
 
-``` clojure
+```klipse-clojure
 (let [f #(* 2 %)]
   (map f (range 0 10)))
 ```
 
 The `%` in the example above means "the first argument". To refer to more than one argument, use `%1`, `%2` and so on:
 
-``` clojure
+```klipse-clojure
 ;; an anonymous function that takes 3 arguments and adds them together
 (let [f #(+ %1 %2 %3)]
   (f 1 2 3))
@@ -116,22 +117,28 @@ Please **use this reader macro sparingly**; excessive use may lead to unreadable
 
 Functions are invoked by placing a function to the leading position (*the calling position*) of a list:
 
-``` clojure
+<pre style="visibility:hidden; height:0;"><code class="klipse-clojure" >
+(import '(goog.string format))
+</code></pre>
+
+```klipse-clojure
 (format "Hello, %s" "world")
 ```
 
 This works also if you have a function stored in a local, a var or passed as an argument:
 
-``` clojure
+```klipse-clojure
 (let [f format]
   (f "Hello, %s" "world"))
 ```
 
 Alternatively, you can call a function using [clojure.core/apply](http://clojuredocs.org/clojure_core/clojure.core/apply)
 
-``` clojure
+```klipse-clojure
 (apply format "Hello, %s" ["world"])
+```
 
+```klipse-clojure
 (apply format "Hello, %s %s" ["Clojure" "world"])
 ```
 
@@ -231,7 +238,7 @@ Destructuring can nest (destructure deeper than one level):
 While this article does not cover `let` and locals, it is worth demonstrating that positional destructuring works
 exactly the same way for let bindings:
 
-``` clojure
+```klipse-clojure
 (let [pair         [10 :gbp]
       [_ currency] pair]
   currency)
@@ -304,7 +311,7 @@ This is very commonly used for implementing functions that take "extra options" 
 
 Just like with positional destructuring, map destructuring works exactly the same way for let bindings:
 
-``` clojure
+```klipse-clojure
 (let [money               {:currency :gbp :amount 10}
      {currency :currency} money]
   currency)
@@ -316,12 +323,24 @@ Just like with positional destructuring, map destructuring works exactly the sam
 Variadic functions are functions that take varying number of arguments (some arguments are optional). Two examples
 of such function in `clojure.core` are `clojure.core/str` and `clojure.core/format`:
 
-``` clojure
-(str "a" "b")      ; ⇒ "ab"
-(str "a" "b" "c")  ; ⇒ "abc"
+```klipse-clojure
+(str "a" "b")
+; ⇒ "ab"
+```
 
-(format "Hello, %s" "world")               ; ⇒ "Hello, world"
-(format "Hello, %s %s" "Clojure" "world")  ; ⇒ "Hello, Clojure world"
+```klipse-clojure
+(str "a" "b" "c")
+; ⇒ "abc"
+```
+
+```klipse-clojure
+(format "Hello, %s" "world")
+; ⇒ "Hello, world"
+```
+
+```klipse-clojure
+(format "Hello, %s %s" "Clojure" "world")
+; ⇒ "Hello, Clojure world"
 ```
 
 To define a variadic function, prefix optional arguments with an ampersand (`&`):
@@ -335,7 +354,7 @@ To define a variadic function, prefix optional arguments with an ampersand (`&`)
 In the example above, one argument is required and the rest is optional. Variadic functions
 are invoked as usual:
 
-``` clojure
+```klipse-clojure
 (defn log
   [message & args]
   (println "args: " args))
@@ -343,14 +362,8 @@ are invoked as usual:
 (log "message from " "192.0.0.76")
 ```
 
-Running the example above in the REPL produces:
-
-``` clojure
-user=> (log "message from " "192.0.0.76")
-args:  (192.0.0.76)
-
-user=> (log "message from " "192.0.0.76" "service:xyz")
-args:  (192.0.0.76 service:xyz)
+```klipse-clojure
+(log "message from " "192.0.0.76" "service:xyz")
 ```
 
 As you can see, optional arguments (`args`) are packed into a list.
@@ -361,7 +374,7 @@ Named parameters are achieved through the use of destructuring a variadic functi
 
 Approaching named parameters from the standpoint of destructuring a variadic function allows for more clearly readable function invocations.  This is an example of named parameters:
 
-``` clojure
+```klipse-clojure
 (defn job-info
   [& {:keys [name job income] :or {job "unemployed" income "$0.00"}}]
   (if name
@@ -371,12 +384,14 @@ Approaching named parameters from the standpoint of destructuring a variadic fun
 
 Using the function looks like this:
 
-``` clojure
-user=> (job-info :name "Robert" :job "Engineer")
-["Robert" "Engineer" "$0.00"]
+```klipse-clojure
+(job-info :name "Robert" :job "Engineer")
+;; ["Robert" "Engineer" "$0.00"]
+```
 
-user=> (job-info :job "Engineer")
-No name specified
+```klipse-clojure
+(job-info :job "Engineer")
+;; No name specified
 ```
 
 Without the use of a variadic argument list, you would have to call the function with a single map argument such as `{:name "Robert" :job "Engineer}`.
@@ -393,7 +408,7 @@ are an important functional programming technique and are quite commonly used in
 of an HOF is a function that takes a function and a collection and returns a collection of elements
 that satisfy a condition (a predicate). In Clojure, this function is called `clojure.core/filter`:
 
-``` clojure
+```klipse-clojure
 (filter even? (range 0 10))  ; ⇒ (0 2 4 6 8)
 ```
 
@@ -413,20 +428,27 @@ They are covered in more detail in the [Namespaces](/articles/language/namespace
 
 In Clojure, keywords can be used as functions. They take a map or record and look themselves up in it:
 
-``` clojure
-(:age {:age 27 :name "Michael"})  ; ⇒ 27
+```klipse-clojure
+(:age {:age 27 :name "Michael"}) 
+; ⇒ 27
 ```
 
 This is commonly used with higher order functions:
 
-``` clojure
-(map :age [{:age 45 :name "Joe"} {:age 42 :name "Jill"} {:age 17 :name "Matt"}])  ; ⇒ (45 42 17)
+```klipse-clojure
+(map :age [{:age 45 :name "Joe"}
+           {:age 42 :name "Jill"}
+           {:age 17 :name "Matt"}]) 
+;; ⇒ (45 42 17)
 ```
 
 and the `->` macro:
 
-``` clojure
-(-> [{:age 45 :name "Joe"} {:age 42 :name "Jill"}] first :name)  ; ⇒ "Joe"
+```klipse-clojure
+(-> [{:age 45 :name "Joe"} {:age 42 :name "Jill"}]
+     first 
+     :name)
+;; ⇒ "Joe"
 ```
 
 
@@ -434,10 +456,19 @@ and the `->` macro:
 
 Clojure maps are also functions that take keys and look up values for them:
 
-``` clojure
-({:age 42 :name "Joe"} :name)     ; ⇒ "Joe"
-({:age 42 :name "Joe"} :age)      ; ⇒ 42
-({:age 42 :name "Joe"} :unknown)  ; ⇒ nil
+```klipse-clojure
+({:age 42 :name "Joe"} :name)
+; ⇒ "Joe"
+```
+
+```klipse-clojure
+({:age 42 :name "Joe"} :age)
+; ⇒ 42
+```
+
+```klipse-clojure
+({:age 42 :name "Joe"} :unknown)
+; ⇒ nil
 ```
 
 Note that this is **not true** for Clojure records, which are almost identical to maps in other
@@ -446,12 +477,24 @@ cases.
 
 ## Sets as Functions
 
-``` clojure
-(#{1 2 3} 1)   ; ⇒ 1
-(#{1 2 3} 10)  ; ⇒ nil
+```klipse-clojure
+(#{1 2 3} 1)
+; ⇒ 1
+```
 
-(#{:us :au :ru :uk} :uk)  ; ⇒ :uk
-(#{:us :au :ru :uk} :cn)  ; ⇒ nil
+```klipse-clojure
+(#{1 2 3} 10)
+; ⇒ nil
+```
+
+```klipse-clojure
+(#{:us :au :ru :uk} :uk)
+; ⇒ :uk
+```
+
+```klipse-clojure
+(#{:us :au :ru :uk} :cn)
+; ⇒ nil
 ```
 
 This is often used to check if a value is in a set:
