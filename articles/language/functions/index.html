@@ -86,20 +86,21 @@ the value function returns:</p><pre><code class="clojure">(defn round
 demonstrated in this example and assumed to be implemented elsewhere.</p><h2 id="anonymous-functions">Anonymous Functions</h2><p>Anonymous functions are defined using the <code>fn</code> special form:</p><pre><code class="clojure">(fn [x]
   (* 2 x))
 </code></pre><p>Anonymous functions can be assigned to locals, passed between functions (higher order functions are covered later in this document)
-and returned from functions:</p><pre><code class="clojure">(let [f (fn [x]
+and returned from functions:</p><pre><code class="klipse-clojure nohighlight">(let [f (fn [x]
           (* 2 x))]
   (map f (range 0 10)))
-</code></pre><p>There is also a reader macro for anonymous functions:</p><pre><code class="clojure">(let [f #(* 2 %)]
+</code></pre><p>There is also a reader macro for anonymous functions:</p><pre><code class="klipse-clojure nohighlight">(let [f #(* 2 %)]
   (map f (range 0 10)))
-</code></pre><p>The <code>%</code> in the example above means "the first argument". To refer to more than one argument, use <code>%1</code>, <code>%2</code> and so on:</p><pre><code class="clojure">;; an anonymous function that takes 3 arguments and adds them together
+</code></pre><p>The <code>%</code> in the example above means "the first argument". To refer to more than one argument, use <code>%1</code>, <code>%2</code> and so on:</p><pre><code class="klipse-clojure nohighlight">;; an anonymous function that takes 3 arguments and adds them together
 (let [f #(+ %1 %2 %3)]
   (f 1 2 3))
-</code></pre><p>Please <strong>use this reader macro sparingly</strong>; excessive use may lead to unreadable code.</p><h2 id="how-to-invoke-functions">How To Invoke Functions</h2><p>Functions are invoked by placing a function to the leading position (<em>the calling position</em>) of a list:</p><pre><code class="clojure">(format "Hello, %s" "world")
-</code></pre><p>This works also if you have a function stored in a local, a var or passed as an argument:</p><pre><code class="clojure">(let [f format]
+</code></pre><p>Please <strong>use this reader macro sparingly</strong>; excessive use may lead to unreadable code.</p><h2 id="how-to-invoke-functions">How To Invoke Functions</h2><p>Functions are invoked by placing a function to the leading position (<em>the calling position</em>) of a list:</p><pre style="visibility:hidden; height:0;"><code class="klipse-clojure nohighlight">
+(import '(goog.string format))
+</code></pre><pre><code class="klipse-clojure nohighlight">(format "Hello, %s" "world")
+</code></pre><p>This works also if you have a function stored in a local, a var or passed as an argument:</p><pre><code class="klipse-clojure nohighlight">(let [f format]
   (f "Hello, %s" "world"))
-</code></pre><p>Alternatively, you can call a function using <a href="http://clojuredocs.org/clojure_core/clojure.core/apply">clojure.core/apply</a></p><pre><code class="clojure">(apply format "Hello, %s" ["world"])
-
-(apply format "Hello, %s %s" ["Clojure" "world"])
+</code></pre><p>Alternatively, you can call a function using <a href="http://clojuredocs.org/clojure_core/clojure.core/apply">clojure.core/apply</a></p><pre><code class="klipse-clojure nohighlight">(apply format "Hello, %s" ["world"])
+</code></pre><pre><code class="klipse-clojure nohighlight">(apply format "Hello, %s %s" ["Clojure" "world"])
 </code></pre><p><code>clojure.core/apply</code> is usually only necessary when calling variadic functions or having the list of arguments passed in
 as a collection.</p><h2 id="multi-arity-functions">Multi-arity Functions</h2><p>Functions in Clojure can have multiple <em>arities</em>, or sets of arguments:</p><pre><code class="clojure">(defn tax-amount
   ([amount]
@@ -144,7 +145,7 @@ ignore it by replacing it with an underscore:</p><pre><code class="clojure">(def
   [[[i _] _]]
   i)
 </code></pre><p>While this article does not cover <code>let</code> and locals, it is worth demonstrating that positional destructuring works
-exactly the same way for let bindings:</p><pre><code class="clojure">(let [pair         [10 :gbp]
+exactly the same way for let bindings:</p><pre><code class="klipse-clojure nohighlight">(let [pair         [10 :gbp]
       [_ currency] pair]
   currency)
 </code></pre><h3 id="map-destructuring">Map Destructuring</h3><p>Destructuring over maps and records (<strong>map destructuring</strong>) works slightly differently:</p><pre><code class="clojure">(defn currency-of
@@ -171,56 +172,67 @@ and <code>amount</code>. The same can be done for strings:</p><pre><code class="
 as well.</p><p>Map destructuring also lets us specify default values for keys that may be missing:</p><pre><code class="clojure">(defn currency-of
   [{:keys [currency amount] :or {currency :gbp}}]
   currency)
-</code></pre><p>This is very commonly used for implementing functions that take "extra options" (faking named arguments support).</p><p>Just like with positional destructuring, map destructuring works exactly the same way for let bindings:</p><pre><code class="clojure">(let [money               {:currency :gbp :amount 10}
+</code></pre><p>This is very commonly used for implementing functions that take "extra options" (faking named arguments support).</p><p>Just like with positional destructuring, map destructuring works exactly the same way for let bindings:</p><pre><code class="klipse-clojure nohighlight">(let [money               {:currency :gbp :amount 10}
      {currency :currency} money]
   currency)
 </code></pre><h2 id="variadic-functions">Variadic Functions</h2><p>Variadic functions are functions that take varying number of arguments (some arguments are optional). Two examples
-of such function in <code>clojure.core</code> are <code>clojure.core/str</code> and <code>clojure.core/format</code>:</p><pre><code class="clojure">(str "a" "b")      ; ⇒ "ab"
-(str "a" "b" "c")  ; ⇒ "abc"
-
-(format "Hello, %s" "world")               ; ⇒ "Hello, world"
-(format "Hello, %s %s" "Clojure" "world")  ; ⇒ "Hello, Clojure world"
+of such function in <code>clojure.core</code> are <code>clojure.core/str</code> and <code>clojure.core/format</code>:</p><pre><code class="klipse-clojure nohighlight">(str "a" "b")
+; ⇒ "ab"
+</code></pre><pre><code class="klipse-clojure nohighlight">(str "a" "b" "c")
+; ⇒ "abc"
+</code></pre><pre><code class="klipse-clojure nohighlight">(format "Hello, %s" "world")
+; ⇒ "Hello, world"
+</code></pre><pre><code class="klipse-clojure nohighlight">(format "Hello, %s %s" "Clojure" "world")
+; ⇒ "Hello, Clojure world"
 </code></pre><p>To define a variadic function, prefix optional arguments with an ampersand (<code>&amp;</code>):</p><pre><code class="clojure">(defn log
   [message &amp; args]
   (comment ...))
 </code></pre><p>In the example above, one argument is required and the rest is optional. Variadic functions
-are invoked as usual:</p><pre><code class="clojure">(defn log
+are invoked as usual:</p><pre><code class="klipse-clojure nohighlight">(defn log
   [message &amp; args]
   (println "args: " args))
 
 (log "message from " "192.0.0.76")
-</code></pre><p>Running the example above in the REPL produces:</p><pre><code class="clojure">user=&gt; (log "message from " "192.0.0.76")
-args:  (192.0.0.76)
-
-user=&gt; (log "message from " "192.0.0.76" "service:xyz")
-args:  (192.0.0.76 service:xyz)
-</code></pre><p>As you can see, optional arguments (<code>args</code>) are packed into a list.</p><h3 id="extra-arguments-aka-named-parameters">Extra Arguments (aka Named Parameters)</h3><p>Named parameters are achieved through the use of destructuring a variadic function.</p><p>Approaching named parameters from the standpoint of destructuring a variadic function allows for more clearly readable function invocations.  This is an example of named parameters:</p><pre><code class="clojure">(defn job-info
+</code></pre><pre><code class="klipse-clojure nohighlight">(log "message from " "192.0.0.76" "service:xyz")
+</code></pre><p>As you can see, optional arguments (<code>args</code>) are packed into a list.</p><h3 id="extra-arguments-aka-named-parameters">Extra Arguments (aka Named Parameters)</h3><p>Named parameters are achieved through the use of destructuring a variadic function.</p><p>Approaching named parameters from the standpoint of destructuring a variadic function allows for more clearly readable function invocations.  This is an example of named parameters:</p><pre><code class="klipse-clojure nohighlight">(defn job-info
   [&amp; {:keys [name job income] :or {job "unemployed" income "$0.00"}}]
   (if name
     [name job income]
     (println "No name specified")))
-</code></pre><p>Using the function looks like this:</p><pre><code class="clojure">user=&gt; (job-info :name "Robert" :job "Engineer")
-["Robert" "Engineer" "$0.00"]
-
-user=&gt; (job-info :job "Engineer")
-No name specified
+</code></pre><p>Using the function looks like this:</p><pre><code class="klipse-clojure nohighlight">(job-info :name "Robert" :job "Engineer")
+;; ["Robert" "Engineer" "$0.00"]
+</code></pre><pre><code class="klipse-clojure nohighlight">(job-info :job "Engineer")
+;; No name specified
 </code></pre><p>Without the use of a variadic argument list, you would have to call the function with a single map argument such as <code>{:name "Robert" :job "Engineer}</code>.</p><p>Keyword default values are assigned by use of the <code>:or</code> keyword followed by a map of keywords to their default value.
 Keywords not present and not given a default will be nil.</p><h2 id="higher-order-functions">Higher Order Functions</h2><p>Higher-order functions (<em>HOFs</em>) are functions that take other functions as arguments. HOFs
 are an important functional programming technique and are quite commonly used in Clojure. One example
 of an HOF is a function that takes a function and a collection and returns a collection of elements
-that satisfy a condition (a predicate). In Clojure, this function is called <code>clojure.core/filter</code>:</p><pre><code class="clojure">(filter even? (range 0 10))  ; ⇒ (0 2 4 6 8)
-</code></pre><p>In the example above, <code>clojure.core/filter</code> takes <code>clojure.core/even?</code> as an argument.</p><p><code>clojure.core</code> has dozens of other higher-order functions. The most commonly used ones are covered in <a href="/articles/language/core_overview/">clojure.core Overview</a>.</p><h2 id="private-functions">Private Functions</h2><p>Functions in Clojure can be private to their namespace.</p><p>They are covered in more detail in the <a href="/articles/language/namespaces/">Namespaces</a> guide.</p><h2 id="keywords-as-functions">Keywords as Functions</h2><p>In Clojure, keywords can be used as functions. They take a map or record and look themselves up in it:</p><pre><code class="clojure">(:age {:age 27 :name "Michael"})  ; ⇒ 27
-</code></pre><p>This is commonly used with higher order functions:</p><pre><code class="clojure">(map :age [{:age 45 :name "Joe"} {:age 42 :name "Jill"} {:age 17 :name "Matt"}])  ; ⇒ (45 42 17)
-</code></pre><p>and the <code>-&gt;</code> macro:</p><pre><code class="clojure">(-&gt; [{:age 45 :name "Joe"} {:age 42 :name "Jill"}] first :name)  ; ⇒ "Joe"
-</code></pre><h2 id="maps-as-functions">Maps as Functions</h2><p>Clojure maps are also functions that take keys and look up values for them:</p><pre><code class="clojure">({:age 42 :name "Joe"} :name)     ; ⇒ "Joe"
-({:age 42 :name "Joe"} :age)      ; ⇒ 42
-({:age 42 :name "Joe"} :unknown)  ; ⇒ nil
+that satisfy a condition (a predicate). In Clojure, this function is called <code>clojure.core/filter</code>:</p><pre><code class="klipse-clojure nohighlight">(filter even? (range 0 10))  ; ⇒ (0 2 4 6 8)
+</code></pre><p>In the example above, <code>clojure.core/filter</code> takes <code>clojure.core/even?</code> as an argument.</p><p><code>clojure.core</code> has dozens of other higher-order functions. The most commonly used ones are covered in <a href="/articles/language/core_overview/">clojure.core Overview</a>.</p><h2 id="private-functions">Private Functions</h2><p>Functions in Clojure can be private to their namespace.</p><p>They are covered in more detail in the <a href="/articles/language/namespaces/">Namespaces</a> guide.</p><h2 id="keywords-as-functions">Keywords as Functions</h2><p>In Clojure, keywords can be used as functions. They take a map or record and look themselves up in it:</p><pre><code class="klipse-clojure nohighlight">(:age {:age 27 :name "Michael"}) 
+; ⇒ 27
+</code></pre><p>This is commonly used with higher order functions:</p><pre><code class="klipse-clojure nohighlight">(map :age [{:age 45 :name "Joe"}
+           {:age 42 :name "Jill"}
+           {:age 17 :name "Matt"}]) 
+;; ⇒ (45 42 17)
+</code></pre><p>and the <code>-&gt;</code> macro:</p><pre><code class="klipse-clojure nohighlight">(-&gt; [{:age 45 :name "Joe"} {:age 42 :name "Jill"}]
+     first 
+     :name)
+;; ⇒ "Joe"
+</code></pre><h2 id="maps-as-functions">Maps as Functions</h2><p>Clojure maps are also functions that take keys and look up values for them:</p><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :name)
+; ⇒ "Joe"
+</code></pre><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :age)
+; ⇒ 42
+</code></pre><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :unknown)
+; ⇒ nil
 </code></pre><p>Note that this is <strong>not true</strong> for Clojure records, which are almost identical to maps in other
-cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="clojure">(#{1 2 3} 1)   ; ⇒ 1
-(#{1 2 3} 10)  ; ⇒ nil
-
-(#{:us :au :ru :uk} :uk)  ; ⇒ :uk
-(#{:us :au :ru :uk} :cn)  ; ⇒ nil
+cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="klipse-clojure nohighlight">(#{1 2 3} 1)
+; ⇒ 1
+</code></pre><pre><code class="klipse-clojure nohighlight">(#{1 2 3} 10)
+; ⇒ nil
+</code></pre><pre><code class="klipse-clojure nohighlight">(#{:us :au :ru :uk} :uk)
+; ⇒ :uk
+</code></pre><pre><code class="klipse-clojure nohighlight">(#{:us :au :ru :uk} :cn)
+; ⇒ nil
 </code></pre><p>This is often used to check if a value is in a set:</p><pre><code class="clojure">(when (countries :in)
   (comment ...))
 
@@ -375,6 +387,12 @@ code.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mail
 <script src="/js/highlight.pack.js" type="application/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-
+ <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css">
+<script>
+window.klipse_settings = {
+  "selector" : ".klipse-clojure"
+};
+</script>
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin/js/klipse_plugin.js"></script> 
 </body>
 </html>
