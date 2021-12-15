@@ -1,5 +1,6 @@
 {:title "Polymorphism in Clojure: Protocols and Multimethods"
  :page-index 2700
+ :klipse true
  :layout :page}
 
 This guide covers:
@@ -55,7 +56,7 @@ implementations for different data types.
 Protocols are defined using the `clojure.core/defprotocol` special form. The example below defines a protocol for working with URLs and URIs.
 While URLs and URIs are not the same thing, some operations make sense for both:
 
-``` clojure
+```klipse-clojure
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
   (^String protocol-of  [input] "Returns protocol of given input")
@@ -78,7 +79,7 @@ While URLs and URIs are not the same thing, some operations make sense for both:
 The example above uses return type hints. This makes sense in the example but is not necessary. It could have been written
 it as
 
-``` clojure
+```clojure
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
   (protocol-of  [input] "Returns protocol of given input")
@@ -90,72 +91,83 @@ it as
   (fragment-of  [input] "Returns fragment of given input"))
 ```
 
-There are 3 ways URIs and URLs are commonly represented on the JVM:
+We will use either [https://github.com/lambdaisland/uri](lambdaisland.uri) or strings to
+represent URLs.
 
- * `java.net.URI` instances
- * `java.net.URL` instances
- * Strings
-
-When a new protocol imlementation is added for a type, it is called **extending the protocol**. The most common way to extend
+When a new protocol implementation is added for a type, it is called **extending the protocol**. The most common way to extend
 a protocol is via the `clojure.core/extend-protocol`:
 
-``` clojure
-(import java.net.URI)
-(import java.net.URL)
+```klipse-clojure
+(require '[lambdaisland.uri :refer [uri URI]])
 
 (extend-protocol URLLike
   URI
   (protocol-of [^URI input]
-    (when-let [s (.getScheme input)]
-      (.toLowerCase s)))
+               (->  input :scheme .toLowerCase))
   (host-of [^URI input]
-    (-> input .getHost .toLowerCase))
+           (-> input :host .toLowerCase))
   (port-of [^URI input]
-    (.getPort input))
+           (:port input))
   (user-info-of [^URI input]
-    (.getUserInfo input))
+                (str (:user input) 
+                     ":"
+                     (:password input)))
   (path-of [^URI input]
-    (.getPath input))
+           (:path input))
   (query-of [^URI input]
-    (.getQuery input))
+            (:query input))
   (fragment-of [^URI input]
-    (.getFragment input))
+               (:fragment input)))
 
-  URL
-  (protocol-of [^URL input]
-    (protocol-of (.toURI input)))
-  (host-of [^URL input]
-    (host-of (.toURI input)))
-  (port-of [^URL input]
-    (.getPort input))
-  (user-info-of [^URL input]
-    (.getUserInfo input))
-  (path-of [^URL input]
-    (.getPath input))
-  (query-of [^URL input]
-    (.getQuery input))
-  (fragment-of [^URL input]
-    (.getRef input)))
+(extend-protocol URLLike
+  js/String
+  (protocol-of [^String input]
+               (protocol-of (uri input)))
+  (host-of [^URI input]
+               (host-of (uri input)))
+  (port-of [^URI input]
+               (port-of (uri input)))
+  (user-info-of [^URI input]
+               (user-info-of (uri input)))
+  (path-of [^URI input]
+               (path-of (uri input)))
+  (query-of [^URI input]
+               (query-of (uri input)))
+  (fragment-of [^URI input]
+               (query-of (uri input))))
 ```
 
 Protocol functions are used just like regular Clojure functions:
 
-``` clojure
-(protocol-of (URI. "https://clojure-doc.github.io")) ;= "http"
-(protocol-of (URL. "https://clojure-doc.github.io")) ;= "http"
-
-(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
-(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
+```klipse-clojure
+(protocol-of (uri "https://clojure-doc.github.io"))
+;= "http"
 ```
+
+```klipse-clojure
+(protocol-of "https://clojure-doc.github.io")
+;= "http"
+```
+
+```klipse-clojure
+(path-of (uri "https://clojure-doc.github.io/articles/content.html"))
+;= "/articles/content/"
+```
+
+```klipse-clojure
+(path-of "https://clojure-doc.github.io/articles/content.html")
+;= "/articles/content/"
+```
+
 
 ### Using Protocols From Different Namespaces
 
 Protocol functions are required and used the same way as regular protocol functions. Consider a
 namespace that looks like this
 
-``` clojure
+```klipse-clojure
 (ns superlib.url-like
-  (:import [java.net URL URI]))
+  (:require [lambdaisland.uri :refer [uri URI]]))
 
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
@@ -170,45 +182,48 @@ namespace that looks like this
 (extend-protocol URLLike
   URI
   (protocol-of [^URI input]
-    (when-let [s (.getScheme input)]
-      (.toLowerCase s)))
+               (->  input :scheme .toLowerCase))
   (host-of [^URI input]
-    (-> input .getHost .toLowerCase))
+           (-> input :host .toLowerCase))
   (port-of [^URI input]
-    (.getPort input))
+           (:port input))
   (user-info-of [^URI input]
-    (.getUserInfo input))
+                (str (:user input) 
+                     ":"
+                     (:password input)))
   (path-of [^URI input]
-    (.getPath input))
+           (:path input))
   (query-of [^URI input]
-    (.getQuery input))
+            (:query input))
   (fragment-of [^URI input]
-    (.getFragment input))
+               (:fragment input)))
 
-  URL
-  (protocol-of [^URL input]
-    (protocol-of (.toURI input)))
-  (host-of [^URL input]
-    (host-of (.toURI input)))
-  (port-of [^URL input]
-    (.getPort input))
-  (user-info-of [^URL input]
-    (.getUserInfo input))
-  (path-of [^URL input]
-    (.getPath input))
-  (query-of [^URL input]
-    (.getQuery input))
-  (fragment-of [^URL input]
-    (.getRef input)))
+(extend-protocol URLLike
+  js/String
+  (protocol-of [^String input]
+               (protocol-of (uri input)))
+  (host-of [^URI input]
+               (host-of (uri input)))
+  (port-of [^URI input]
+               (port-of (uri input)))
+  (user-info-of [^URI input]
+               (user-info-of (uri input)))
+  (path-of [^URI input]
+               (path-of (uri input)))
+  (query-of [^URI input]
+               (query-of (uri input)))
+  (fragment-of [^URI input]
+               (query-of (uri input))))
 ```
 
 To use `superlib.url-like/path-of` and other functions, you require them as regular functions:
 
-``` clojure
-(ns myapp
-  (:require [superlib.url-like] :refer [host-of scheme-of]))
+```klipse-clojure
+(ns my.app
+  (:require [lambdaisland.uri :refer [uri URI]]
+            [superlib.url-like :refer [host-of]]))
 
-(host-of (java.net.URI. "https://twitter.com/cnn/"))
+(host-of (uri. "https://twitter.com/cnn/"))
 ```
 
 
@@ -243,7 +258,7 @@ In total, we need 4 functions:
 
 we will start with the latter and define a *multimethod* (not related to methods on Java objects or object-oriented programming):
 
-``` clojure
+```klipse-clojure
 (defmulti area (fn [shape & _]
                  shape))
 ```
@@ -255,16 +270,13 @@ called *ad-hoc polymorphism*.
 
 An alternative way of doing the same thing is to pass `clojure.core/first` instead of an anonymous function:
 
-``` clojure
+```klipse-clojure
 (defmulti area first)
 ```
 
 Next lets implement our area multimethod for squares:
 
-``` clojure
-(defmulti area (fn [shape & _]
-                 shape))
-
+```klipse-clojure
 (defmethod area :square
   [_ side]
   (* side side))
@@ -273,8 +285,9 @@ Next lets implement our area multimethod for squares:
 Here `defmethod` defines a particular implementation of the multimethod `area`, the one that will be used if dispatch function
 returns `:square`. Lets try it out. Multimethods are invoked like regular Clojure functions:
 
-``` clojure
-(area :square 4)     ;= 16
+```klipse-clojure
+(area :square 4)
+;= 16
 ```
 
 In this case, we pass dispatch value as the first argument, our dispatch function returns it unmodified and
@@ -282,12 +295,13 @@ that's how the exact implementation is looked up.
 
 Implementation for circles looks very similar, we choose `:circle` as a reasonable dispatch value:
 
-``` clojure
+```klipse-clojure
 (defmethod area :circle
   [_ radius]
   (* radius radius Math/PI))
 
-(area :circle 3)     ;= 28.274333882308138
+(area :circle 3)
+;= 28.274333882308138
 ```
 
 For the record, `Math/PI` in this example refers to `java.lang.Math/PI`, a field that stores the value of Pi.
@@ -295,19 +309,20 @@ For the record, `Math/PI` in this example refers to `java.lang.Math/PI`, a field
 Finally, an implementation for triangles. Here you can see that exact implementations can take different number of
 arguments. To calculate the area of a triangle, we multiple base by height and divide it by 2:
 
-``` clojure
+```klipse-clojure
 (defmethod area :triangle
   [_ b h]
   (* 1/2 b h))
 
-(area :triangle 3 5) ;= 15/2
+(area :triangle 3 5)
+;= 15/2
 ```
 
 In this example we used **Clojure ratio** data type. We could have used doubles as well.
 
 Putting it all together:
 
-``` clojure
+```klipse-clojure
 (defmulti area (fn [shape & _]
                  shape))
 
@@ -322,10 +337,21 @@ Putting it all together:
 (defmethod area :triangle
   [_ b h]
   (* 1/2 b h))
+```
 
-(area :square 4)     ;= 16
-(area :circle 3)     ;= 28.274333882308138
-(area :triangle 3 5) ;= 15/2
+```klipse-clojure
+(area :square 4)
+;= 16
+```
+
+```klipse-clojure
+(area :circle 3)
+;= 28.274333882308138
+```
+
+```klipse-clojure
+(area :triangle 3 5)
+;= 15/2
 ```
 
 
