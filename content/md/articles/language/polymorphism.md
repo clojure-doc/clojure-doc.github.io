@@ -56,7 +56,7 @@ implementations for different data types.
 Protocols are defined using the `clojure.core/defprotocol` special form. The example below defines a protocol for working with URLs and URIs.
 While URLs and URIs are not the same thing, some operations make sense for both:
 
-```klipse-clojure
+``` clojure
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
   (^String protocol-of  [input] "Returns protocol of given input")
@@ -91,83 +91,72 @@ it as
   (fragment-of  [input] "Returns fragment of given input"))
 ```
 
-We will use either [https://github.com/lambdaisland/uri](lambdaisland.uri) or strings to
-represent URLs.
+There are 3 ways URIs and URLs are commonly represented on the JVM:
 
-When a new protocol implementation is added for a type, it is called **extending the protocol**. The most common way to extend
+ * `java.net.URI` instances
+ * `java.net.URL` instances
+ * Strings
+
+When a new protocol imlementation is added for a type, it is called **extending the protocol**. The most common way to extend
 a protocol is via the `clojure.core/extend-protocol`:
 
-```klipse-clojure
-(require '[lambdaisland.uri :refer [uri URI]])
+``` clojure
+(import java.net.URI)
+(import java.net.URL)
 
 (extend-protocol URLLike
   URI
   (protocol-of [^URI input]
-               (->  input :scheme .toLowerCase))
+    (when-let [s (.getScheme input)]
+      (.toLowerCase s)))
   (host-of [^URI input]
-           (-> input :host .toLowerCase))
+    (-> input .getHost .toLowerCase))
   (port-of [^URI input]
-           (:port input))
+    (.getPort input))
   (user-info-of [^URI input]
-                (str (:user input) 
-                     ":"
-                     (:password input)))
+    (.getUserInfo input))
   (path-of [^URI input]
-           (:path input))
+    (.getPath input))
   (query-of [^URI input]
-            (:query input))
+    (.getQuery input))
   (fragment-of [^URI input]
-               (:fragment input)))
+    (.getFragment input))
 
-(extend-protocol URLLike
-  js/String
-  (protocol-of [^String input]
-               (protocol-of (uri input)))
-  (host-of [^URI input]
-               (host-of (uri input)))
-  (port-of [^URI input]
-               (port-of (uri input)))
-  (user-info-of [^URI input]
-               (user-info-of (uri input)))
-  (path-of [^URI input]
-               (path-of (uri input)))
-  (query-of [^URI input]
-               (query-of (uri input)))
-  (fragment-of [^URI input]
-               (query-of (uri input))))
+  URL
+  (protocol-of [^URL input]
+    (protocol-of (.toURI input)))
+  (host-of [^URL input]
+    (host-of (.toURI input)))
+  (port-of [^URL input]
+    (.getPort input))
+  (user-info-of [^URL input]
+    (.getUserInfo input))
+  (path-of [^URL input]
+    (.getPath input))
+  (query-of [^URL input]
+    (.getQuery input))
+  (fragment-of [^URL input]
+    (.getRef input)))
 ```
 
 Protocol functions are used just like regular Clojure functions:
 
-```klipse-clojure
-(protocol-of (uri "https://clojure-doc.github.io"))
-;= "http"
-```
+``` clojure
+(protocol-of (URI. "https://clojure-doc.github.io")) ;= "http"
+(protocol-of (URL. "https://clojure-doc.github.io")) ;= "http"
 
-```klipse-clojure
-(protocol-of "https://clojure-doc.github.io")
-;= "http"
+(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
+(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
 ```
-
-```klipse-clojure
-(path-of (uri "https://clojure-doc.github.io/articles/content.html"))
-;= "/articles/content/"
-```
-
-```klipse-clojure
-(path-of "https://clojure-doc.github.io/articles/content.html")
-;= "/articles/content/"
-```
-
 
 ### Using Protocols From Different Namespaces
 
 Protocol functions are required and used the same way as regular protocol functions. Consider a
 namespace that looks like this
 
-```klipse-clojure
+``` clojure
 (ns superlib.url-like
-  (:require [lambdaisland.uri :refer [uri URI]]))
+  (:import [java.net URL URI]))
 
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
@@ -182,48 +171,45 @@ namespace that looks like this
 (extend-protocol URLLike
   URI
   (protocol-of [^URI input]
-               (->  input :scheme .toLowerCase))
+    (when-let [s (.getScheme input)]
+      (.toLowerCase s)))
   (host-of [^URI input]
-           (-> input :host .toLowerCase))
+    (-> input .getHost .toLowerCase))
   (port-of [^URI input]
-           (:port input))
+    (.getPort input))
   (user-info-of [^URI input]
-                (str (:user input) 
-                     ":"
-                     (:password input)))
+    (.getUserInfo input))
   (path-of [^URI input]
-           (:path input))
+    (.getPath input))
   (query-of [^URI input]
-            (:query input))
+    (.getQuery input))
   (fragment-of [^URI input]
-               (:fragment input)))
+    (.getFragment input))
 
-(extend-protocol URLLike
-  js/String
-  (protocol-of [^String input]
-               (protocol-of (uri input)))
-  (host-of [^URI input]
-               (host-of (uri input)))
-  (port-of [^URI input]
-               (port-of (uri input)))
-  (user-info-of [^URI input]
-               (user-info-of (uri input)))
-  (path-of [^URI input]
-               (path-of (uri input)))
-  (query-of [^URI input]
-               (query-of (uri input)))
-  (fragment-of [^URI input]
-               (query-of (uri input))))
+  URL
+  (protocol-of [^URL input]
+    (protocol-of (.toURI input)))
+  (host-of [^URL input]
+    (host-of (.toURI input)))
+  (port-of [^URL input]
+    (.getPort input))
+  (user-info-of [^URL input]
+    (.getUserInfo input))
+  (path-of [^URL input]
+    (.getPath input))
+  (query-of [^URL input]
+    (.getQuery input))
+  (fragment-of [^URL input]
+    (.getRef input)))
 ```
 
 To use `superlib.url-like/path-of` and other functions, you require them as regular functions:
 
-```klipse-clojure
-(ns my.app
-  (:require [lambdaisland.uri :refer [uri URI]]
-            [superlib.url-like :refer [host-of]]))
+``` clojure
+(ns myapp
+  (:require [superlib.url-like] :refer [host-of scheme-of]))
 
-(host-of (uri. "https://twitter.com/cnn/"))
+(host-of (java.net.URI. "https://twitter.com/cnn/"))
 ```
 
 
