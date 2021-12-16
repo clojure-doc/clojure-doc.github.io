@@ -1,5 +1,6 @@
 {:title "Polymorphism in Clojure: Protocols and Multimethods"
  :page-index 2700
+ :klipse true
  :layout :page}
 
 This guide covers:
@@ -78,7 +79,7 @@ While URLs and URIs are not the same thing, some operations make sense for both:
 The example above uses return type hints. This makes sense in the example but is not necessary. It could have been written
 it as
 
-``` clojure
+```clojure
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
   (protocol-of  [input] "Returns protocol of given input")
@@ -243,7 +244,7 @@ In total, we need 4 functions:
 
 we will start with the latter and define a *multimethod* (not related to methods on Java objects or object-oriented programming):
 
-``` clojure
+```klipse-clojure
 (defmulti area (fn [shape & _]
                  shape))
 ```
@@ -255,16 +256,13 @@ called *ad-hoc polymorphism*.
 
 An alternative way of doing the same thing is to pass `clojure.core/first` instead of an anonymous function:
 
-``` clojure
+```klipse-clojure
 (defmulti area first)
 ```
 
 Next lets implement our area multimethod for squares:
 
-``` clojure
-(defmulti area (fn [shape & _]
-                 shape))
-
+```klipse-clojure
 (defmethod area :square
   [_ side]
   (* side side))
@@ -273,8 +271,9 @@ Next lets implement our area multimethod for squares:
 Here `defmethod` defines a particular implementation of the multimethod `area`, the one that will be used if dispatch function
 returns `:square`. Lets try it out. Multimethods are invoked like regular Clojure functions:
 
-``` clojure
-(area :square 4)     ;= 16
+```klipse-clojure
+(area :square 4)
+;= 16
 ```
 
 In this case, we pass dispatch value as the first argument, our dispatch function returns it unmodified and
@@ -282,12 +281,13 @@ that's how the exact implementation is looked up.
 
 Implementation for circles looks very similar, we choose `:circle` as a reasonable dispatch value:
 
-``` clojure
+```klipse-clojure
 (defmethod area :circle
   [_ radius]
   (* radius radius Math/PI))
 
-(area :circle 3)     ;= 28.274333882308138
+(area :circle 3)
+;= 28.274333882308138
 ```
 
 For the record, `Math/PI` in this example refers to `java.lang.Math/PI`, a field that stores the value of Pi.
@@ -295,19 +295,20 @@ For the record, `Math/PI` in this example refers to `java.lang.Math/PI`, a field
 Finally, an implementation for triangles. Here you can see that exact implementations can take different number of
 arguments. To calculate the area of a triangle, we multiple base by height and divide it by 2:
 
-``` clojure
+```klipse-clojure
 (defmethod area :triangle
   [_ b h]
   (* 1/2 b h))
 
-(area :triangle 3 5) ;= 15/2
+(area :triangle 3 5)
+;= 15/2
 ```
 
 In this example we used **Clojure ratio** data type. We could have used doubles as well.
 
 Putting it all together:
 
-``` clojure
+```klipse-clojure
 (defmulti area (fn [shape & _]
                  shape))
 
@@ -322,10 +323,21 @@ Putting it all together:
 (defmethod area :triangle
   [_ b h]
   (* 1/2 b h))
+```
 
-(area :square 4)     ;= 16
-(area :circle 3)     ;= 28.274333882308138
-(area :triangle 3 5) ;= 15/2
+```klipse-clojure
+(area :square 4)
+;= 16
+```
+
+```klipse-clojure
+(area :circle 3)
+;= 28.274333882308138
+```
+
+```klipse-clojure
+(area :triangle 3 5)
+;= 15/2
 ```
 
 
