@@ -185,33 +185,33 @@ namespace that looks like this</p><pre><code class="clojure">(ns superlib.url-li
 
 (host-of (java.net.URI. "https://twitter.com/cnn/"))
 </code></pre><h3 id="extending-protocols-for-core-clojure-data-types">Extending Protocols For Core Clojure Data Types</h3><p>TBD</p><h3 id="protocols-and-custom-data-types">Protocols and Custom Data Types</h3><p>TBD: cover extend-type, extend</p><h3 id="partial-implementation-of-protocols">Partial Implementation of Protocols</h3><p>With protocols, it is possible to only implement certain functions for certain types.</p><h2 id="ad-hoc-polymorphism-with-multimethods">Ad-hoc Polymorphism with Multimethods</h2><h3 id="first-example-shapes">First Example: Shapes</h3><p>Lets start with a simple problem definition. We have 3 shapes: square, circle and triangle, and
-need to provide an polymorphic function that calculates the area of the given shape.</p><p>In total, we need 4 functions:</p><ul><li>A function that calculates area of a square</li><li>A function that calculates area of a circle</li><li>A function that calculates area of a triangle</li><li>A polymorphic function that acts as a "unified frontend" to the functions above</li></ul><p>we will start with the latter and define a <em>multimethod</em> (not related to methods on Java objects or object-oriented programming):</p><pre><code class="clojure">(defmulti area (fn [shape &amp; _]
+need to provide an polymorphic function that calculates the area of the given shape.</p><p>In total, we need 4 functions:</p><ul><li>A function that calculates area of a square</li><li>A function that calculates area of a circle</li><li>A function that calculates area of a triangle</li><li>A polymorphic function that acts as a "unified frontend" to the functions above</li></ul><p>we will start with the latter and define a <em>multimethod</em> (not related to methods on Java objects or object-oriented programming):</p><pre><code class="klipse-clojure nohighlight">(defmulti area (fn [shape &amp; _]
                  shape))
 </code></pre><p>Our multimethod has a name and a <em>dispatch function</em> that takes arguments passed to the multimethod and returns
 a value. The returned value will define what implementation of multimethod is used. In Java or Ruby, method implementation
 is picked by traversing the class hierarchy. With multimethods, the logic can be anything you need. That's why it is
-called <em>ad-hoc polymorphism</em>.</p><p>An alternative way of doing the same thing is to pass <code>clojure.core/first</code> instead of an anonymous function:</p><pre><code class="clojure">(defmulti area first)
-</code></pre><p>Next lets implement our area multimethod for squares:</p><pre><code class="clojure">(defmulti area (fn [shape &amp; _]
-                 shape))
-
-(defmethod area :square
+called <em>ad-hoc polymorphism</em>.</p><p>An alternative way of doing the same thing is to pass <code>clojure.core/first</code> instead of an anonymous function:</p><pre><code class="klipse-clojure nohighlight">(defmulti area first)
+</code></pre><p>Next lets implement our area multimethod for squares:</p><pre><code class="klipse-clojure nohighlight">(defmethod area :square
   [_ side]
   (* side side))
 </code></pre><p>Here <code>defmethod</code> defines a particular implementation of the multimethod <code>area</code>, the one that will be used if dispatch function
-returns <code>:square</code>. Lets try it out. Multimethods are invoked like regular Clojure functions:</p><pre><code class="clojure">(area :square 4)     ;= 16
+returns <code>:square</code>. Lets try it out. Multimethods are invoked like regular Clojure functions:</p><pre><code class="klipse-clojure nohighlight">(area :square 4)
+;= 16
 </code></pre><p>In this case, we pass dispatch value as the first argument, our dispatch function returns it unmodified and
-that's how the exact implementation is looked up.</p><p>Implementation for circles looks very similar, we choose <code>:circle</code> as a reasonable dispatch value:</p><pre><code class="clojure">(defmethod area :circle
+that's how the exact implementation is looked up.</p><p>Implementation for circles looks very similar, we choose <code>:circle</code> as a reasonable dispatch value:</p><pre><code class="klipse-clojure nohighlight">(defmethod area :circle
   [_ radius]
   (* radius radius Math/PI))
 
-(area :circle 3)     ;= 28.274333882308138
+(area :circle 3)
+;= 28.274333882308138
 </code></pre><p>For the record, <code>Math/PI</code> in this example refers to <code>java.lang.Math/PI</code>, a field that stores the value of Pi.</p><p>Finally, an implementation for triangles. Here you can see that exact implementations can take different number of
-arguments. To calculate the area of a triangle, we multiple base by height and divide it by 2:</p><pre><code class="clojure">(defmethod area :triangle
+arguments. To calculate the area of a triangle, we multiple base by height and divide it by 2:</p><pre><code class="klipse-clojure nohighlight">(defmethod area :triangle
   [_ b h]
   (* 1/2 b h))
 
-(area :triangle 3 5) ;= 15/2
-</code></pre><p>In this example we used <strong>Clojure ratio</strong> data type. We could have used doubles as well.</p><p>Putting it all together:</p><pre><code class="clojure">(defmulti area (fn [shape &amp; _]
+(area :triangle 3 5)
+;= 15/2
+</code></pre><p>In this example we used <strong>Clojure ratio</strong> data type. We could have used doubles as well.</p><p>Putting it all together:</p><pre><code class="klipse-clojure nohighlight">(defmulti area (fn [shape &amp; _]
                  shape))
 
 (defmethod area :square
@@ -225,10 +225,12 @@ arguments. To calculate the area of a triangle, we multiple base by height and d
 (defmethod area :triangle
   [_ b h]
   (* 1/2 b h))
-
-(area :square 4)     ;= 16
-(area :circle 3)     ;= 28.274333882308138
-(area :triangle 3 5) ;= 15/2
+</code></pre><pre><code class="klipse-clojure nohighlight">(area :square 4)
+;= 16
+</code></pre><pre><code class="klipse-clojure nohighlight">(area :circle 3)
+;= 28.274333882308138
+</code></pre><pre><code class="klipse-clojure nohighlight">(area :triangle 3 5)
+;= 15/2
 </code></pre><h3 id="second-example-tbd">Second Example: TBD</h3><p>TBD: an example that demonstrates deriving</p><h2 id="how-to-create-custom-data-type-that-core-functions-can-work-with">How To Create Custom Data Type That Core Functions Can Work With</h2><p>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p><h2 id="wrapping-up">Wrapping Up</h2><p>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p>
 
     <div id="prev-next">
@@ -372,6 +374,12 @@ arguments. To calculate the area of a triangle, we multiple base by height and d
 <script src="/js/highlight.pack.js" type="application/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-
+ <link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css">
+<script>
+window.klipse_settings = {
+  "selector" : ".klipse-clojure"
+};
+</script>
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin/js/klipse_plugin.js"></script> 
 </body>
 </html>
