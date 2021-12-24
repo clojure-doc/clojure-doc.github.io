@@ -1,14 +1,13 @@
-= How to Klipsify an article
+# How to Klipsify an article
 
-
-== Basic steps
+## Basic steps
 
 Having interactive code snippets in an article is straightforward. You need to:
 
 1. Add `:klipse true` in the map at the beginning of the article
 1. Instead of a clojure block, you make a `klipse-clojure` block and Boom the code snippet becomes interactive
 
-== Macros
+## Macros
 
 Write macros in Klipse require using `defmacro` from `https://github.com/mfikes/chivorcam`, like this:
 
@@ -18,10 +17,11 @@ Write macros in Klipse require using `defmacro` from `https://github.com/mfikes/
 
 You might want to put hide this code snippet, by using HTML tags:
 
-<pre style="visibility:hidden; height:0;"><code class="klipse-clojure" >
+```html
+<pre style="visibility:hidden; height:0;"><code class="klipse-clojure">
 (require '[chivorcam.core :refer [defmacro defmacfn]])
 </code></pre>
-
+```
 
 Dealing with macros in Klipse is a bit cumbersome. You need to
 
