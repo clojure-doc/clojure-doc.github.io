@@ -10,7 +10,7 @@ Having interactive code snippets in an article is straightforward. You need to:
 
 == Macros
 
-Write macros in Klipse require using `defmacro` from `https://github.com/mfikes/chivorcam`, likse this:
+Write macros in Klipse require using `defmacro` from `https://github.com/mfikes/chivorcam`, like this:
 
 ```clojure
 (require '[chivorcam.core :refer [defmacro defmacfn]])
@@ -23,7 +23,7 @@ You might want to put hide this code snippet, by using HTML tags:
 </code></pre>
 
 
-Dealing with macros in Klipse is a bit cumbersome. You need to 
+Dealing with macros in Klipse is a bit cumbersome. You need to
 
 1. Define the macro in a namespaces whose name ends with `$macros`
 1. Use the macro with its fully-qualified names (without the `$macros`)
@@ -46,5 +46,3 @@ Then, you use the macro with its fully-qualified name `cljs.user/foo`, like this
 
 (cljs.user/foo 123)
 ```
-
-
