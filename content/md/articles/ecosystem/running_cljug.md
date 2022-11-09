@@ -64,7 +64,7 @@ Once you get to a certain size (or if you are fortunate to have good companies i
 Looking for meeting ideas? Here's some ideas....
 
  * Work through through the [Clojure Koans](https://github.com/functional-koans/clojure-koans)
- * Work through problems from [4Clojure](http://www.4clojure.com/)
+ * Work through problems from [4Clojure](http://4clojure.oxal.org/)
  * Run a session on getting set up on Emacs with Clojure (or Vim, or ...)
  * Work through [Project Euler](http://projecteuler.net/) problems
  * Work through a [Code Kata](http://codekata.pragprog.com/)

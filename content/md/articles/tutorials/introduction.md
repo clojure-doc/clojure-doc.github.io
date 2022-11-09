@@ -1571,7 +1571,7 @@ someone will write a good topical guide...
 
 ## See Also
 
-  * [4Clojure](https://www.4clojure.com/) --- try out what you've
+  * [4Clojure](https://4clojure.oxal.org/) --- try out what you've
     learned so far by interactively solving a set of interesting
     programming problems.
 

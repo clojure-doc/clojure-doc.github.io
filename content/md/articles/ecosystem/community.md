@@ -89,7 +89,7 @@ library distributions (with the exception of contrib) are available at
   * [Clojure at Rosetta Code](http://rosettacode.org/wiki/Category:Clojure)
   * [Clojure Confluence wiki](http://dev.clojure.org/dashboard.action)
   * [The Clojure Toolbox](http://www.clojure-toolbox.com/): a categorized directory of libraries and tools for Clojure
-  * [4Clojure](https://www.4clojure.com/): Clojure exercise problems
+  * [4Clojure](https://4clojure.oxal.org/): Clojure exercise problems
   * [Exercism.io](http://exercism.io/): Peer-reviewed Clojure exercises
 
 

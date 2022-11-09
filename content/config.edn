@@ -19,7 +19,7 @@
  :sass-path                    "sass"
  :theme                        "blue"
  :resources                    ["img"]
- :keep-files                   [".git" "README.md" "Klipse.md"]
+ :keep-files                   [".git" "README.md" "Klipse.md" "CNAME"]
  :disqus?                      false
  :disqus-shortname             ""
  :ignored-files                [#"\.#.*" #".*\.swp$"]
