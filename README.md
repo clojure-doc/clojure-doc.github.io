@@ -6,6 +6,8 @@ ecosystem. [Read the guides online](https://clojure-doc.github.io).
 
 > Note: due to loss of access to the original infrastructure hosting http://clojure-doc.org, this is a reboot of that site using [Cryogen](http://cryogenweb.org/) and hosted as a GitHub organization website. _Sean Corfield, November 14th, 2021._
 
+> **Pull Requests should be made against the `source` branch, with changes to the Markdown files. The HTML on the `main` branch is auto-generated using Cryogen.**
+
 ## Goals
 
 The goal is to produce quality technical documentation with limited
