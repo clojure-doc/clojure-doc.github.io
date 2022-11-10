@@ -1,0 +1,9 @@
+Hi! Thanks for your interest in contributing to this project.
+
+The source of this site is in Markdown on the `source` branch.
+
+The `main` branch is auto-generated from the `source` branch
+using Cryogen.
+
+Please submit any Pull Requests against the **`source`** branch,
+not the `main` branch! Thank you!
