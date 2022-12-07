@@ -1,9 +1,9 @@
 {:title "java.jdbc - Getting Started"
  :layout :page :page-index 8500}
 
-This guide is intended to help you the Clojure Contrib JDBC wrapper: `clojure.java.jdbc`
+This guide is intended to help you use the Clojure Contrib JDBC wrapper: `clojure.java.jdbc`
 
-**A modern JDBC wrapper has since been written (by the same author/maintainer) -- read about [`next.jdbc` on cljdoc.org](cljdoc.org/d/com.github.seancorfield/next.jdbc/)**
+**A modern JDBC wrapper has since been written (by the same author/maintainer) -- read about [`next.jdbc` on cljdoc.org](https://cljdoc.org/d/com.github.seancorfield/next.jdbc/)**
 
 ## Contents
 
