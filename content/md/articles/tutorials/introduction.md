@@ -1354,7 +1354,7 @@ result you just got and the 3rd item in the coll. Then the result of
 ;; → 6 + 4   [5]
 ;; → 10      [5]
 ;; → 10 + 5
-;; => 5
+;; => 15
 ```
 
 And, of course, you can supply your own function if you like:
