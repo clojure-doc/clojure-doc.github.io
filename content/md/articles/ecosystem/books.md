@@ -234,8 +234,8 @@ benchmarking, data structures, laziness impact, and more.
 
 #### Where You Can Buy It
 
- * [Packt Publishing](http://www.packtpub.com/clojure-high-performance-programming/book): eBook, paperback
- * [Amazon](https://www.amazon.com/Clojure-Performance-Programming-Shantanu-Kumar-ebook/dp/B00GTE1RVW/): eBook (Kindle), paperback
+ * [Packt Publishing](https://www.packtpub.com/product/clojure-high-performance-programming-second-edition/9781785283642): eBook, paperback
+ * [Amazon](https://www.amazon.com/Clojure-High-Performance-Programming-Second/dp/1785283642): eBook (Kindle), paperback
 
 
 
@@ -250,7 +250,7 @@ A book for beginners. Covers the language and key parts of the ecosystem.
 
 #### Where You Can Buy It
 
- * [Official Site](http://www.braveclojure.com/)
+ * [Official Site](https://www.braveclojure.com/)
 
 
 ### Clojure Cookbook
@@ -296,33 +296,33 @@ An excellent introductory book. Friendly to newcomers to the language and functi
 #### Where You Can Buy It
 
  * [Official Site](http://www.clojurebook.com/)
- * From [O'Reilly](http://shop.oreilly.com/product/0636920013754.do), eBook (Kindle, ePub, PDF) or paperback.
- * [Kindle version on Amazon](https://www.amazon.com/Clojure-Programming-ebook/dp/B007Q4T040/ref=tmm_kin_title_0?ie=UTF8&qid=1350284538&sr=8-1)
- * [Paperback on Amazon](https://www.amazon.com/Clojure-Programming-Chas-Emerick/dp/1449394701/ref=sr_1_1?ie=UTF8&qid=1350284538&sr=8-1&keywords=Clojure)
+ * From [O'Reilly](https://www.oreilly.com/library/view/clojure-programming/9781449310387/), eBook (Kindle, ePub, PDF) or paperback.
+ * [Kindle version on Amazon](https://www.amazon.com/Clojure-Programming-ebook/dp/B007Q4T040/)
+ * [Paperback on Amazon](https://www.amazon.com/Clojure-Programming-Chas-Emerick/dp/1449394701/)
 
 
 
 
 
-### Programming Clojure, 2nd Ed
+### Programming Clojure, 3rd Ed
 
-By Stuart Halloway and Aaron Bedra.
+By Alex Miller with Stuart Halloway and Aaron Bedra.
 
 #### Notes
 
-2nd edition of the oldest book about Clojure. Updated for Clojure 1.3+ and includes new content, for example, introduction
-to `test.generative`, a Clojure testing framework similar to QuickCheck. A good book for beginners.
+3rd edition of the oldest book about Clojure. Updated for Clojure 1.9+ and includes new content, for example, introduction
+to transducers and spec. A good book for beginners.
 
 #### Where You Can Buy It
 
- * From [Pragmatic Programmers](http://pragprog.com/book/shcloj2/programming-clojure), eBook (Kindle, ePub, PDF) or paperback.
- * [Paperback on Amazon](https://www.amazon.com/Programming-Clojure-Stuart-Halloway/dp/1934356867/ref=sr_1_4?ie=UTF8&qid=1350284538&sr=8-4&keywords=Clojure)
+ * From [Pragmatic Programmers](https://pragprog.com/titles/shcloj3/programming-clojure-third-edition/), eBook (Kindle, ePub, PDF) or paperback.
+ * [Paperback on Amazon](https://www.amazon.com/Programming-Clojure-Pragmatic-Programmers-Miller-dp-1680502468/dp/1680502468/)
 
 
 
 
 
-### The Joy of Clojure, 1st Ed
+### The Joy of Clojure, 2nd Ed
 
 By Michael Fogus and Chris Houser.
 
@@ -334,8 +334,8 @@ To really appreciate it, however, you will need to have some real Clojure experi
 #### Where You Can Buy It
 
  * [Official Site](http://joyofclojure.com/)
- * From [Manning](http://www.manning.com/fogus/), eBook (Kindle, ePub, PDF) or paperback.
- * [Paperback on Amazon](https://www.amazon.com/The-Joy-Clojure-Thinking-Way/dp/1935182641/ref=sr_1_2?ie=UTF8&qid=1350284538&sr=8-2&keywords=Clojure)
+ * From [Manning](https://www.manning.com/books/the-joy-of-clojure-second-edition/), eBook (Kindle, ePub, PDF) or paperback.
+ * [Paperback on Amazon](https://www.amazon.com/Joy-Clojure-Michael-Fogus-dp-1617291412/dp/1617291412/)
 
 
 
@@ -356,7 +356,7 @@ Covers multiple topics related to data analysis and data processing:
 
 #### Where You Can Buy It
 
- * From [Packt Publishing](http://www.packtpub.com/clojure-data-analysis-cookbook/book)
+ * From [Packt Publishing](https://www.packtpub.com/product/clojure-data-analysis-cookbook-second-edition/9781784390297)
 
 
 
@@ -371,7 +371,7 @@ Extended version of the first edition that covers Clojure 1.5, ClojureScript and
 
 #### Where You Can Buy It
 
- * From [Manning](http://www.manning.com/rathore2/), MEAP eBook (Kindle, ePub, PDF).
+ * From [Manning](https://www.manning.com/books/clojure-in-action-second-edition), MEAP eBook (Kindle, ePub, PDF).
 
 
 
@@ -385,13 +385,7 @@ A quick taste of Clojure for developers curious about the language.  Its aimed a
 
 #### Where You Can Buy It
 
- * [Official site](http://developerpress.com/en/clojure-made-simple-introduction-clojure)
- * [Book support site](http://clojuremadesimple.co.uk/)
- * [ganxy.com](https://ganxy.com/i/77456/john-stevenson/clojure-made-simple)
- * [Kindle version on Amazon](https://www.amazon.com/Clojure-Made-Simple-ebook/dp/B00BSY20HS)
- * [Apple iBookStore](https://itunes.apple.com/us/book/clojure-made-simple/id618287958?mt=11)
- * [Google Play](https://play.google.com/store/books/details/John_Stevenson_Clojure_Made_Simple?id=yqfBJYhvqJcC&feature=nav_result#?t=W251bGwsMSwxLDMsImJvb2steXFmQkpZaHZxSmNDIl0.)
-
+?
 
 
 ### Practical Clojure
@@ -404,30 +398,12 @@ A good introductory book.
 
 #### Where You Can Buy It
 
- * From [Apress](http://www.apress.com/9781430272311), eBook or paperback.
- * [Kindle version on Amazon](https://www.amazon.com/Practical-Clojure-Experts-Source-ebook/dp/B003VM7G3S/ref=sr_1_12?ie=UTF8&qid=1350284538&sr=8-12&keywords=Clojure)
- * [Paperback on Amazon](https://www.amazon.com/Practical-Clojure-Experts-Voice-Source/dp/1430272317/ref=sr_1_6?ie=UTF8&qid=1350284538&sr=8-6&keywords=Clojure)
+ * From [Apress](https://link.springer.com/book/10.1007/978-1-4302-7230-4), eBook or paperback.
+ * [Kindle version on Amazon](https://www.amazon.com/Practical-Clojure-Experts-Voice-Source-ebook/dp/B004VH7LDC)
+ * [Paperback on Amazon](https://www.amazon.com/Practical-Clojure-Experts-Voice-Source/dp/1430272317)
 
 
 
-
-
-### Clojure in Action, 1st Ed
-
-By Amit Rathore.
-
-#### Notes
-
-Contains many practical examples. The last chapter on metaprogramming and DSLs is fantastic.
-
-**This book covers Clojure 1.2**. There were breaking changes in the language between Clojure 1.2 and 1.3,
-keep this in mind.
-
-
-#### Where You Can Buy It
-
- * From [Manning](http://www.manning.com/rathore/), eBook (Kindle, ePub, PDF) or paperback.
- * [Paperback on Amazon](https://www.amazon.com/Clojure-Action-Amit-Rathore/dp/1935182595/ref=sr_1_3?ie=UTF8&qid=1350284538&sr=8-3&keywords=Clojure)
 
 
 ### Clojure - Grundlagen, Concurrent Programming, Java
@@ -445,30 +421,9 @@ By Stefan Kamphausen, Tim Oliver Kaiser
 #### Where You Can Buy It
 
  * From
-   [dpunkt.verlag](http://www.dpunkt.de/buecher/3372/clojure.html),
+   [dpunkt.verlag](https://dpunkt.de/produkt/clojure/),
    eBook (PDF) or paperback.
- * From [Buch.de](http://www.buch.de/shop/home/suchartikel/clojure/ISBN3-89864-684-X/)
- * [Paperback on Amazon](http://www.amazon.de/Clojure-Grundlagen-Concurrent-Programming-Java/dp/389864684X/)
-
-
-
-### Programming Clojure, 1st Ed
-
-By Stuart Halloway.
-
-#### Notes
-
-The oldest book on Clojure. Please consider getting the 2nd edition which covers a more recent version
-and includes several updates.
-
-**This book covers Clojure 1.2**.
-
-#### Where You Can Buy It
-
- * From [Pragmatic Programmers](http://pragprog.com/book/shcloj/programming-clojure)
- * [Paperback on Amazon](https://www.amazon.com/Programming-Clojure-Pragmatic-Programmers-Halloway/dp/1934356336/ref=sr_1_7?ie=UTF8&qid=1350284538&sr=8-7&keywords=Clojure)
-
-
+ * [Paperback on Amazon](https://www.amazon.de/Clojure-Grundlagen-Concurrent-Programming-Java/dp/389864684X/)
 
 
 ## Books About ClojureScript
@@ -498,4 +453,4 @@ The first book about ClojureScript, a Clojure implementation that compiles to Ja
 
 #### Where You Can Buy It
 
- * From [O'Reilly](http://shop.oreilly.com/product/0636920025139.do), eBook (Kindle, ePub, PDF) or paperback.
+ * From [O'Reilly](https://www.oreilly.com/library/view/clojurescript-up-and/9781449327422/), eBook (Kindle, ePub, PDF) or paperback.
