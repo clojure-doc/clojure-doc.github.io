@@ -19,11 +19,11 @@ Attribution 3.0 Unported License (including images &amp;
 stylesheets). The source is available on
 Github.">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/cookbooks/strings/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/strings/" />
 <meta property="og:title" content="Strings" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/cookbooks/strings/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/cookbooks/strings/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -70,25 +70,25 @@ Github.">
     
     <p>This cookbook covers working with strings in Clojure using built-in
 functions, standard and contrib libraries, and parts of the JDK via
-interoperability.</p><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+interoperability.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="overview">Overview</h2><ul><li>Strings are <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">plain Java
+Github</a>.</p><h2 id="overview">Overview</h2><ul><li>Strings are <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html">plain Java
 strings</a>.
 You can use anything which operates on them.</li><li>Java strings are immutable, so they're convenient to use in Clojure.</li><li>You can't add metadata to Java strings.</li><li>Clojure supports some convenient notations:</li></ul><pre><code>    "foo"    java.lang.String
     #"\d"    java.util.regex.Pattern (in this case, one which matches a single digit)
     \f       java.lang.Character (in this case, the letter 'f')
 </code></pre><ul><li><strong>Caveat:</strong> Human brains and electronic computers are rather different
-devices. So Java strings (sequences of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html#unicode">UTF-16
+devices. So Java strings (sequences of <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Character.html#unicode">UTF-16
 characters</a>)
 don't always map nicely to user-perceived characters. For example, a
 single Unicode "code point" doesn't necessarily equal a user-perceived
 character. (Like Korean Hangul Jamo, where user-perceived characters
 are composed from two or three Unicode code points.) Also, a Unicode
 code point may sometimes require 2 UTF-16 characters to encode it.</li></ul><h2 id="preliminaries">Preliminaries</h2><p>Some examples use
-<a href="http://clojure.github.io/clojure/clojure.string-api.html">clojure.string</a>,
+<a href="https://clojure.github.io/clojure/clojure.string-api.html">clojure.string</a>,
 <a href="https://github.com/edn-format/edn">clojure.edn</a> and
-<a href="http://clojure.github.io/clojure/clojure.pprint-api.html">clojure.pprint</a>. We'll
+<a href="https://clojure.github.io/clojure/clojure.pprint-api.html">clojure.pprint</a>. We'll
 assume your <code>ns</code> macro contains:</p><pre><code class="clojure">(:require [clojure.string :as str]
           [clojure.edn :as edn]
           [clojure.pprint :as pp])
@@ -164,7 +164,7 @@ bar")                             ;=&gt; ["foo" "bar"]
   (read-string "#\"[abc]\""))
 ;=&gt; #"[abc]"
 </code></pre><h3 id="parsing-complex-strings">Parsing complex strings</h3><h4 id="regexes">Regexes</h4><p>Regexes offer a boost in string-matching power. You can express ideas
-like repetition, alternatives, etc.</p><p><a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Regex
+like repetition, alternatives, etc.</p><p><a href="https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Regex
 reference.</a></p><p><strong>Groups:</strong> Regex groups are useful, when we want to match more than
 one substring. (Or refer to matches later.) In the regex <code>#"(group-1) (group-2)"</code>, the 0th group is the whole match. The 1st group is
 started by the left-most <code>(</code>, the 2nd group is started by the
@@ -208,7 +208,7 @@ the next two args are match and replacement:</p><pre><code>   match / replacemen
 ;print=&gt;
 </code></pre><h4 id="context-free-grammars">Context-free grammars</h4><p>Context-free grammars offer yet another boost in expressive matching
 power, compared to regexes. You can express ideas like nesting.</p><p>We'll use <a href="https://github.com/Engelberg/instaparse">Instaparse</a> on
-<a href="http://www.json.org/">JSON's grammar</a>.  (This example isn't seriously
+<a href="https://www.json.org/">JSON's grammar</a>.  (This example isn't seriously
 tested nor a featureful parser. Use
 <a href="https://github.com/clojure/data.json">data.json</a> instead.)</p><pre><code class="clojure">;; Your project.clj should contain this (you may need to restart your JVM):
 ;;   :dependencies [[instaparse "1.2.4"]]
@@ -276,7 +276,7 @@ nested functions</em>, and get the resulting string at the end.</p><pre><code cl
     (print "...")))
 ;=&gt; "We have shrimp-kabobs, shrimp creole, shrimp gumbo..."
 </code></pre><h4 id="format-strings">Format strings</h4><p>Java's templating mini-language helps you build many strings
-conveniently. <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html">Reference.</a></p><pre><code class="clojure">;; %s is most commonly used to print args. Escape %'s with %%.
+conveniently. <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html">Reference.</a></p><pre><code class="clojure">;; %s is most commonly used to print args. Escape %'s with %%.
 (format "%s enjoyed %s%%." "Mozambique" 19.8) ;=&gt; "Mozambique enjoyed 19.8%."
 
 ;; The 1$ prefix allows you to keep referring to the first arg.
@@ -294,7 +294,7 @@ varieties of Roman numerals.) However, it's weaker than plain <code>format</code
 with printing dates and referring to args in arbitrary order.</p><p>Remember that <code>cl-format</code> represents a (potentially unreadable)
 language which your audience didn't sign up to learn. If you're the
 sort of person who likes it, try to only use it in sweetspots where it
-provides clarity for little complexity.</p><p><a href="http://www.gigamonkeys.com/book/a-few-format-recipes.html">Tutorial</a>
+provides clarity for little complexity.</p><p><a href="https://www.gigamonkeys.com/book/a-few-format-recipes.html">Tutorial</a>
 in Practical Common
 Lisp. <a href="http://www.lispworks.com/documentation/HyperSpec/Body/22_c.htm">Reference</a>
 in Common Lisp's Hyperspec.</p><pre><code class="clojure">;; The first param prints to *out* if true. To string if false.
@@ -452,7 +452,7 @@ in Common Lisp's Hyperspec.</p><pre><code class="clojure">;; The first param pri
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

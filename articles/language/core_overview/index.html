@@ -9,11 +9,11 @@
 
 <meta property="og:description" content="This guide covers:">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/language/core_overview/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/language/core_overview/" />
 <meta property="og:title" content="Overview of clojure.core, the standard Clojure library" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/core_overview/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/language/core_overview/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -59,7 +59,7 @@
     </div>
     
     <p>This guide covers:</p><ul><li>Key functions of <code>clojure.core</code></li><li>Key macros of <code>clojure.core</code></li><li>Key vars of <code>clojure.core</code></li><li>Essential special forms</li></ul><p>This guide is <strong>by no means comprehensive</strong> and does not try to explain each function/macro/form in depth. It is an overview,
-the goal is to briefly explain the purpose of each item and provide links to other articles with more information.</p><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+the goal is to briefly explain the purpose of each item and provide links to other articles with more information.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="binding">Binding</h2><p><a id="let_desc"></a></p><h3 id="let">let</h3><pre><code class="clojure">(let [bindings*] exprs*)
 </code></pre><p><code>let</code> takes a vector of symbol value pairs followed by a variable number of expressions.</p><p><code>let</code> allows binding of locals (roughly equivalent to variables in many other languages) and defines an explicit scope for those bindings.</p><p>The body of a <code>let</code> statement also provides an implicit <code>do</code> that allows for multiple statements in the body of <code>let</code>.</p><p>A basic example:</p><pre><code class="klipse-clojure nohighlight">(let [x 1 y 2]
   (println x y))
@@ -277,7 +277,7 @@ returned vector.  The key must be &lt;= (count vector) or a
 "IndexOutOfBoundsException" will occur. <code>assoc</code> can not be used to add
 an item to a vector.</p><pre><code class="klipse-clojure nohighlight">(assoc [1 2 76] 2 3) ;= [1 2 3]
 </code></pre><pre><code class="klipse-clojure nohighlight">;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
-(assoc [1 2 3] 5 6) 
+(assoc [1 2 3] 5 6)
 ;; IndexOutOfBoundsException   clojure.lang.PersistentVector.assocN (PersistentVector.java:136)
 </code></pre><p><a id="dissoc_desc"></a></p><h3 id="dissoc">dissoc</h3><pre><code class="clojure">([map])
 ([map key])
@@ -727,7 +727,7 @@ Nguyễn Hà Dương <a href="mailto:cmpitg@gmail.com">cmpitg@gmail.com</a></p>
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

@@ -9,11 +9,11 @@
 
 <meta property="og:description" content="This guide covers:">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/language/namespaces/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/language/namespaces/" />
 <meta property="og:title" content="Clojure Namespaces and Vars" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/namespaces/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/language/namespaces/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -58,7 +58,7 @@
         <h2>Clojure Namespaces and Vars</h2>
     </div>
     
-    <p>This guide covers:</p><ul><li>An overview of Clojure namespaces and vars</li><li>How to define namespaces</li><li>How to use functions in other namespaces</li><li><code>require</code>, <code>refer</code> and <code>use</code></li><li>Common compilation errors and typical problems that cause them</li><li>Namespaces and their relation to code compilation in Clojure</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+    <p>This guide covers:</p><ul><li>An overview of Clojure namespaces and vars</li><li>How to define namespaces</li><li>How to use functions in other namespaces</li><li><code>require</code>, <code>refer</code> and <code>use</code></li><li>Common compilation errors and typical problems that cause them</li><li>Namespaces and their relation to code compilation in Clojure</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure functions are organized into <em>namespaces</em>. Clojure namespaces
 are very similar to Java packages and Python modules. Namespaces are
 basically maps (dictionaries) that map names to <em>vars</em>. In many cases,
@@ -115,8 +115,8 @@ of an import list is the package and other elements are class names in that pack
   (:import [java.util.concurrent Executors TimeUnit]
            java.util.Date))
 </code></pre><p>Even though <em>import list</em> is called a list, it can be any Clojure collection (typically
-vectors are used).</p><h3 id="the-current-namespace">The Current Namespace</h3><p>Under the hood, Clojure keeps <strong>current namespace</strong> a special var, <a href="http://clojuredocs.org/clojure_core/clojure.core/*ns*">*ns*</a>.
-When vars are defined using the <a href="http://clojuredocs.org/clojure_core/clojure.core/def">def</a> special form, they are
+vectors are used).</p><h3 id="the-current-namespace">The Current Namespace</h3><p>Under the hood, Clojure keeps <strong>current namespace</strong> a special var, <a href="https://clojuredocs.org/clojure.core/*ns*">*ns*</a>.
+When vars are defined using the <a href="https://clojuredocs.org/clojure.core/def">def</a> special form, they are
 added to the current namespace.</p><h3 id="the-refer-clojure-helper-form">The :refer-clojure Helper Form</h3><p>Functions like <code>clojure.core/get</code> and macros like <code>clojure.core/defn</code> can be used without
 namespace qualification because they reside in the <code>clojure.core</code> namespace and Clojure
 compiler automatically <em>refers</em> all vars in it. Therefore, if your
@@ -363,7 +363,7 @@ in namespaces can be temporarily altered for unit testing purposes.</p><h2 id="c
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

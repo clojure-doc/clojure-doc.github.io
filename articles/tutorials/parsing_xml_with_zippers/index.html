@@ -15,11 +15,11 @@ Attribution 3.0 Unported License (including images &amp;
 stylesheets). The source is available on
 Github.What Version of Clojure Does This Guide Cover?">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/tutorials/parsing_xml_with_zippers/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/tutorials/parsing_xml_with_zippers/" />
 <meta property="og:title" content="Parsing XML in Clojure" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/tutorials/parsing_xml_with_zippers/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/tutorials/parsing_xml_with_zippers/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -64,7 +64,7 @@ Github.What Version of Clojure Does This Guide Cover?">
         <h2>Parsing XML in Clojure</h2>
     </div>
     
-    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+    <p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
 Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.4 and Leiningen 2.x.</p><h2 id="overview">Overview</h2><p>Try as you might, XML is difficult to avoid. This is particularly true
@@ -169,7 +169,7 @@ with the representation I have in the test. To do that, we need a way
 of traversing this tree and picking out the pieces of information we
 require. The <code>clojure.zip</code> and <code>clojure.data.zip</code> libraries are
 perfect for this. The
-<a href="http://clojure.github.com/data.zip/">documentation</a> for the
+<a href="https://clojure.github.io/data.zip/">documentation</a> for the
 <code>data.zip</code> library on github is nice, but it initially left me a
 little confused as to how to go about using the library (not being
 familiar with zippers).</p><h3 id="a-simple-example">A Simple Example</h3><p>Zippers allow you to easily traverse a data structure. Let's play with
@@ -230,7 +230,7 @@ the code we have already written for parsing the metadata of the NZB:</p><pre><c
 </code></pre><p>The only new thing here is the use of <code>io/input-stream</code> to allow us to
 use anything as <code>input</code> that the <code>io/input-stream</code> supports. These are
 currently <code>OutputStream</code>, <code>File</code>, <code>URI</code>, <code>URL</code>, <code>Socket</code>, <code>byte array</code>, and <code>String</code> arguments. See the
-<a href="http://clojure.github.com/clojure/clojure.java.io-api.html">clojure.java.io</a>
+<a href="https://clojure.github.io/clojure/clojure.java.io-api.html">clojure.java.io</a>
 docs for details.</p><p>Now let's fill in the <code>file-&gt;map</code> function:</p><pre><code class="clojure">(defn segment-&gt;map
   [seg]
   {:bytes  (Long/valueOf (zip-xml/attr seg :bytes))
@@ -474,7 +474,7 @@ extend the tools already provded in interesting directions.</p><h2 id="contribut
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

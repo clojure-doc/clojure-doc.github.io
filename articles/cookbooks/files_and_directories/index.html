@@ -19,11 +19,11 @@ Attribution 3.0 Unported License (including images &amp;
 stylesheets). The source is available on
 Github.">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/cookbooks/files_and_directories/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/files_and_directories/" />
 <meta property="og:title" content="Working with Files and Directories in Clojure" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/cookbooks/files_and_directories/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/cookbooks/files_and_directories/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -70,14 +70,14 @@ Github.">
     
     <p>This cookbook covers working with files and directories from Clojure,
 using functions in the <code>clojure.java.io</code> namespace as well as parts of
-the JDK via interoperability.</p><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+the JDK via interoperability.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
 Github</a>.</p><h2 id="preliminaries">Preliminaries</h2><p>Note that for the examples below, "io" is an alias for
 <code>clojure.java.io</code>. That is, it's assumed your <code>ns</code> macro contains:</p><pre><code class="clojure">(:require [clojure.java.io :as io])
 </code></pre><p>or else in the repl you've loaded it:</p><pre><code class="clojure">(require '[clojure.java.io :as io])
 </code></pre><h2 id="recipes">Recipes</h2><h3 id="read-a-file-into-one-long-string">Read a file into one long string</h3><pre><code class="clojure">(def a-long-string (slurp "foo.txt"))
-</code></pre><p>Note, you can pass urls to <code>slurp</code> as well. See also <a href="http://clojuredocs.org/clojure_core/clojure.core/slurp">slurp at
+</code></pre><p>Note, you can pass urls to <code>slurp</code> as well. See also <a href="https://clojuredocs.org/clojure.core/slurp">slurp at
 Clojuredocs</a>.</p><h3 id="read-a-file-one-line-at-a-time">Read a file one line at a time</h3><p>Suppose you'd like to call <code>my-func</code> on every line in a file,
 and return the resulting sequence:</p><pre><code class="clojure">(with-open [rdr (io/reader "foo.txt")]
   (doall (map my-func (line-seq rdr))))
@@ -101,10 +101,10 @@ getName       The basename of the file.
 getParent     The dirname of the file.
 getPath       Filename with directory.
 mkdir         Create this directory on disk.
-</code></pre><p>To read about more available methods, see <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html">the java.io.File
+</code></pre><p>To read about more available methods, see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/File.html">the java.io.File
 docs</a>.</p><h3 id="get-a-list-of-the-files-and-dirs-in-a-given-directory">Get a list of the files and dirs in a given directory</h3><p>As <code>File</code> objects:</p><pre><code class="clojure">(.listFiles (io/file "path/to/some-dir"))
 </code></pre><p>Same, but just the <em>names</em> (strings), not File objects:</p><pre><code class="clojure">(.list (io/file "path/to/some-dir"))
-</code></pre><p>The results of those calls are seqable.</p><h2 id="see-also">See also</h2><ul><li><a href="https://github.com/Raynes/fs">https://github.com/Raynes/fs</a></li><li>the I/O section of the <a href="http://clojure.org/cheatsheet">cheatsheet</a></li></ul>
+</code></pre><p>The results of those calls are seqable.</p><h2 id="see-also">See also</h2><ul><li><a href="https://github.com/clj-commons/fs">https://github.com/clj-commons/fs</a></li><li>the I/O section of the <a href="https://clojure.org/api/cheatsheet">cheatsheet</a></li></ul>
 
     <div id="prev-next">
         
@@ -240,7 +240,7 @@ docs</a>.</p><h3 id="get-a-list-of-the-files-and-dirs-in-a-given-directory">Get 
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

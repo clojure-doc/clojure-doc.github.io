@@ -9,11 +9,11 @@
 
 <meta property="og:description" content="This guide covers:">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/language/concurrency_and_parallelism/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/language/concurrency_and_parallelism/" />
 <meta property="og:title" content="Concurrency and Parallelism in Clojure" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/concurrency_and_parallelism/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/language/concurrency_and_parallelism/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -58,7 +58,7 @@
         <h2>Concurrency and Parallelism in Clojure</h2>
     </div>
     
-    <p>This guide covers:</p><ul><li>Clojure's identity/value separation</li><li>Clojure reference types and their concurrency semantics: atoms, refs, agents, vars</li><li>Dereferencing</li><li>Delays, futures and promises</li><li>Watches and validators</li><li>How to use java.util.concurrent from Clojure</li><li>Other approaches to concurrency available on the JVM</li><li>Other topics related to concurrency</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+    <p>This guide covers:</p><ul><li>Clojure's identity/value separation</li><li>Clojure reference types and their concurrency semantics: atoms, refs, agents, vars</li><li>Dereferencing</li><li>Delays, futures and promises</li><li>Watches and validators</li><li>How to use java.util.concurrent from Clojure</li><li>Other approaches to concurrency available on the JVM</li><li>Other topics related to concurrency</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="before-you-read-this-guide">Before You Read This Guide</h2><p>This is one of the most hardcore guides of the entire Clojure documentation
 project. It describes concepts that are simple but may seem foreign at first.
 These concepts are some of the key points of Clojure
@@ -144,7 +144,7 @@ currently-connected
 ;; ⇒ #&lt;Atom@614b6b5d: ["chatty-joe"]&gt;
 @currently-connected
 ;; ⇒ ["chatty-joe"]
-</code></pre><p>To demonstrate this graphically, initial atom state looks like this:</p><p><img src="/assets/images/language/concurrency_and_parallelism/atom_state1.png" alt="Atom state 1" /></p><p>and then we mutated it with <code>swap!</code>:</p><p><img src="/assets/images/language/concurrency_and_parallelism/atom_state2.png" alt="Atom state 2" /></p><p>For the readers familiar with the atomic types from the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html">java.util.concurrent.atomic</a> package,
+</code></pre><p>To demonstrate this graphically, initial atom state looks like this:</p><p><img src="/assets/images/language/concurrency_and_parallelism/atom_state1.png" alt="Atom state 1" /></p><p>and then we mutated it with <code>swap!</code>:</p><p><img src="/assets/images/language/concurrency_and_parallelism/atom_state2.png" alt="Atom state 2" /></p><p>For the readers familiar with the atomic types from the <a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html">java.util.concurrent.atomic</a> package,
 this should sound very familiar. The only difference is that instead of setting a value, atoms are mutated
 with a function. This is both because Clojure is a functional language and because with this approach,
 <code>clojure.core/swap!</code> can <em>retry the operation</em> safely. This implies that the function you provide to
@@ -572,10 +572,10 @@ stored in an atom. More realistic scenarios will contact external services, the 
 perform some computation and so on.</p><p>Because when threads are executed concurrently (or in parallel), the order of their execution is not
 guaranteed, we see 4 being added to the vector before 3 in the result.</p><p>Countdown latches are commonly used with initial value of 1 to "block and wait until this operation in
 a different thread is done".</p><h3 id="concurrent-collections">Concurrent Collections</h3><p>Most of the Java collections are mutable and were not designed for concurrency. <code>java.util.concurrent</code> includes a number of collections that
-are thread safe and can be used for passing data structures between threads.</p><h3 id="atomic-variables">Atomic Variables</h3><p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html">java.util.concurrent.atomic</a> package provides
+are thread safe and can be used for passing data structures between threads.</p><h3 id="atomic-variables">Atomic Variables</h3><p>The <a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html">java.util.concurrent.atomic</a> package provides
 a number of data structures that support lock-free thread-safe programming on a single variable (identity). They support
-conditional atomic update operation (<em>compared-and-swap</em> aka <em>CAS</em>).</p><p>Some of the more popular atomic types in the <code>j.u.c.atomic</code> package are <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html">AtomicBoolean</a>,
-<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html">AtomicLong</a> and <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a>.</p><p>Atomic references are pretty well covered in Clojure with atoms but ocassionally may be used by
+conditional atomic update operation (<em>compared-and-swap</em> aka <em>CAS</em>).</p><p>Some of the more popular atomic types in the <code>j.u.c.atomic</code> package are <a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html">AtomicBoolean</a>,
+<a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html">AtomicLong</a> and <a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a>.</p><p>Atomic references are pretty well covered in Clojure with atoms but ocassionally may be used by
 other libraries. An example to demonstrate how to use an atomic long for a thread-safe counter:</p><pre><code class="clojure">(let [l (AtomicLong.)]
   (dotimes [i 50]
     (.start (Thread. (fn []
@@ -592,7 +592,7 @@ cores are available for OS scheduler to use.</p><p>In Clojure, many concurrency 
 and thus benefit from runtime parallelism if the program is running on
 a multi-core machine.</p><h2 id="books">Books</h2><p>Concurrency is a broad topic and it would be silly to think that we
 can cover it well in just one guide.  To get a better understanding of
-the subject, one can refer to a few excellent books:</p><ul><li><a href="http://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601">Java Concurrency in Practice</a> by Brian Goetz et al. is a true classic.</li><li><a href="http://pragprog.com/book/vspcon/programming-concurrency-on-the-jvm">Programming Concurrency on the JVM</a> demonstrates a range of concurrency features in several JVM languages.</li></ul><h2 id="wrapping-up">Wrapping Up</h2><p>One of Clojure design goals was to make concurrent programming easier.</p><p>The key design decision was making Clojure data structures immutable
+the subject, one can refer to a few excellent books:</p><ul><li><a href="https://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601">Java Concurrency in Practice</a> by Brian Goetz et al. is a true classic.</li><li><a href="http://pragprog.com/book/vspcon/programming-concurrency-on-the-jvm">Programming Concurrency on the JVM</a> demonstrates a range of concurrency features in several JVM languages.</li></ul><h2 id="wrapping-up">Wrapping Up</h2><p>One of Clojure design goals was to make concurrent programming easier.</p><p>The key design decision was making Clojure data structures immutable
 (persistent) and separating the concepts of <em>identity</em> (references)
 and <em>value</em>. Immutable values eliminate many concurrency hazards, and
 ultimately make it easier for developers to reason about their
@@ -743,7 +743,7 @@ to the <code>java.util.concurrent</code> primitives and libraries such as
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

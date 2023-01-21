@@ -9,11 +9,11 @@
 
 <meta property="og:description" content="This guide covers:">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/language/functions/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/language/functions/" />
 <meta property="og:title" content="Functions in Clojure" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/functions/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/language/functions/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -58,8 +58,8 @@
         <h2>Functions in Clojure</h2>
     </div>
     
-    <p>This guide covers:</p><ul><li>How to define functions</li><li>How to invoke functions</li><li>Multi-arity functions</li><li>Variadic functions</li><li>Higher order functions</li><li>Other topics related to functions</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure is a functional programming language. Naturally, functions are very important part of Clojure.</p><h2 id="how-to-define-functions">How To Define Functions</h2><p>Functions are typically defined using the <a href="http://clojuredocs.org/clojure_core/clojure.core/defn">defn</a> macro:</p><pre><code class="clojure">(defn round
+    <p>This guide covers:</p><ul><li>How to define functions</li><li>How to invoke functions</li><li>Multi-arity functions</li><li>Variadic functions</li><li>Higher order functions</li><li>Other topics related to functions</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure is a functional programming language. Naturally, functions are very important part of Clojure.</p><h2 id="how-to-define-functions">How To Define Functions</h2><p>Functions are typically defined using the <a href="https://clojuredocs.org/clojure.core/defn">defn</a> macro:</p><pre><code class="clojure">(defn round
   [d precision]
   (let [factor (Math/pow 10 precision)]
     (/ (Math/floor (* d factor)) factor)))
@@ -99,7 +99,7 @@ and returned from functions:</p><pre><code class="klipse-clojure nohighlight">(l
 </code></pre><pre><code class="klipse-clojure nohighlight">(format "Hello, %s" "world")
 </code></pre><p>This works also if you have a function stored in a local, a var or passed as an argument:</p><pre><code class="klipse-clojure nohighlight">(let [f format]
   (f "Hello, %s" "world"))
-</code></pre><p>Alternatively, you can call a function using <a href="http://clojuredocs.org/clojure_core/clojure.core/apply">clojure.core/apply</a></p><pre><code class="klipse-clojure nohighlight">(apply format "Hello, %s" ["world"])
+</code></pre><p>Alternatively, you can call a function using <a href="https://clojuredocs.org/clojure.core/apply">clojure.core/apply</a></p><pre><code class="klipse-clojure nohighlight">(apply format "Hello, %s" ["world"])
 </code></pre><pre><code class="klipse-clojure nohighlight">(apply format "Hello, %s %s" ["Clojure" "world"])
 </code></pre><p><code>clojure.core/apply</code> is usually only necessary when calling variadic functions or having the list of arguments passed in
 as a collection.</p><h2 id="multi-arity-functions">Multi-arity Functions</h2><p>Functions in Clojure can have multiple <em>arities</em>, or sets of arguments:</p><pre><code class="clojure">(defn tax-amount
@@ -208,14 +208,14 @@ Keywords not present and not given a default will be nil.</p><h2 id="higher-orde
 are an important functional programming technique and are quite commonly used in Clojure. One example
 of an HOF is a function that takes a function and a collection and returns a collection of elements
 that satisfy a condition (a predicate). In Clojure, this function is called <code>clojure.core/filter</code>:</p><pre><code class="klipse-clojure nohighlight">(filter even? (range 0 10))  ; ⇒ (0 2 4 6 8)
-</code></pre><p>In the example above, <code>clojure.core/filter</code> takes <code>clojure.core/even?</code> as an argument.</p><p><code>clojure.core</code> has dozens of other higher-order functions. The most commonly used ones are covered in <a href="/articles/language/core_overview/">clojure.core Overview</a>.</p><h2 id="private-functions">Private Functions</h2><p>Functions in Clojure can be private to their namespace.</p><p>They are covered in more detail in the <a href="/articles/language/namespaces/">Namespaces</a> guide.</p><h2 id="keywords-as-functions">Keywords as Functions</h2><p>In Clojure, keywords can be used as functions. They take a map or record and look themselves up in it:</p><pre><code class="klipse-clojure nohighlight">(:age {:age 27 :name "Michael"}) 
+</code></pre><p>In the example above, <code>clojure.core/filter</code> takes <code>clojure.core/even?</code> as an argument.</p><p><code>clojure.core</code> has dozens of other higher-order functions. The most commonly used ones are covered in <a href="/articles/language/core_overview/">clojure.core Overview</a>.</p><h2 id="private-functions">Private Functions</h2><p>Functions in Clojure can be private to their namespace.</p><p>They are covered in more detail in the <a href="/articles/language/namespaces/">Namespaces</a> guide.</p><h2 id="keywords-as-functions">Keywords as Functions</h2><p>In Clojure, keywords can be used as functions. They take a map or record and look themselves up in it:</p><pre><code class="klipse-clojure nohighlight">(:age {:age 27 :name "Michael"})
 ; ⇒ 27
 </code></pre><p>This is commonly used with higher order functions:</p><pre><code class="klipse-clojure nohighlight">(map :age [{:age 45 :name "Joe"}
            {:age 42 :name "Jill"}
-           {:age 17 :name "Matt"}]) 
+           {:age 17 :name "Matt"}])
 ;; ⇒ (45 42 17)
 </code></pre><p>and the <code>-&gt;</code> macro:</p><pre><code class="klipse-clojure nohighlight">(-&gt; [{:age 45 :name "Joe"} {:age 42 :name "Jill"}]
-     first 
+     first
      :name)
 ;; ⇒ "Joe"
 </code></pre><h2 id="maps-as-functions">Maps as Functions</h2><p>Clojure maps are also functions that take keys and look up values for them:</p><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :name)
@@ -239,7 +239,7 @@ cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="kli
 (if (countries :in)
   (comment Implement positive case)
   (comment Implement negative case))
-</code></pre><p>because everything but <code>false</code> and <code>nil</code> evaluates to <code>true</code> in Clojure.</p><h2 id="clojure-functions-as-comparators">Clojure Functions As Comparators</h2><p>Clojure functions implement the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html">java.util.Comparator</a>
+</code></pre><p>because everything but <code>false</code> and <code>nil</code> evaluates to <code>true</code> in Clojure.</p><h2 id="clojure-functions-as-comparators">Clojure Functions As Comparators</h2><p>Clojure functions implement the <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html">java.util.Comparator</a>
 interface and can be used as comparators.</p><h2 id="wrapping-up">Wrapping Up</h2><p>Functions are at the heart of Clojure. They are defined using the <code>defn</code> macro, can have multiple arities,
 be variadic and support parameter destructuring. Function arguments and return value can optionally be
 type hinted.</p><p>Functions are first class values and can be passed to other functions (called Higher Order Functions or HOFs).
@@ -380,7 +380,7 @@ code.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mail
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

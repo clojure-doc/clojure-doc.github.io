@@ -9,11 +9,11 @@
 
 <meta property="og:description" content="This guide covers:">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/language/polymorphism/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/language/polymorphism/" />
 <meta property="og:title" content="Polymorphism in Clojure: Protocols and Multimethods" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/language/polymorphism/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/language/polymorphism/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -58,7 +58,7 @@
         <h2>Polymorphism in Clojure: Protocols and Multimethods</h2>
     </div>
     
-    <p>This guide covers:</p><ul><li>What are polymorphic functions</li><li>Type-based polymorphism with protocols</li><li>Ad-hoc polymorphism with multimethods</li><li>How to create your own data types that behave like core Clojure data types</li></ul><p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+    <p>This guide covers:</p><ul><li>What are polymorphic functions</li><li>Type-based polymorphism with protocols</li><li>Ad-hoc polymorphism with multimethods</li><li>How to create your own data types that behave like core Clojure data types</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>According to Wikipedia,</p><blockquote><p>In computer science, polymorphism is a programming language feature that allows values of different data types to be handled using a uniform interface.</p></blockquote><p>Polymorphism is not at all unique to object-oriented programming languages. Clojure has excellent support for
 polymorphism.</p><p>For example, when a function can be used on multiple data types or behave differently based on additional argument
 (often called <em>dispatch value</em>), that function is <em>polymorphic</em>. A simple example of such function is a function that
@@ -128,11 +128,11 @@ a protocol is via the <code>clojure.core/extend-protocol</code>:</p><pre><code c
     (.getQuery input))
   (fragment-of [^URL input]
     (.getRef input)))
-</code></pre><p>Protocol functions are used just like regular Clojure functions:</p><pre><code class="clojure">(protocol-of (URI. "https://clojure-doc.github.io")) ;= "http"
-(protocol-of (URL. "https://clojure-doc.github.io")) ;= "http"
+</code></pre><p>Protocol functions are used just like regular Clojure functions:</p><pre><code class="clojure">(protocol-of (URI. "https://clojure-doc.org")) ;= "http"
+(protocol-of (URL. "https://clojure-doc.org")) ;= "http"
 
-(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
-(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
+(path-of (URL. "https://clojure-doc.org/articles/content.html")) ;= "/articles/content/"
+(path-of (URI. "https://clojure-doc.org/articles/content.html")) ;= "/articles/content/"
 </code></pre><h3 id="using-protocols-from-different-namespaces">Using Protocols From Different Namespaces</h3><p>Protocol functions are required and used the same way as regular protocol functions. Consider a
 namespace that looks like this</p><pre><code class="clojure">(ns superlib.url-like
   (:import [java.net URL URI]))
@@ -367,7 +367,7 @@ arguments. To calculate the area of a triangle, we multiple base by height and d
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>

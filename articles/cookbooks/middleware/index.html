@@ -15,11 +15,11 @@ Attribution 3.0 Unported License (including images &amp;
 stylesheets). The source is available on
 Github.What is Middleware?">
 
-<meta property="og:url" content="https://clojure-doc.github.io/articles/cookbooks/middleware/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/middleware/" />
 <meta property="og:title" content="Middleware in Clojure" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.github.io/articles/cookbooks/middleware/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/cookbooks/middleware/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -64,7 +64,7 @@ Github.What is Middleware?">
         <h2>Middleware in Clojure</h2>
     </div>
     
-    <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+    <p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
 Github</a>.</p><h2 id="what-is-middleware">What is Middleware?</h2><p>Middleware in Clojure is a common design pattern for threading a
@@ -115,7 +115,7 @@ client function:</p><pre><code class="clojure">(def https-client (wrap-https cli
 
 ;; Notice the :trace-redirects key shows that HTTPS was used instead
 ;; of HTTP
-(https-client {:site "http://www.google.com" :options {}})
+(https-client {:site "https://www.google.com" :options {}})
 ;; ⇒ {:trace-redirects ["https://www.google.com"],
 ;;    :status 200,
 ;;    :headers {...},
@@ -142,7 +142,7 @@ response map:</p><pre><code class="clojure">(defn wrap-add-date
 useful is in combining middleware together. Here's what a new client
 function looks like combining all the middleware:</p><pre><code class="clojure">(def my-client (wrap-add-date (wrap-https (wrap-no-op client))))
 
-(my-client {:site "http://www.google.com"})
+(my-client {:site "https://www.google.com"})
 ;; ⇒ {:date #inst "2012-11-09T12:43:39.451-00:00",
 ;;    :cookies {...},
 ;;    :trace-redirects ["https://www.google.com/"],
@@ -152,7 +152,7 @@ function looks like combining all the middleware:</p><pre><code class="clojure">
 ;;    :body "..."}
 </code></pre><p>(The response map has been edited to take less space where you see
 '...')</p><p>Here we can see that the <code>wrap-https</code> middleware has successfully
-turned the request for http://www.google.com into one for
+turned the request for https://www.google.com into one for
 https://www.google.com, additionally the <code>wrap-add-date</code> middleware
 has added the :date key with the date the request happened. (the
 <code>wrap-no-op</code> middleware did execute, but since it didn't do anything,
@@ -164,7 +164,7 @@ cleaner and clearer way by using Clojure's threading macro, <code>-&gt;</code>. 
       wrap-https
       wrap-add-date))
 
-(my-client {:site "http://www.google.com"})
+(my-client {:site "https://www.google.com"})
 ;; ⇒ {:date #inst "2012-11-09T12:47:32.130-00:00",
 ;;    :cookies {...},
 ;;    :trace-redirects ["https://www.google.com/"],
@@ -314,7 +314,7 @@ file</p>
         </div>
     </div>
     <footer>Copyright &copy; 2023 Multiple Authors
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
