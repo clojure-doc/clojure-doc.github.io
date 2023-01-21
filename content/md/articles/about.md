@@ -31,8 +31,14 @@ design goals, the ecosystem and operations is just as important. CDS will try to
 
 What's *not* here:
 
-  * Cheatsheets. The official [Clojure cheatsheet](http://clojure.org/cheatsheet) is very good.  There is also an unofficial [ClojureScript cheatsheet](https://github.com/fogus/clojurescript-cheatsheet) available for download and contribution.
-  * API reference docs. Those can currently be found (with examples) at [Clojuredocs](http://clojuredocs.org/).
+  * Cheatsheets. Those can be found at
+    [clojure.org/cheatsheet](https://clojure.org/api/cheatsheet), which is derived from
+    [jafingerhut.github.io](https://jafingerhut.github.io/),
+    and [cljs.info/cheatsheet](https://cljs.info/cheatsheet/), which is derived from
+    [oakmac/cljs-cheatsheet](https://github.com/oakmac/cljs-cheatsheet/).
+  * API reference docs. The [official API docs](https://clojure.org/api/api)
+    also have a community-maintained version with examples
+    at [ClojureDocs](https://clojuredocs.org/).
 
 Clojuredocs needs a lot of work and redesign (as in, the way it works) which will take a while. CDS is not concerned with providing the API reference;
 only tutorials, guides, and linking to other relevant resources.
@@ -43,10 +49,10 @@ only tutorials, guides, and linking to other relevant resources.
 
 CDS is structured as a number of guides. They broadly fall into 4 categories:
 
-  * [Tutorials](content/#clojure_tutorials)
-  * [Language Guides](content/#clojure_language_guides)
-  * [Ecosystem & Tools](content/#the_clojure_ecosystem)
-  * [Cookbooks](content/#cookbooks)
+  * [Tutorials](/articles/content/#clojure_tutorials)
+  * [Language Guides](/articles/content/#clojure_language_guides)
+  * [Ecosystem & Tools](/articles/content/#the_clojure_ecosystem)
+  * [Cookbooks](/articles/content/#cookbooks)
 
 
 ### Tutorials
@@ -62,11 +68,11 @@ Target audience: newcomers to the language.
 These guides are more in-depth, focused on various aspects of the language and interoperability.
 Examples of such guides include:
 
-  * Sequences
+  * Collections & Sequences
+  * Concurrency & Parallelism
   * Interoperability
-  * Reference types
   * Laziness
-  * Macros and compilation
+  * Macros
 
 Target audience: from developers who already have some familiarity with the language to those who have been using it for
 a while.
@@ -74,9 +80,9 @@ a while.
 
 ### Tools & Ecosystem guides
 
-These guides cover key Clojure ecosystem tools such as [Leiningen](http://leiningen.org), [Clojars](http://clojars.org), [REPLy](https://github.com/trptcolin/reply),
-[nREPL](https://github.com/clojure/tools.nrepl), [Emacs clojure-mode](https://github.com/technomancy/clojure-mode), VimClojure, [Counterclockwise](https://code.google.com/p/counterclockwise/), [La Clojure](http://plugins.jetbrains.com/plugin?pluginId=4050), etc. It also covers important ecosystem projects that are not tools: books,
-[ClojureSphere](http://www.clojuresphere.com/), [ClojureWerkz](http://clojurewerkz.org/), [Flatland](https://github.com/flatland) and so on.
+These guides cover key Clojure ecosystem tools such as [Leiningen](https://leiningen.org), [Clojars](https://clojars.org),
+[nREPL](https://nrepl.org), Emacs, vim, Calva, etc. It also covers important ecosystem projects that are not tools: books,
+communities, etc.
 
 Target audience: all developers using or interested in the Clojure programming language.
 
@@ -84,7 +90,7 @@ Target audience: all developers using or interested in the Clojure programming l
 
 ### Cookbooks
 
-Concise [Clojure example code](content/#cookbooks), categorized by subject.
+Concise [Clojure example code](/articles/content/#cookbooks), categorized by subject.
 
 
 
@@ -106,7 +112,7 @@ If you find a mistake, poor grammar, an important topic not covered, or an outda
 
 ## Contributing
 
-CDS uses [Cryogen](http://cryogenweb.org/). All tutorials and guides are written in Markdown.
+CDS uses [Cryogen](https://cryogenweb.org/). All tutorials and guides are written in Markdown.
 
 The toolchain and setup process are described [in the README](https://github.com/clojure-doc/clojure-doc.github.io/blob/main/README.md#toolchain).
 

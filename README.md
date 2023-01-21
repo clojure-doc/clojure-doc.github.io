@@ -2,32 +2,32 @@
 
 An assorted collection of tutorials, guides, and other documentation
 (by various authors) for the Clojure programming language and its
-ecosystem. [Read the guides online](https://clojure-doc.github.io).
+ecosystem. [Read the guides online](https://clojure-doc.org).
 
-> Note: due to loss of access to the original infrastructure hosting http://clojure-doc.org, this is a reboot of that site using [Cryogen](http://cryogenweb.org/) and hosted as a GitHub organization website. _Sean Corfield, November 14th, 2021._
+> Note: due to loss of access to the original infrastructure hosting http://clojure-doc.org, this is a reboot of that site using [Cryogen](https://cryogenweb.org/) and hosted as a GitHub organization website. _Sean Corfield, November 14th, 2021._
 
 > **Pull Requests should be made against the `source` branch, with changes to the Markdown files. The HTML on the `main` branch is auto-generated using Cryogen.**
+
+> *News: funding for extensive work on CDS in 2023 is generally provided by [Clojurists Together](https://www.clojuriststogether.org/news/clojurists-together-2023-long-term-funding-announcement/) as part of their Long-Term Funding for [Sean Corfield](https://github.com/seancorfield).*
 
 ## Goals
 
 The goal is to produce quality technical documentation with limited
-duplication between guides, and eventually have these documents hosted
-at doc.clojure.org.
-
+duplication between guides.
 
 What's *not* here:
 
   * Cheatsheets. Those can be found at
-    [clojure.org/cheatsheet](https://clojure.org/api/cheatsheet), or with
-    tooltips at
-    [jafingerhut.github.com](http://jafingerhut.github.com).  There is also an unofficial [ClojureScript cheatsheet](https://github.com/fogus/clojurescript-cheatsheet) available for download and contribution.
-  * API reference docs. Those can currently be found (with examples)
-    at [Clojuredocs](http://clojuredocs.org/).
+    [clojure.org/cheatsheet](https://clojure.org/api/cheatsheet), which is derived from
+    [jafingerhut.github.io](https://jafingerhut.github.io/),
+    and [cljs.info/cheatsheet](https://cljs.info/cheatsheet/), which is derived from
+    [oakmac/cljs-cheatsheet](https://github.com/oakmac/cljs-cheatsheet/).
+  * API reference docs. The [official API docs](https://clojure.org/api/api)
+    also have a community-maintained version with examples
+    at [ClojureDocs](https://clojuredocs.org/).
 
 CDS is not concerned with providing the API reference; only tutorials, guides, and
 linking to other relevant resources.
-
-
 
 ## Structure
 
@@ -41,7 +41,7 @@ CDS is structured as a number of guides. They broadly fall into 4 categories:
 
 ### Tutorials
 
-These guides are for complete newcomers and should include a lot of hand holding. They don't assume any
+These guides are intended for complete newcomers and should include a lot of hand holding. They don't assume any
 previous familiarity with Clojure, the JVM, the JVM tool ecosystem, functional programming, immutability, and so on.
 
 Target audience: newcomers to the language.
@@ -52,11 +52,11 @@ Target audience: newcomers to the language.
 These guides are more in-depth, focused on various aspects of the language and interoperability.
 Examples of such guides include:
 
-  * Sequences
+  * Collections & Sequences
+  * Concurrency & Parallelism
   * Interoperability
-  * Reference types
   * Laziness
-  * Macros and compilation
+  * Macros
 
 Target audience: from developers who already have some familiarity with the language to those who have been using it for
 a while.
@@ -64,9 +64,9 @@ a while.
 
 ### Tools & Ecosystem guides
 
-These guides cover key Clojure ecosystem tools such as [Leiningen](http://leiningen.org), [Clojars](http://clojars.org), [REPLy](https://github.com/trptcolin/reply),
-nREPL, Emacs clojure-mode, VimClojure, Counterclockwise, La Clojure, etc. It also covers important ecosystem projects that are not tools: books,
-ClojureSphere, ClojureWerkz, Flatland and so on.
+These guides cover key Clojure ecosystem tools such as [Leiningen](https://leiningen.org), [Clojars](https://clojars.org),
+nREPL, Emacs, vim/neovim, Calva, etc. It also covers important ecosystem projects that are not tools: books,
+communities, etc.
 
 Target audience: all developers using or interested in the language.
 
@@ -77,19 +77,9 @@ Target audience: all developers using or interested in the language.
 Concise Clojure example code, categorized by subject.
 
 
-
-
 ## How To Contribute
 
-First of all: you **can** contribute to Clojure documentation even if you have 15 minutes to spare a day. To give you an example,
-here's what 2 people could produce in about 6 months in their spare time:
-
- * [Monger documentation](http://clojuremongodb.info)
- * [Neocons documentation](http://clojureneo4j.info)
- * [Welle documentation](http://clojureriak.info)
- * [Elastisch documentation](http://clojureelasticsearch.info)
- * [Langohr documentation](http://clojurerabbitmq.info)
- * [Quartzite documentation](http://clojurequartz.info)
+First of all: you **can** contribute to Clojure documentation even if you have 15 minutes to spare a day.
 
 No contribution is too small: feel free to suggest grammar improvements, better code examples, submit pull requests with just
 one new paragraph or even a couple of spelling corrections. Editing and proof-reading is also a great way to contribute.
@@ -105,11 +95,11 @@ Thank you!
 
 ### Toolchain
 
-This site is built with [Cryogen](http://cryogenweb.org/) and hosted as a GitHub organization website.
+This site is built with [Cryogen](https://cryogenweb.org/) and hosted as a GitHub organization website.
 
 Clone the repository, checkout the `source` branch, and run `clojure -M:build` to generate the `public` folder
 containing the rendered HTML version of the site (which is actually the `main` branch of the repository, so that
-it is published to https://clojure-doc.github.io automatically).
+it is published to https://clojure-doc.org automatically).
 
 You can view the generated version with `clojure -X:serve` which should open a browser to port 3000 (of localhost).
 This will automatically regenerate the `public` folder as files are changed in `content` etc.
@@ -120,12 +110,12 @@ See [Klipse.md](Klipse.md) for instructions about including interactive code sni
 
 First, pick a topic that sounds interesting. Writing documentation takes some effort and
 working on something that is interesting to you will motivate you. Next, find the article you want
-to contribute to under `./articles/`. It is a Markdown file with inline code snippets.
+to contribute to under `./content/md/articles/`. It is a Markdown file with inline code snippets.
 
 At the top of each article you will usually find what it is supposed to cover. Please stick
 to that list.
 
-Then fork the repository, create a [topic branch](http://git-scm.com/book/en/Git-Branching-Branching-Workflows), and
+Then fork the repository, create a [topic branch](https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows), and
 start writing.
 
 When writing, periodically view results in the browser (see `clojure -X:serve` described above for running a local server) and make
@@ -142,7 +132,7 @@ All good documentation out there is a result of dozens of edits, corrections, an
 rewrites. This is normal. We want Clojure documentation to be high quality just like the language and
 `clojure.core`.
 
-For some guidance on writing great documentation, see <http://jacobian.org/writing/great-documentation/>.
+For some guidance on writing great documentation, see <https://jacobian.org/series/great-documentation/>.
 
 
 
@@ -181,5 +171,5 @@ review and discussions for new content, but you will be able to push small impro
 ## License
 
 All the content is distributed under the
-[CC BY 3.0](http://creativecommons.org/licenses/by/3.0/) license
+[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) license
 and are copyright their respective primary author(s).

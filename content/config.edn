@@ -1,7 +1,7 @@
 {:site-title                   "Clojure Guides"
  :author                       "Multiple Authors"
  :description                  "Clojure Documentation"
- :site-url                     "https://clojure-doc.github.io/"
+ :site-url                     "https://clojure-doc.org/"
  :post-root                    "posts"
  :page-root                    "articles"
  :post-root-uri                "posts"

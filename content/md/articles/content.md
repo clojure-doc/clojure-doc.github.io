@@ -40,10 +40,6 @@ The Chlorine package for Clojure development in Atom (via a Socket REPL).
 
 The user guide for Cursive, the Clojure plugin for IntelliJ.
 
-### [Eclipse for Clojure Development](/articles/tutorials/eclipse/)
-
-A brief introduction to Counterclockwise, a Clojure plugin for Eclipse.
-
 ### [Emacs for Clojure Development](/articles/tutorials/emacs/)
 
 A brief introduction to Emacs, Clojure mode, CIDER and Clojure development workflow with Emacs.
@@ -55,9 +51,6 @@ A brief introduction to Clojure development in Vim with fireplace.vim.
 ### [VS Code for Clojure Development](https://calva.io/)
 
 The Calva extension for Clojure development in VS Code (via nREPL).
-
-See also [Clover for VS Code](https://marketplace.visualstudio.com/items?itemName=mauricioszabo.clover)
-for Clojure development in VS Code (via a Socket REPL).
 
 
 
@@ -382,7 +375,7 @@ This guide covers:
 ## License
 
 All the content is distributed under the
-[CC BY 3.0](http://creativecommons.org/licenses/by/3.0/) license
+[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) license
 and are copyright their respective primary author(s).
 
 
