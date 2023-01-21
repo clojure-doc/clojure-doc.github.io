@@ -17,7 +17,7 @@ This guide covers:
  * basics of Clojure macros
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -635,7 +635,7 @@ expressions: `#"regex here"`. Clojure uses the same regular expression
 syntax as Java, which is nearly the same as what Perl 5 (and Python,
 and Ruby) uses. You can read more about the specifics in the Java
 [java.util.regex Pattern
-docs](http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html).
+docs](https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html).
 
 Clojure provides a number of functions for working with strings, and a
 number of those can make use of regexes. See the next section for some
@@ -870,8 +870,8 @@ across various types of numbers:
 ```
 
 See the docs for
-[=](http://clojuredocs.org/clojure_core/clojure.core/=) and
-[==](http://clojuredocs.org/clojure_core/clojure.core/==) for more
+[=](https://clojuredocs.org/clojure.core/=) and
+[==](https://clojuredocs.org/clojure.core/==) for more
 info.
 
 

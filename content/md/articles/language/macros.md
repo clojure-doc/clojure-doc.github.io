@@ -9,7 +9,7 @@ This guide covers:
   * the Clojure compilation process
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -459,7 +459,7 @@ Special forms are restrictive in their use and do not interact cleanly with seve
    `a
    ;; user/a
    ```
-   
+
    ```klipse-clojure
    `do
    ;; do

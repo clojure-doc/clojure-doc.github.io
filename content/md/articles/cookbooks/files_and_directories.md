@@ -6,7 +6,7 @@ using functions in the `clojure.java.io` namespace as well as parts of
 the JDK via interoperability.
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -39,7 +39,7 @@ or else in the repl you've loaded it:
 ```
 
 Note, you can pass urls to `slurp` as well. See also [slurp at
-Clojuredocs](http://clojuredocs.org/clojure_core/clojure.core/slurp).
+Clojuredocs](https://clojuredocs.org/clojure.core/slurp).
 
 
 ### Read a file one line at a time
@@ -108,7 +108,7 @@ call a number of functions on it, including:
     mkdir         Create this directory on disk.
 
 To read about more available methods, see [the java.io.File
-docs](http://docs.oracle.com/javase/7/docs/api/java/io/File.html).
+docs](https://docs.oracle.com/javase/7/docs/api/java/io/File.html).
 
 
 ### Get a list of the files and dirs in a given directory
@@ -130,5 +130,5 @@ The results of those calls are seqable.
 
 ## See also
 
-  * <https://github.com/Raynes/fs>
-  * the I/O section of the [cheatsheet](http://clojure.org/cheatsheet)
+  * <https://github.com/clj-commons/fs>
+  * the I/O section of the [cheatsheet](https://clojure.org/api/cheatsheet)

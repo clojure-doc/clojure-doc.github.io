@@ -40,7 +40,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ## Testing
 
-  * [clojure.test](http://clojure.github.com/clojure/clojure.test-api.html): the standard unit testing library that ships with Clojure
+  * [clojure.test](https://clojure.github.io/clojure/clojure.test-api.html): the standard unit testing library that ships with Clojure
 
   * [Midje](https://clojars.org/midje): a more featureful test framework
 
@@ -400,7 +400,7 @@ Standard streams I/O is covered by the JDK and commonly used via `clojure.java.i
 
 ## Concurrency and Parallelism
 
-  * [java.util.concurrent](http://docs.oracle.com/javase/7/docs/technotes/guides/concurrency/index.html): a comprehensive, very mature set of concurrency primitives built into the JDK
+  * [java.util.concurrent](https://docs.oracle.com/javase/7/docs/technotes/guides/concurrency/index.html): a comprehensive, very mature set of concurrency primitives built into the JDK
   * [Okku](https://github.com/gaverhae/okku) ([at clojars](https://clojars.org/org.clojure.gaverhae/okku)): Akka API for Clojure
 
 
@@ -494,14 +494,14 @@ Standard streams I/O is covered by the JDK and commonly used via `clojure.java.i
     example.
 
   * [Autodoc](http://tomfaulhaber.github.com/autodoc/) ([at clojars](https://clojars.org/autodoc)): used
-    to generate the official [Clojure API reference](http://clojure.github.com/).
+    to generate the official [Clojure API reference](https://clojure.github.io/).
 
 
 ## Tooling
 
- * [Leiningen](http://leiningen.org): the Clojure build tool
+ * [Leiningen](https://leiningen.org): the Clojure build tool
 
- * [tools.nrepl](https://github.com/clojure/tools.nrepl): nREPL interface
+ * [nREPL](https://nrepl.org): nREPL interface
 
  * [java.jmx](https://github.com/clojure/java.jmx): nice JMX interface
 

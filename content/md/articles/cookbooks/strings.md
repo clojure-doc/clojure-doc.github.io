@@ -6,7 +6,7 @@ functions, standard and contrib libraries, and parts of the JDK via
 interoperability.
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -15,7 +15,7 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 ## Overview
 
 * Strings are [plain Java
-strings](http://docs.oracle.com/javase/7/docs/api/java/lang/String.html).
+strings](https://docs.oracle.com/javase/7/docs/api/java/lang/String.html).
 You can use anything which operates on them.
 * Java strings are immutable, so they're convenient to use in Clojure.
 * You can't add metadata to Java strings.
@@ -29,7 +29,7 @@ You can use anything which operates on them.
 
 * **Caveat:** Human brains and electronic computers are rather different
 devices. So Java strings (sequences of [UTF-16
-characters](http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html#unicode))
+characters](https://docs.oracle.com/javase/7/docs/api/java/lang/Character.html#unicode))
 don't always map nicely to user-perceived characters. For example, a
 single Unicode "code point" doesn't necessarily equal a user-perceived
 character. (Like Korean Hangul Jamo, where user-perceived characters
@@ -40,9 +40,9 @@ code point may sometimes require 2 UTF-16 characters to encode it.
 ## Preliminaries
 
 Some examples use
-[clojure.string](http://clojure.github.io/clojure/clojure.string-api.html),
+[clojure.string](https://clojure.github.io/clojure/clojure.string-api.html),
 [clojure.edn](https://github.com/edn-format/edn) and
-[clojure.pprint](http://clojure.github.io/clojure/clojure.pprint-api.html). We'll
+[clojure.pprint](https://clojure.github.io/clojure/clojure.pprint-api.html). We'll
 assume your `ns` macro contains:
 
 ``` clojure
@@ -144,7 +144,7 @@ Regexes offer a boost in string-matching power. You can express ideas
 like repetition, alternatives, etc.
 
 [Regex
-reference.](http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html)
+reference.](https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html)
 
 **Groups:** Regex groups are useful, when we want to match more than
 one substring. (Or refer to matches later.) In the regex `#"(group-1)
@@ -212,7 +212,7 @@ Context-free grammars offer yet another boost in expressive matching
 power, compared to regexes. You can express ideas like nesting.
 
 We'll use [Instaparse](https://github.com/Engelberg/instaparse) on
-[JSON's grammar](http://www.json.org/).  (This example isn't seriously
+[JSON's grammar](https://www.json.org/).  (This example isn't seriously
 tested nor a featureful parser. Use
 [data.json](https://github.com/clojure/data.json) instead.)
 
@@ -297,7 +297,7 @@ nested functions*, and get the resulting string at the end.
 #### Format strings
 
 Java's templating mini-language helps you build many strings
-conveniently. [Reference.](http://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html)
+conveniently. [Reference.](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html)
 
 ``` clojure
 ;; %s is most commonly used to print args. Escape %'s with %%.
@@ -327,7 +327,7 @@ language which your audience didn't sign up to learn. If you're the
 sort of person who likes it, try to only use it in sweetspots where it
 provides clarity for little complexity.
 
-[Tutorial](http://www.gigamonkeys.com/book/a-few-format-recipes.html)
+[Tutorial](https://www.gigamonkeys.com/book/a-few-format-recipes.html)
 in Practical Common
 Lisp. [Reference](http://www.lispworks.com/documentation/HyperSpec/Body/22_c.htm)
 in Common Lisp's Hyperspec.

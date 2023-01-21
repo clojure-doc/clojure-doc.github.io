@@ -6,7 +6,7 @@ This guide covers:
  * Books about Clojure
  * Books about ClojureScript
 
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 
@@ -151,7 +151,7 @@ A book that walks you step-by-step from the basic building blocks of macros to c
 #### Where You Can Buy It
 
  * [Pragmatic Programmers](https://pragprog.com/book/cjclojure/mastering-clojure-macros):  eBook, paperback
- * [Paperback on Amazon](http://www.amazon.com/Mastering-Clojure-Macros-Cleaner-Smarter/dp/1941222226)
+ * [Paperback on Amazon](https://www.amazon.com/Mastering-Clojure-Macros-Cleaner-Smarter/dp/1941222226)
 
 
 
@@ -165,9 +165,8 @@ Updated for Clojure 1.6 with new content.
 
 #### Where You Can Buy It
 
- * [Official Site](http://joyofclojure.com/)
- * From [Manning](http://www.manning.com/fogus2/): eBook, paperback
- * [Paperback on Amazon](http://www.amazon.com/The-Joy-Clojure-Michael-Fogus/dp/1617291412)
+ * From [Manning](https://www.manning.com/books/the-joy-of-clojure-second-edition): eBook, paperback
+ * [Paperback on Amazon](https://www.amazon.com/Joy-Clojure-Michael-Fogus/dp/1617291412)
 
 
 
@@ -185,8 +184,8 @@ Analysis, etc) are examined with examples using Clojure to process real-world da
 #### Where You Can Buy It
 
  * [Packt Publishing](https://www.packtpub.com/big-data-and-business-intelligence/mastering-clojure-data-analysis):  eBook, paperback
- * [Kindle version on Amazon](http://www.amazon.com/Mastering-Clojure-Data-Analysis-Rochester-ebook/dp/B00KLAJ66S)
- * [Paperback on Amazon](http://www.amazon.com/Mastering-Clojure-Data-Analysis-Rochester/dp/1783284137)
+ * [Kindle version on Amazon](https://www.amazon.com/Mastering-Clojure-Data-Analysis-Rochester-ebook/dp/B00KLAJ66S)
+ * [Paperback on Amazon](https://www.amazon.com/Mastering-Clojure-Data-Analysis-Rochester/dp/1783284137)
 
 
 
@@ -202,8 +201,8 @@ how they can be applied against real-world problems using Clojure.
 #### Where You Can Buy It
 
  * [Packt Publishing](https://www.packtpub.com/big-data-and-business-intelligence/clojure-machine-learning): eBook, paperback
- * [Kindle version on Amazon](http://www.amazon.com/Clojure-Machine-Learning-Akhil-Wali-ebook/dp/B00JXLF78M)
- * [Paperback on Amazon](http://www.amazon.com/Clojure-Machine-Learning-Akhil-Wali/dp/1783284358)
+ * [Kindle version on Amazon](https://www.amazon.com/Clojure-Machine-Learning-Akhil-Wali-ebook/dp/B00JXLF78M)
+ * [Paperback on Amazon](https://www.amazon.com/Clojure-Machine-Learning-Akhil-Wali/dp/1783284358)
 
 
 
@@ -219,8 +218,8 @@ create web applications using an example-based approach.
 #### Where You Can Buy It
 
  * From [Pragmatic Programmers](https://pragprog.com/book/dswdcloj/web-development-with-clojure): eBook, paperback
- * [Kindle version on Amazon](http://www.amazon.com/Web-Development-Clojure-Build-Bulletproof/dp/1937785645)
- * [Paperback on Amazon](http://www.amazon.com/Clojure-Machine-Learning-Akhil-Wali/dp/1783284358)
+ * [Kindle version on Amazon](https://www.amazon.com/Web-Development-Clojure-Build-Bulletproof/dp/1937785645)
+ * [Paperback on Amazon](https://www.amazon.com/Clojure-Machine-Learning-Akhil-Wali/dp/1783284358)
 
 
 
@@ -236,7 +235,7 @@ benchmarking, data structures, laziness impact, and more.
 #### Where You Can Buy It
 
  * [Packt Publishing](http://www.packtpub.com/clojure-high-performance-programming/book): eBook, paperback
- * [Amazon](http://www.amazon.com/Clojure-Performance-Programming-Shantanu-Kumar-ebook/dp/B00GTE1RVW/): eBook (Kindle), paperback
+ * [Amazon](https://www.amazon.com/Clojure-Performance-Programming-Shantanu-Kumar-ebook/dp/B00GTE1RVW/): eBook (Kindle), paperback
 
 
 
@@ -298,8 +297,8 @@ An excellent introductory book. Friendly to newcomers to the language and functi
 
  * [Official Site](http://www.clojurebook.com/)
  * From [O'Reilly](http://shop.oreilly.com/product/0636920013754.do), eBook (Kindle, ePub, PDF) or paperback.
- * [Kindle version on Amazon](http://www.amazon.com/Clojure-Programming-ebook/dp/B007Q4T040/ref=tmm_kin_title_0?ie=UTF8&qid=1350284538&sr=8-1)
- * [Paperback on Amazon](http://www.amazon.com/Clojure-Programming-Chas-Emerick/dp/1449394701/ref=sr_1_1?ie=UTF8&qid=1350284538&sr=8-1&keywords=Clojure)
+ * [Kindle version on Amazon](https://www.amazon.com/Clojure-Programming-ebook/dp/B007Q4T040/ref=tmm_kin_title_0?ie=UTF8&qid=1350284538&sr=8-1)
+ * [Paperback on Amazon](https://www.amazon.com/Clojure-Programming-Chas-Emerick/dp/1449394701/ref=sr_1_1?ie=UTF8&qid=1350284538&sr=8-1&keywords=Clojure)
 
 
 
@@ -317,7 +316,7 @@ to `test.generative`, a Clojure testing framework similar to QuickCheck. A good 
 #### Where You Can Buy It
 
  * From [Pragmatic Programmers](http://pragprog.com/book/shcloj2/programming-clojure), eBook (Kindle, ePub, PDF) or paperback.
- * [Paperback on Amazon](http://www.amazon.com/Programming-Clojure-Stuart-Halloway/dp/1934356867/ref=sr_1_4?ie=UTF8&qid=1350284538&sr=8-4&keywords=Clojure)
+ * [Paperback on Amazon](https://www.amazon.com/Programming-Clojure-Stuart-Halloway/dp/1934356867/ref=sr_1_4?ie=UTF8&qid=1350284538&sr=8-4&keywords=Clojure)
 
 
 
@@ -336,7 +335,7 @@ To really appreciate it, however, you will need to have some real Clojure experi
 
  * [Official Site](http://joyofclojure.com/)
  * From [Manning](http://www.manning.com/fogus/), eBook (Kindle, ePub, PDF) or paperback.
- * [Paperback on Amazon](http://www.amazon.com/The-Joy-Clojure-Thinking-Way/dp/1935182641/ref=sr_1_2?ie=UTF8&qid=1350284538&sr=8-2&keywords=Clojure)
+ * [Paperback on Amazon](https://www.amazon.com/The-Joy-Clojure-Thinking-Way/dp/1935182641/ref=sr_1_2?ie=UTF8&qid=1350284538&sr=8-2&keywords=Clojure)
 
 
 
@@ -389,7 +388,7 @@ A quick taste of Clojure for developers curious about the language.  Its aimed a
  * [Official site](http://developerpress.com/en/clojure-made-simple-introduction-clojure)
  * [Book support site](http://clojuremadesimple.co.uk/)
  * [ganxy.com](https://ganxy.com/i/77456/john-stevenson/clojure-made-simple)
- * [Kindle version on Amazon](http://www.amazon.com/Clojure-Made-Simple-ebook/dp/B00BSY20HS)
+ * [Kindle version on Amazon](https://www.amazon.com/Clojure-Made-Simple-ebook/dp/B00BSY20HS)
  * [Apple iBookStore](https://itunes.apple.com/us/book/clojure-made-simple/id618287958?mt=11)
  * [Google Play](https://play.google.com/store/books/details/John_Stevenson_Clojure_Made_Simple?id=yqfBJYhvqJcC&feature=nav_result#?t=W251bGwsMSwxLDMsImJvb2steXFmQkpZaHZxSmNDIl0.)
 
@@ -406,8 +405,8 @@ A good introductory book.
 #### Where You Can Buy It
 
  * From [Apress](http://www.apress.com/9781430272311), eBook or paperback.
- * [Kindle version on Amazon](http://www.amazon.com/Practical-Clojure-Experts-Source-ebook/dp/B003VM7G3S/ref=sr_1_12?ie=UTF8&qid=1350284538&sr=8-12&keywords=Clojure)
- * [Paperback on Amazon](http://www.amazon.com/Practical-Clojure-Experts-Voice-Source/dp/1430272317/ref=sr_1_6?ie=UTF8&qid=1350284538&sr=8-6&keywords=Clojure)
+ * [Kindle version on Amazon](https://www.amazon.com/Practical-Clojure-Experts-Source-ebook/dp/B003VM7G3S/ref=sr_1_12?ie=UTF8&qid=1350284538&sr=8-12&keywords=Clojure)
+ * [Paperback on Amazon](https://www.amazon.com/Practical-Clojure-Experts-Voice-Source/dp/1430272317/ref=sr_1_6?ie=UTF8&qid=1350284538&sr=8-6&keywords=Clojure)
 
 
 
@@ -428,7 +427,7 @@ keep this in mind.
 #### Where You Can Buy It
 
  * From [Manning](http://www.manning.com/rathore/), eBook (Kindle, ePub, PDF) or paperback.
- * [Paperback on Amazon](http://www.amazon.com/Clojure-Action-Amit-Rathore/dp/1935182595/ref=sr_1_3?ie=UTF8&qid=1350284538&sr=8-3&keywords=Clojure)
+ * [Paperback on Amazon](https://www.amazon.com/Clojure-Action-Amit-Rathore/dp/1935182595/ref=sr_1_3?ie=UTF8&qid=1350284538&sr=8-3&keywords=Clojure)
 
 
 ### Clojure - Grundlagen, Concurrent Programming, Java
@@ -467,7 +466,7 @@ and includes several updates.
 #### Where You Can Buy It
 
  * From [Pragmatic Programmers](http://pragprog.com/book/shcloj/programming-clojure)
- * [Paperback on Amazon](http://www.amazon.com/Programming-Clojure-Pragmatic-Programmers-Halloway/dp/1934356336/ref=sr_1_7?ie=UTF8&qid=1350284538&sr=8-7&keywords=Clojure)
+ * [Paperback on Amazon](https://www.amazon.com/Programming-Clojure-Pragmatic-Programmers-Halloway/dp/1934356336/ref=sr_1_7?ie=UTF8&qid=1350284538&sr=8-7&keywords=Clojure)
 
 
 

@@ -13,7 +13,7 @@ This guide covers:
  * Other approaches to concurrency available on the JVM
  * Other topics related to concurrency
 
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
@@ -304,7 +304,7 @@ and then we mutated it with `swap!`:
 
 ![Atom state 2](/assets/images/language/concurrency_and_parallelism/atom_state2.png)
 
-For the readers familiar with the atomic types from the [java.util.concurrent.atomic](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html) package,
+For the readers familiar with the atomic types from the [java.util.concurrent.atomic](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html) package,
 this should sound very familiar. The only difference is that instead of setting a value, atoms are mutated
 with a function. This is both because Clojure is a functional language and because with this approach,
 `clojure.core/swap!` can *retry the operation* safely. This implies that the function you provide to
@@ -1145,12 +1145,12 @@ are thread safe and can be used for passing data structures between threads.
 
 ### Atomic Variables
 
-The [java.util.concurrent.atomic](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html) package provides
+The [java.util.concurrent.atomic](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html) package provides
 a number of data structures that support lock-free thread-safe programming on a single variable (identity). They support
 conditional atomic update operation (*compared-and-swap* aka *CAS*).
 
-Some of the more popular atomic types in the `j.u.c.atomic` package are [AtomicBoolean](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html),
-[AtomicLong](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html) and [AtomicReference](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicReference.html).
+Some of the more popular atomic types in the `j.u.c.atomic` package are [AtomicBoolean](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html),
+[AtomicLong](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html) and [AtomicReference](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicReference.html).
 
 Atomic references are pretty well covered in Clojure with atoms but ocassionally may be used by
 other libraries. An example to demonstrate how to use an atomic long for a thread-safe counter:
@@ -1203,7 +1203,7 @@ Concurrency is a broad topic and it would be silly to think that we
 can cover it well in just one guide.  To get a better understanding of
 the subject, one can refer to a few excellent books:
 
- * [Java Concurrency in Practice](http://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601) by Brian Goetz et al. is a true classic.
+ * [Java Concurrency in Practice](https://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601) by Brian Goetz et al. is a true classic.
  * [Programming Concurrency on the JVM](http://pragprog.com/book/vspcon/programming-concurrency-on-the-jvm) demonstrates a range of concurrency features in several JVM languages.
 
 

@@ -6,7 +6,7 @@ built-in functions, contrib libraries, and parts of the JDK via
 interoperability.
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -52,13 +52,13 @@ or else in the repl you've loaded them like so:
 
 For doing integer division and getting remainders (modulus), see the
 docs for
-[quot](http://clojuredocs.org/clojure_core/clojure.core/quot),
-[rem](http://clojuredocs.org/clojure_core/clojure.core/rem), and
-[mod](http://clojuredocs.org/clojure_core/clojure.core/mod).
+[quot](https://clojuredocs.org/clojure.core/quot),
+[rem](https://clojuredocs.org/clojure.core/rem), and
+[mod](https://clojuredocs.org/clojure.core/mod).
 
 For exponents, square roots, rounding, ceiling, floor, absolute value,
 and greatest/least common multiples, see the [docs for
-math.numeric-tower](http://clojure.github.com/math.numeric-tower/).
+math.numeric-tower](https://clojure.github.io/math.numeric-tower/).
 
 ### Trigonometry
 
@@ -73,11 +73,11 @@ Math/PI       ;=> 3.14159...
 
 There are many more functions available, which you can read about in
 the [docs for
-java.lang.Math](http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html).
+java.lang.Math](https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html).
 
 
 ### Combinatorics
 
 For combinatoric functions (such as `combinations` and
 `permutations`), see the [docs for
-math.combinatorics](http://clojure.github.com/math.combinatorics/).
+math.combinatorics](https://clojure.github.io/math.combinatorics/).

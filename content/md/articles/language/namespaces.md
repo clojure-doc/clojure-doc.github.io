@@ -11,7 +11,7 @@ This guide covers:
  * Common compilation errors and typical problems that cause them
  * Namespaces and their relation to code compilation in Clojure
 
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 
@@ -164,8 +164,8 @@ vectors are used).
 
 ### The Current Namespace
 
-Under the hood, Clojure keeps **current namespace** a special var, [\*ns\*](http://clojuredocs.org/clojure_core/clojure.core/*ns*).
-When vars are defined using the [def](http://clojuredocs.org/clojure_core/clojure.core/def) special form, they are
+Under the hood, Clojure keeps **current namespace** a special var, [\*ns\*](https://clojuredocs.org/clojure.core/*ns*).
+When vars are defined using the [def](https://clojuredocs.org/clojure.core/def) special form, they are
 added to the current namespace.
 
 

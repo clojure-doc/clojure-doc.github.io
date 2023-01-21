@@ -3,7 +3,7 @@
  :layout :page}
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -156,7 +156,7 @@ with the representation I have in the test. To do that, we need a way
 of traversing this tree and picking out the pieces of information we
 require. The `clojure.zip` and `clojure.data.zip` libraries are
 perfect for this. The
-[documentation](http://clojure.github.com/data.zip/) for the
+[documentation](https://clojure.github.io/data.zip/) for the
 `data.zip` library on github is nice, but it initially left me a
 little confused as to how to go about using the library (not being
 familiar with zippers).
@@ -258,7 +258,7 @@ The only new thing here is the use of `io/input-stream` to allow us to
 use anything as `input` that the `io/input-stream` supports. These are
 currently `OutputStream`, `File`, `URI`, `URL`, `Socket`, `byte
 array`, and `String` arguments. See the
-[clojure.java.io](http://clojure.github.com/clojure/clojure.java.io-api.html)
+[clojure.java.io](https://clojure.github.io/clojure/clojure.java.io-api.html)
 docs for details.
 
 Now let's fill in the `file->map` function:

@@ -2,7 +2,7 @@
  :layout :page :page-index 4500}
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -98,7 +98,7 @@ client function:
 
 ;; Notice the :trace-redirects key shows that HTTPS was used instead
 ;; of HTTP
-(https-client {:site "http://www.google.com" :options {}})
+(https-client {:site "https://www.google.com" :options {}})
 ;; ⇒ {:trace-redirects ["https://www.google.com"],
 ;;    :status 200,
 ;;    :headers {...},
@@ -147,7 +147,7 @@ function looks like combining all the middleware:
 ``` clojure
 (def my-client (wrap-add-date (wrap-https (wrap-no-op client))))
 
-(my-client {:site "http://www.google.com"})
+(my-client {:site "https://www.google.com"})
 ;; ⇒ {:date #inst "2012-11-09T12:43:39.451-00:00",
 ;;    :cookies {...},
 ;;    :trace-redirects ["https://www.google.com/"],
@@ -161,7 +161,7 @@ function looks like combining all the middleware:
 '...')
 
 Here we can see that the `wrap-https` middleware has successfully
-turned the request for http://www.google.com into one for
+turned the request for https://www.google.com into one for
 https://www.google.com, additionally the `wrap-add-date` middleware
 has added the :date key with the date the request happened. (the
 `wrap-no-op` middleware did execute, but since it didn't do anything,
@@ -178,7 +178,7 @@ cleaner and clearer way by using Clojure's threading macro, `->`. The
       wrap-https
       wrap-add-date))
 
-(my-client {:site "http://www.google.com"})
+(my-client {:site "https://www.google.com"})
 ;; ⇒ {:date #inst "2012-11-09T12:47:32.130-00:00",
 ;;    :cookies {...},
 ;;    :trace-redirects ["https://www.google.com/"],

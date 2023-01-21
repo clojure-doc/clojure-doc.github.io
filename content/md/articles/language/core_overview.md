@@ -13,7 +13,7 @@ This guide covers:
 This guide is **by no means comprehensive** and does not try to explain each function/macro/form in depth. It is an overview,
 the goal is to briefly explain the purpose of each item and provide links to other articles with more information.
 
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
@@ -633,7 +633,7 @@ an item to a vector.
 
 ```klipse-clojure
 ;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
-(assoc [1 2 3] 5 6) 
+(assoc [1 2 3] 5 6)
 ;; IndexOutOfBoundsException   clojure.lang.PersistentVector.assocN (PersistentVector.java:136)
 ```
 

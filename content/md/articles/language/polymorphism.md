@@ -10,7 +10,7 @@ This guide covers:
  * Ad-hoc polymorphism with multimethods
  * How to create your own data types that behave like core Clojure data types
 
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
@@ -142,11 +142,11 @@ a protocol is via the `clojure.core/extend-protocol`:
 Protocol functions are used just like regular Clojure functions:
 
 ``` clojure
-(protocol-of (URI. "https://clojure-doc.github.io")) ;= "http"
-(protocol-of (URL. "https://clojure-doc.github.io")) ;= "http"
+(protocol-of (URI. "https://clojure-doc.org")) ;= "http"
+(protocol-of (URL. "https://clojure-doc.org")) ;= "http"
 
-(path-of (URL. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
-(path-of (URI. "https://clojure-doc.github.io/articles/content.html")) ;= "/articles/content/"
+(path-of (URL. "https://clojure-doc.org/articles/content.html")) ;= "/articles/content/"
+(path-of (URI. "https://clojure-doc.org/articles/content.html")) ;= "/articles/content/"
 ```
 
 ### Using Protocols From Different Namespaces

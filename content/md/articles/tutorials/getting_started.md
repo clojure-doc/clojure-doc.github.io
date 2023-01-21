@@ -10,7 +10,7 @@ This guide covers:
  * interactive development
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
@@ -119,8 +119,6 @@ Other getting started documentation you might find useful:
     Clojure](http://www.unexpected-vortices.com/clojure/brief-beginners-guide/index.html):
     contains a bit more overview and background material for learning your way
     around the landscape.
-  * [Starting Clojure screencast](http://cemerick.com/2012/05/02/starting-clojure/):
-    an extensive getting-started screencast using Eclipse to develop a webapp project.
 
 
 ## Next Stop

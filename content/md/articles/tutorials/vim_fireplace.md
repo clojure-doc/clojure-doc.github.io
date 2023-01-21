@@ -3,14 +3,14 @@
  :layout :page}
 
 This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/3.0/">Creative Commons
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## Overview
 
-[fireplace.vim](https://github.com/tpope/vim-fireplace) is a Vim plugin developed by [Tim Pope](http://tpo.pe/) which provides support for the "dynamic" aspects of Clojure development. Namely, connection to an [nREPL](https://github.com/clojure/tools.nrepl) server, code evaluation, code completion, and basically everything beyond syntax highlighting and indentation.
+[fireplace.vim](https://github.com/tpope/vim-fireplace) is a Vim plugin developed by [Tim Pope](http://tpo.pe/) which provides support for the "dynamic" aspects of Clojure development. Namely, connection to an [nREPL](https://nrepl.org) server, code evaluation, code completion, and basically everything beyond syntax highlighting and indentation.
 
 This guide will cover installation and some basic usage within a typical Clojure project.
 
@@ -39,7 +39,7 @@ Before using fireplace, it's useful to have a basic understanding of how it work
 
 _Note that because fireplace evaluates code synchronously, so if you evaluate a long-running command, **your entire Vim process will be blocked/frozen** until the operation completes. More on this below._
 
-Usually the task of running an nREPL server falls to Leiningen, but fireplace can connect to any nREPL server. See the [nREPL docs](https://github.com/clojure/tools.nrepl) for details.
+Usually the task of running an nREPL server falls to Leiningen, but fireplace can connect to any nREPL server. See the [nREPL docs](https://nrepl.org) for details.
 
 ## Installing Vim
 TODO: Someone should write Vim installation instructions and basic usage here.

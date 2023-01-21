@@ -12,7 +12,7 @@ This guide covers:
  * Higher order functions
  * Other topics related to functions
 
-This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
+This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
@@ -27,7 +27,7 @@ Clojure is a functional programming language. Naturally, functions are very impo
 
 ## How To Define Functions
 
-Functions are typically defined using the [defn](http://clojuredocs.org/clojure_core/clojure.core/defn) macro:
+Functions are typically defined using the [defn](https://clojuredocs.org/clojure.core/defn) macro:
 
 ``` clojure
 (defn round
@@ -132,7 +132,7 @@ This works also if you have a function stored in a local, a var or passed as an 
   (f "Hello, %s" "world"))
 ```
 
-Alternatively, you can call a function using [clojure.core/apply](http://clojuredocs.org/clojure_core/clojure.core/apply)
+Alternatively, you can call a function using [clojure.core/apply](https://clojuredocs.org/clojure.core/apply)
 
 ```klipse-clojure
 (apply format "Hello, %s" ["world"])
@@ -429,7 +429,7 @@ They are covered in more detail in the [Namespaces](/articles/language/namespace
 In Clojure, keywords can be used as functions. They take a map or record and look themselves up in it:
 
 ```klipse-clojure
-(:age {:age 27 :name "Michael"}) 
+(:age {:age 27 :name "Michael"})
 ; ⇒ 27
 ```
 
@@ -438,7 +438,7 @@ This is commonly used with higher order functions:
 ```klipse-clojure
 (map :age [{:age 45 :name "Joe"}
            {:age 42 :name "Jill"}
-           {:age 17 :name "Matt"}]) 
+           {:age 17 :name "Matt"}])
 ;; ⇒ (45 42 17)
 ```
 
@@ -446,7 +446,7 @@ and the `->` macro:
 
 ```klipse-clojure
 (-> [{:age 45 :name "Joe"} {:age 42 :name "Jill"}]
-     first 
+     first
      :name)
 ;; ⇒ "Joe"
 ```
@@ -513,7 +513,7 @@ because everything but `false` and `nil` evaluates to `true` in Clojure.
 
 ## Clojure Functions As Comparators
 
-Clojure functions implement the [java.util.Comparator](http://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html)
+Clojure functions implement the [java.util.Comparator](https://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html)
 interface and can be used as comparators.
 
 
