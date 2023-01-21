@@ -49,10 +49,10 @@ only tutorials, guides, and linking to other relevant resources.
 
 CDS is structured as a number of guides. They broadly fall into 4 categories:
 
-  * [Tutorials](/articles/content/#clojure_tutorials)
-  * [Language Guides](/articles/content/#clojure_language_guides)
-  * [Ecosystem & Tools](/articles/content/#the_clojure_ecosystem)
-  * [Cookbooks](/articles/content/#cookbooks)
+  * [Tutorials](/articles/content/#tutorials-and-cookbooks)
+  * [Language Guides](/articles/content/#language-guides)
+  * [Ecosystem & Tools](/articles/content/#the-clojure-ecosystem)
+  * [Cookbooks](/articles/content/#tutorials-and-cookbooks)
 
 
 ### Tutorials
@@ -90,7 +90,7 @@ Target audience: all developers using or interested in the Clojure programming l
 
 ### Cookbooks
 
-Concise [Clojure example code](/articles/content/#cookbooks), categorized by subject.
+Concise [Clojure example code](/articles/content/#tutorials-and-cookbooks), categorized by subject.
 
 
 
