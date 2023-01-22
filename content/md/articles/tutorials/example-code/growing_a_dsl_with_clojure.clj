@@ -1,4 +1,4 @@
-(ns dsl-test.core)
+(ns growing-a-dsl-with-clojure)
 
 
 (defmacro with-implementation
@@ -50,4 +50,3 @@
   )))
 
 )
-

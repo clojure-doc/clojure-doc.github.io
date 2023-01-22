@@ -15,7 +15,7 @@ Write macros in Klipse require using `defmacro` from `https://github.com/mfikes/
 (require '[chivorcam.core :refer [defmacro defmacfn]])
 ```
 
-You might want to put hide this code snippet, by using HTML tags:
+You might want to hide this code snippet, by using HTML tags:
 
 ```html
 <pre style="visibility:hidden; height:0;"><code class="klipse-clojure">
