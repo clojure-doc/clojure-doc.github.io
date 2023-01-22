@@ -56,21 +56,20 @@ Channel logs are available at ???.
 
 ## Videos About Clojure
 
-Videos of talks about Clojure are often made available on [InfoQ](http://www.infoq.com/clojure), and [Clojure YouTube channel](https://www.youtube.com/user/ClojureTV).
+Videos of talks about Clojure are often made available on [InfoQ](https://www.infoq.com/clojure), and [Clojure YouTube channel](https://www.youtube.com/user/ClojureTV).
 
- * [Full Disclojure](http://vimeo.com/channels/fulldisclojure/videos) is a series of screencasts about Clojure
- * [Clojure Concurrency Tutorial](http://pluralsight.com/training/Courses/TableOfContents/clojure-concurrency-tutorial)
- * [Clojure Inside Out](http://shop.oreilly.com/product/0636920030409.do) from O'Reilly
- * [Clojure Koans Walkthroughs](http://www.youtube.com/playlist?list=PL1p6TgkbKXqyOwq6iSkce_EY5YWFHciHt)
- * [Clojure Fundamentals](http://pluralsight.com/training/courses/TableOfContents?courseName=clojure-fundamentals-part-one)
- * [LispCast](http://www.purelyfunctional.tv/)
+ * [Full Disclojure](https://vimeo.com/channels/fulldisclojure/videos) is a series of screencasts about Clojure
+ * [Clojure Concurrency Tutorial](https://pluralsight.com/training/Courses/TableOfContents/clojure-concurrency-tutorial)
+ * [Clojure Inside Out](https://www.oreilly.com/library/view/clojure-inside-out/9781449368647/) from O'Reilly
+ * [Clojure Koans Walkthroughs](https://www.youtube.com/playlist?list=PL1p6TgkbKXqyOwq6iSkce_EY5YWFHciHt)
+ * [Clojure Fundamentals](https://pluralsight.com/training/courses/TableOfContents?courseName=clojure-fundamentals-part-one)
+ * [Eric Normand](https://ericnormand.me/)
  * [Clojure Tutorials by Tim Baldridge](https://tbaldridge.pivotshare.com/)
 
 
 ## Podcasts About Clojure
 
- * [Mostly λazy… a Clojure podcast](http://mostlylazy.com/) by Chas Emerick
- * [Cognicast](http://cognitect.com/podcast) by Craig Andera often discusses topics relevant to Clojure and ClojureScript.
+ * [Cognicast](https://cognitect.com/cognicast/) by Craig Andera often discusses topics relevant to Clojure and ClojureScript.
 
 
 ## Code Repositories
@@ -83,29 +82,16 @@ library distributions (with the exception of contrib) are available at
 
 ## Websites
 
-  * [Clojure.org](http://clojure.org/): the official website
-  * [Planet Clojure](http://planet.clojure.in/): aggregator of selected Clojure-related blog posts
-  * [Clojure at Rosetta Code](http://rosettacode.org/wiki/Category:Clojure)
-  * [Clojure Confluence wiki](http://dev.clojure.org/dashboard.action)
-  * [The Clojure Toolbox](http://www.clojure-toolbox.com/): a categorized directory of libraries and tools for Clojure
+  * [Clojure.org](https://clojure.org/): the official website
+  * [Planet Clojure](https://planet.clojure.in/): aggregator of selected Clojure-related blog posts
+  * [The Clojure Toolbox](https://www.clojure-toolbox.com/): a categorized directory of libraries and tools for Clojure
   * [4Clojure](https://4clojure.oxal.org/): Clojure exercise problems
-  * [Exercism.io](http://exercism.io/): Peer-reviewed Clojure exercises
-
-
-## Forums
-
- * [r/Clojure subreddit](http://www.reddit.com/r/clojure)
+  * [Exercism.io](https://exercism.io/): Peer-reviewed Clojure exercises
 
 
 ## Conferences
 
-In no particular order:
-
-  * [Clojure/conj](http://clojure-conj.org/), aka "the Conj"
-  * [EuroClojure](http://euroclojure.com/)
-  * [Clojure/West](http://clojurewest.org/)
-  * [StrangeLoop](https://thestrangeloop.com/) (not about Clojure but often has strong Clojure community presence)
-  * [Lambda Jam](http://lambdajam.com/) (also not about Clojure but has strong Clojure community presence)
+See [Community > Resources > Conferences on clojure.org](https://clojure.org/community/resources#_conferences).
 
 
 ## Email Newsletters
@@ -117,16 +103,13 @@ In no particular order:
 ## Workshops
 
   * [ClojureBridge](http://www.clojurebridge.org/)
-  * [Lambda Next](http://lambdanext.eu/)
 
 
 ## Core development
 
-See the [Clojure Confluence wiki](http://dev.clojure.org/display/design/Home) for full details on
+See the [Clojure > Development on clojure.org](https://clojure.org/dev/dev) for full details on
 how core development is handled.
 
-Coordination of development efforts happen on the development mailing list, on the Confluence wiki,
-and make use of the [JIRA bug and issue tracker](http://dev.clojure.org/jira/browse/CLJ).
-
-Although Clojure and the contrib libraries all have homes [at GitHub](https://github.com/clojure),
-**pull-requests are not accepted**. All core development happens via JIRA, patches and the Confluence wiki.
+Most feature requests and bug reports start life on
+[ask.clojure.org](https://ask.clojure.org/) which also serves
+as a general Clojure Q&A site.

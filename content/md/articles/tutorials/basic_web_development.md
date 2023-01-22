@@ -77,7 +77,7 @@ For more info, see:
 
   * [the Compojure readme](https://github.com/weavejester/compojure#readme)
   * [its wiki docs](https://github.com/weavejester/compojure/wiki)
-  * [its API docs](http://weavejester.github.com/compojure/)
+  * [its API docs](https://weavejester.github.io/compojure/)
 
 
 
@@ -115,7 +115,7 @@ For more info, see:
 
   * [the Hiccup readme](https://github.com/weavejester/hiccup#readme)
   * [its wiki docs](https://github.com/weavejester/hiccup/wiki)
-  * [its API docs](http://weavejester.github.com/hiccup/)
+  * [its API docs](https://weavejester.github.io/hiccup/)
 
 
 

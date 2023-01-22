@@ -335,7 +335,6 @@ To really appreciate it, however, you will need to have some real Clojure experi
 
 #### Where You Can Buy It
 
- * [Official Site](http://joyofclojure.com/)
  * From [Manning](https://www.manning.com/books/the-joy-of-clojure-second-edition/), eBook (Kindle, ePub, PDF) or paperback.
  * [Paperback on Amazon](https://www.amazon.com/Joy-Clojure-Michael-Fogus-dp-1617291412/dp/1617291412/)
 

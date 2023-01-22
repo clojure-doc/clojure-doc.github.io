@@ -267,7 +267,6 @@ specify the filename:
 [github]: https://github.com/clojure/java.jdbc/
 [mailing-list]: https://groups.google.com/forum/#!forum/clojure-java-jdbc
 [reference]: http://clojure.github.io/java.jdbc/
-[korma]: http://sqlkorma.com
 
 [overview]: ../home
 [using-sql]: ../using_sql

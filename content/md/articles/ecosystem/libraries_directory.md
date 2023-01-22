@@ -489,7 +489,7 @@ Standard streams I/O is covered by the JDK and commonly used via `clojure.java.i
 ### Generating API Reference
 
   * [Codox](https://github.com/weavejester/codox) ([at clojars](https://clojars.org/codox)): from the author of Compojure. See [compojure
-    api docs](http://weavejester.github.com/compojure/) for an
+    api docs](https://weavejester.github.io/compojure/) for an
     example.
 
   * [Autodoc](http://tomfaulhaber.github.com/autodoc/) ([at clojars](https://clojars.org/autodoc)): used
