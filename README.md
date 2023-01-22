@@ -1,19 +1,44 @@
-# CDS: A Clojure Doc Site
+{:title "About"
+ :page-index 0
+ :layout :page}
+
+# CDS: A Clojure Documentation Site
 
 An assorted collection of tutorials, guides, and other documentation
 (by various authors) for the Clojure programming language and its
 ecosystem. [Read the guides online](https://clojure-doc.org).
 
-> Note: due to loss of access to the original infrastructure hosting http://clojure-doc.org, this is a reboot of that site using [Cryogen](https://cryogenweb.org/) and hosted as a GitHub organization website. _Sean Corfield, November 14th, 2021._
+CDS (Clojure Documentation Site) is a community documentation project for the Clojure programming language, and is developed [on GitHub](https://github.com/clojure-doc/clojure-doc.github.io).
 
 > **Pull Requests should be made against the `source` branch, with changes to the Markdown files. The HTML on the `main` branch is auto-generated using Cryogen.**
 
-> *News: funding for extensive work on CDS in 2023 is generally provided by [Clojurists Together](https://www.clojuriststogether.org/news/clojurists-together-2023-long-term-funding-announcement/) as part of their Long-Term Funding for [Sean Corfield](https://github.com/seancorfield).*
+## Rationale & History
+
+The rationale is explained in more detail in the [announcement blog post](http://blog.clojurewerkz.org/blog/2012/10/10/announcing-a-new-clojure-documentation-project/).
+
+CDS was started in early October, 2012, by several active members of the Clojure community due to their dissatisfaction at the time
+with the state of documentation and the documentation contribution process (that involved mailing the Clojure Contributor Agreement in paper).
+
+Unfortunately, access to the original infrastructure hosting http://clojure-doc.org,
+was lost several years ago. This current incarnation is a reboot of that site
+using [Cryogen](https://cryogenweb.org/) and hosted as a GitHub organization website.
+
+Funding for extensive work on CDS in 2023 is generousy provided by
+[Clojurists Together](https://www.clojuriststogether.org/news/clojurists-together-2023-long-term-funding-announcement/) as part of their Long-Term Funding for [Sean Corfield](https://github.com/seancorfield).
 
 ## Goals
 
-The goal is to produce quality technical documentation with limited
-duplication between guides.
+The goal is to produce quality technical documentation for Clojure users and potential adopters with various expertise levels.
+
+CDS strives to cover all aspects of Clojure: from tutorials and language guides to overview of the ecosystem, how
+libraries are developed and published, topics operations engineers will be interested in, JVM ecosystem tools
+and so on.
+
+Adopting a language always takes more than just reading a book or a few tutorials about language features. Understanding
+design goals, the ecosystem and operations is just as important. CDS will try to address this.
+
+
+### What CDS is Not
 
 What's *not* here:
 
@@ -26,17 +51,19 @@ What's *not* here:
     also have a community-maintained version with examples
     at [ClojureDocs](https://clojuredocs.org/).
 
-CDS is not concerned with providing the API reference; only tutorials, guides, and
-linking to other relevant resources.
+CDS needs a lot of work and redesign (as in, the way it works) which will take a while.
+CDS is not concerned with providing the API reference;
+only tutorials, guides, and linking to other relevant resources.
+
 
 ## Structure
 
 CDS is structured as a number of guides. They broadly fall into 4 categories:
 
-  * Tutorials
-  * Language Guides
-  * Ecosystem & Tools
-  * Cookbooks
+  * [Tutorials](/articles/content/#tutorials-and-cookbooks)
+  * [Language Guides](/articles/content/#language-guides)
+  * [Ecosystem & Tools](/articles/content/#the-clojure-ecosystem)
+  * [Cookbooks](/articles/content/#tutorials-and-cookbooks)
 
 
 ### Tutorials
@@ -65,16 +92,17 @@ a while.
 ### Tools & Ecosystem guides
 
 These guides cover key Clojure ecosystem tools such as [Leiningen](https://leiningen.org), [Clojars](https://clojars.org),
-nREPL, Emacs, vim/neovim, Calva, etc. It also covers important ecosystem projects that are not tools: books,
+[nREPL](https://nrepl.org), Emacs, vim, Calva, etc. It also covers important ecosystem projects that are not tools: books,
 communities, etc.
 
-Target audience: all developers using or interested in the language.
+Target audience: all developers using or interested in the Clojure programming language.
 
 
 
 ### Cookbooks
 
-Concise Clojure example code, categorized by subject.
+Concise [Clojure example code](/articles/content/#tutorials-and-cookbooks), categorized by subject.
+
 
 
 ## How To Contribute
