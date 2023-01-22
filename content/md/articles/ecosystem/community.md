@@ -3,6 +3,7 @@
 
 This guide covers:
 
+ * Online Communities
  * The Official Clojure mailing lists
  * IRC channel
  * Documentation sites
@@ -13,11 +14,17 @@ This guide covers:
 This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
+## Online Communities
 
-## Clojure Mailing Lists
+  * [Clojurians Slack](https://clojurians.slack.com) -- currently the most active online community, generously sponsored by Slack -- [self-signup](http://clojurians.net) -- [partial archive of channels](https://clojurians-log.clojureverse.org/) (via `@logbot` on Slack)
+  * [Clojurians Zulip](https://clojurians.zulipchat.com/) -- free, open source community, includes an archive of most channels from the Clojurians Slack (via `@zulip-mirror-bot` on Slack)
+  * [Clojure SubReddit](https://www.reddit.com/r/Clojure/) -- r/Clojure -- the right-hand sidebar has links to many Clojure resources
+  * [ClojureVerse](https://clojureverse.org) -- online forum
+  * [Clojurians Discord](https://discordapp.com/invite/v9QMy9D)
 
-  * [Clojure user mailing list](https://groups.google.com/forum/?fromgroups#!forum/clojure)
-  * [Clojure development mailing list](https://groups.google.com/forum/?fromgroups#!forum/clojure-dev)
+## Clojure Mailing List
+
+  * [Clojure users mailing list](https://groups.google.com/g/clojure)
 
 
 ## Clojure IRC Channels
@@ -26,33 +33,25 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 `#clojure` on `irc.freenode.net`.
 
-Channel logs are available at [clojure-log.n01se.net](http://clojure-log.n01se.net/) and [www.raynes.me/logs/irc.freenode.net/clojure/](http://www.raynes.me/logs/irc.freenode.net/clojure/).
-
-
-### Documentation Channel
-
-`#clojure-doc` on `irc.freenode.net`.
+Channel logs are available at ???.
 
 
 ## Documentation
 
-  * [Clojuredocs](http://clojuredocs.org/): Clojure API reference, with examples
-  * [Clojure API Cheatsheet](http://jafingerhut.github.io/cheatsheet/clojuredocs/cheatsheet-tiptip-no-cdocs-summary.html)
+  * [ClojureDocs](https://clojuredocs.org/): Clojure API reference, with examples
+  * [Clojure API Cheatsheet](https://clojure.org/api/cheatsheet)
   * [Clojure Koans](http://clojurekoans.com/)
   * [GetClojure](http://www.getclojure.org): Tens of thousands of searchable Clojure examples mined from all over the internet.
-  * [Grimoire](http://grimoire.arrdem.com/)
 
 
 ## Courses
 
- * [Udemy's 19 part series on Clojure](http://www.udemy.com/clojure-code)
- * [Functional Programming with Clojure](http://mooc.cs.helsinki.fi/clojure)
-
+???
 
 ## User Groups
 
- * The list of [Clojure User Groups](/articles/ecosystem/user_groups/) around the world
- * [How to run your own Clojure User Group](/articles/ecosystem/running_cljug/)
+ * The list of [Clojure User Groups](https://clojure.org/community/user_groups) around the world
+ * [How to run your own Clojure User Group](https://clojure.org/community/start_group)
 
 
 ## Videos About Clojure
