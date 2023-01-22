@@ -94,7 +94,7 @@ depending upon which page was requested.
 <a href="https://github.com/weavejester/compojure">Compojure</a> (<a href="https://clojars.org/compojure">at
 clojars</a>) provides some handy features
 to take care of this for us such that we can associate url paths with
-corresponding functions, all in one place.</p><p>For more info, see:</p><ul><li><a href="https://github.com/weavejester/compojure#readme">the Compojure readme</a></li><li><a href="https://github.com/weavejester/compojure/wiki">its wiki docs</a></li><li><a href="http://weavejester.github.com/compojure/">its API docs</a></li></ul><h3 id="hiccup">Hiccup</h3><p><a href="https://github.com/weavejester/hiccup">Hiccup</a> (<a href="https://clojars.org/hiccup">at
+corresponding functions, all in one place.</p><p>For more info, see:</p><ul><li><a href="https://github.com/weavejester/compojure#readme">the Compojure readme</a></li><li><a href="https://github.com/weavejester/compojure/wiki">its wiki docs</a></li><li><a href="https://weavejester.github.io/compojure/">its API docs</a></li></ul><h3 id="hiccup">Hiccup</h3><p><a href="https://github.com/weavejester/hiccup">Hiccup</a> (<a href="https://clojars.org/hiccup">at
 clojars</a>) provides a quick and easy way to
 generate html. It converts regular Clojure data structures right into
 html. For example,</p><pre><code class="clojure">[:p "Hello, " [:i "doctor"] " Jones."]
@@ -103,7 +103,7 @@ html. For example,</p><pre><code class="clojure">[:p "Hello, " [:i "doctor"] " J
 and</p></li><li><p>it automatically unpacks seqs for you, for example:</p><pre><code class="clojure">[:p '("a" "b" "c")]
 ;; expands to (and so, is the same as if you wrote)
 [:p "a" "b" "c"]
-</code></pre></li></ul><p>For more info, see:</p><ul><li><a href="https://github.com/weavejester/hiccup#readme">the Hiccup readme</a></li><li><a href="https://github.com/weavejester/hiccup/wiki">its wiki docs</a></li><li><a href="http://weavejester.github.com/hiccup/">its API docs</a></li></ul><h3 id="h2">H2</h3><p><a href="http://www.h2database.com/html/main.html">H2</a> is a small and fast Java SQL
+</code></pre></li></ul><p>For more info, see:</p><ul><li><a href="https://github.com/weavejester/hiccup#readme">the Hiccup readme</a></li><li><a href="https://github.com/weavejester/hiccup/wiki">its wiki docs</a></li><li><a href="https://weavejester.github.io/hiccup/">its API docs</a></li></ul><h3 id="h2">H2</h3><p><a href="http://www.h2database.com/html/main.html">H2</a> is a small and fast Java SQL
 database that could be embedded in your application or run in server
 mode. Uses single file for storage, but also could be run as in-memory DB.</p><blockquote><p>Another similar Java-based embedded DB that could be used in your
 application is <a href="http://db.apache.org/derby/">Apache Derby</a>.</p></blockquote><h2 id="create-and-set-up-your-project">Create and set up your project</h2><p>Create your new webapp project like so:</p><pre><code class="bash">lein new compojure my-webapp
