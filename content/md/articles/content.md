@@ -18,7 +18,7 @@ and separates content into several groups:
 ## Essentials
 
 Note that the editing environments are listed in alphabetical order and indicate no preference or endorsement. The last
-["State of the Union" Clojure survey](https://clojure.org/news/2021/04/06/state-of-clojure-2021) indicated
+["State of the Union" Clojure survey](https://clojure.org/news/2022/06/02/state-of-clojure-2022) indicated
 that Emacs is still the most popular editing environment, followed by IntelliJ/Cursive, VS Code, Vim, and Atom.
 
 
