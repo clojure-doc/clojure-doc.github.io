@@ -1,5 +1,7 @@
 {:title "Books about Clojure and ClojureScript"
- :layout :page :page-index 3990}
+ :layout :page :sidebar-omit? true :page-index 3990}
+
+_[Superceded by https://clojure.org/community/books]_
 
 This guide covers:
 

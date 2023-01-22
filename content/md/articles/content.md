@@ -172,13 +172,6 @@ This guide includes definitons of various Clojure-related terminology.
 
 ## The Clojure Ecosystem
 
-### [Books](/articles/ecosystem/books/)
-
-This guide covers:
-
- * Books on Clojure
- * Books on ClojureScript
-
 
 ### [Getting Started with Leiningen](https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md)
 
