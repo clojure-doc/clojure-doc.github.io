@@ -283,13 +283,6 @@ This guide covers:
 
 
 
-### [Clojure User Groups](/articles/ecosystem/user_groups/)
-
-This guide covers:
-
- * Clojure User Groups (CLJUGs) around the world
-
-
 
 ## Tutorials and Cookbooks
 

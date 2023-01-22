@@ -1,10 +1,12 @@
 {:title "Clojure User Groups"
- :layout :page :page-index 3970}
+ :layout :page :sidebar-omit? true :page-index 3970}
+
+_[Superceded by https://clojure.org/community/user_groups]_
 
 This guide covers Clojure User Groups (CLJUGs) around the world. If you want to add a new user group,
 please see our [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute) guide.
 
-If you are looking to start a new Clojure User Group (CLJUG), see  [How to run your own Clojure User Group](/articles/ecosystem/running_cljug/)
+If you are looking to start a new Clojure User Group (CLJUG), see  [How to run your own Clojure User Group](https://clojure.org/community/start_group)
 and feel free to submit a link to your CLJUG site or mailing list once you have it going.
 
 

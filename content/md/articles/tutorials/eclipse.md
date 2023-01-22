@@ -1,6 +1,5 @@
 {:title "Starting with Eclipse and Counterclockwise For Clojure Development"
  :sidebar-omit? true :page-index 1400
- :sidebar-omit? true
  :layout :page}
 
  _[CounterClockWise is no longer maintained -- this page will go away at some point]_

@@ -1,5 +1,7 @@
 {:title "Running a Clojure User Group"
- :layout :page :page-index 3980}
+ :layout :page :sidebar-omit? true :page-index 3980}
+
+_[Superceded by https://clojure.org/community/start_group]_
 
 ## About this tutorial
 
