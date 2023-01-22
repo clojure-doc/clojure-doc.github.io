@@ -1,5 +1,5 @@
 {:title "core.typed - Types"
- :layout :page :page-index 9510}
+ :layout :page :sidebar-omit? true :page-index 9510}
 
 ## Common types
 

@@ -1,5 +1,5 @@
 {:title "core.typed - Polymorphic Functions"
- :layout :page :page-index 9520}
+ :layout :page :sidebar-omit? true :page-index 9520}
 
 core.typed supports polymorphic function types. They allow us to specify
 function types which are both general and accurate.

@@ -1,5 +1,5 @@
 {:title "java.jdbc - How to reuse database connections"
- :layout :page :page-index 8530}
+ :layout :page :sidebar-omit? true :page-index 8530}
 
 ## Contents
 

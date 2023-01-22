@@ -1,5 +1,5 @@
 {:title "core.typed - User Documentation"
- :layout :page :page-index 9500}
+ :layout :page :sidebar-omit? true :page-index 9500}
 
 # Usage
 

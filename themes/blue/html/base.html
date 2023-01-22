@@ -55,9 +55,9 @@
             <div id="sidebar">
                 <h3>Links</h3>
                 <ul id="links">
-                    {% for page in sidebar-pages %}
+                    {% for page in sidebar-pages %}{% if not page.sidebar-omit? %}
                     <li><a href="{{page.uri}}">{{page.title}}</a></li>
-                    {% endfor %}
+                    {% endif %}{% endfor %}
                 </ul>
                 {% if latest-posts|not-empty %}
                 <div id="recent">

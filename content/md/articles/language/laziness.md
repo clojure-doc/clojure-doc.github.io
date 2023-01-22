@@ -1,5 +1,5 @@
 {:title "Laziness in Clojure"
- :page-index 2400
+ :sidebar-omit? true :page-index 2400
  :klipse true
  :layout :page}
 

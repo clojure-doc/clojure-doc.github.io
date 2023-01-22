@@ -1,5 +1,5 @@
 {:title "Functions in Clojure"
- :page-index 2300
+ :sidebar-omit? true :page-index 2300
  :klipse true
  :layout :page}
 

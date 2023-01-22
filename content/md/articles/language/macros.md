@@ -1,5 +1,5 @@
 {:title "Clojure Macros and Metaprogramming"
- :page-index 2600
+ :sidebar-omit? true :page-index 2600
  :klipse true
  :layout :page}
 

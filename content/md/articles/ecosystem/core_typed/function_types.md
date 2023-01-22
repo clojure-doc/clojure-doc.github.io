@@ -1,5 +1,5 @@
 {:title "core.typed - Functions"
- :layout :page :page-index 9560}
+ :layout :page :sidebar-omit? true :page-index 9560}
 
 - Function types are quite different from Typed Racket
   - anything can implement the `IFn` interface

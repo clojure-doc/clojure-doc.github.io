@@ -1,5 +1,5 @@
 {:title "core.typed - Quick Guide"
- :layout :page :page-index 9502}
+ :layout :page :sidebar-omit? true :page-index 9502}
 
 ## Design choices
 

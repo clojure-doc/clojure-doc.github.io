@@ -1,5 +1,5 @@
 {:title "java.jdbc - Getting Started"
- :layout :page :page-index 8500}
+ :layout :page :sidebar-omit? true :page-index 8500}
 
 This guide is intended to help you use the Clojure Contrib JDBC wrapper: `clojure.java.jdbc`
 

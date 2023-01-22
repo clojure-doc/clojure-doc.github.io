@@ -1,5 +1,5 @@
 {:title "Polymorphism in Clojure: Protocols and Multimethods"
- :page-index 2700
+ :sidebar-omit? true :page-index 2700
  :klipse true
  :layout :page}
 

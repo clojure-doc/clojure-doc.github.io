@@ -1,5 +1,5 @@
 {:title "Data Processing (Help Wanted)"
- :layout :page :page-index 3300}
+ :layout :page :sidebar-omit? true :page-index 3300}
 
 
 ## Help wanted

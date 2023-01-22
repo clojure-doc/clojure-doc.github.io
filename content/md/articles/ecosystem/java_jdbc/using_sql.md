@@ -1,5 +1,5 @@
 {:title "java.jdbc - Manipulating data with SQL"
- :layout :page :page-index 8510}
+ :layout :page :sidebar-omit? true :page-index 8510}
 
 ## Contents
 
