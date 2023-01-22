@@ -77,7 +77,7 @@ the second.  The stock comparator that Clojure.core comes with is
 <code>compare</code>.</p><h3 id="coordinates">coordinates</h3><p>The "group-id/artifact-id version-string" identifier used in your
 project.clj to indicate a particular dependency.</p><p>See also <a href="#libspec">libspec</a>.</p><h3 id="destructuring">destructuring</h3><p>The handy trick used in a <a href="#let_binding">let-binding</a> to "unpack" the
 values from a data structure into the locals you're going to use.  See
-also <a href="#binding-form">binding-form</a> and <a href="functions.html#destructuring_of_function_arguments">the destructuring section in
+also <a href="#binding-form">binding-form</a> and <a href="/articles/language/functions#destructuring_of_function_arguments">the destructuring section in
 the functions
 guide</a>.</p><h3 id="dereference">dereference</h3><p>To get the value of a reference type. You can use the <code>deref</code> function
 for this, or else some syntactic sugar: <code>@some-ref-type</code>.</p><h3 id="entry">entry</h3><p>A key/value pair in a map. Try <code>(type (first {:a 1 :b 2}))</code> and see
@@ -132,11 +132,11 @@ involved in the function.</p><h3 id="metadata">metadata</h3><p>An extra map that
 which contains data about the data you're attaching it to. Use <code>meta</code>
 to see the metadata of a given value.</p><h3 id="namespaced-keyword">namespaced keyword</h3><p>When you put two colons in front of a keyword's name --- for example
 ::foo --- it is a so-called "namespaced keyword", and is expanded by
-the reader to become :current-namespace/foo.</p><h3 id="nullipotent">nullipotent</h3><p>An operation with no side effects.  The result of calling the function
+the reader to become :current-namespace/foo.</p><h3 id="nullipotent-pure">nullipotent (pure)</h3><p>An operation with no side effects.  The result of calling the function
 one or more times is the same as if it was never called.  Queries are
-typically good examples of functions that are nullipotent, as they
+typically good examples of functions that are nullipotent (pure), as they
 do not modify the state of the object or structure they are queried
-against.</p><h3 id="persistence">persistence</h3><p>See the <a href="../tutorials/introduction.html#values_immutability_and_persistence">relevant section of the
+against.</p><h3 id="persistence">persistence</h3><p>See the <a href="/articles/tutorials/introduction.html#values_immutability_and_persistence">relevant section of the
 introduction</a>.</p><h3 id="predicate">predicate</h3><p>A function taking one or more args and returning a boolean (<code>true</code> or
 <code>false</code>). Its name typically ends with a question mark. Some examples:
 <code>nil?</code>, <code>zero?</code>, <code>string?</code>.</p><h3 id="pure-function">pure function</h3><p>A function that given the same inputs will always produce the same
@@ -149,7 +149,7 @@ the function.  Pure functions are also
 <a href="#referential-transparency">referentially transparent.</a></p><h3 id="reader">reader</h3><p><em>todo</em></p><h3 id="reader-macro">reader macro</h3><p>Syntax that the Clojure reader recognizes as special syntactic sugar,
 for example, <code>#""</code>, <code>#{}</code>, quoting, etc.</p><h3 id="realize">realize</h3><p>When the next value in a <a href="#lazy">lazy</a> sequence is accessed for the
 first time, and is computed so as to made available, it is said to
-have been "realized".  This term is also used to refer to the status of <a href="concurrency_and_parallelism.html#promises">promises</a>, <a href="concurrency_and_parallelism.html#futures">futures</a>, and <a href="concurrency_and_parallelism.html#delays">delays</a>.  That is, if a promise (for example) is realized then that means its value has been delivered and is accessible via <a href="#dereference">dereferencing</a>.</p><h3 id="reference-types">reference types</h3><p>Vars, atoms, refs, and agents are all reference types. They are
+have been "realized".  This term is also used to refer to the status of <a href="/articles/language/concurrency_and_parallelism#promises">promises</a>, <a href="/articles/language/concurrency_and_parallelism#futures">futures</a>, and <a href="/articles/language/concurrency_and_parallelism#delays">delays</a>.  That is, if a promise (for example) is realized then that means its value has been delivered and is accessible via <a href="#dereference">dereferencing</a>.</p><h3 id="reference-types">reference types</h3><p>Vars, atoms, refs, and agents are all reference types. They are
 mutable in the sense that you can change to what value they refer, and
 Clojure provides thread-safe mechanisms for doing so.</p><h3 id="referential-transparency">referential transparency</h3><p>An expression that will always return the same result for the values
 given, and can be substituted for the resulting value, without

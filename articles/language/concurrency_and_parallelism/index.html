@@ -252,8 +252,8 @@ idea, when the error mode is set to <code>:continue</code> you must also pass an
 not require strict consistency for reads:</p><ul><li>Counters (e.g. message rates in event processing)</li><li>Collections (e.g. recently processed events)</li></ul><p>Agents can be used for offloading arbitrary computations to a thread pool, however,
 only starting with Clojure 1.5 they can provide the same flexiblity as JDK executors
 (thread pools).</p><h3 id="refs">Refs</h3><p>Refs are the only <em>coordinated</em> reference type Clojure has. They help ensure that multiple
-identities can be modified concurrently within a <em><a href="glossary.html#transaction">transaction</a></em>:</p><ul><li>Either all refs are modified or none are</li><li>No race conditions between involved refs</li><li>No possibility of deadlocks between involved refs</li></ul><p>Refs provide ACI of <a href="http://en.wikipedia.org/wiki/ACID">ACID</a>. Refs
-are backed by Clojure's implementation of <a href="glossary.html#stm"><em>software transactional
+identities can be modified concurrently within a <em><a href="/articles/language/glossary/#transaction">transaction</a></em>:</p><ul><li>Either all refs are modified or none are</li><li>No race conditions between involved refs</li><li>No possibility of deadlocks between involved refs</li></ul><p>Refs provide ACI of <a href="http://en.wikipedia.org/wiki/ACID">ACID</a>. Refs
+are backed by Clojure's implementation of <a href="/articles/language/glossary/#stm"><em>software transactional
 memory</em> (STM)</a>.</p><p>To instantiate a ref, use the <code>clojure.core/ref</code> function:</p><pre><code class="clojure">(def account-a (ref 0))
 ;; ⇒ #'user/account-a
 (def account-b (ref 0))
@@ -312,7 +312,7 @@ but substraction is not (1 − 10 does not equal 10 − 1).</p><p><code>clojure.
 </code></pre><p>Note that a change made to a ref by <code>commute</code> will never cause a transaction
 to retry. <code>commute</code> does not cause <em>transaction conflicts</em>.</p><h4 id="using-refs-with-clojure-data-structures">Using Refs With Clojure Data Structures</h4><p><em>TBD: demonstrate more complex changes, e.g., to game characters</em></p><h4 id="limitations-of-refs">Limitations of Refs</h4><p>Software transactional memory is a powerful but highly specialized tool. Because transactions can be retried,
 you must only use pure functions with STM. I/O operations cannot be undone by the runtime and very often are
-not <a href="glossary.html#idempotent">idempotent</a>.</p><p>Structuring your application code as <em>pure core</em> and <em>edge code</em> that interacts with the user or other
+not <a href="/articles/language/glossary/#idempotent">idempotent</a>.</p><p>Structuring your application code as <em>pure core</em> and <em>edge code</em> that interacts with the user or other
 services (performing I/O operations and other side-effects) helps with this. In that case, the pure core
 can use STM without issues.</p><p>For example, in a Web or network server, incoming requests are the edge code: they do I/O. The pure core
 is then called to modify server state, do any calculations necessary, return a result that is returned

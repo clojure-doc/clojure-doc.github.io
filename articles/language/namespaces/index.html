@@ -175,7 +175,7 @@ can be used directly:</p><pre><code class="clojure">;; Will be available as cloj
 
 ;; Will be available as io, e.g. io/resource.
 (require '[clojure.java.io :as io])
-</code></pre><p>It takes a quoted <em><a href="glossary.html#libspec">libspec</a></em>. The libspec is either a namespace name or
+</code></pre><p>It takes a quoted <em><a href="/articles/language/glossary/#libspec">libspec</a></em>. The libspec is either a namespace name or
 a collection (typically a vector) of <code>[name :as alias]</code> or <code>[name :refer [fns]]</code>:</p><pre><code class="clojure">(require '[clojure.set :refer [difference]])
 
 (difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
@@ -217,7 +217,7 @@ function, for example, passed as an argument to a higher order function:</p><pre
 (let [f (ns-resolve 'clojure.set 'difference)]
    (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
 </code></pre><h2 id="compiler-exceptions">Compiler Exceptions</h2><p>This section describes some common compilation errors.</p><h3 id="classnotfoundexception">ClassNotFoundException</h3><p>This exception means that JVM could not load a class. It is either misspelled or not on the
-<a href="glossary.html#classpath">classpath</a>.
+<a href="/articles/language/glossary/#classpath">classpath</a>.
 Potentially your project has unsatisfied dependency (some dependencies may be optional).</p><p>Example:</p><pre><code class="clojure">user=&gt; (import java.uyil.concurrent.TimeUnit)
 ClassNotFoundException java.uyil.concurrent.TimeUnit  java.net.URLClassLoader$1.run (URLClassLoader.java:366)
 </code></pre><p>In the example above, <code>java.uyil.concurrent.TimeUnit</code> should have been <code>java.util.concurrent.TimeUnit</code>.</p><h3 id="compilerexception-javalangruntimeexception-no-such-var">CompilerException java.lang.RuntimeException: No such var</h3><p>This means that somewhere in the code a non-existent var is used. It may be a typo, an
