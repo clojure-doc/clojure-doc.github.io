@@ -296,7 +296,7 @@ can be used directly:
 (require '[clojure.java.io :as io])
 ```
 
-It takes a quoted *[libspec](glossary.html#libspec)*. The libspec is either a namespace name or
+It takes a quoted *[libspec](/articles/language/glossary/#libspec)*. The libspec is either a namespace name or
 a collection (typically a vector) of `[name :as alias]` or `[name :refer [fns]]`:
 
 ``` clojure
@@ -395,7 +395,7 @@ This section describes some common compilation errors.
 ### ClassNotFoundException
 
 This exception means that JVM could not load a class. It is either misspelled or not on the
-[classpath](glossary.html#classpath).
+[classpath](/articles/language/glossary/#classpath).
 Potentially your project has unsatisfied dependency (some dependencies may be optional).
 
 Example:

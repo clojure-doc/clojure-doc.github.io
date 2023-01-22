@@ -67,7 +67,7 @@ The handy trick used in a [let-binding](#let_binding) to "unpack" the
 values from a data structure into the locals you're going to use.  See
 also [binding-form](#binding-form) and [the destructuring section in
 the functions
-guide](functions.html#destructuring_of_function_arguments).
+guide](/articles/language/functions#destructuring_of_function_arguments).
 
 
 
@@ -251,11 +251,11 @@ the reader to become :current-namespace/foo.
 
 
 
-### nullipotent
+### nullipotent (pure)
 
 An operation with no side effects.  The result of calling the function
 one or more times is the same as if it was never called.  Queries are
-typically good examples of functions that are nullipotent, as they
+typically good examples of functions that are nullipotent (pure), as they
 do not modify the state of the object or structure they are queried
 against.
 
@@ -264,7 +264,7 @@ against.
 ### persistence
 
 See the [relevant section of the
-introduction](../tutorials/introduction.html#values_immutability_and_persistence).
+introduction](/articles/tutorials/introduction.html#values_immutability_and_persistence).
 
 
 
@@ -306,7 +306,7 @@ for example, `#""`, `#{}`, quoting, etc.
 
 When the next value in a [lazy](#lazy) sequence is accessed for the
 first time, and is computed so as to made available, it is said to
-have been "realized".  This term is also used to refer to the status of [promises](concurrency_and_parallelism.html#promises), [futures](concurrency_and_parallelism.html#futures), and [delays](concurrency_and_parallelism.html#delays).  That is, if a promise (for example) is realized then that means its value has been delivered and is accessible via [dereferencing](#dereference).
+have been "realized".  This term is also used to refer to the status of [promises](/articles/language/concurrency_and_parallelism#promises), [futures](/articles/language/concurrency_and_parallelism#futures), and [delays](/articles/language/concurrency_and_parallelism#delays).  That is, if a promise (for example) is realized then that means its value has been delivered and is accessible via [dereferencing](#dereference).
 
 
 

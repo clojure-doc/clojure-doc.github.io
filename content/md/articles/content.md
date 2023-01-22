@@ -212,19 +212,6 @@ This guide covers:
  * core.typed documentation, tutorials, and guides.
 
 
-### [java.jdbc](/articles/ecosystem/java_jdbc/home/)
-
-This guide covers:
-
- * An overview of Clojure's JDBC wrapper
- * Setting up a data source
- * Manipulating data with SQL
- * Manipulating tables with DDL
- * How to use connection pooling
- * How to use some common DSLs with java.jdbc
- * Where to go beyond java.jdbc
-
-
 ### [Library Development and Distribution](/articles/ecosystem/libraries_authoring/)
 
 This guide covers:

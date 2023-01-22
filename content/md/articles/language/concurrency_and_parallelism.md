@@ -513,7 +513,7 @@ only starting with Clojure 1.5 they can provide the same flexiblity as JDK execu
 ### Refs
 
 Refs are the only *coordinated* reference type Clojure has. They help ensure that multiple
-identities can be modified concurrently within a *[transaction](glossary.html#transaction)*:
+identities can be modified concurrently within a *[transaction](/articles/language/glossary/#transaction)*:
 
  * Either all refs are modified or none are
  * No race conditions between involved refs
@@ -521,7 +521,7 @@ identities can be modified concurrently within a *[transaction](glossary.html#tr
 
 Refs provide ACI of [ACID](http://en.wikipedia.org/wiki/ACID). Refs
 are backed by Clojure's implementation of [*software transactional
-memory* (STM)](glossary.html#stm).
+memory* (STM)](/articles/language/glossary/#stm).
 
 To instantiate a ref, use the `clojure.core/ref` function:
 
@@ -632,7 +632,7 @@ to retry. `commute` does not cause *transaction conflicts*.
 
 Software transactional memory is a powerful but highly specialized tool. Because transactions can be retried,
 you must only use pure functions with STM. I/O operations cannot be undone by the runtime and very often are
-not [idempotent](glossary.html#idempotent).
+not [idempotent](/articles/language/glossary/#idempotent).
 
 Structuring your application code as *pure core* and *edge code* that interacts with the user or other
 services (performing I/O operations and other side-effects) helps with this. In that case, the pure core

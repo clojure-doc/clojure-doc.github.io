@@ -209,9 +209,8 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### Relational Databases, JDBC
 
-  * [java.jdbc](https://github.com/clojure/java.jdbc): Basic wrapper for JDBC. Works with all JDBC databases (MySQL, PostgreSQL, Oracle, SQL Server, etc).
+  * [next.jdbc](https://cljdoc.org/d/com.github.seancorfield/next.jdbc/): Modern wrapper for JDBC. Works with all JDBC databases (MySQL, PostgreSQL, Oracle, SQL Server, etc).
 
-  * [Korma](https://clojars.org/korma): ["Tasty SQL for Clojure"](http://sqlkorma.com/docs)
 
 ### CouchDB
 

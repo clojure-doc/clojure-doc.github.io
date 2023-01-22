@@ -132,7 +132,7 @@ it is published to https://clojure-doc.org automatically).
 You can view the generated version with `clojure -X:serve` which should open a browser to port 3000 (of localhost).
 This will automatically regenerate the `public` folder as files are changed in `content` etc.
 
-See [Klipse.md](Klipse.md) for instructions about including interactive code snippets in an article.
+See [Klipse.md](https://github.com/clojure-doc/clojure-doc.github.io/blob/source/Klipse.md) for instructions about including interactive code snippets in an article.
 
 ### Contributing To Existing Guides
 
