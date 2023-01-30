@@ -206,12 +206,6 @@ This guide covers:
  * Local Clojure user groups
  * Other Clojure community resources
 
-### [core.typed](/articles/ecosystem/core_typed/home/)
-
- * What is Clojure core.typed
- * core.typed documentation, tutorials, and guides.
-
-
 ### [Library Development and Distribution](/articles/ecosystem/libraries_authoring/)
 
 This guide covers:
