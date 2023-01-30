@@ -1,4 +1,4 @@
-{:title "About"
+{:title "About" :info "Online README: https://clojure-doc.org/articles/about/ (for working links)"
  :page-index 0
  :layout :page}
 
@@ -23,7 +23,7 @@ Unfortunately, access to the original infrastructure hosting http://clojure-doc.
 was lost several years ago. This current incarnation is a reboot of that site
 using [Cryogen](https://cryogenweb.org/) and hosted as a GitHub organization website.
 
-Funding for extensive work on CDS in 2023 is generousy provided by
+Funding for extensive work on CDS in 2023 is generously provided by
 [Clojurists Together](https://www.clojuriststogether.org/news/clojurists-together-2023-long-term-funding-announcement/) as part of their Long-Term Funding for [Sean Corfield](https://github.com/seancorfield).
 
 ## Goals
@@ -33,6 +33,8 @@ The goal is to produce quality technical documentation for Clojure users and pot
 CDS strives to cover all aspects of Clojure: from tutorials and language guides to overview of the ecosystem, how
 libraries are developed and published, topics operations engineers will be interested in, JVM ecosystem tools
 and so on.
+
+Since the original creation
 
 Adopting a language always takes more than just reading a book or a few tutorials about language features. Understanding
 design goals, the ecosystem and operations is just as important. CDS will try to address this.
@@ -60,15 +62,16 @@ only tutorials, guides, and linking to other relevant resources.
 
 CDS is structured as a number of guides. They broadly fall into 4 categories:
 
-  * [Tutorials](/articles/content/#tutorials-and-cookbooks)
-  * [Language Guides](/articles/content/#language-guides)
-  * [Ecosystem & Tools](/articles/content/#the-clojure-ecosystem)
-  * [Cookbooks](/articles/content/#tutorials-and-cookbooks)
+  * [Tutorials](/articles/about/#tutorials)
+  * [Language Guides](/articles/about/#language-guides)
+  * [Ecosystem & Tools](/articles/about/#tools--ecosystem-guides)
+  * [Cookbooks](/articles/content/#cookbooks)
 
 
 ### Tutorials
 
-These guides are intended for complete newcomers and should include a lot of hand holding. They don't assume any
+The [Tutorials](/articles/content/#tutorials-and-cookbooks) are
+intended for complete newcomers and should include a lot of hand holding. They don't assume any
 previous familiarity with Clojure, the JVM, the JVM tool ecosystem, functional programming, immutability, and so on.
 
 Target audience: newcomers to the language.
@@ -76,7 +79,7 @@ Target audience: newcomers to the language.
 
 ### Language guides
 
-These guides are more in-depth, focused on various aspects of the language and interoperability.
+The [Language Guides](/articles/content/#language-guides) are more in-depth, focused on various aspects of the language and interoperability.
 Examples of such guides include:
 
   * Collections & Sequences
@@ -91,7 +94,9 @@ a while.
 
 ### Tools & Ecosystem guides
 
-These guides cover key Clojure ecosystem tools such as [Leiningen](https://leiningen.org), [Clojars](https://clojars.org),
+These guides cover key
+[Clojure ecosystem tools](/articles/content/#the-clojure-ecosystem)
+such as [Leiningen](https://leiningen.org), [Clojars](https://clojars.org),
 [nREPL](https://nrepl.org), Emacs, vim, Calva, etc. It also covers important ecosystem projects that are not tools: books,
 communities, etc.
 
