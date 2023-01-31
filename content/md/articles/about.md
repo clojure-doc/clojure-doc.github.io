@@ -23,6 +23,10 @@ Unfortunately, access to the original infrastructure hosting http://clojure-doc.
 was lost several years ago. This current incarnation is a reboot of that site
 using [Cryogen](https://cryogenweb.org/) and hosted as a GitHub organization website.
 
+Since the original creation of CDS in 2012, the [clojure.org](https://clojure.org) website has improved and expanded dramatically, and now includes a number of tutorials as well as extensive community resources.
+In addition, the contribution process has been simplified: the Contributor Agreement can be e-signed and the [clojure-site repo](https://github.com/clojure/clojure-site) accepts Pull Requests.
+As a result of that, CDS contained content that was essentially duplicated on clojure.org and was not as well-maintained as clojure.org so that content is being removed from CDS.
+
 Funding for extensive work on CDS in 2023 is generously provided by
 [Clojurists Together](https://www.clojuriststogether.org/news/clojurists-together-2023-long-term-funding-announcement/) as part of their Long-Term Funding for [Sean Corfield](https://github.com/seancorfield).
 
@@ -34,7 +38,7 @@ CDS strives to cover all aspects of Clojure: from tutorials and language guides 
 libraries are developed and published, topics operations engineers will be interested in, JVM ecosystem tools
 and so on.
 
-Since the original creation
+CDS also strives to avoid duplicating content from the [official Clojure site](clojure.org) but will link extensively to that, in order to make that content easier to find and navigate.
 
 Adopting a language always takes more than just reading a book or a few tutorials about language features. Understanding
 design goals, the ecosystem and operations is just as important. CDS will try to address this.
