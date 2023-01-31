@@ -31,8 +31,8 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ### Main Channel
 
-* `#clojure` on [irc.freenode.net](https://irc.freenode.net)
-* `#clojure-beginners` on [irc.freenode.net](https://irc.freenode.net)
+* `#clojure` on [irc.freenode.net](https://freenode.net)
+* `#clojure-beginners` on [irc.freenode.net](https://freenode.net)
 * `#clojure` on [Libera.Chat](https://libera.chat)
 
 Channel logs are available at ???.
@@ -80,7 +80,7 @@ Videos of talks about Clojure are often made available on [InfoQ](https://www.in
 ## Code Repositories
 
 Most folks host their projects at
-[GitHub](https://github.com/languages/Clojure), and most pure Clojure
+[GitHub](https://github.com/search?l=Clojure&q=clojure&type=Repositories), and most pure Clojure
 library distributions (with the exception of contrib) are available at
 [Clojars](https://clojars.org/).
 

@@ -12,7 +12,7 @@
 
 Here are some examples of using `java.jdbc` to manipulate data with SQL.
 These examples assume a simple table called `fruit` (see [Using DDL and
-Metadata](using_ddl/)). These examples all assume the following in your
+Metadata](/articles/ecosystem/java_jdbc/using_ddl/)). These examples all assume the following in your
 `ns` declaration:
 
 ```clojure
