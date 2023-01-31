@@ -122,14 +122,6 @@ https://clojure-doc.org/articles/ecosystem/maven/index.html
 </url>
 <url>
 <loc>
-https://clojure-doc.org/articles/ecosystem/books/index.html
-</loc>
-<lastmod>
-2023-01-30
-</lastmod>
-</url>
-<url>
-<loc>
 https://clojure-doc.org/articles/ecosystem/java_jdbc/using_ddl/index.html
 </loc>
 <lastmod>
