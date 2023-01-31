@@ -31,7 +31,9 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ### Main Channel
 
-`#clojure` on `irc.freenode.net`.
+* `#clojure` on [irc.freenode.net](https://irc.freenode.net)
+* `#clojure-beginners` on [irc.freenode.net](https://irc.freenode.net)
+* `#clojure` on [Libera.Chat](https://libera.chat)
 
 Channel logs are available at ???.
 
@@ -43,6 +45,9 @@ Channel logs are available at ???.
   * [Clojure Koans](http://clojurekoans.com/)
   * [GetClojure](http://www.getclojure.org): Tens of thousands of searchable Clojure examples mined from all over the internet.
 
+## Books
+
+  * See the list of [books on clojure.org](https://clojure.org/community/books)
 
 ## Courses
 
