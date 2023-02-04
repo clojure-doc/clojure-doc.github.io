@@ -1,5 +1,5 @@
 {:title "Clojure Community"
- :layout :page :page-index 3960}
+ :layout :page :page-index 100}
 
 This guide covers:
 
@@ -29,7 +29,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Clojure IRC Channels
 
-### Main Channel
+### Main Channels
 
 * `#clojure` on [irc.freenode.net](https://freenode.net)
 * `#clojure-beginners` on [irc.freenode.net](https://freenode.net)
@@ -40,6 +40,9 @@ Channel logs are available at ???.
 
 ## Documentation
 
+  * Official [clojure.org Guides](https://clojure.org/guides/guides)
+  * Official [clojure.org Reference documentation](https://clojure.org/reference/documentation)
+  * Official [clojure.org API documentation](https://clojure.org/api/api)
   * [ClojureDocs](https://clojuredocs.org/): Clojure API reference, with examples
   * [Clojure API Cheatsheet](https://clojure.org/api/cheatsheet)
   * [Clojure Koans](http://clojurekoans.com/)
@@ -51,7 +54,7 @@ Channel logs are available at ???.
 
 ## Courses
 
-???
+  * See the list of [courses and training on clojure.org](https://www.clojure.org/community/training)
 
 ## User Groups
 
