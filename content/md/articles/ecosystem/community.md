@@ -21,6 +21,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
   * [Clojure SubReddit](https://www.reddit.com/r/Clojure/) -- r/Clojure -- the right-hand sidebar has links to many Clojure resources
   * [ClojureVerse](https://clojureverse.org) -- online forum
   * [Clojurians Discord](https://discordapp.com/invite/v9QMy9D)
+  * See also the [Clojure Discussion section on clojure.org](https://clojure.org/community/resources) for more online communities
 
 ## Clojure Mailing List
 
