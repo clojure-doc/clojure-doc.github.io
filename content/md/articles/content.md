@@ -2,7 +2,8 @@
  :page-index 1
  :layout :page}
 
-[The content](https://github.com/clojure-doc/clojure-doc.github.io) is a categorized and
+The content on this site
+([source](https://github.com/clojure-doc/clojure-doc.github.io)) is a categorized and
 manifold collection of documentation guides for the Clojure programming language and
 its ecosystem.
 
@@ -19,8 +20,9 @@ and separates content into several groups:
 
 Note that the editing environments are listed in alphabetical order and indicate no preference or endorsement. The last
 ["State of the Union" Clojure survey](https://clojure.org/news/2022/06/02/state-of-clojure-2022) indicated
-that Emacs is still the most popular editing environment, followed by IntelliJ/Cursive, VS Code, Vim, and Atom.
+that Emacs is still the most popular editing environment, followed by IntelliJ/Cursive, VS Code, and Vim.
 
+* See the [Editors guide on clojure.org](https://clojure.org/guides/editors) for more links
 
 ### [Getting Started](/articles/tutorials/getting_started/)
 
@@ -32,25 +34,21 @@ If you're new to Clojure, this is a good place to start.
 A swift introduction to the Clojure language, covering most of the
 basics.
 
-### [Atom for Clojure Development](https://atom.io/packages/chlorine)
+### [Emacs for Clojure Development](/articles/tutorials/emacs/)
 
-The Chlorine package for Clojure development in Atom (via a Socket REPL).
+A brief introduction to Emacs, Clojure mode, CIDER and Clojure development workflow with Emacs.
 
 ### [IntelliJ / Cursive for Clojure Development](https://cursive-ide.com/userguide/)
 
 The user guide for Cursive, the Clojure plugin for IntelliJ.
 
-### [Emacs for Clojure Development](/articles/tutorials/emacs/)
+### [VS Code for Clojure Development](https://calva.io/)
 
-A brief introduction to Emacs, Clojure mode, CIDER and Clojure development workflow with Emacs.
+The Calva extension for Clojure development in VS Code (via nREPL).
 
 ### [Vim for Clojure Development](/articles/tutorials/vim_fireplace/)
 
 A brief introduction to Clojure development in Vim with fireplace.vim.
-
-### [VS Code for Clojure Development](https://calva.io/)
-
-The Calva extension for Clojure development in VS Code (via nREPL).
 
 
 
