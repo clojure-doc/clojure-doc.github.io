@@ -173,7 +173,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
   * [Crawlista](https://github.com/michaelklishin/crawlista) ([at clojars](https://clojars.org/clojurewerkz/crawlista)): a support library for applications that crawl the Web
 
-  * [TagSoup](http://home.ccil.org/~cowan/XML/tagsoup/): a tool for parsing html as it's found in the wild: poor, nasty, and brutish.
+  * [TagSoup](https://search.maven.org/artifact/org.ccil.cowan.tagsoup/tagsoup/): a tool for parsing html as it's found in the wild: poor, nasty, and brutish.
 
 
 ### Data Validation
@@ -340,8 +340,6 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ## Automation, Provisioning, DevOps Tools
 
- * [pallet](http://palletops.com/) ([at clojars](https://clojars.org/pallet)): a platform for agile and programmatic automation of infrastructure
-
  * [jclouds](http://www.jclouds.org/): unified APIs for dozens of cloud (IaaS) providers
 
  * [Amazonica](https://github.com/mcohen01/amazonica): comprehensive Clojure client for the entire AWS API
@@ -464,10 +462,10 @@ Standard streams I/O is covered by the JDK and commonly used via `clojure.java.i
 ## Graphics and GUI
 
   * [Quil](https://clojars.org/quil): For making drawings, animations,
-    and artwork ([some examples](https://github.com/quil/quil/blob/master/examples/gen_art/README.md)). Wraps
-    the ["Processing"](http://www.processing.org/) graphics environment.
+    and artwork ([some examples](https://github.com/quil/quil-examples/blob/master/src/quil_sketches/gen_art/README.md)). Wraps
+    the ["Processing"](https://www.processing.org/) graphics environment.
 
-  * [seesaw](http://seesaw-clj.org/) ([at clojars](https://clojars.org/seesaw)): A Swing wrapper/DSL.
+  * [seesaw](https://github.com/clj-commons/seesaw/) ([at clojars](https://clojars.org/seesaw)): A Swing wrapper/DSL.
 
   * [clisk](https://github.com/mikera/clisk): Clisk is a DSL-based library for procedural image generation that can be used from Clojure and Java.
 
@@ -480,10 +478,10 @@ Standard streams I/O is covered by the JDK and commonly used via `clojure.java.i
 
 ### Literate Programming
 
-  * [Marginalia](https://github.com/fogus/marginalia) ([at clojars](https://clojars.org/marginalia)): literate programming implementation for Clojure. See [the Marginalia
-    site](http://fogus.me/fun/marginalia/) for an example.
+  * [Marginalia](https://github.com/gdeer81/marginalia) ([at clojars](https://clojars.org/marginalia)): literate programming implementation for Clojure. See [the Marginalia
+    site](https://gdeer81.github.io/marginalia/) for an example.
 
-  * [Marginalia Leiningen plug-in](https://github.com/fogus/lein-marginalia) ([at clojars](https://clojars.org/lein-marginalia))
+  * [Marginalia Leiningen plug-in](https://github.com/gdeer81/lein-marginalia) ([at clojars](https://clojars.org/lein-marginalia))
 
 
 ### Generating API Reference

@@ -83,17 +83,10 @@ implementation of Mustache.
 templates, much like Java's JSPs, or Ruby's ERb.
 
 
-### Clabango
-
-[Clabango](https://github.com/danlarkin/clabango) is modeled after the
-[Django templating system](https://docs.djangoproject.com/en/1.4/topics/templates/). It
-embeds special tags and filters inside HTML templates to insert and
-manipulate data.
-
 
 ### Selmer
-[Selmer](https://github.com/yogthos/Selmer) is also modeled after the Django
-templating system with a primary goal of performance.
+[Selmer](https://github.com/yogthos/Selmer) is modeled after the
+[Django templating system](https://www.djangoproject.com/) with a primary goal of performance.
 
 
 ### Enlive and Laser

@@ -65,7 +65,7 @@ $ sudo pacman -S emacs
 ```
 
 On older systems you can add unofficial package sources for `emacs-snapshot`,
-either for [Debian](http://emacs.naquadah.org/) or
+either for [Debian](https://www.emacswiki.org/emacs/EmacsSnapshotAndDebian/) or
 [Ubuntu](https://launchpad.net/~cassou/+archive/emacs).
 
 ### MS Windows ###
@@ -103,10 +103,10 @@ Emacs can be configured through a folder in your home folder called
 configuration options are pretty much endless. To help you through
 this, Phil Hagelberg has created a small library enables a few
 non-intrusive helpful features called
-[better-defaults](https://github.com/technomancy/better-defaults)
+[better-defaults](https://git.sr.ht/~technomancy/better-defaults)
 which might be useful if you are not already an Emacs pro.
 
-Most Emacs packages are kept at [MELPA](http://melpa.milkbox.net),
+Most Emacs packages are kept at [MELPA](https://melpaorg),
 the community package host. Add this code to your config in
 `~/.emacs.d/init.el` to tell Emacs to look there:
 
@@ -462,9 +462,9 @@ CIDER keyboard shortcuts can be found in [CIDER documentation](https://github.co
 
 ## Contributors
 
-[Gareth Jones](http://blog.gaz-jones.com), 2012 (original author)
+Gareth Jones, 2012 (original author)
 
-Thanks to [Phil Hagelberg](http://technomancy.us/), [Mikael
-Sundberg](http://cleancode.se/), and [Jake
-McCrary](http://jakemccrary.com/) for suggestions for improvements to
+Thanks to [Phil Hagelberg](https://technomancy.us/), [Mikael
+Sundberg](https://github.com/bobo/), and [Jake
+McCrary](https://jakemccrary.com/) for suggestions for improvements to
 the original blog posts from which this guide was created.

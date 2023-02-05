@@ -20,7 +20,7 @@ _fireplace was once called foreplay, but people weren't ready for that, so now i
 
 ## What About VimClojure?
 
-Until recently (late 2012), VimClojure was the preeminent plugin for Clojure development in Vim. Since then, its developer, Meikel Brandmeyer, has [acknowledged](https://groups.google.com/forum/?fromgroups=#!topic/vimclojure/B-UU8qctd5A) that VimClojure development has slowed to a trickle and that fireplace is the future. That said, VimClojure is still a viable and excellent development evironment.
+Until recently (late 2012), VimClojure was the preeminent plugin for Clojure development in Vim. Since then, its developer, Meikel Brandmeyer, has [acknowledged](https://groups.google.com/forum/?fromgroups=#!topic/vimclojure/B-UU8qctd5A) that VimClojure development has slowed to a trickle and that fireplace is the future. That said, VimClojure is still a viable and excellent development environment.
 
 ## What Versions of Clojure and fireplace Does This Guide Cover?
 
@@ -258,7 +258,7 @@ The `vim-clojure-static` plugin makes some minor adjustments to Vim's settings t
 * Word motions (`:help w`), include dots, hyphens, etc. So `dw` in normal mode will delete an entire Clojure symbol.
 
 ### Wrangling Parentheses
-The most effective way to edit Clojure code is *structurally* with [paredit.vim](https://bitbucket.org/kovisoft/paredit/overview), but if you don't have time to learn that, Vim still brings a lot to the table for dealing with all the parentheses in Clojure code.
+The most effective way to edit Clojure code is *structurally* with [paredit.vim](https://www.vim.org/scripts/script.php?script_id=3998), but if you don't have time to learn that, Vim still brings a lot to the table for dealing with all the parentheses in Clojure code.
 
 First, obviously, the `%` motion (`:help %`) is very useful. In normal mode, put the cursor on an opening or closing paren and you can:
 

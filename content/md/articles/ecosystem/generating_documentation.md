@@ -46,7 +46,7 @@ containing the resulting html.
 
 If you'd like to render API docs side-by-side with the source code
 it's documenting, use [the marginalia lein
-plug-in](https://github.com/fogus/lein-marginalia). Usage instructions
+plug-in](https://github.com/gdeer81/lein-marginalia). Usage instructions
 are in the readme.
 
 

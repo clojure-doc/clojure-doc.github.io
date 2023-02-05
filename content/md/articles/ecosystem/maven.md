@@ -52,7 +52,7 @@ Clojure's support in Maven is provided by
 [clojure-maven-plugin](https://github.com/talios/clojure-maven-plugin), that is available
 in Maven's central repository, so it always available. (Besides `clojure-maven-plugin`,
 there is also [Zi](https://github.com/pallet/zi) plugin, that was developed as part of
-[Pallet](http://palletops.com/) project. In contrast to `clojure-maven-plugin` it's
+[Pallet](https://github.com/palletops/) project. In contrast to `clojure-maven-plugin` it's
 written in Clojure, and more tightly integrated with Clojure-specific subsystems, such
 Marginalia, Ritz, etc.)
 
@@ -71,7 +71,7 @@ add following code into `<plugins>` section of `pom.xml`:
 ```
 
 *Attention:* version number could be changed as development continues.  To find latest
-plugin's version number you can use sites [mvnrepository](http://mvnrepository.com/artifact/com.theoryinpractise/clojure-maven-plugin) or [Jarvana](http://jarvana.com/jarvana/), that contains
+plugin's version number you can use sites [mvnrepository](http://mvnrepository.com/artifact/com.theoryinpractise/clojure-maven-plugin), that contains
 information about packages, registered in Maven's repositories.  Besides this, you can
 omit plugin version - in this case, Maven will automatically use latest available version
 (although this isn't always good idea).
@@ -151,10 +151,7 @@ following groups:
     REPL more comfortable;
    * `clojure:swank`: starts Swank server, so you can connect to it from Emacs SLIME.  By
     default, this server is running on port 4005 (this value could be changed with system
-    option `clojure.swank.port`);
-   * `clojure:nailgun`: starts Nailgun server, so you can connect to it from Vim with
-    [vimclojure](http://kotka.de/projects/clojure/vimclojure.html).  By default, this server is running on port 2113 (this value could be
-    changed with system option `clojure.nailgun.port`).
+    option `clojure.swank.port`).
 
  * Auxiliary tasks:
    * `clojure:marginalia`: generates documentation using [Marginalia](https://gdeer81.github.io/marginalia/);
@@ -164,8 +161,8 @@ following groups:
 ### Clojure-related repositories
 
 There are several Clojure-related repositories.  All Clojure versions (stable &
-development) are published at [Sonatype repository](http://dev.clojure.org/display/doc/Maven+Settings+and+Repositories) that is periodically synchronized with
-Maven Central.  [Clojars](http://clojars.org) is repository that is used by Clojure community to publish their
+development) are published at [Sonatype repository](https://oss.sonatype.org/) that is periodically synchronized with
+Maven Central.  [Clojars](https://clojars.org) is repository that is used by Clojure community to publish their
 projects.
 
 To use repository you need to add following code into `repositories` section in `pom.xml`:
@@ -173,7 +170,7 @@ To use repository you need to add following code into `repositories` section in 
 ```xml
  <repository>
    <id>clojars</id>
-   <url>http://clojars.org/repo/</url>
+   <url>https://repo.clojars.org/</url>
  </repository>
 ```
 
@@ -302,7 +299,7 @@ code and/or tests:
 I think, that this article provides enough information for you to start use Maven together
 with Clojure.  If you have Clojure-only project, and you don't plan to use all power of
 Maven, then may be you can look to [Leiningen](https://leiningen.org) - this tool was created to build
-projects, written mostly in Clojure.  Another interesting project is [Polyglot Maven](http://polyglot.sonatype.org/), the
+projects, written mostly in Clojure.  Another interesting project is [Polyglot Maven](https://github.com/takari/polyglot-maven/), the
 main goal of it is creation of special DSL (Domain Specificl Language) using different
 languages (Clojure, Scala, Groovy) for description of Maven's configurations (for Clojure
 this language is almost the same as language implemented in Leiningen).

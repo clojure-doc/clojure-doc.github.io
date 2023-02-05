@@ -449,4 +449,4 @@ extend the tools already provded in interesting directions.
 
 ## Contributors
 
-[Gareth Jones](http://blog.gaz-jones.com), 2012 (original author)
+Gareth Jones, 2012 (original author)
