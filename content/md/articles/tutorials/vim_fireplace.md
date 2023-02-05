@@ -46,7 +46,7 @@ TODO: Someone should write Vim installation instructions and basic usage here.
 
 ### OSX
 
-* Install [Homebrew](http://mxcl.github.com/homebrew/)
+* Install [Homebrew](https://brew.sh/)
 * The dance: `brew update`
 * If you're like me, you tend to inspect a homebrew formula's options before installing: `brew options macvim`
 * And if you're like me: `brew install --override-system-vim macvim`

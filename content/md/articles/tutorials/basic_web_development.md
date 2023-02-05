@@ -59,7 +59,7 @@ For more info, see:
 
   * [the Ring readme](https://github.com/ring-clojure/ring#readme)
   * [its wiki docs](https://github.com/ring-clojure/ring/wiki)
-  * [its API docs](http://ring-clojure.github.com/ring/)
+  * [its API docs](https://ring-clojure.github.io/ring/)
 
 
 

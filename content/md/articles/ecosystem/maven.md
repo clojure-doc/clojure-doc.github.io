@@ -157,8 +157,8 @@ following groups:
     changed with system option `clojure.nailgun.port`).
 
  * Auxiliary tasks:
-   * `clojure:marginalia`: generates documentation using [Marginalia](http://fogus.github.com/marginalia/);
-   * `clojure:autodoc`: generates documentation using [autodoc](http://tomfaulhaber.github.com/autodoc/);
+   * `clojure:marginalia`: generates documentation using [Marginalia](https://gdeer81.github.io/marginalia/);
+   * `clojure:autodoc`: generates documentation using [autodoc](https://tomfaulhaber.github.io/autodoc/);
    * `clojure:gendoc`: generates documentation using gendoc.
 
 ### Clojure-related repositories
@@ -301,7 +301,7 @@ code and/or tests:
 
 I think, that this article provides enough information for you to start use Maven together
 with Clojure.  If you have Clojure-only project, and you don't plan to use all power of
-Maven, then may be you can look to the [Leiningen](leiningen.md) - this tool was created to build
+Maven, then may be you can look to [Leiningen](https://leiningen.org) - this tool was created to build
 projects, written mostly in Clojure.  Another interesting project is [Polyglot Maven](http://polyglot.sonatype.org/), the
 main goal of it is creation of special DSL (Domain Specificl Language) using different
 languages (Clojure, Scala, Groovy) for description of Maven's configurations (for Clojure

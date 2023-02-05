@@ -1062,7 +1062,7 @@ Executors are most often instantiated using static methods of the `java.util.con
 ```
 
 In the example above, we create a new fixed size thread pool with 16 threads
-and submit a Clojure function for execution. Clojure functions [implement Runnable and Callable](/articles/language/interop/#clojure_functions_implement_runnable_and_callable)
+and submit a Clojure function for execution. Clojure functions [implement Runnable and Callable](/articles/language/interop/#clojure-functions-implement-runnable-and-callable)
 interfaces and can be submitted for execution, however, because `ExecutorService#submit`
 is an overloaded method, to avoid reflection warnings, we cast the function
 to `java.util.concurrent.Callable`.
@@ -1178,7 +1178,7 @@ include:
 
  * [Akka](http://akka.io)
  * [Jetlang](http://code.google.com/p/jetlang/)
- * [LMAX Disruptor](http://lmax-exchange.github.com/disruptor/)
+ * [LMAX Disruptor](https://lmax-exchange.github.io/disruptor/)
 
 Akka's Java API can be used from Clojure either directly or via a library called [Okku](https://github.com/gaverhae/okku).
 

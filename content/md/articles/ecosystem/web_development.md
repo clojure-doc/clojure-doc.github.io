@@ -70,7 +70,7 @@ a template separate from the insertion of your data into the template.
 ### Mustache
 
 [Clostache](https://github.com/fhd/clostache) implements the
-[Mustache](http://mustache.github.com/) templating language for
+[Mustache](https://mustache.github.io/) templating language for
 Clojure.
 
 [Stencil](https://github.com/davidsantiago/stencil) is another
@@ -116,7 +116,7 @@ different from most other languages' templating libraries.
 ## See Also
 
   * the [web development section of the library
-    directory](/articles/ecosystem/libraries_directory/#web_development).
+    directory](/articles/ecosystem/libraries_directory/#web-development).
 
   * [The Clojure Web Stack and the CRUD Stack](http://brehaut.net/blog/2012/clojure_web_and_the_crud_stack)
 

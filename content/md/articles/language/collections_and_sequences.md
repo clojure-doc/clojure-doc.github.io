@@ -112,12 +112,12 @@ has structural sharing (for efficiency reasons) but semantically is a separate i
 
 #### Maps As Functions
 
-Maps in Clojure can be used as functions on their keys. See the [Functions guide](/articles/language/functions/#maps_as_functions)
+Maps in Clojure can be used as functions on their keys. See the [Functions guide](/articles/language/functions/#maps-as-functions)
 for more information.
 
 #### Keywords As Functions
 
-Keywords in Clojure can be used as functions on maps. See the [Functions guide](/articles/language/functions/#keywords_as_functions)
+Keywords in Clojure can be used as functions on maps. See the [Functions guide](/articles/language/functions/#keywords-as-functions)
 for more information.
 
 
@@ -213,7 +213,7 @@ Commas can be used to separate set elements (Clojure compiler treats the as whit
 
 #### Sets As Functions
 
-Sets in Clojure can be used as functions on their elements. See the [Functions guide](/articles/language/functions/#sets_as_functions)
+Sets in Clojure can be used as functions on their elements. See the [Functions guide](/articles/language/functions/#sets-as-functions)
 for more information.
 
 

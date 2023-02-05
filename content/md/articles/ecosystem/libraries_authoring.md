@@ -296,7 +296,7 @@ For larger library projects, you may want to automatically generate
 API docs (from your docstrings). See
 [codox](https://github.com/weavejester/codox). If your library project
 is hosted at github, you can use [github
-pages](http://pages.github.com/) to host the resulting docs.
+pages](https://pages.github.com/) to host the resulting docs.
 
 
 

@@ -941,7 +941,7 @@ Every object on the JVM has an *intrinsic lock* (also referred to as *monitor lo
 or simply *monitor*). While very rarely necessary, Clojure provides support for
 operations that acquire intrinsic lock of a mutable Java object.
 
-This is covered in the [Concurrency and Parallelism guide](/articles/language/concurrency_and_parallelism/#using_intrinsic_locks_synchronized_in_clojure).
+This is covered in the [Concurrency and Parallelism guide](/articles/language/concurrency_and_parallelism/#using-intrinsic-locks-synchronized-in-clojure).
 
 
 

@@ -106,9 +106,9 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ## Templating
 
-  * [Stencil](https://clojars.org/stencil): [Mustache](http://mustache.github.com/) for Clojure (logic-less templates). Fast.
+  * [Stencil](https://clojars.org/stencil): [Mustache](https://mustache.github.io/) for Clojure (logic-less templates). Fast.
 
-  * [Clostache](https://clojars.org/de.ubercode.clostache/clostache): another nice [Mustache](http://mustache.github.com/) implementation
+  * [Clostache](https://clojars.org/de.ubercode.clostache/clostache): another nice [Mustache](https://mustache.github.io/) implementation
 
 
 
@@ -218,7 +218,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### MongoDB
 
-  * [Monger](https://clojuremongodb.info) ([at clojars](https://clojars.org/com.novemberain/monger)): Monger is an idiomatic Clojure MongoDB driver for a more civilized age with solid documentation
+  * [Monger](http://clojuremongodb.info) ([at clojars](https://clojars.org/com.novemberain/monger)): Monger is an idiomatic Clojure MongoDB driver for a more civilized age with solid documentation
 
   * [congomongo](https://github.com/aboekhoff/congomongo) ([at clojars](https://clojars.org/congomongo)): Basic wrapper for the MongoDB Java driver
 
@@ -492,7 +492,7 @@ Standard streams I/O is covered by the JDK and commonly used via `clojure.java.i
     api docs](https://weavejester.github.io/compojure/) for an
     example.
 
-  * [Autodoc](http://tomfaulhaber.github.com/autodoc/) ([at clojars](https://clojars.org/autodoc)): used
+  * [Autodoc](https://tomfaulhaber.github.io/autodoc/) ([at clojars](https://clojars.org/autodoc)): used
     to generate the official [Clojure API reference](https://clojure.github.io/).
 
 

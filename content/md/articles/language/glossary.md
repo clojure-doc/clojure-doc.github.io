@@ -67,7 +67,7 @@ The handy trick used in a [let-binding](#let_binding) to "unpack" the
 values from a data structure into the locals you're going to use.  See
 also [binding-form](#binding-form) and [the destructuring section in
 the functions
-guide](/articles/language/functions#destructuring_of_function_arguments).
+guide](/articles/language/functions#destructuring-of-function-arguments).
 
 
 
@@ -264,7 +264,7 @@ against.
 ### persistence
 
 See the [relevant section of the
-introduction](/articles/tutorials/introduction.html#values_immutability_and_persistence).
+introduction](/articles/tutorials/introduction/#values-immutability-and-persistence).
 
 
 
