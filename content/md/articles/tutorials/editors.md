@@ -6,6 +6,19 @@ The last
 ["State of the Union" Clojure survey](https://clojure.org/news/2022/06/02/state-of-clojure-2022) indicated
 that Emacs is still the most popular editing environment, followed by IntelliJ/Cursive, VS Code, and Vim.
 
+If you are already using one of these editors, follow one of the guides for that
+editor to integrate a REPL-based Clojure workflow, so that you can focus on
+learning just the language.
+
+If you are not using one of these four editors, try to pick the one that is
+closest to what you are currently using, unless your editor is listed on
+the [Clojure Tools page](https://clojure.org/community/tools) with an active
+Clojure integration.
+
+Despite the popularity of Emacs within the
+Clojure world, you don't want to be learning _both_ Clojure _and_ Emacs
+at the same time!
+
 ## Emacs
 
 [Emacs](https://www.gnu.org/software/emacs/) is the longest serving and most

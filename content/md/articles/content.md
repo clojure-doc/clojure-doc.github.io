@@ -18,11 +18,17 @@ and separates content into several groups:
 
 ## Essentials
 
-The last
-["State of the Union" Clojure survey](https://clojure.org/news/2022/06/02/state-of-clojure-2022) indicated
-that Emacs is still the most popular editing environment, followed by IntelliJ/Cursive, VS Code, and Vim.
+What makes developing in Clojure unique is that we have a focus on
+interactive programming: not just the REPL (Read Eval Print Loop) that
+Clojure provides but working in an editor that integrates well with the
+REPL experience to allow you to evaluate your code, in small pieces,
+directly from your editor as you write the code. This provides immediate
+feedback as you are exploring your problem space and "growing" your
+application.
 
-* See the [Editors guide on clojure.org](https://clojure.org/guides/editors) for more links
+These first three sections should help you get Clojure and some basic
+tooling installed, learn the basics of the language, and get a good
+editor setup that allows you to program interactively.
 
 ### [Getting Started](/articles/tutorials/getting_started/)
 
