@@ -83,8 +83,8 @@ different guarantees about ordering. Hash maps are typically instantiated with l
 the code will not compile:</p><pre><code class="klipse-clojure nohighlight">{:language "Clojure" :creator}
 </code></pre><p>In general, the only major difference between Clojure maps and maps/hashes/dictionaries in some other languages
 is that Clojure maps are <em>immutable</em>. When a Clojure map is modified, the result is a new map that internally
-has structural sharing (for efficiency reasons) but semantically is a separate immutable value.</p><h4 id="maps-as-functions">Maps As Functions</h4><p>Maps in Clojure can be used as functions on their keys. See the <a href="/articles/language/functions/#maps_as_functions">Functions guide</a>
-for more information.</p><h4 id="keywords-as-functions">Keywords As Functions</h4><p>Keywords in Clojure can be used as functions on maps. See the <a href="/articles/language/functions/#keywords_as_functions">Functions guide</a>
+has structural sharing (for efficiency reasons) but semantically is a separate immutable value.</p><h4 id="maps-as-functions">Maps As Functions</h4><p>Maps in Clojure can be used as functions on their keys. See the <a href="/articles/language/functions/#maps-as-functions">Functions guide</a>
+for more information.</p><h4 id="keywords-as-functions">Keywords As Functions</h4><p>Keywords in Clojure can be used as functions on maps. See the <a href="/articles/language/functions/#keywords-as-functions">Functions guide</a>
 for more information.</p><h3 id="vectors">Vectors</h3><p>Vectors are collections that offer efficient random access (by index). They are typically instantiated with
 literals:</p><pre><code class="clojure">[1 2 3 4]
 
@@ -109,7 +109,7 @@ developers avoid a lot of incidental complexity that string generation brings al
 once. They are typically instantiated with literals:</p><pre><code class="klipse-clojure nohighlight">#{1 2 3 4}
 </code></pre><pre><code class="klipse-clojure nohighlight">#{"clojure" "scala" "erlang" "f#" "haskell" "ocaml"}
 </code></pre><p>Commas can be used to separate set elements (Clojure compiler treats the as whitespace):</p><pre><code class="klipse-clojure nohighlight">#{"clojure", "scala", "erlang", "f#", "haskell", "ocaml"}
-</code></pre><h4 id="sets-as-functions">Sets As Functions</h4><p>Sets in Clojure can be used as functions on their elements. See the <a href="/articles/language/functions/#sets_as_functions">Functions guide</a>
+</code></pre><h4 id="sets-as-functions">Sets As Functions</h4><p>Sets in Clojure can be used as functions on their elements. See the <a href="/articles/language/functions/#sets-as-functions">Functions guide</a>
 for more information.</p><h4 id="set-membership-checks">Set Membership Checks</h4><p>The most common way of checking if an element is in a set is by using set as a function:</p><pre><code class="klipse-clojure nohighlight">(#{1 2 3 4} 1)
 ;; ⇒ 1
 </code></pre><pre><code class="klipse-clojure nohighlight">(#{1 2 3 4} 10)

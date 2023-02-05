@@ -533,7 +533,7 @@ be fixed size or growing dynamically, using different error handling strategies 
   (.submit pool clbl))
 ;; ⇒ #&lt;FutureTask java.util.concurrent.FutureTask@19ca276f&gt;
 </code></pre><p>In the example above, we create a new fixed size thread pool with 16 threads
-and submit a Clojure function for execution. Clojure functions <a href="/articles/language/interop/#clojure_functions_implement_runnable_and_callable">implement Runnable and Callable</a>
+and submit a Clojure function for execution. Clojure functions <a href="/articles/language/interop/#clojure-functions-implement-runnable-and-callable">implement Runnable and Callable</a>
 interfaces and can be submitted for execution, however, because <code>ExecutorService#submit</code>
 is an overloaded method, to avoid reflection warnings, we cast the function
 to <code>java.util.concurrent.Callable</code>.</p><h4 id="javautilconcurrentfuture">java.util.concurrent.Future</h4><p><code>Executor#submit</code> will return an instance of <code>java.util.concurrent.Future</code>. It is much like Clojure
@@ -585,7 +585,7 @@ other libraries. An example to demonstrate how to use an atomic long for a threa
 </code></pre><h3 id="forkjoin-framework">Fork/Join Framework</h3><p><em>TBD</em></p><h2 id="other-approaches-to-concurrency">Other Approaches to Concurrency</h2><p>There are also other approaches to concurrency that neither Clojure nor Java cover. The growing
 adoption of <em>message passing</em> concurrency (the <a href="http://en.wikipedia.org/wiki/Actor_model">Actor model</a> and <a href="http://en.wikipedia.org/wiki/Communicating_Sequential_Processes">CSP</a>)
 lead to the creation of several JVM-based frameworks for message passing. Some of the most popular ones
-include:</p><ul><li><a href="http://akka.io">Akka</a></li><li><a href="http://code.google.com/p/jetlang/">Jetlang</a></li><li><a href="http://lmax-exchange.github.com/disruptor/">LMAX Disruptor</a></li></ul><p>Akka's Java API can be used from Clojure either directly or via a library called <a href="https://github.com/gaverhae/okku">Okku</a>.</p><p>In LMAX Disruptor, event instances passed around are assumed to be mutable, so the framework is of limited use with Clojure.</p><h2 id="runtime-parallelism">Runtime Parallelism</h2><p>Clojure was designed to be a hosted language. Its primary target, the
+include:</p><ul><li><a href="http://akka.io">Akka</a></li><li><a href="http://code.google.com/p/jetlang/">Jetlang</a></li><li><a href="https://lmax-exchange.github.io/disruptor/">LMAX Disruptor</a></li></ul><p>Akka's Java API can be used from Clojure either directly or via a library called <a href="https://github.com/gaverhae/okku">Okku</a>.</p><p>In LMAX Disruptor, event instances passed around are assumed to be mutable, so the framework is of limited use with Clojure.</p><h2 id="runtime-parallelism">Runtime Parallelism</h2><p>Clojure was designed to be a hosted language. Its primary target, the
 JVM, provides runtime parallelism support.  JVM threads map 1:1 to
 kernel threads. Those will be executed in parallel given that enough
 cores are available for OS scheduler to use.</p><p>In Clojure, many concurrency features are built on top of JVM threads

@@ -161,7 +161,7 @@ REPL more comfortable;</li><li><code>clojure:swank</code>: starts Swank server, 
 default, this server is running on port 4005 (this value could be changed with system
 option <code>clojure.swank.port</code>);</li><li><code>clojure:nailgun</code>: starts Nailgun server, so you can connect to it from Vim with
 <a href="http://kotka.de/projects/clojure/vimclojure.html">vimclojure</a>.  By default, this server is running on port 2113 (this value could be
-changed with system option <code>clojure.nailgun.port</code>).</li></ul></li><li><p>Auxiliary tasks:</p><ul><li><code>clojure:marginalia</code>: generates documentation using <a href="http://fogus.github.com/marginalia/">Marginalia</a>;</li><li><code>clojure:autodoc</code>: generates documentation using <a href="http://tomfaulhaber.github.com/autodoc/">autodoc</a>;</li><li><code>clojure:gendoc</code>: generates documentation using gendoc.</li></ul></li></ul><h3 id="clojure-related-repositories">Clojure-related repositories</h3><p>There are several Clojure-related repositories.  All Clojure versions (stable &amp;
+changed with system option <code>clojure.nailgun.port</code>).</li></ul></li><li><p>Auxiliary tasks:</p><ul><li><code>clojure:marginalia</code>: generates documentation using <a href="https://gdeer81.github.io/marginalia/">Marginalia</a>;</li><li><code>clojure:autodoc</code>: generates documentation using <a href="https://tomfaulhaber.github.io/autodoc/">autodoc</a>;</li><li><code>clojure:gendoc</code>: generates documentation using gendoc.</li></ul></li></ul><h3 id="clojure-related-repositories">Clojure-related repositories</h3><p>There are several Clojure-related repositories.  All Clojure versions (stable &amp;
 development) are published at <a href="http://dev.clojure.org/display/doc/Maven+Settings+and+Repositories">Sonatype repository</a> that is periodically synchronized with
 Maven Central.  <a href="http://clojars.org">Clojars</a> is repository that is used by Clojure community to publish their
 projects.</p><p>To use repository you need to add following code into <code>repositories</code> section in <code>pom.xml</code>:</p><pre><code class="xml"> &lt;repository&gt;
@@ -240,7 +240,7 @@ your code via Maven.  You can also change this value by using Maven's command-li
 option.  For example, using following command <code>mvn clojure:repl -Dclojure.runwith.test=false</code>;</li><li><code>clojureOptions</code> - using this option you can specify command-line options that will be
 passed to <code>java</code> process on every invocation.</li></ul><h2 id="wrapping-up">Wrapping Up</h2><p>I think, that this article provides enough information for you to start use Maven together
 with Clojure.  If you have Clojure-only project, and you don't plan to use all power of
-Maven, then may be you can look to the <a href="leiningen.md">Leiningen</a> - this tool was created to build
+Maven, then may be you can look to <a href="https://leiningen.org">Leiningen</a> - this tool was created to build
 projects, written mostly in Clojure.  Another interesting project is <a href="http://polyglot.sonatype.org/">Polyglot Maven</a>, the
 main goal of it is creation of special DSL (Domain Specificl Language) using different
 languages (Clojure, Scala, Groovy) for description of Maven's configurations (for Clojure
