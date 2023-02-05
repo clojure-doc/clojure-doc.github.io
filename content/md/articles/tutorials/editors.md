@@ -54,8 +54,8 @@ See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vs_co
 ## Vim/Neovim
 
 The main options here are:
-* [vim-fireplace](https://github.com/tpope/vim-fireplace)
-* [vim-iced](https://liquidz.github.io/vim-iced/) (for Neovim).
+* [vim-fireplace](https://github.com/tpope/vim-fireplace) (for Vim)
+* [vim-iced](https://liquidz.github.io/vim-iced/) (for Vim/Neovim)
 * [Conjure](https://github.com/Olical/conjure) (for Neovim): [Getting Started](https://oli.me.uk/getting-started-with-clojure-neovim-and-conjure-in-minutes/), [Conjure/Neovim on Practical.li](https://practical.li/neovim/)
 
 See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vim_highly_efficient_text_editing) for more links.
