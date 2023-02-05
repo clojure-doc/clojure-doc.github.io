@@ -83,7 +83,7 @@ provide a symlink to the application as <code>/usr/local/bin/emacs</code>.</p><p
 </code></pre><h3 id="debianubuntu">Debian/Ubuntu</h3><p>Newer Debian-based systems (post-wheezy) ship Emacs 24 in apt:</p><pre><code class="bash">$ sudo apt install emacs24
 </code></pre><h3 id="archantergos">Arch/Antergos</h3><p>The latest version of Emacs(<em>i.e.</em> v25.1) is available in Arch's official repositories.</p><pre><code class="bash">$ sudo pacman -S emacs
 </code></pre><p>On older systems you can add unofficial package sources for <code>emacs-snapshot</code>,
-either for <a href="http://emacs.naquadah.org/">Debian</a> or
+either for <a href="https://www.emacswiki.org/emacs/EmacsSnapshotAndDebian/">Debian</a> or
 <a href="https://launchpad.net/~cassou/+archive/emacs">Ubuntu</a>.</p><h3 id="ms-windows">MS Windows</h3><p>You can find Emacs for Windows in the <a href="http://ftp.gnu.org/pub/gnu/emacs/windows/">FSF FTP
 directory</a>.</p><p>Download the file named <code>emacs-24.1-bin-i386.zip</code> and unzip it in a new folder.
 Avoid folder with spaces in their names such as <code>C:\Documents and Settings</code>.
@@ -102,8 +102,8 @@ development.</p><h3 id="manual-setup">Manual setup</h3><p>Emacs can be configure
 configuration options are pretty much endless. To help you through
 this, Phil Hagelberg has created a small library enables a few
 non-intrusive helpful features called
-<a href="https://github.com/technomancy/better-defaults">better-defaults</a>
-which might be useful if you are not already an Emacs pro.</p><p>Most Emacs packages are kept at <a href="http://melpa.milkbox.net">MELPA</a>,
+<a href="https://git.sr.ht/~technomancy/better-defaults">better-defaults</a>
+which might be useful if you are not already an Emacs pro.</p><p>Most Emacs packages are kept at <a href="https://melpaorg">MELPA</a>,
 the community package host. Add this code to your config in
 <code>~/.emacs.d/init.el</code> to tell Emacs to look there:</p><p>For the stable repository:</p><pre><code class="cl">(require 'package)
 (add-to-list 'package-archives
@@ -294,8 +294,8 @@ those which come from third-party libraries. Use <code>M-,</code> to pop the
 stack and return to where you were. For all the definitions in a
 single file you can use <code>M-x imenu</code> to list them and jump to one.</p><p>When you are finished with the REPL (or if for some reason it has
 gotten into a bad state), you can simply kill the <code>*cider-repl*</code>
-buffer by typing <code>M-x cider-quit</code> and re-run <code>cider-jack-in</code> to start another.</p><h2 id="appendix">Appendix</h2><p><a href="http://stable.melpa.org/#/getting-started">MELPA documentation</a></p><p>CIDER keyboard shortcuts can be found in <a href="https://github.com/clojure-emacs/cider#keyboard-shortcuts">CIDER documentation</a>.</p><h2 id="contributors">Contributors</h2><p><a href="http://blog.gaz-jones.com">Gareth Jones</a>, 2012 (original author)</p><p>Thanks to <a href="http://technomancy.us/">Phil Hagelberg</a>, <a href="http://cleancode.se/">Mikael
-Sundberg</a>, and <a href="http://jakemccrary.com/">Jake
+buffer by typing <code>M-x cider-quit</code> and re-run <code>cider-jack-in</code> to start another.</p><h2 id="appendix">Appendix</h2><p><a href="http://stable.melpa.org/#/getting-started">MELPA documentation</a></p><p>CIDER keyboard shortcuts can be found in <a href="https://github.com/clojure-emacs/cider#keyboard-shortcuts">CIDER documentation</a>.</p><h2 id="contributors">Contributors</h2><p>Gareth Jones, 2012 (original author)</p><p>Thanks to <a href="https://technomancy.us/">Phil Hagelberg</a>, <a href="https://github.com/bobo/">Mikael
+Sundberg</a>, and <a href="https://jakemccrary.com/">Jake
 McCrary</a> for suggestions for improvements to
 the original blog posts from which this guide was created.</p>
 

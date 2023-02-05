@@ -99,7 +99,7 @@ configuration.</p><h2 id="maven-and-clojure">Maven and Clojure</h2><p>Clojure's 
 <a href="https://github.com/talios/clojure-maven-plugin">clojure-maven-plugin</a>, that is available
 in Maven's central repository, so it always available. (Besides <code>clojure-maven-plugin</code>,
 there is also <a href="https://github.com/pallet/zi">Zi</a> plugin, that was developed as part of
-<a href="http://palletops.com/">Pallet</a> project. In contrast to <code>clojure-maven-plugin</code> it's
+<a href="https://github.com/palletops/">Pallet</a> project. In contrast to <code>clojure-maven-plugin</code> it's
 written in Clojure, and more tightly integrated with Clojure-specific subsystems, such
 Marginalia, Ritz, etc.)</p><p>As a base for your projects you can use <code>pom.xml</code> file from
 <a href="https://github.com/talios/clojure-maven-example">clojure-maven-example</a> project.</p><p>If you already have <code>pom.xml</code> in your project, then to enable this plugin, you will need to
@@ -109,7 +109,7 @@ add following code into <code>&lt;plugins&gt;</code> section of <code>pom.xml</c
     &lt;version&gt;1.3.10&lt;/version&gt;
   &lt;/plugin&gt;
 </code></pre><p><em>Attention:</em> version number could be changed as development continues.  To find latest
-plugin's version number you can use sites <a href="http://mvnrepository.com/artifact/com.theoryinpractise/clojure-maven-plugin">mvnrepository</a> or <a href="http://jarvana.com/jarvana/">Jarvana</a>, that contains
+plugin's version number you can use sites <a href="http://mvnrepository.com/artifact/com.theoryinpractise/clojure-maven-plugin">mvnrepository</a>, that contains
 information about packages, registered in Maven's repositories.  Besides this, you can
 omit plugin version - in this case, Maven will automatically use latest available version
 (although this isn't always good idea).</p><p>Declaration of this plugin will give you all implemented functionality - compilation,
@@ -159,14 +159,12 @@ example, you can put some initialization code into it.  If the JLine library was
 specified in dependencies, then it will be loaded automatically, making your work in
 REPL more comfortable;</li><li><code>clojure:swank</code>: starts Swank server, so you can connect to it from Emacs SLIME.  By
 default, this server is running on port 4005 (this value could be changed with system
-option <code>clojure.swank.port</code>);</li><li><code>clojure:nailgun</code>: starts Nailgun server, so you can connect to it from Vim with
-<a href="http://kotka.de/projects/clojure/vimclojure.html">vimclojure</a>.  By default, this server is running on port 2113 (this value could be
-changed with system option <code>clojure.nailgun.port</code>).</li></ul></li><li><p>Auxiliary tasks:</p><ul><li><code>clojure:marginalia</code>: generates documentation using <a href="https://gdeer81.github.io/marginalia/">Marginalia</a>;</li><li><code>clojure:autodoc</code>: generates documentation using <a href="https://tomfaulhaber.github.io/autodoc/">autodoc</a>;</li><li><code>clojure:gendoc</code>: generates documentation using gendoc.</li></ul></li></ul><h3 id="clojure-related-repositories">Clojure-related repositories</h3><p>There are several Clojure-related repositories.  All Clojure versions (stable &amp;
-development) are published at <a href="http://dev.clojure.org/display/doc/Maven+Settings+and+Repositories">Sonatype repository</a> that is periodically synchronized with
-Maven Central.  <a href="http://clojars.org">Clojars</a> is repository that is used by Clojure community to publish their
+option <code>clojure.swank.port</code>).</li></ul></li><li><p>Auxiliary tasks:</p><ul><li><code>clojure:marginalia</code>: generates documentation using <a href="https://gdeer81.github.io/marginalia/">Marginalia</a>;</li><li><code>clojure:autodoc</code>: generates documentation using <a href="https://tomfaulhaber.github.io/autodoc/">autodoc</a>;</li><li><code>clojure:gendoc</code>: generates documentation using gendoc.</li></ul></li></ul><h3 id="clojure-related-repositories">Clojure-related repositories</h3><p>There are several Clojure-related repositories.  All Clojure versions (stable &amp;
+development) are published at <a href="https://oss.sonatype.org/">Sonatype repository</a> that is periodically synchronized with
+Maven Central.  <a href="https://clojars.org">Clojars</a> is repository that is used by Clojure community to publish their
 projects.</p><p>To use repository you need to add following code into <code>repositories</code> section in <code>pom.xml</code>:</p><pre><code class="xml"> &lt;repository&gt;
    &lt;id&gt;clojars&lt;/id&gt;
-   &lt;url&gt;http://clojars.org/repo/&lt;/url&gt;
+   &lt;url&gt;https://repo.clojars.org/&lt;/url&gt;
  &lt;/repository&gt;
 </code></pre><h3 id="dependencies-management">Dependencies Management</h3><p>Maven automatically downloads the all necessary dependencies from the default repository (known as
 Maven Central), and
@@ -241,7 +239,7 @@ option.  For example, using following command <code>mvn clojure:repl -Dclojure.r
 passed to <code>java</code> process on every invocation.</li></ul><h2 id="wrapping-up">Wrapping Up</h2><p>I think, that this article provides enough information for you to start use Maven together
 with Clojure.  If you have Clojure-only project, and you don't plan to use all power of
 Maven, then may be you can look to <a href="https://leiningen.org">Leiningen</a> - this tool was created to build
-projects, written mostly in Clojure.  Another interesting project is <a href="http://polyglot.sonatype.org/">Polyglot Maven</a>, the
+projects, written mostly in Clojure.  Another interesting project is <a href="https://github.com/takari/polyglot-maven/">Polyglot Maven</a>, the
 main goal of it is creation of special DSL (Domain Specificl Language) using different
 languages (Clojure, Scala, Groovy) for description of Maven's configurations (for Clojure
 this language is almost the same as language implemented in Leiningen).</p><p>Other examples of using Maven with Clojure you can find in different projects: <a href="https://github.com/liebke/incanter/tree/1.0.x">Incanter</a>
