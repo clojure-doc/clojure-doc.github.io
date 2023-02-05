@@ -18,7 +18,7 @@ and separates content into several groups:
 
 ## Essentials
 
-Note that the editing environments are listed in alphabetical order and indicate no preference or endorsement. The last
+The last
 ["State of the Union" Clojure survey](https://clojure.org/news/2022/06/02/state-of-clojure-2022) indicated
 that Emacs is still the most popular editing environment, followed by IntelliJ/Cursive, VS Code, and Vim.
 
@@ -34,22 +34,10 @@ If you're new to Clojure, this is a good place to start.
 A swift introduction to the Clojure language, covering most of the
 basics.
 
-### [Emacs for Clojure Development](/articles/tutorials/emacs/)
+### [Editors for Clojure Development](/articles/tutorials/editors/)
 
-A brief introduction to Emacs, Clojure mode, CIDER and Clojure development workflow with Emacs.
-
-### [IntelliJ / Cursive for Clojure Development](https://cursive-ide.com/userguide/)
-
-The user guide for Cursive, the Clojure plugin for IntelliJ.
-
-### [VS Code for Clojure Development](https://calva.io/)
-
-The Calva extension for Clojure development in VS Code (via nREPL).
-
-### [Vim for Clojure Development](/articles/tutorials/vim_fireplace/)
-
-A brief introduction to Clojure development in Vim with fireplace.vim.
-
+A list of popular options for editing Clojure code and working with
+Clojure data.
 
 
 ## Language Guides
