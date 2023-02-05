@@ -8,7 +8,7 @@ that Emacs is still the most popular editing environment, followed by IntelliJ/C
 
 ## Emacs
 
-[Emacs](https://www.gnu.org/software/emacs/) is the oldest and most
+[Emacs](https://www.gnu.org/software/emacs/) is the longest serving and most
 customizable editor available and for years it was the overwhelmingly
 popular choice for editing Clojure code.
 
