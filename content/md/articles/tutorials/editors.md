@@ -21,6 +21,15 @@ Other options are [clojure-mode](https://github.com/clojure-emacs/clojure-mode)
 on its own and [inf-clojure](https://github.com/clojure-emacs/inf-clojure)
 for integration with a basic Clojure REPL.
 
+For a complete, opinionated, and well-maintained configuration for Emacs,
+you might consider [Prelude](https://prelude.emacsredux.com/en/latest/)
+by the creator of CIDER.
+
+You can also get static analysis and refactoring support via
+[clojure-lsp for Emacs](https://clojure-lsp.io/clients/#emacs) (and
+it should also work out-of-the-box with [`eglot`](https://github.com/joaotavora/eglot/),
+which is built into Emacs 29 and above).
+
 See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_emacs_most_popular_most_customizable) for more links.
 
 ## IntelliJ/Cursive
@@ -44,8 +53,10 @@ See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vs_co
 
 ## Vim/Neovim
 
-The main options here are [vim-fireplace](https://github.com/tpope/vim-fireplace)
-and [vim-iced](https://liquidz.github.io/vim-iced/) (for Neovim).
+The main options here are:
+* [vim-fireplace](https://github.com/tpope/vim-fireplace)
+* [vim-iced](https://liquidz.github.io/vim-iced/) (for Neovim).
+* [Conjure](https://github.com/Olical/conjure) (for Neovim): [Getting Started](https://oli.me.uk/getting-started-with-clojure-neovim-and-conjure-in-minutes/), [Conjure/Neovim on Practical.li](https://practical.li/neovim/)
 
 See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vim_highly_efficient_text_editing) for more links.
 
@@ -57,3 +68,7 @@ Clojure and evaluating code:
 * [Portal](https://github.com/djblue/portal)
 * [Reveal](https://github.com/vlaaad/reveal)
 * [Cognitect REBL](https://docs.datomic.com/cloud/other-tools/REBL.html)
+
+## Additional Editor Guides
+
+* [Practical.li](https://practical.li/clojure/clojure-editors/)
