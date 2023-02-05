@@ -234,7 +234,7 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### Graph Databases (Neo4J, Titan, etc)
 
-  * [Neocons](https://clojureneo4j.info) ([at clojars](https://clojars.org/clojurewerkz/neocons)): Neocons is a feature rich idiomatic [Clojure client for the Neo4J REST API](http://clojureneo4j.info)  with solid documentation
+  * [Neocons](http://clojureneo4j.info) ([at clojars](https://clojars.org/clojurewerkz/neocons)): Neocons is a feature rich idiomatic [Clojure client for the Neo4J REST API](http://clojureneo4j.info)  with solid documentation
 
   * [Titanium](http://titanium.clojurewerkz.org) ([at clojars](https://clojars.org/clojurewerkz/titanium)):
     a Clojure graph library built on top of Titan

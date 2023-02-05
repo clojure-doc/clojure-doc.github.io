@@ -19,7 +19,7 @@ The rationale is explained in more detail in the [announcement blog post](http:/
 CDS was started in early October, 2012, by several active members of the Clojure community due to their dissatisfaction at the time
 with the state of documentation and the documentation contribution process (that involved mailing the Clojure Contributor Agreement in paper).
 
-Unfortunately, access to the original infrastructure hosting http://clojure-doc.org,
+Unfortunately, access to the original infrastructure hosting https://clojure-doc.org,
 was lost several years ago. This current incarnation is a reboot of that site
 using [Cryogen](https://cryogenweb.org/) and hosted as a GitHub organization website.
 
