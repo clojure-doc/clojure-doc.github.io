@@ -1,5 +1,5 @@
 {:title "Clojure interoperability with Java"
- :sidebar-omit? true :page-index 2500
+ :sidebar-omit? true :page-index 102500
  :layout :page}
 
 This guide covers:

@@ -1,5 +1,5 @@
 {:title "How to use Maven to build Clojure projects"
- :layout :page :sidebar-omit? true :page-index 3800}
+ :layout :page :sidebar-omit? true :page-index 103800}
 
 This guide describes how to use Maven to build projects written in Clojure (or in Clojure,
 and other languages, such as Java).  Although Leiningen is more popular build tool in the

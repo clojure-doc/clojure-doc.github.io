@@ -1,5 +1,5 @@
 {:title "Overview of clojure.core, the standard Clojure library"
- :sidebar-omit? true :page-index 2000
+ :sidebar-omit? true :page-index 102000
  :klipse true
  :layout :page}
 

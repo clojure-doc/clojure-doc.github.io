@@ -1,5 +1,5 @@
 {:title "Generating Documentation"
- :layout :page :sidebar-omit? true :page-index 3200}
+ :layout :page :sidebar-omit? true :page-index 103200}
 
 This guide notes some commonly-used tools for generating project
 documentation.

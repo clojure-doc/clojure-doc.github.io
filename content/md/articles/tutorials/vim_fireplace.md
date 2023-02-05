@@ -1,5 +1,5 @@
 {:title "Clojure with Vim and fireplace.vim"
- :sidebar-omit? true :page-index 1300
+ :sidebar-omit? true :page-index 101300
  :layout :page}
 
 This work is licensed under a <a rel="license"

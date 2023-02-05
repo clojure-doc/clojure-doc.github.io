@@ -1,5 +1,5 @@
 {:title "Clojure with Emacs"
- :sidebar-omit? true :page-index 1200
+ :sidebar-omit? true :page-index 101200
  :layout :page}
 
 This work is licensed under a <a rel="license"
