@@ -106,7 +106,7 @@ non-intrusive helpful features called
 [better-defaults](https://git.sr.ht/~technomancy/better-defaults)
 which might be useful if you are not already an Emacs pro.
 
-Most Emacs packages are kept at [MELPA](https://melpaorg),
+Most Emacs packages are kept at [MELPA](https://melpa.org),
 the community package host. Add this code to your config in
 `~/.emacs.d/init.el` to tell Emacs to look there:
 

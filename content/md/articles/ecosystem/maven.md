@@ -212,19 +212,6 @@ If you will use `clojure:swank` goal, then you need to specify dependency on `sw
 </dependency>
 ```
 
-If you will use `clojure:nailgun` task, then you need to download distribution from
-[vimclojure](http://kotka.de/projects/clojure/vimclojure.html)'s site, build it, as described in documentation, and install into local
-Maven repository.  And after this, you need to add following dependency on
-`vimclojure` with following code:
-
-```xml
-<dependency>
-  <groupId>de.kotka</groupId>
-  <artifactId>vimclojure</artifactId>
-  <version>X.Y.Z</version>
- </dependency>
-```
-
 The JLine library isn't required, but it could be useful if you plan to use the REPL -
 this library implements support for command history and other nice things. Presence of this library is detected
 automatically when `mvn clojure:repl` goal is executed. You can add dependency for this
@@ -284,7 +271,7 @@ code and/or tests:
    task.  If there was no value specified in plugin's configuration, then plugin will
    automatically generate run script for all tests, that was found in project;
  * `replScript` - defines name of script, that will executed if you'll execute `clojure:repl` task
-  (it's also used by `clojure:swank` and `clojure:nailgun` tasks).  This code will executed
+  (it's also used by `clojure:swank`).  This code will executed
   before entering into REPL, so you can use it to specify initialization code for your
   working environment;
  * `runWithTests` - enables (`true`) or disables (`false`) executions of tests if you run REPL or
