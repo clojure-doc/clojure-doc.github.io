@@ -186,14 +186,6 @@ dependencies.</p><p>If you will use <code>clojure:swank</code> goal, then you ne
   &lt;artifactId&gt;swank-clojure&lt;/artifactId&gt;
   &lt;version&gt;1.4.2&lt;/version&gt;
 &lt;/dependency&gt;
-</code></pre><p>If you will use <code>clojure:nailgun</code> task, then you need to download distribution from
-<a href="http://kotka.de/projects/clojure/vimclojure.html">vimclojure</a>'s site, build it, as described in documentation, and install into local
-Maven repository.  And after this, you need to add following dependency on
-<code>vimclojure</code> with following code:</p><pre><code class="xml">&lt;dependency&gt;
-  &lt;groupId&gt;de.kotka&lt;/groupId&gt;
-  &lt;artifactId&gt;vimclojure&lt;/artifactId&gt;
-  &lt;version&gt;X.Y.Z&lt;/version&gt;
- &lt;/dependency&gt;
 </code></pre><p>The JLine library isn't required, but it could be useful if you plan to use the REPL -
 this library implements support for command history and other nice things. Presence of this library is detected
 automatically when <code>mvn clojure:repl</code> goal is executed. You can add dependency for this
@@ -231,7 +223,7 @@ tags) names of scripts with code, that will executed when you'll execute the
 <code>clojure:run</code> task;</li><li><code>testScript</code>: defines name of script that will executed when you'll execute <code>clojure:test</code>
 task.  If there was no value specified in plugin's configuration, then plugin will
 automatically generate run script for all tests, that was found in project;</li><li><code>replScript</code> - defines name of script, that will executed if you'll execute <code>clojure:repl</code> task
-(it's also used by <code>clojure:swank</code> and <code>clojure:nailgun</code> tasks).  This code will executed
+(it's also used by <code>clojure:swank</code>).  This code will executed
 before entering into REPL, so you can use it to specify initialization code for your
 working environment;</li><li><code>runWithTests</code> - enables (<code>true</code>) or disables (<code>false</code>) executions of tests if you run REPL or
 your code via Maven.  You can also change this value by using Maven's command-line
