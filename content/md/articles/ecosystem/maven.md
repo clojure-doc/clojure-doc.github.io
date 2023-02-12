@@ -66,7 +66,7 @@ add following code into `<plugins>` section of `pom.xml`:
   <plugin>
     <groupId>com.theoryinpractise</groupId>
     <artifactId>clojure-maven-plugin</artifactId>
-    <version>1.3.10</version>
+    <version>1.8.4</version>
   </plugin>
 ```
 
@@ -88,7 +88,7 @@ concrete lifecycle phases (`compile` and `test`).  To do this you need to add se
  <plugin>
    <groupId>com.theoryinpractise</groupId>
    <artifactId>clojure-maven-plugin</artifactId>
-   <version>1.3.10</version>
+   <version>1.8.4</version>
    <executions>
      <execution>
        <id>compile</id>
@@ -236,7 +236,7 @@ the script, that will be executed during testing, using following code:
 <plugin>
    <groupId>com.theoryinpractise</groupId>
    <artifactId>clojure-maven-plugin</artifactId>
-   <version>1.3.10</version>
+   <version>1.8.4</version>
    <configuration>
      <testScript>src/test/clojure/test.clj</testScript>
    </configuration>
