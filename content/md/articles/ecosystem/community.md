@@ -45,7 +45,8 @@ Channel logs are available at ???.
   * Official [clojure.org Reference documentation](https://clojure.org/reference/documentation)
   * Official [clojure.org API documentation](https://clojure.org/api/api)
   * [ClojureDocs](https://clojuredocs.org/): Clojure API reference, with examples
-  * [Clojure API Cheatsheet](https://clojure.org/api/cheatsheet)
+  * [Clojure API Cheatsheet](https://clojure.org/api/cheatsheet) (hosted on clojure.org)
+  * Community [Clojure Style Guide](https://guide.clojure.style/)
   * [Clojure Koans](http://clojurekoans.com/)
   * [GetClojure](http://www.getclojure.org): Tens of thousands of searchable Clojure examples mined from all over the internet.
 
