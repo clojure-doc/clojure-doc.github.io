@@ -2,18 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Clojure Guides: Data Processing (Help Wanted)</title>
+    <title>Clojure Guides: Getting Started with the Clojure CLI</title>
     
 
-<meta name="description" content="Help wantedPlease follow the instructions on how to contribute and start writing over here">
+<meta name="description" content="This guide covers:">
 
-<meta property="og:description" content="Help wantedPlease follow the instructions on how to contribute and start writing over here">
+<meta property="og:description" content="This guide covers:">
 
-<meta property="og:url" content="https://clojure-doc.org/articles/ecosystem/data_processing/" />
-<meta property="og:title" content="Data Processing (Help Wanted)" />
+<meta property="og:url" content="https://clojure-doc.org/articles/tutorials/getting_started_cli/" />
+<meta property="og:title" content="Getting Started with the Clojure CLI" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.org/articles/ecosystem/data_processing/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/tutorials/getting_started_cli/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -55,22 +55,69 @@
                 
 <div id="custom-page">
     <div id="page-header">
-        <h2>Data Processing (Help Wanted)</h2>
+        <h2>Getting Started with the Clojure CLI</h2>
     </div>
     
-    <h2 id="help-wanted">Help wanted</h2><p>Please follow the <a href="https://github.com/clojure-doc/clojure-doc.github.io/tree/source#how-to-contribute">instructions</a> on how to contribute and start writing over <a href="https://github.com/clojure-doc/clojure-doc.github.io/blob/source/content/md/articles/ecosystem/data_processing.md">here</a></p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
+    <p>This guide covers:</p><ul><li>prerequisites (such as the CLI) and installing</li><li>running the REPL</li><li>creating a project</li><li>interactive development</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
-stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p>
+stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
+Github</a>.</p><p><em>[This is currently a copy of the Leiningen Getting Started Guide but will be updated to cover the Clojure CLI shortly!]</em></p><h2 id="overview">Overview</h2><p>Clojure is a wonderfully simple language and you are going to love
+it.</p><p>To quickly get started, first make sure you've got Java installed.</p><p>Then install the <a href="http://leiningen.org/">Leiningen</a> project management
+tool.</p><blockquote><p>This author (jg) recommends always installing by downloading the
+script directly (as described in the instructions at leiningen.org),
+rather than using your OS's package manager. This will ensure that
+you get the latest lein version 2.</p></blockquote><p>Clojure programs are typically developed inside their own project
+directory, and Leiningen manages projects for you. Lein takes care of
+pulling in dependencies (including Clojure itself), running the REPL,
+running your program and its tests, packaging your program for
+distribution, and other administrative tasks. Run <code>lein help</code> to
+see the list of all the tasks in can perform.</p><blockquote><p>Again, there's no need to "install" Clojure, per se. Lein
+will take care of fetching it for you.</p></blockquote><h2 id="trying-out-the-repl">Trying out the REPL</h2><p>Although lein facilitates managing your projects, you can also run it
+on its own (outside of any particular project directory). Once you
+have the <code>lein</code> tool installed, run it from anywhere you like to get a
+repl:</p><pre><code>$ lein repl
+</code></pre><p>You should be greeted with a "<code>user=&gt;</code>" prompt. Try it out:</p><pre><code class="clojure">user=&gt; (+ 1 1)
+;; ⇒ 2
+user=&gt; (distinct [:a :b :a :c :a :d])
+;; ⇒ (:a :b :c :d)
+user=&gt; (dotimes [i 3]
+  #_=&gt;   (println (rand-nth ["Fabulous!" "Marvelous!" "Inconceivable!"])
+  #_=&gt;            i))
+;; Marvelous! 0
+;; Inconceivable! 1
+;; Fabulous! 2
+;; ⇒ nil
+</code></pre><h2 id="your-first-project">Your first project</h2><p>Create your first Clojure program like so:</p><pre><code class="bash">lein new app my-proj
+cd my-proj
+# Have a look at the "-main" function in src/my_proj/core.clj.
+lein run
+</code></pre><p>and see the output from that <code>println</code> function call in
+my_proj/core.clj!</p><h2 id="interactive-development">Interactive Development</h2><p>In your project directory, start up a repl (<code>lein repl</code>) and
+run your <code>-main</code> function to see its output in the repl:</p><pre><code>$ lein repl
+...
+my-proj.core=&gt; (-main)
+Hello, World!
+nil
+</code></pre><p>(The prompt is now "my-proj.core=&gt;" instead of "user=&gt;" because lein
+has started the repl in an app project. More about that ("namespaces")
+in the topical guides.)</p><p>From elsewhere, open up your my-proj/src/my_proj/core.clj file
+in your editor. Modify the text in that <code>println</code> call.</p><p>Back in the repl, reload your source file and run <code>-main</code> again:</p><pre><code>my-proj.core=&gt; (require 'my-proj.core :reload)
+my-proj.core=&gt; (-main)
+</code></pre><p>to see your changes.</p><h2 id="see-also">See Also</h2><p>Other getting started documentation you might find useful:</p><ul><li><a href="http://yogthos.github.io/ClojureDistilled.html">Clojure Distilled</a>:
+introduction to core concepts necessary for working with Clojure</li><li><a href="http://www.unexpected-vortices.com/clojure/brief-beginners-guide/index.html">A Brief Beginner's Guide to
+Clojure</a>:
+contains a bit more overview and background material for learning your way
+around the landscape.</li></ul><h2 id="next-stop">Next Stop</h2><p>Next stop: <a href="/articles/tutorials/introduction/">the basic Clojure language tutorial</a>.</p><h2 id="contributors">Contributors</h2><p>John Gabriele <a href="mailto:jmg3000@gmail.com">jmg3000@gmail.com</a> (original author)</p>
 
     <div id="prev-next">
         
-        <a href="/articles/ecosystem/generating_documentation/">&laquo; Generating Documentation</a>
+        <a href="/articles/tutorials/getting_started/">&laquo; Getting Started with Clojure</a>
         
         
         ||
         
         
-        <a href="/articles/ecosystem/maven/">How to use Maven to build Clojure projects &raquo;</a>
+        <a href="/articles/tutorials/getting_started_lein/">Getting Started with Clojure and Leiningen &raquo;</a>
         
     </div>
 </div>
