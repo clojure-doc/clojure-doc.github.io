@@ -4,7 +4,7 @@
 
 This guide covers:
 
- * prerequisites (such as Leiningen) and installing
+ * prerequisites (such as the Clojure CLI or Leiningen) and installation
  * running the REPL
  * creating a project
  * interactive development
@@ -23,102 +23,71 @@ it.
 
 To quickly get started, first make sure you've got Java installed.
 
-Then install the [Leiningen](http://leiningen.org/) project management
+Then install either the [official Clojure CLI](https://clojure.org/guides/deps_and_cli)
+or the [Leiningen](http://leiningen.org/) project management
 tool.
 
-> This author (jg) recommends always installing by downloading the
-> script directly (as described in the instructions at leiningen.org),
-> rather than using your OS's package manager. This will ensure that
-> you get the latest lein version 2.
+### Clojure CLI or Leiningen?
 
-Clojure programs are typically developed inside their own project
-directory, and Leiningen manages projects for you. Lein takes care of
-pulling in dependencies (including Clojure itself), running the REPL,
-running your program and its tests, packaging your program for
-distribution, and other administrative tasks. Run `lein help` to
-see the list of all the tasks in can perform.
+If you are already following a book or tutorial that uses Leiningen,
+you can follow the [Getting Started with Clojure and Leiningen](/articles/tutorials/getting_started_lein)
+guide here.
 
-> Again, there's no need to "install" Clojure, per se. Lein
-> will take care of fetching it for you.
+If you are following a book or tutorial that uses the Clojure CLI,
+there will be a similar Getting Started with the Clojure CLI guide soon!
 
+Leiningen is "batteries-included", providing the ability to run code, start a
+REPL, run tests, build and deploy a JAR file, create a new project, etc.
+The Clojure CLI is focused on running code and starting a REPL. Additional
+libraries and tools exist for use with the CLI to run tests, build and deploy
+a JAR file, create a new project, etc. Leiningen is "easy". The CLI is "simple".
 
-## Trying out the REPL
+#### Why are there multiple tools?
 
-Although lein facilitates managing your projects, you can also run it
-on its own (outside of any particular project directory). Once you
-have the `lein` tool installed, run it from anywhere you like to get a
-repl:
+When Clojure first appeared, developers used existing tooling from the Java
+world (or earlier). In late 2009, Leiningen appeared as a "batteries-included"
+tool to make it easy to run Clojure code, start a REPL, run tests, build a
+JAR file for distribution or deployment. It was designed around a "plugin"
+architecture so that the community could provide new functionality -- such as
+creating new application and library projects, which was later incorporated
+into the core Leiningen project. For years, Leiningen was really the only
+option, if you didn't want to do things "manually" using older, more general
+tooling.
 
-    $ lein repl
+Boot appeared as an alternative to Leiningen in 2013 but didn't really take
+off until 2015 (with its 2.0 release). Instead of a "plugin" architecture,
+Boot let you extend the core functionality using regular Clojure functions.
+It also provided a more programmatic approach to specifying dependencies
+(compared to Leiningen's declarative `project.clj` file). Boot never
+achieved the popularity of Leiningen and has mostly faded away over time.
 
-You should be greeted with a "`user=>`" prompt. Try it out:
+In 2018, the core Clojure team released the official Clojure CLI that used
+a declarative approach to specifying dependencies (the `deps.edn` file) and
+focused on "running Clojure code". The community responded by providing a
+number of tools based on the CLI's underlying library: `tools.deps`.
+The CLI also offered git dependencies out of the box, so that libraries and
+tools could be made available directly on GitHub (or other similar public
+repositories) with needing JAR files to be built and deployed.
 
-``` clojure
-user=> (+ 1 1)
-;; ⇒ 2
-user=> (distinct [:a :b :a :c :a :d])
-;; ⇒ (:a :b :c :d)
-user=> (dotimes [i 3]
-  #_=>   (println (rand-nth ["Fabulous!" "Marvelous!" "Inconceivable!"])
-  #_=>            i))
-;; Marvelous! 0
-;; Inconceivable! 1
-;; Fabulous! 2
-;; ⇒ nil
-```
+Since the release of the official Clojure CLI, usage of Leiningen has dropped
+as the community adopted the new CLI and associated libraries such as
+`tools.deps` and `tools.build`.
+_[See [State of Clojure 2022 Survey Result](https://clojure.org/news/2022/06/02/state-of-clojure-2022)]_
 
+**Too Much Information! What Should I Use?**
 
-## Your first project
+As noted above, if you're following a book or tutorial that uses Leiningen,
+or working with a project that uses Leiningen, then keep using Leiningen.
 
-Create your first Clojure program like so:
+If you're following a book or tutorial that uses the newer CLI, or working
+with a project that uses it, then keep using the Clojure CLI and associated
+libraries.
 
-``` bash
-lein new app my-proj
-cd my-proj
-# Have a look at the "-main" function in src/my_proj/core.clj.
-lein run
-```
+If you're starting from scratch, learning the Clojure CLI is probably a
+better option because that's where most of the community effort (and core
+Clojure team effort) is going to be focused these days.
 
-and see the output from that `println` function call in
-my_proj/core.clj!
-
-
-## Interactive Development
-
-In your project directory, start up a repl (`lein repl`) and
-run your `-main` function to see its output in the repl:
-
-    $ lein repl
-    ...
-    my-proj.core=> (-main)
-    Hello, World!
-    nil
-
-(The prompt is now "my-proj.core=>" instead of "user=>" because lein
-has started the repl in an app project. More about that ("namespaces")
-in the topical guides.)
-
-From elsewhere, open up your my-proj/src/my_proj/core.clj file
-in your editor. Modify the text in that `println` call.
-
-Back in the repl, reload your source file and run `-main` again:
-
-    my-proj.core=> (require 'my-proj.core :reload)
-    my-proj.core=> (-main)
-
-to see your changes.
-
-
-## See Also
-
-Other getting started documentation you might find useful:
-
-  * [Clojure Distilled](http://yogthos.github.io/ClojureDistilled.html):
-    introduction to core concepts necessary for working with Clojure
-  * [A Brief Beginner's Guide to
-    Clojure](http://www.unexpected-vortices.com/clojure/brief-beginners-guide/index.html):
-    contains a bit more overview and background material for learning your way
-    around the landscape.
+> The reality is that you'll probably have to learn at least a bit of the Clojure CLI **and** Leiningen for the time being!
 
 
 ## Next Stop
