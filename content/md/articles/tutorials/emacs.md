@@ -256,7 +256,7 @@ into a map of key-value pairs. The functionality is irrelevant and not
 particularly useful. It serves purely to illustrate the development
 flow.
 
-If you don't have [Leiningen](http://leiningen.org) yet, get it
+If you don't have [Leiningen](https://leiningen.org) yet, get it
 installed and then use it to create a new project:
 
 ```bash

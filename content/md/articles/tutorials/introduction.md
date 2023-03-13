@@ -30,7 +30,7 @@ This is a brief beginner's introduction to Clojure. If you haven't
 already done so, have a look at the [Getting
 Started](/articles/tutorials/getting_started/) tutorial. Before
 continuing, make sure you've got Java and
-[Leiningen](http://leiningen.org) installed, and can create a new
+[Leiningen](https://leiningen.org) installed, and can create a new
 project and run a REPL in it. The author expects you'll want to have a
 REPL running while following this introduction so you can type
 expressions into it as you go.

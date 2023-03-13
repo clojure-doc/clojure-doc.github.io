@@ -24,7 +24,7 @@ it.
 To quickly get started, first make sure you've got Java installed.
 
 Then install either the [official Clojure CLI](https://clojure.org/guides/deps_and_cli)
-or the [Leiningen](http://leiningen.org/) project management
+or the [Leiningen](https://leiningen.org/) project management
 tool.
 
 ### Clojure CLI or Leiningen?

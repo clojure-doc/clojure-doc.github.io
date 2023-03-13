@@ -23,7 +23,7 @@ it.
 
 To quickly get started, first make sure you've got Java installed.
 
-Then install the [Leiningen](http://leiningen.org/) project management
+Then install the [Leiningen](https://leiningen.org/) project management
 tool.
 
 > This author (jg) recommends always installing by downloading the
@@ -36,7 +36,7 @@ directory, and Leiningen manages projects for you. Lein takes care of
 pulling in dependencies (including Clojure itself), running the REPL,
 running your program and its tests, packaging your program for
 distribution, and other administrative tasks. Run `lein help` to
-see the list of all the tasks in can perform.
+see the list of all the tasks it can perform.
 
 > Again, there's no need to "install" Clojure, per se. Lein
 > will take care of fetching it for you.
