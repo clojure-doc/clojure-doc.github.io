@@ -61,38 +61,55 @@
     <p>This guide covers:</p><ul><li>prerequisites (such as the CLI) and installing</li><li>running the REPL</li><li>creating a project</li><li>interactive development</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><p><em>[This is currently a copy of the Leiningen Getting Started Guide but will be updated to cover the Clojure CLI shortly!]</em></p><h2 id="overview">Overview</h2><p>Clojure is a wonderfully simple language and you are going to love
-it.</p><p>To quickly get started, first make sure you've got Java installed.</p><p>Then install the <a href="http://leiningen.org/">Leiningen</a> project management
-tool.</p><blockquote><p>This author (jg) recommends always installing by downloading the
-script directly (as described in the instructions at leiningen.org),
-rather than using your OS's package manager. This will ensure that
-you get the latest lein version 2.</p></blockquote><p>Clojure programs are typically developed inside their own project
-directory, and Leiningen manages projects for you. Lein takes care of
+Github</a>.</p><h2 id="overview">Overview</h2><p>Clojure is a wonderfully simple language and you are going to love
+it.</p><p>To quickly get started, first make sure you've got Java installed.</p><p>Then install the <a href="https://clojure.org/guides/install_clojure">official Clojure CLI</a>.</p><p>For macOS, Linux, and Windows with WSL2, the <a href="https://clojure.org/guides/install_clojure#_posix_instructions">POSIX</a>
+or <a href="https://clojure.org/guides/install_clojure#_linux_instructions">Linux</a>
+instructions will work. For the small percentage of Clojure users on Windows
+planning to use Powershell or <code>cmd.exe</code>, the
+<a href="https://github.com/casselc/clj-msi">MSI installer</a> provided by the community
+is probably your easiest route.</p><p>A useful shortcut to get the latest stable version is to use the script name
+without the version number:</p><pre><code class="shell">curl -O https://download.clojure.org/install/posix-install.sh
+# or:
+curl -O https://download.clojure.org/install/linux-install.sh
+</code></pre><blockquote><p>For macOS and Linux, <a href="https://brew.sh/"><code>brew</code></a> (or <a href="https://docs.brew.sh/Homebrew-on-Linux">Homebrew on Linux</a>) are also reasonable options.</p></blockquote><p>Clojure programs are typically developed inside their own project
+directory, with a <code>deps.edn</code> file at the top level and a <code>src</code> directory
+containing one or more source files (Clojure scripts). The CLI takes care of
 pulling in dependencies (including Clojure itself), running the REPL,
-running your program and its tests, packaging your program for
-distribution, and other administrative tasks. Run <code>lein help</code> to
-see the list of all the tasks in can perform.</p><blockquote><p>Again, there's no need to "install" Clojure, per se. Lein
-will take care of fetching it for you.</p></blockquote><h2 id="trying-out-the-repl">Trying out the REPL</h2><p>Although lein facilitates managing your projects, you can also run it
-on its own (outside of any particular project directory). Once you
-have the <code>lein</code> tool installed, run it from anywhere you like to get a
-repl:</p><pre><code>$ lein repl
-</code></pre><p>You should be greeted with a "<code>user=&gt;</code>" prompt. Try it out:</p><pre><code class="clojure">user=&gt; (+ 1 1)
+and running your program. Run <code>clojure -h</code> to
+see the list of all the options available.</p><h2 id="trying-out-the-repl">Trying out the REPL</h2><p>Once you have the Clojure CLI installed, you can run it from anywhere you like
+to get a REPL:</p><pre><code>$ clj
+</code></pre><p>You should be greeted with the Clojure version and a "<code>user=&gt;</code>" prompt. Try it out:</p><pre><code class="clojure">$ clj
+Clojure 1.11.1
+user=&gt; (+ 1 1)
 ;; ⇒ 2
 user=&gt; (distinct [:a :b :a :c :a :d])
 ;; ⇒ (:a :b :c :d)
 user=&gt; (dotimes [i 3]
-  #_=&gt;   (println (rand-nth ["Fabulous!" "Marvelous!" "Inconceivable!"])
-  #_=&gt;            i))
+         (println (rand-nth ["Fabulous!" "Marvelous!" "Inconceivable!"])
+                  i))
 ;; Marvelous! 0
 ;; Inconceivable! 1
 ;; Fabulous! 2
 ;; ⇒ nil
-</code></pre><h2 id="your-first-project">Your first project</h2><p>Create your first Clojure program like so:</p><pre><code class="bash">lein new app my-proj
-cd my-proj
-# Have a look at the "-main" function in src/my_proj/core.clj.
-lein run
-</code></pre><p>and see the output from that <code>println</code> function call in
-my_proj/core.clj!</p><h2 id="interactive-development">Interactive Development</h2><p>In your project directory, start up a repl (<code>lein repl</code>) and
+</code></pre><h2 id="your-first-project">Your first project</h2><p>A Clojure CLI project can start with a <code>deps.edn</code> file containing just <code>{}</code>
+and a <code>src</code> folder containing your program:</p><pre><code>.
+├── deps.edn
+└── src
+    └── my
+        └── proj.clj
+</code></pre><p>Where <code>src/my/proj.clj</code> contains:</p><pre><code class="clojure">(ns my.proj)
+
+(defn -main []
+  (println "Hello, World!"))
+</code></pre><p>You can run this program with:</p><pre><code>$ clojure -M -m my.proj
+</code></pre><p>And it should display:</p><pre><code>Hello, World!
+</code></pre><p><code>clojure -M</code> says we want to run <code>clojure.main</code> -- a part of the core Clojure runtime that knows how to run code and/or programs.
+The <code>-m my.proj</code> option tells <code>clojure.main</code> that we want it to load the <code>my.proj</code> namespace and run the <code>-main</code> function.
+<code>clojure.main</code> can also evaluate expressions:</p><pre><code>$ clojure -M -e '(println "Hello, World!")'
+Hello, World!
+</code></pre><p>or:</p><pre><code>$ clojure -M -e '(clojure-version)'
+"1.11.1"
+</code></pre><p>The <code>-e</code> option prints the value returned by the expression (if it is not <code>nil</code>).</p><h2 id="interactive-development">Interactive Development</h2><p><em>[This is currently a copy of the Leiningen Interactive Development section but will be updated to cover the Clojure CLI shortly!]</em></p><p>In your project directory, start up a repl (<code>lein repl</code>) and
 run your <code>-main</code> function to see its output in the repl:</p><pre><code>$ lein repl
 ...
 my-proj.core=&gt; (-main)
@@ -107,7 +124,7 @@ my-proj.core=&gt; (-main)
 introduction to core concepts necessary for working with Clojure</li><li><a href="http://www.unexpected-vortices.com/clojure/brief-beginners-guide/index.html">A Brief Beginner's Guide to
 Clojure</a>:
 contains a bit more overview and background material for learning your way
-around the landscape.</li></ul><h2 id="next-stop">Next Stop</h2><p>Next stop: <a href="/articles/tutorials/introduction/">the basic Clojure language tutorial</a>.</p><h2 id="contributors">Contributors</h2><p>John Gabriele <a href="mailto:jmg3000@gmail.com">jmg3000@gmail.com</a> (original author)</p>
+around the landscape.</li></ul><h2 id="next-stop">Next Stop</h2><p>Next stop: <a href="/articles/tutorials/introduction/">the basic Clojure language tutorial</a>.</p><h2 id="contributors">Contributors</h2><p>John Gabriele <a href="mailto:jmg3000@gmail.com">jmg3000@gmail.com</a> (original Leiningen version)</p>
 
     <div id="prev-next">
         

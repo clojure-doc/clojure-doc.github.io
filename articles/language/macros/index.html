@@ -80,7 +80,7 @@ DSLs (domain-specific languages).</p><h2 id="compile-time-and-run-time">Compile 
 produces data structures (aka the AST) and performs <em>macroexpansion</em>. Macros are evaluated at
 <em>compile time</em> and produce modified data structures that are compiled to the JVM
 bytecode. That bytecode is executed at <em>run time</em>.</p><p>Clojure code is compiled when it is loaded with <code>clojure.core/load</code> or <code>clojure.core/require</code>
-or can be ahead of time (AOT compilation) using tools such as <a href="http://leiningen.org">Leiningen</a>
+or can be ahead of time (AOT compilation) using tools such as <a href="https://leiningen.org">Leiningen</a>
 or the <a href="/articles/ecosystem/maven/">Clojure Maven plugin</a>.</p><h2 id="clojure-reader">Clojure Reader</h2><p>Reader is another name for parser. Unlike many other languages, reader in Clojure
 can be extended in the language itself. It is also exposed to the language
 with <code>clojure.core/read</code> and <code>clojure.core/read-string</code> functions that
