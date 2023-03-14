@@ -1,5 +1,5 @@
 {:title "Getting Started with the Clojure CLI"
- :page-index 1001
+ :sidebar-omit? true :page-index 1001
  :layout :page}
 
 This guide covers:
