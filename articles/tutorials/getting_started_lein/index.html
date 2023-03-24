@@ -103,7 +103,33 @@ has started the repl in an app project. More about that ("namespaces")
 in the topical guides.)</p><p>From elsewhere, open up your my-proj/src/my_proj/core.clj file
 in your editor. Modify the text in that <code>println</code> call.</p><p>Back in the repl, reload your source file and run <code>-main</code> again:</p><pre><code>my-proj.core=&gt; (require 'my-proj.core :reload)
 my-proj.core=&gt; (-main)
-</code></pre><p>to see your changes.</p><h2 id="see-also">See Also</h2><p>Other getting started documentation you might find useful:</p><ul><li><a href="http://yogthos.github.io/ClojureDistilled.html">Clojure Distilled</a>:
+</code></pre><p>to see your changes.</p><h3 id="interactive-development">Interactive Development</h3><p>While you can work with the REPL as shown above for small projects while
+you are getting started, the real benefits of Clojure's "interactive
+development" mindset require an approach that more tightly integrates your
+editor with a running REPL.</p><p>Most Clojure-enabled editors have a way to automatically start a REPL for
+a Leiningen project and connect to it in such a way that you can evaluate code
+directly inside your editor, allowing you to "grow" your program incrementally
+while testing each piece of it and exploring how code works, alongside your
+running program.</p><p>It's common to use <code>comment</code> as a way to include exploratory code in your
+source files, so you can evaluate calls to functions and experiment with
+data tranformations:</p><pre><code class="clojure">(defn greet
+  "Return a greeting for this person."
+  [person]
+  (str "Hello, " person "!"))
+
+(comment
+  ;; Clojure-enabled editors let you easily evaluate these two
+  ;; expressions and will usually show the results inline, so
+  ;; you don't need to switch back and forth between your editor
+  ;; and a separate window running a REPL, and you don't need to
+  ;; copy'n'paste code from the editor into the REPL or type
+  ;; directly into the REPL -- and these comment forms can be left
+  ;; in your code to show how you arrived at the final solution
+  ;; (or remind your future self how you got there!).
+  (greet "Programmer") ; "Hello, Programmer!"
+  (greet nil) ; "Hello, !"
+  )
+</code></pre><blockquote><p>These are sometimes called "Rich Comment Forms" because not only can they be a rich source of infomation about how the code works or how it was developed, but also because Rich Hickey, Clojure's creator, uses this approach quite a lot in his own code.</p></blockquote><h2 id="see-also">See Also</h2><p>Other getting started documentation you might find useful:</p><ul><li><a href="https://clojure.org/guides/learn/clojure">Learn Clojure</a>: the official guide to learning the language</li><li><a href="https://clojure.org/guides/learn/clojure">Programming at the REPL</a>: the official guide to working with the REPL</li><li><a href="/articles/tutorials/editors/">Clojure Editors</a></li><li><a href="http://yogthos.github.io/ClojureDistilled.html">Clojure Distilled</a>:
 introduction to core concepts necessary for working with Clojure</li><li><a href="http://www.unexpected-vortices.com/clojure/brief-beginners-guide/index.html">A Brief Beginner's Guide to
 Clojure</a>:
 contains a bit more overview and background material for learning your way
