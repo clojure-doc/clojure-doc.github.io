@@ -105,21 +105,22 @@ and a <code>src</code> folder containing your program:</p><pre><code>.
 </code></pre><p>And it should display:</p><pre><code>Hello, World!
 </code></pre><p><code>clojure -M</code> says we want to run <code>clojure.main</code> -- a part of the core Clojure runtime that knows how to run code and/or programs.
 The <code>-m my.proj</code> option tells <code>clojure.main</code> that we want it to load the <code>my.proj</code> namespace and run the <code>-main</code> function.
-<code>clojure.main</code> can also evaluate expressions:</p><pre><code>$ clojure -M -e '(println "Hello, World!")'
-Hello, World!
+<code>clojure.main</code> can also evaluate expressions:</p><pre><code>$ clojure -M -e '(println "Hello, Command!")'
+Hello, Command!
 </code></pre><p>or:</p><pre><code>$ clojure -M -e '(clojure-version)'
 "1.11.1"
-</code></pre><p>The <code>-e</code> option prints the value returned by the expression (if it is not <code>nil</code>).</p><h2 id="interactive-development">Interactive Development</h2><p><em>[This is currently a copy of the Leiningen Interactive Development section but will be updated to cover the Clojure CLI shortly!]</em></p><p>In your project directory, start up a repl (<code>lein repl</code>) and
-run your <code>-main</code> function to see its output in the repl:</p><pre><code>$ lein repl
-...
-my-proj.core=&gt; (-main)
+</code></pre><p>The <code>-e</code> option prints the value returned by the expression (if it is not <code>nil</code>).</p><h3 id="working-in-the-repl">Working in the REPL</h3><p>In your project directory, start up a repl (<code>clj</code>) and
+run your <code>-main</code> function to see its output in the repl:</p><pre><code>$ clj
+Clojure 1.11.1
+user=&gt; (require 'my.proj)
+nil
+user=&gt; (my.proj/-main)
 Hello, World!
 nil
-</code></pre><p>(The prompt is now "my-proj.core=&gt;" instead of "user=&gt;" because lein
-has started the repl in an app project. More about that ("namespaces")
-in the topical guides.)</p><p>From elsewhere, open up your my-proj/src/my_proj/core.clj file
-in your editor. Modify the text in that <code>println</code> call.</p><p>Back in the repl, reload your source file and run <code>-main</code> again:</p><pre><code>my-proj.core=&gt; (require 'my-proj.core :reload)
-my-proj.core=&gt; (-main)
+</code></pre><p>From elsewhere, open up your <code>src/my/proj.clj</code> file
+in your editor. Modify the text in that <code>println</code> call.</p><p>Back in the repl, reload your source file and run <code>-main</code> again:</p><pre><code>user=&gt; (require 'my.proj :reload)
+nil
+user=&gt; (my.proj/-main)
 </code></pre><p>to see your changes.</p><h2 id="see-also">See Also</h2><p>Other getting started documentation you might find useful:</p><ul><li><a href="http://yogthos.github.io/ClojureDistilled.html">Clojure Distilled</a>:
 introduction to core concepts necessary for working with Clojure</li><li><a href="http://www.unexpected-vortices.com/clojure/brief-beginners-guide/index.html">A Brief Beginner's Guide to
 Clojure</a>:
