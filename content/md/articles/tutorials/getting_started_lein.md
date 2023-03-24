@@ -83,7 +83,7 @@ and see the output from that `println` function call in
 my_proj/core.clj!
 
 
-## Interactive Development
+### Working in the REPL
 
 In your project directory, start up a repl (`lein repl`) and
 run your `-main` function to see its output in the repl:

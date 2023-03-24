@@ -115,8 +115,8 @@ The `-m my.proj` option tells `clojure.main` that we want it to load the `my.pro
 `clojure.main` can also evaluate expressions:
 
 ```
-$ clojure -M -e '(println "Hello, World!")'
-Hello, World!
+$ clojure -M -e '(println "Hello, Command!")'
+Hello, Command!
 ```
 
 or:
@@ -128,30 +128,27 @@ $ clojure -M -e '(clojure-version)'
 
 The `-e` option prints the value returned by the expression (if it is not `nil`).
 
-## Interactive Development
+### Working in the REPL
 
-_[This is currently a copy of the Leiningen Interactive Development section but will be updated to cover the Clojure CLI shortly!]_
-
-In your project directory, start up a repl (`lein repl`) and
+In your project directory, start up a repl (`clj`) and
 run your `-main` function to see its output in the repl:
 
-    $ lein repl
-    ...
-    my-proj.core=> (-main)
+    $ clj
+    Clojure 1.11.1
+    user=> (require 'my.proj)
+    nil
+    user=> (my.proj/-main)
     Hello, World!
     nil
 
-(The prompt is now "my-proj.core=>" instead of "user=>" because lein
-has started the repl in an app project. More about that ("namespaces")
-in the topical guides.)
-
-From elsewhere, open up your my-proj/src/my_proj/core.clj file
+From elsewhere, open up your `src/my/proj.clj` file
 in your editor. Modify the text in that `println` call.
 
 Back in the repl, reload your source file and run `-main` again:
 
-    my-proj.core=> (require 'my-proj.core :reload)
-    my-proj.core=> (-main)
+    user=> (require 'my.proj :reload)
+    nil
+    user=> (my.proj/-main)
 
 to see your changes.
 
