@@ -18,7 +18,7 @@ Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
-This guide uses Clojure 1.5, as well as current versions of the
+This guide uses Clojure 1.11.1, as well as current versions of the
 component libraries noted below.
 
 
@@ -41,7 +41,7 @@ little webapp:
 clojars](https://clojars.org/ring)) is a foundational Clojure web
 application library. It:
 
-  * sets things up such that an http request comes into your webapp
+  * sets things up such that an HTTP request comes into your webapp
     as a regular Clojure hashmap, and likewise makes it so that you
     can return a response as a hashmap.
   * provides [a
@@ -123,7 +123,7 @@ For more info, see:
 
 [H2](http://www.h2database.com/html/main.html) is a small and fast Java SQL
 database that could be embedded in your application or run in server
-mode. Uses single file for storage, but also could be run as in-memory DB.
+mode. It uses a single file for storage, but also could be run as in-memory DB.
 
 > Another similar Java-based embedded DB that could be used in your
 > application is [Apache Derby](http://db.apache.org/derby/).
@@ -132,27 +132,101 @@ mode. Uses single file for storage, but also could be run as in-memory DB.
 
 ## Create and set up your project
 
-Create your new webapp project like so:
+We're going to create this project from scratch and use the Clojure CLI
+so you can how see how all the moving parts work.
 
-```bash
-lein new compojure my-webapp
-cd my-webapp
-```
+In a new folder, perhaps called `my-webapp`, we're going to create a `deps.edn`
+file to specify the libraries we want to use, and a couple of folders: one
+for CSS files and one for your source code.
 
-Add the following extra dependencies to your project.clj's
-`:dependencies` vector:
+The `deps.edn` file should have the following contents:
 
 ```clojure
-[hiccup "1.0.5"]
-[org.clojure/java.jdbc "0.6.0"]
-[com.h2database/h2 "1.4.193"]
+{:deps {;; basic Ring and web server:
+        ring/ring-core {:mvn/version "1.9.6"}
+        ring/ring-jetty-adapter {:mvn/version "1.9.6"}
+
+        ;; routing:
+        compojure/compojure {:mvn/version "1.7.0"}
+
+        ;; convenient package of "default" middleware:
+        ring/ring-defaults {:mvn/version "0.3.4"}
+
+        ;; to generate HTML:
+        hiccup/hiccup {:mvn/version "1.0.5"}
+
+        ;; for the database:
+        com.github.seancorfield/next.jdbc {:mvn/version "1.3.862"}
+        com.h2database/h2 {:mvn/version "2.1.214"}}}
 ```
 
-(You might also remove the `-SNAPSHOT` from the project's version
-string.)
+Now we'll create the first version of our source file:
 
+```clojure
+;; this file is: src/my_app/handler.clj
+(ns my-webapp.handler
+  (:require [compojure.core :refer [defroutes GET]]
+            [compojure.route :as route]
+            [ring.adapter.jetty :as jetty]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
+
+(defroutes app-routes
+  (GET "/" [] "Hello World")
+  (route/not-found "Not Found"))
+
+(def app
+  (wrap-defaults #'app-routes site-defaults))
+
+(defn -main []
+  (jetty/run-jetty #'app {:port 3000}))
+```
+
+> Note: the directory has an underscore in it (`my_app`) but the namespace has a hyphen in it (`my-app`). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake-case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.
+
+At this point you can run this very basic web application from the command-line:
+
+```bash
+clojure -M -m my-app.handler
+```
+
+This says we want to run Clojure's main entry point (`-M`) and then `-m my-app.handler`
+tells Clojure that we want it to run the `-main` function in that namespace.
+
+It will output something like this (and then "hang" while the web server is running):
+
+```
+2023-03-24 14:03:21.305:INFO::main: Logging initialized @2337ms to org.eclipse.jetty.util.log.StdErrLog
+2023-03-24 14:03:21.752:INFO:oejs.Server:main: jetty-9.4.48.v20220622; built: 2022-06-21T20:42:25.880Z; git: 6b67c5719d1f4371b33655ff2d047d24e171e49a; jvm 19.0.2+7
+2023-03-24 14:03:21.783:INFO:oejs.AbstractConnector:main: Started ServerConnector@43201f84{HTTP/1.1, (http/1.1)}{0.0.0.0:3000}
+2023-03-24 14:03:21.783:INFO:oejs.Server:main: Started @2815ms
+```
+
+> Note: you can stop this program running by pressing `^C` (control-c) on macOS or Linux, or by pressing `^Z` (control-z) on Windows.
+
+The only relevant line in that output is `Started ServerConnector` where it
+shows the host and port it is running on -- `0.0.0.0:3000` -- so you should
+be able to output a web browser and go to http://localhost:3000 and you should
+see:
+
+```
+Hello World
+```
+
+If you go to http://localhost:3000/page you should instead see:
+
+```
+Not Found
+```
+
+This is because `defroutes` specifies a single route (`GET "/"`) and then
+`route/not-found` will match all other requests and present the given string
+`"Not Found"`.
+
+Stop the program (as indicated above) and we'll add more features to it.
 
 ## Add some styling
+
+Now we're going to create some styling by creating a CSS file:
 
 ```bash
 mkdir -p resources/public/css
@@ -180,12 +254,12 @@ h1 {
 
 ## Set up your database
 
-A file with DB would be automatically created when you connect to it for the
-first time, so all necessary DB preparations could be done programmatically
-using the REPL (with help of `clojure.java.jdbc`):
+A file containing the database would be automatically created when you connect to it for the
+first time, so all necessary database preparations could be done programmatically
+using the REPL (with help of `next.jdbc`):
 
 ```bash
-lein repl
+clj
 ```
 
 Execute the following code to create a new my-webapp.h2.db database file in db
@@ -193,23 +267,34 @@ subdirectory of your project, create a table we'll use for our webapp, and add
 one record to start us off with:
 
 ```clojure
-(require '[clojure.java.jdbc :as jdbc])
-(jdbc/with-db-connection [conn {:dbtype "h2" :dbname "./my-webapp"}]
-
-  (jdbc/db-do-commands conn
-    (jdbc/create-table-ddl :locations
-      [[:id "bigint primary key auto_increment"]
-       [:x "integer"]
-       [:y "integer"]]))
-
-  (jdbc/insert! conn :locations
-    {:x 8 :y 9}))
+user=> (require '[next.jdbc :as jdbc] '[next.jdbc.sql :as sql])
+nil
+;; a hash map that describes the database we plan to use:
+user=> (def db-spec {:dbtype "h2" :dbname "./my-db"})
+#'user/db-spec
+;; execute a single statement to create the locations table:
+user=> (jdbc/execute-one! db-spec ["
+CREATE TABLE locations (
+  id bigint primary key auto_increment,
+  x  integer,
+  y  integer
+)
+"])
+#:next.jdbc{:update-count 0}
+;; insert a single row of data into that table:
+user=> (sql/insert! db-spec :locations {:x 8 :y 9})
+#:LOCATIONS{:ID 1} ; the generated key(s) from the insert
+user=>
 ```
 
-and hit `ctrl-d` to exit.
+and press `ctrl-d` to exit.
+
+You'll see that a file called `my-db.mv.db` has been created: this contains your `my-db` database.
+
+> Note: the `#:namespace{:key value}` notation is shorthand for `{:namespace/key value}` and is something you'll see a lot in Clojure. Namespace-qualified keys provide additional context: in the first case above `:next.jdbc/update-count` is produced by `next.jdbc` itself whereas `:LOCATIONS.ID` indicates the table and column name of the auto-increment key from the database.
 
 For more about how to use the database functions, see the
-[Using java.jdbc](/articles/ecosystem/java_jdbc/home/) on this site.
+[Getting Started with next.jdbc](https://cljdoc.org/d/com.github.seancorfield/next.jdbc/1.3.862/doc/getting-started).
 
 
 
