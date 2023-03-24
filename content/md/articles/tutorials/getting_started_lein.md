@@ -109,10 +109,52 @@ Back in the repl, reload your source file and run `-main` again:
 to see your changes.
 
 
+### Interactive Development
+
+While you can work with the REPL as shown above for small projects while
+you are getting started, the real benefits of Clojure's "interactive
+development" mindset require an approach that more tightly integrates your
+editor with a running REPL.
+
+Most Clojure-enabled editors have a way to automatically start a REPL for
+a Leiningen project and connect to it in such a way that you can evaluate code
+directly inside your editor, allowing you to "grow" your program incrementally
+while testing each piece of it and exploring how code works, alongside your
+running program.
+
+It's common to use `comment` as a way to include exploratory code in your
+source files, so you can evaluate calls to functions and experiment with
+data tranformations:
+
+```clojure
+(defn greet
+  "Return a greeting for this person."
+  [person]
+  (str "Hello, " person "!"))
+
+(comment
+  ;; Clojure-enabled editors let you easily evaluate these two
+  ;; expressions and will usually show the results inline, so
+  ;; you don't need to switch back and forth between your editor
+  ;; and a separate window running a REPL, and you don't need to
+  ;; copy'n'paste code from the editor into the REPL or type
+  ;; directly into the REPL -- and these comment forms can be left
+  ;; in your code to show how you arrived at the final solution
+  ;; (or remind your future self how you got there!).
+  (greet "Programmer") ; "Hello, Programmer!"
+  (greet nil) ; "Hello, !"
+  )
+```
+
+> These are sometimes called "Rich Comment Forms" because not only can they be a rich source of infomation about how the code works or how it was developed, but also because Rich Hickey, Clojure's creator, uses this approach quite a lot in his own code.
+
 ## See Also
 
 Other getting started documentation you might find useful:
 
+  * [Learn Clojure](https://clojure.org/guides/learn/clojure): the official guide to learning the language
+  * [Programming at the REPL](https://clojure.org/guides/learn/clojure): the official guide to working with the REPL
+  * [Clojure Editors](/articles/tutorials/editors/)
   * [Clojure Distilled](http://yogthos.github.io/ClojureDistilled.html):
     introduction to core concepts necessary for working with Clojure
   * [A Brief Beginner's Guide to
