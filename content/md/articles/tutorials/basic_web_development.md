@@ -206,7 +206,7 @@ It will output something like this (and then "hang" while the web server is runn
 
 The only relevant line in that output is `Started ServerConnector` where it
 shows the host and port it is running on -- `0.0.0.0:3000` -- so you should
-be able to output a web browser and go to http://localhost:3000 and you should
+be able to open a web browser and go to http://localhost:3000 and you should
 see:
 
 ```
@@ -237,6 +237,7 @@ touch resources/public/css/styles.css
 and put into that file something like:
 
 ```css
+// resources/public/css/styles.css
 body {
     background-color: Cornsilk;
 }
@@ -263,8 +264,8 @@ using the REPL (with help of `next.jdbc`):
 clj
 ```
 
-Execute the following code to create a new my-webapp.h2.db database file in db
-subdirectory of your project, create a table we'll use for our webapp, and add
+Execute the following code to create a new `my-db.mv.db` database file in the
+root of your project, create a table we'll use for our webapp, and add
 one record to start us off with:
 
 ```clojure
@@ -292,7 +293,7 @@ and press `ctrl-d` to exit.
 
 You'll see that a file called `my-db.mv.db` has been created: this contains your `my-db` database.
 
-> Note: the `#:namespace{:key value}` notation is shorthand for `{:namespace/key value}` and is something you'll see a lot in Clojure. Namespace-qualified keys provide additional context: in the first case above `:next.jdbc/update-count` is produced by `next.jdbc` itself whereas `:LOCATIONS.ID` indicates the table and column name of the auto-increment key from the database.
+> Note: the `#:namespace{:key value}` notation is shorthand for `{:namespace/key value}` and is something you'll see a lot in Clojure. Namespace-qualified keys provide additional context: in the first case above `:next.jdbc/update-count` is produced by `next.jdbc` itself whereas `:LOCATIONS/ID` indicates the table and column name of the auto-increment key from the database.
 
 For more about how to use the database functions, see the
 [Getting Started with next.jdbc](https://cljdoc.org/d/com.github.seancorfield/next.jdbc/1.3.862/doc/getting-started).
@@ -366,6 +367,8 @@ my-webapp.db=> (get-xy 1)
 #:LOCATIONS{:X 8, :Y 9}
 my-webapp.db=>
 ```
+
+> Note: H2 uses UPPERCASE for its table and column names which looks a little ugly in Clojure. Most other databases will use lowercase for table and column names so you would get results like `#:locations{:x 8, :y 9}` so if you decide to change databases later on, as you evolve this web application, remember to change the case of keys in the `views.clj` file you'll create next.
 
 ## Create your Views
 
@@ -537,7 +540,7 @@ shown above. Once it is running, visit http://localhost:3000 in your
 browser.
 
 You should be able to stop the webapp by
-hitting `ctrl-c`.
+hitting `ctrl-c` (`ctrl-z` on Windows).
 
 
 
@@ -601,7 +604,7 @@ The whole `deps.edn` file should now look like this:
 The `tools.build` library is intended to be used with a `build.clj` script
 which typically lives in the root of your project and is invoked via the
 `:build` alias in your project. It is a Clojure namespace, containing any number
-of function that you can invoke using `clojure -T:build` and the function name.
+of functions that you can invoke using `clojure -T:build` and the function name.
 
 The `:ns-default` key in the `:build` alias is typically set to `build` so
 that you can say `clojure -T:build foo` and the CLI will treat that as an
@@ -704,6 +707,7 @@ And now you can run it directly:
 
 (or on whatever port number you wish). If you run the JAR file from another
 folder, remember to copy the `my-db.mv.db` file to that folder!
+(or else it will create a new database file in that folder)
 
 You could also run it like this:
 
