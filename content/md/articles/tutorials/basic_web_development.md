@@ -142,7 +142,8 @@ for CSS files and one for your source code.
 The `deps.edn` file should have the following contents:
 
 ```clojure
-{:deps {;; basic Ring and web server:
+{:paths ["src" "resources"]
+ :deps {;; basic Ring and web server:
         ring/ring-core {:mvn/version "1.9.6"}
         ring/ring-jetty-adapter {:mvn/version "1.9.6"}
 
@@ -181,15 +182,15 @@ Now we'll create the first version of our source file:
   (jetty/run-jetty #'app {:port 3000}))
 ```
 
-> Note: the directory has an underscore in it (`my_app`) but the namespace has a hyphen in it (`my-app`). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake-case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.
+> Note: the directory has an underscore in it (`my_webapp`) but the namespace has a hyphen in it (`my-webapp`). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake-case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.
 
 At this point you can run this very basic web application from the command-line:
 
 ```bash
-clojure -M -m my-app.handler
+clojure -M -m my-webapp.handler
 ```
 
-This says we want to run Clojure's main entry point (`-M`) and then `-m my-app.handler`
+This says we want to run Clojure's main entry point (`-M`) and then `-m my-webapp.handler`
 tells Clojure that we want it to run the `-main` function in that namespace.
 
 It will output something like this (and then "hang" while the web server is running):
@@ -298,74 +299,85 @@ For more about how to use the database functions, see the
 
 
 
-## Set up your routes
+## Create some db access functions
 
-In the default `src/my_webapp/handler.clj` file you're provided, we
-specify our webapp's *routes* inside the `defroutes` macro. That is,
-we assign a function to handle each of the url paths we'd like to
-support, and then at the end provide a "not found" page for any other
-url paths.
+We're going to work bottom-up, so that our code is always in a state
+where we can evaluate it and try it out via the REPL (hopefully, via
+your REPL-connected editor).
 
-Make your handler.clj file look like this:
+Create a `src/my_webapp/db.clj` file and make it look like:
 
 ```clojure
-(ns my-webapp.handler
-  (:require [my-webapp.views :as views] ; add this require
-            [compojure.core :refer :all]
-            [compojure.route :as route]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
+;; src/my_app/db.clj
+(ns my-webapp.db
+  (:require [next.jdbc.sql :as sql]))
 
-(defroutes app-routes ; replace the generated app-routes with this
-  (GET "/"
-       []
-       (views/home-page))
-  (GET "/add-location"
-       []
-       (views/add-location-page))
-  (POST "/add-location"
-        {params :params}
-        (views/add-location-results-page params))
-  (GET "/location/:loc-id"
-       [loc-id]
-       (views/location-page loc-id))
-  (GET "/all-locations"
-       []
-       (views/all-locations-page))
-  (route/resources "/")
-  (route/not-found "Not Found"))
+(def db-spec {:dbtype "h2" :dbname "./my-db"})
 
-(def app
-  (wrap-defaults app-routes site-defaults))
+(defn add-location-to-db
+  [x y]
+  (let [results (sql/insert! db-spec :locations {:x x :y y})]
+    (assert (and (map? results) (:LOCATIONS/ID results)))
+    results))
+
+(defn get-xy
+  [loc-id]
+  (let [results (sql/query db-spec
+                           ["select x, y from locations where id = ?" loc-id])]
+    (assert (= (count results) 1))
+    (first results)))
+
+(defn get-all-locations
+  []
+  (sql/query db-spec ["select id, x, y from locations"]))
+
+(comment
+  (get-all-locations)
+  ;; => [#:LOCATIONS{:ID 1, :X 8, :Y 9}]
+  (get-xy 1)
+  ;; => #:LOCATIONS{:X 8, :Y 9}
+  )
 ```
 
-Each of those expressions in `defroutes` like `(GET ...)` or `(POST ...)` are
-so-called "routes". They each evaluate to a function that
-takes a ring request hashmap and returns a response hashmap. Your
-`views/foo` function's job is to return that response hashmap, but note
-that Compojure is kind enough to make a suitable response map out of
-any html you return.
+Note that `sql/query` returns a vector  of maps. Each map
+entry's key is a column name (as a Clojure keyword), and its value is
+the value for that column.
 
-So, all you actually need to do now is write your views functions to
-return some html.
+You can try the code out in the `comment` form by evaluating the expressions
+in -- and you should see the same results as the inline comments show.
 
-Incidentally, note the special destructuring that Compojure does for
-you in each of those routes. It can pull out url query (and body)
-parameters, as well as pieces of the url path requested, and hand them
-to your views functions. Read more about that at [Compojure
-destructuring](https://github.com/weavejester/compojure/wiki/Destructuring-Syntax).
+You can also try those calls yourself in a standalone REPL,
+if you like:
 
-
-
+```clojure
+clj
+Clojure 1.11.1
+user=> (require 'my-webapp.db)
+nil
+;; you must require a namespace before you go into it:
+user=> (in-ns 'my-webapp.db)
+#object[clojure.lang.Namespace 0x707865bd "my-webapp.db"]
+;; sql/query returns a vector:
+my-webapp.db=> (sql/query db-spec
+                 ["select x, y from locations where id = ?" 1])
+[#:LOCATIONS{:X 8, :Y 9}]
+;; the get-xy function only returns a single hash map:
+my-webapp.db=> (get-xy 1)
+#:LOCATIONS{:X 8, :Y 9}
+my-webapp.db=>
+```
 
 ## Create your Views
+
+Next, we will create the views -- that generate our HTML pages.
 
 Create a `src/my_webapp/views.clj` file and make it look like:
 
 ```clojure
+;; src/my_webapp/views.clj
 (ns my-webapp.views
-  (:require [my-webapp.db :as db]
-            [clojure.string :as str]
-            [hiccup.page :as page]
+  (:require [hiccup.page :as page]
+            [my-webapp.db :as db]
             [ring.util.anti-forgery :as util]))
 
 (defn gen-page-head
@@ -406,7 +418,7 @@ Create a `src/my_webapp/views.clj` file and make it look like:
 
 (defn add-location-results-page
   [{:keys [x y]}]
-  (let [id (db/add-location-to-db x y)]
+  (let [{id :LOCATIONS/ID} (db/add-location-to-db x y)]
     (page/html5
      (gen-page-head "Added a Location")
      header-links
@@ -417,7 +429,7 @@ Create a `src/my_webapp/views.clj` file and make it look like:
 
 (defn location-page
   [loc-id]
-  (let [{x :x y :y} (db/get-xy loc-id)]
+  (let [{x :LOCATIONS/X y :LOCATIONS/Y} (db/get-xy loc-id)]
     (page/html5
      (gen-page-head (str "Location " loc-id))
      header-links
@@ -436,90 +448,102 @@ Create a `src/my_webapp/views.clj` file and make it look like:
      [:table
       [:tr [:th "id"] [:th "x"] [:th "y"]]
       (for [loc all-locs]
-        [:tr [:td (:id loc)] [:td (:x loc)] [:td (:y loc)]])])))
+        [:tr
+         [:td (:LOCATIONS/ID loc)]
+         [:td (:LOCATIONS/X loc)]
+         [:td (:LOCATIONS/Y loc)]])])))
 ```
 
-Here we've implemented each function used in `handler.clj`.
+These functions generate all the HTML pages needed by our application.
 
-Again, note that each of the functions with names ending in "-page"
-(the ones being called in `handler.clj`) is returning just a plain
-string consisting of html markup. In handler.clj's `defroutes`,
-Compojure is helpfully taking care of placing that into a response
+Each of the functions with names ending in "-page"
+(which will be the ones being called from `handler.clj` in the next section)
+is returning just a string consisting of HTML markup.
+Compojure will take care of placing that into a response
 hashmap for us.
 
-Rather than clog up this file with database-related calls, we've put
-them all into their own `db.clj` file (described next).
+We use the `{sym :key}` form of destructuring in several functions to
+give local symbol names to the values associated with the database table/column keys.
 
+## Set up your routes
 
+Finally, we're going to add the extra routes we need into the main file
+of our application, so that they call our new view functions.
 
-## Create some db access functions
+In the basic `src/my_webapp/handler.clj` file you've created, we
+specify our webapp's *routes* inside the `defroutes` macro. That is,
+we assign a function to handle each of the url paths we'd like to
+support, and then at the end provide a "not found" page for any other
+url paths.
 
-Create a `src/my_webapp/db.clj` file and make it look like:
+Make your `handler.clj` file look like this:
 
 ```clojure
-(ns my-webapp.db
-  (:require [clojure.java.jdbc :as jdbc]))
+;; src/my_app/handler.clj
+(ns my-webapp.handler
+  (:require [compojure.core :refer [defroutes GET POST]] ; add POST here
+            [compojure.route :as route]
+            [my-webapp.views :as views] ; add this require
+            [ring.adapter.jetty :as jetty]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
-(def db-spec {:dbtype "h2" :dbname "./my-webapp"})
+(defroutes app-routes ; replace the previous app-routes with this
+  (GET "/"
+    []
+    (views/home-page))
+  (GET "/add-location"
+    []
+    (views/add-location-page))
+  (POST "/add-location"
+    {params :params}
+    (views/add-location-results-page params))
+  (GET "/location/:loc-id"
+    [loc-id]
+    (views/location-page loc-id))
+  (GET "/all-locations"
+    []
+    (views/all-locations-page))
+  (route/resources "/")
+  (route/not-found "Not Found"))
 
-(defn add-location-to-db
-  [x y]
-  (let [results (jdbc/insert! db-spec :locations {:x x :y y})]
-    (assert (= (count results) 1))
-    (first (vals (first results)))))
+(def app
+  (wrap-defaults #'app-routes site-defaults))
 
-(defn get-xy
-  [loc-id]
-  (let [results (jdbc/query db-spec
-                            ["select x, y from locations where id = ?" loc-id])]
-    (assert (= (count results) 1))
-    (first results)))
-
-(defn get-all-locations
-  []
-  (jdbc/query db-spec "select id, x, y from locations"))
+(defn -main []
+  (jetty/run-jetty #'app {:port 3000}))
 ```
 
-Note that `jdbc/query` returns a seq of maps. Each map
-entry's key is a column name (as a Clojure keyword), and its value is
-the value for that column.
+Each of those expressions in `defroutes` like `(GET ...)` or `(POST ...)` are
+so-called "routes". They each evaluate to a function that
+takes a Ring request hashmap and returns a response hashmap. Your
+`views/foo` function's job is to return that response hashmap, but note
+that Compojure is kind enough to make a suitable response map out of
+any HTML you return.
 
-You'll also notice that we used a plain string in `get-all-locations`,
-rather than putting it in a vector. `java.jdbc` allows us to omit the vector
-wrapping when we have a simple SQL query with no parameters.
+Incidentally, note the special destructuring that Compojure does for
+you in each of those routes. It can pull out url query (and body)
+parameters, as well as pieces of the url path requested, and hand them
+to your views functions. Read more about that at [Compojure
+destructuring](https://github.com/weavejester/compojure/wiki/Destructuring-Syntax).
 
-Of course, you can try out all these calls yourself in the REPL,
-if you like:
 
-```
-~/temp/my-webapp$ lein repl
-...
-user=> (require 'my-webapp.db)
-nil
-user=> (ns my-webapp.db)
-nil
-my-webapp.db=> (jdbc/query db-spec
-          #_=>     "select x, y from locations where id = 1")
-({:y 9, :x 8})
-```
+
+
 
 ## Run your webapp during development
 
-You can run your webapp via lein:
+You can run your webapp any time via `clojure -M -m my-webapp.handler` as
+shown above. Once it is running, visit http://localhost:3000 in your
+browser.
 
-    lein ring server
-
-It should start up and also open a browser window for you pointed at
-<http://localhost:3000>. You should be able to stop the webapp by
+You should be able to stop the webapp by
 hitting `ctrl-c`.
 
-If you don't want it to automatically open a
-browser window, run it like so:
-
-    lein ring server-headless
 
 
 ## Deploy your webapp
+
+**The rest of this page needs updating to use `tools.build` etc.**
 
 To make your webapp suitable for deployment, make the following
 changes:
