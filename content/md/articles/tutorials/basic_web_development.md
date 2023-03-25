@@ -543,76 +543,171 @@ hitting `ctrl-c`.
 
 ## Deploy your webapp
 
-**The rest of this page needs updating to use `tools.build` etc.**
+For the final step, we're going to build an "uberjar". This is a file that
+contains your code plus the Clojure runtime plus all the libraries your
+code depends on: it's a single, self-contained file that can be executed
+by `java` alone and can easily be deployed to servers or services to put
+your application on the web.
+
+In order to produce this `.jar` file, we will rely on the official
+`tools.build` library, and add a `build.clj` file.
+
+All of the steps will be shown here but you can read the
+[`tools.build` guide](https://clojure.org/guides/tools_build) for more details.
 
 To make your webapp suitable for deployment, make the following
 changes:
 
 
-### Changes in project.clj
+### Changes in deps.edn
 
-In your `project.clj` file:
+In your `dep.edn` file add the following, after the `:deps` hash map:
 
-  * add to `:dependencies` (the version should generally match `compojure`s version):
+```clojure
+ :aliases
+ {;; Run with clj -T:build function-in-build
+  :build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}}
+          :ns-default build}}
+```
 
-    ```clojure
-    [ring/ring-jetty-adapter "1.5.1"] ; e.g., for compojure version 1.5.1
-    ```
+The whole `deps.edn` file should now look like this:
 
-  * and also add `:main my-webapp.handler`
+```clojure
+{:paths ["src" "resources"]
+ :deps {;; basic Ring and web server:
+        ring/ring-core {:mvn/version "1.9.6"}
+        ring/ring-jetty-adapter {:mvn/version "1.9.6"}
 
+        ;; routing:
+        compojure/compojure {:mvn/version "1.7.0"}
+
+        ;; convenient package of "default" middleware:
+        ring/ring-defaults {:mvn/version "0.3.4"}
+
+        ;; to generate HTML:
+        hiccup/hiccup {:mvn/version "1.0.5"}
+
+        ;; for the database:
+        com.github.seancorfield/next.jdbc {:mvn/version "1.3.862"}
+        com.h2database/h2 {:mvn/version "2.1.214"}}
+ :aliases
+ {;; Run with clj -T:build function-in-build
+  :build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}}
+          :ns-default build}}}
+```
+
+### Add a build.clj file
+
+The `tools.build` library is intended to be used with a `build.clj` script
+which typically lives in the root of your project and is invoked via the
+`:build` alias in your project. It is a Clojure namespace, containing any number
+of function that you can invoke using `clojure -T:build` and the function name.
+
+The `:ns-default` key in the `:build` alias is typically set to `build` so
+that you can say `clojure -T:build foo` and the CLI will treat that as an
+invocation of the function `build/foo`. All such functions take a single
+argument, which is a hash map of arguments supplied on the command-line
+using Clojure-style syntax:
+
+```clojure
+clojure -T:build foo :bar 42
+;; invokes (build/foo {:bar 42})
+```
+
+For the purposes of this web application project, you want a single function
+that can build the "uberjar" you need. This is typically called `uber` so
+here is the `build.clj` file you need to add, alongside `deps.edn` at the
+top-level of your project:
+
+```clojure
+(ns build
+  (:require [clojure.tools.build.api :as b]))
+
+;; the main namespace in your application:
+(def main-ns 'my-webapp.handler)
+;; where to compile your application:
+(def class-dir "target/classes")
+;; where to create the uberjar file:
+(def uber-file "target/my-webapp.jar")
+
+;; "basis" is a description of your project, as data, that includes
+;; details about the paths and dependencies (libraries) it uses:
+(def basis (b/create-basis {:project "deps.edn"}))
+
+(defn clean [_]
+  (b/delete {:path "target"}))
+
+(defn uber [_]
+  (clean nil)
+  (b/copy-dir {:src-dirs ["src" "resources"]
+               :target-dir class-dir})
+  (b/compile-clj {:basis basis
+                  :src-dirs ["src"]
+                  :class-dir class-dir})
+  (b/uber {:class-dir class-dir
+           :uber-file uber-file
+           :basis basis
+           :main main-ns}))
+```
 
 ### Changes in handler.clj
 
-In `src/my_webapp/handler.clj`:
+In order to make it easier to invoke your application as an uberjar,
+we are going to make a couple of small changes.
 
-  * in your `ns` macro:
-      * add `[ring.adapter.jetty :as jetty]` to the `:require`, and
-      * add `(:gen-class)` to the end
-
-The `ns` form should now look like this:
+First, we're going to add `(:gen-class)` to the end of the `ns` form at the
+top of the file so it looks like this:
 
 ```clojure
 (ns my-webapp.handler
-  (:require [my-webapp.views :as views]
-            [compojure.core :refer :all]
+  (:require [compojure.core :refer [defroutes GET POST]] ; add POST here
             [compojure.route :as route]
-            [ring.adapter.jetty :as jetty] ; add this require
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]])
-  (:gen-class)) ; and add this gen-class
+            [my-webapp.views :as views] ; add this require
+            [ring.adapter.jetty :as jetty]
+            [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
+  (:gen-class))
 ```
 
-  * and at the bottom, add the following `-main` function:
+This tells Clojure to generate a JVM-compatible class for your main namespace
+so that the `-main` function can be invoked directly from Java instead of
+going through `clojure.main` as we've done so far with the Clojure CLI
+and the `-M -m my-webapp.handler` options.
 
-    ~~~clojure
-    (defn -main
-      [& [port]]
-      (let [port (Integer. (or port
-                               (System/getenv "PORT")
-                               5000))]
-        (jetty/run-jetty #'app {:port  port
-                                :join? false})))
-    ~~~
+Second, we're going to update the `-main` function so that you can specify
+the port on which to run the web application, so it isn't fixed to be `3000`.
+We'll allow the port to specified either on the command-line, or as an
+environment variable, else default to a specific value (`3000`).
 
+```clojure
+(defn -main [& [port]]
+  ;; command-line arguments and environment variables are always
+  ;; strings so we need to call parse-long on the result; which
+  ;; means that if neither are specified and we provide the default,
+  ;; then it has to be a string as well:
+  (let [port (parse-long (or port
+                             (System/getenv "PORT")
+                             "3000"))]
+    (jetty/run-jetty #'app {:port port})))
+```
 
 ### Build and Run it
 
 Now create an uberjar of your webapp:
 
 ```
-lein uberjar
+clojure -T:build uber
 ```
 
 And now you can run it directly:
 
-    java -jar target/my-webapp-0.1.0-standalone.jar 8080
+    java -jar target/my-webapp.jar 8080
 
 (or on whatever port number you wish). If you run the JAR file from another
-folder, remember to copy the `my-webapp.mv.db` file to that folder!
+folder, remember to copy the `my-db.mv.db` file to that folder!
 
-_NOTE: if you did not remove "-SNAPSHOT" from the project's version string
-when you first edited `project.clj`, then the JAR file will have `-SNAPSHOT`
-in its name._
+You could also run it like this:
+
+    PORT=8000 java -jar target/my-webapp.jar
 
 
 
