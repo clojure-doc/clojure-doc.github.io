@@ -164,7 +164,7 @@ The `deps.edn` file should have the following contents:
 Now we'll create the first version of our source file:
 
 ```clojure
-;; this file is: src/my_app/handler.clj
+;; this file is: src/my_webapp/handler.clj
 (ns my-webapp.handler
   (:require [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
@@ -309,7 +309,7 @@ your REPL-connected editor).
 Create a `src/my_webapp/db.clj` file and make it look like:
 
 ```clojure
-;; src/my_app/db.clj
+;; src/my_webapp/db.clj
 (ns my-webapp.db
   (:require [next.jdbc.sql :as sql]))
 
@@ -482,7 +482,7 @@ url paths.
 Make your `handler.clj` file look like this:
 
 ```clojure
-;; src/my_app/handler.clj
+;; src/my_webapp/handler.clj
 (ns my-webapp.handler
   (:require [compojure.core :refer [defroutes GET POST]] ; add POST here
             [compojure.route :as route]
