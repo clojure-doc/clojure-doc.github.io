@@ -124,7 +124,7 @@ running program.
 
 It's common to use `comment` as a way to include exploratory code in your
 source files, so you can evaluate calls to functions and experiment with
-data tranformations:
+data transformations:
 
 ```clojure
 (defn greet

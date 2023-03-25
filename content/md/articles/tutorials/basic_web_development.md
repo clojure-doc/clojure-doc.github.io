@@ -182,7 +182,7 @@ Now we'll create the first version of our source file:
   (jetty/run-jetty #'app {:port 3000}))
 ```
 
-> Note: the directory has an underscore in it (`my_webapp`) but the namespace has a hyphen in it (`my-webapp`). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake-case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.
+> Note: the directory has an underscore in it (`my_webapp`) but the namespace has a hyphen in it (`my-webapp`). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake_case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.
 
 At this point you can run this very basic web application from the command-line:
 
