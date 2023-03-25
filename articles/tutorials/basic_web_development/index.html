@@ -150,14 +150,15 @@ tells Clojure that we want it to run the <code>-main</code> function in that nam
 2023-03-24 14:03:21.783:INFO:oejs.Server:main: Started @2815ms
 </code></pre><blockquote><p>Note: you can stop this program running by pressing <code>^C</code> (control-c) on macOS or Linux, or by pressing <code>^Z</code> (control-z) on Windows.</p></blockquote><p>The only relevant line in that output is <code>Started ServerConnector</code> where it
 shows the host and port it is running on -- <code>0.0.0.0:3000</code> -- so you should
-be able to output a web browser and go to http://localhost:3000 and you should
+be able to open a web browser and go to http://localhost:3000 and you should
 see:</p><pre><code>Hello World
 </code></pre><p>If you go to http://localhost:3000/page you should instead see:</p><pre><code>Not Found
 </code></pre><p>This is because <code>defroutes</code> specifies a single route (<code>GET "/"</code>) and then
 <code>route/not-found</code> will match all other requests and present the given string
 <code>"Not Found"</code>.</p><p>Stop the program (as indicated above) and we'll add more features to it.</p><h2 id="add-some-styling">Add some styling</h2><p>Now we're going to create some styling by creating a CSS file:</p><pre><code class="bash">mkdir -p resources/public/css
 touch resources/public/css/styles.css
-</code></pre><p>and put into that file something like:</p><pre><code class="css">body {
+</code></pre><p>and put into that file something like:</p><pre><code class="css">// resources/public/css/styles.css
+body {
     background-color: Cornsilk;
 }
 
@@ -172,8 +173,8 @@ h1 {
 </code></pre><h2 id="set-up-your-database">Set up your database</h2><p>A file containing the database would be automatically created when you connect to it for the
 first time, so all necessary database preparations could be done programmatically
 using the REPL (with help of <code>next.jdbc</code>):</p><pre><code class="bash">clj
-</code></pre><p>Execute the following code to create a new my-webapp.h2.db database file in db
-subdirectory of your project, create a table we'll use for our webapp, and add
+</code></pre><p>Execute the following code to create a new <code>my-db.mv.db</code> database file in the
+root of your project, create a table we'll use for our webapp, and add
 one record to start us off with:</p><pre><code class="clojure">user=&gt; (require '[next.jdbc :as jdbc] '[next.jdbc.sql :as sql])
 nil
 ;; a hash map that describes the database we plan to use:
@@ -192,7 +193,7 @@ CREATE TABLE locations (
 user=&gt; (sql/insert! db-spec :locations {:x 8 :y 9})
 #:LOCATIONS{:ID 1} ; the generated key(s) from the insert
 user=&gt;
-</code></pre><p>and press <code>ctrl-d</code> to exit.</p><p>You'll see that a file called <code>my-db.mv.db</code> has been created: this contains your <code>my-db</code> database.</p><blockquote><p>Note: the <code>#:namespace{:key value}</code> notation is shorthand for <code>{:namespace/key value}</code> and is something you'll see a lot in Clojure. Namespace-qualified keys provide additional context: in the first case above <code>:next.jdbc/update-count</code> is produced by <code>next.jdbc</code> itself whereas <code>:LOCATIONS.ID</code> indicates the table and column name of the auto-increment key from the database.</p></blockquote><p>For more about how to use the database functions, see the
+</code></pre><p>and press <code>ctrl-d</code> to exit.</p><p>You'll see that a file called <code>my-db.mv.db</code> has been created: this contains your <code>my-db</code> database.</p><blockquote><p>Note: the <code>#:namespace{:key value}</code> notation is shorthand for <code>{:namespace/key value}</code> and is something you'll see a lot in Clojure. Namespace-qualified keys provide additional context: in the first case above <code>:next.jdbc/update-count</code> is produced by <code>next.jdbc</code> itself whereas <code>:LOCATIONS/ID</code> indicates the table and column name of the auto-increment key from the database.</p></blockquote><p>For more about how to use the database functions, see the
 <a href="https://cljdoc.org/d/com.github.seancorfield/next.jdbc/1.3.862/doc/getting-started">Getting Started with next.jdbc</a>.</p><h2 id="create-some-db-access-functions">Create some db access functions</h2><p>We're going to work bottom-up, so that our code is always in a state
 where we can evaluate it and try it out via the REPL (hopefully, via
 your REPL-connected editor).</p><p>Create a <code>src/my_webapp/db.clj</code> file and make it look like:</p><pre><code class="clojure">;; src/my_app/db.clj
@@ -243,7 +244,7 @@ my-webapp.db=&gt; (sql/query db-spec
 my-webapp.db=&gt; (get-xy 1)
 #:LOCATIONS{:X 8, :Y 9}
 my-webapp.db=&gt;
-</code></pre><h2 id="create-your-views">Create your Views</h2><p>Next, we will create the views -- that generate our HTML pages.</p><p>Create a <code>src/my_webapp/views.clj</code> file and make it look like:</p><pre><code class="clojure">;; src/my_webapp/views.clj
+</code></pre><blockquote><p>Note: H2 uses UPPERCASE for its table and column names which looks a little ugly in Clojure. Most other databases will use lowercase for table and column names so you would get results like <code>#:locations{:x 8, :y 9}</code> so if you decide to change databases later on, as you evolve this web application, remember to change the case of keys in the <code>views.clj</code> file you'll create next.</p></blockquote><h2 id="create-your-views">Create your Views</h2><p>Next, we will create the views -- that generate our HTML pages.</p><p>Create a <code>src/my_webapp/views.clj</code> file and make it look like:</p><pre><code class="clojure">;; src/my_webapp/views.clj
 (ns my-webapp.views
   (:require [hiccup.page :as page]
             [my-webapp.db :as db]
@@ -375,7 +376,7 @@ to your views functions. Read more about that at <a href="https://github.com/wea
 destructuring</a>.</p><h2 id="run-your-webapp-during-development">Run your webapp during development</h2><p>You can run your webapp any time via <code>clojure -M -m my-webapp.handler</code> as
 shown above. Once it is running, visit http://localhost:3000 in your
 browser.</p><p>You should be able to stop the webapp by
-hitting <code>ctrl-c</code>.</p><h2 id="deploy-your-webapp">Deploy your webapp</h2><p>For the final step, we're going to build an "uberjar". This is a file that
+hitting <code>ctrl-c</code> (<code>ctrl-z</code> on Windows).</p><h2 id="deploy-your-webapp">Deploy your webapp</h2><p>For the final step, we're going to build an "uberjar". This is a file that
 contains your code plus the Clojure runtime plus all the libraries your
 code depends on: it's a single, self-contained file that can be executed
 by <code>java</code> alone and can easily be deployed to servers or services to put
@@ -410,7 +411,7 @@ changes:</p><h3 id="changes-in-depsedn">Changes in deps.edn</h3><p>In your <code
 </code></pre><h3 id="add-a-buildclj-file">Add a build.clj file</h3><p>The <code>tools.build</code> library is intended to be used with a <code>build.clj</code> script
 which typically lives in the root of your project and is invoked via the
 <code>:build</code> alias in your project. It is a Clojure namespace, containing any number
-of function that you can invoke using <code>clojure -T:build</code> and the function name.</p><p>The <code>:ns-default</code> key in the <code>:build</code> alias is typically set to <code>build</code> so
+of functions that you can invoke using <code>clojure -T:build</code> and the function name.</p><p>The <code>:ns-default</code> key in the <code>:build</code> alias is typically set to <code>build</code> so
 that you can say <code>clojure -T:build foo</code> and the CLI will treat that as an
 invocation of the function <code>build/foo</code>. All such functions take a single
 argument, which is a hash map of arguments supplied on the command-line
@@ -474,7 +475,8 @@ environment variable, else default to a specific value (<code>3000</code>).</p><
 </code></pre><h3 id="build-and-run-it">Build and Run it</h3><p>Now create an uberjar of your webapp:</p><pre><code>clojure -T:build uber
 </code></pre><p>And now you can run it directly:</p><pre><code>java -jar target/my-webapp.jar 8080
 </code></pre><p>(or on whatever port number you wish). If you run the JAR file from another
-folder, remember to copy the <code>my-db.mv.db</code> file to that folder!</p><p>You could also run it like this:</p><pre><code>PORT=8000 java -jar target/my-webapp.jar
+folder, remember to copy the <code>my-db.mv.db</code> file to that folder!
+(or else it will create a new database file in that folder)</p><p>You could also run it like this:</p><pre><code>PORT=8000 java -jar target/my-webapp.jar
 </code></pre><h2 id="see-also">See Also</h2><ul><li>To get a head start with a more "batteries-included" project
 template, see <a href="http://www.luminusweb.net/">Luminus</a>.</li></ul><h2 id="contributors">Contributors</h2><p>John Gabriele <a href="mailto:jmg3000@gmail.com">jmg3000@gmail.com</a> (original author)</p><p>Ivan Kryvoruchko <a href="mailto:gildraug@gmail.com">gildraug@gmail.com</a></p><p>Sean Corfield <a href="mailto:sean@corfield.org">sean@corfield.org</a></p>
 
