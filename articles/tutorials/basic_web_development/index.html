@@ -126,7 +126,7 @@ for CSS files and one for your source code.</p><p>The <code>deps.edn</code> file
         ;; for the database:
         com.github.seancorfield/next.jdbc {:mvn/version "1.3.862"}
         com.h2database/h2 {:mvn/version "2.1.214"}}}
-</code></pre><p>Now we'll create the first version of our source file:</p><pre><code class="clojure">;; this file is: src/my_app/handler.clj
+</code></pre><p>Now we'll create the first version of our source file:</p><pre><code class="clojure">;; this file is: src/my_webapp/handler.clj
 (ns my-webapp.handler
   (:require [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
@@ -196,7 +196,7 @@ user=&gt;
 </code></pre><p>and press <code>ctrl-d</code> to exit.</p><p>You'll see that a file called <code>my-db.mv.db</code> has been created: this contains your <code>my-db</code> database.</p><blockquote><p>Note: the <code>#:namespace{:key value}</code> notation is shorthand for <code>{:namespace/key value}</code> and is something you'll see a lot in Clojure. Namespace-qualified keys provide additional context: in the first case above <code>:next.jdbc/update-count</code> is produced by <code>next.jdbc</code> itself whereas <code>:LOCATIONS/ID</code> indicates the table and column name of the auto-increment key from the database.</p></blockquote><p>For more about how to use the database functions, see the
 <a href="https://cljdoc.org/d/com.github.seancorfield/next.jdbc/1.3.862/doc/getting-started">Getting Started with next.jdbc</a>.</p><h2 id="create-some-db-access-functions">Create some db access functions</h2><p>We're going to work bottom-up, so that our code is always in a state
 where we can evaluate it and try it out via the REPL (hopefully, via
-your REPL-connected editor).</p><p>Create a <code>src/my_webapp/db.clj</code> file and make it look like:</p><pre><code class="clojure">;; src/my_app/db.clj
+your REPL-connected editor).</p><p>Create a <code>src/my_webapp/db.clj</code> file and make it look like:</p><pre><code class="clojure">;; src/my_webapp/db.clj
 (ns my-webapp.db
   (:require [next.jdbc.sql :as sql]))
 
@@ -332,7 +332,7 @@ of our application, so that they call our new view functions.</p><p>In the basic
 specify our webapp's <em>routes</em> inside the <code>defroutes</code> macro. That is,
 we assign a function to handle each of the url paths we'd like to
 support, and then at the end provide a "not found" page for any other
-url paths.</p><p>Make your <code>handler.clj</code> file look like this:</p><pre><code class="clojure">;; src/my_app/handler.clj
+url paths.</p><p>Make your <code>handler.clj</code> file look like this:</p><pre><code class="clojure">;; src/my_webapp/handler.clj
 (ns my-webapp.handler
   (:require [compojure.core :refer [defroutes GET POST]] ; add POST here
             [compojure.route :as route]
