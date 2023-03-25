@@ -34,7 +34,8 @@ you can follow the [Getting Started with Clojure and Leiningen](/articles/tutori
 guide here.
 
 If you are following a book or tutorial that uses the Clojure CLI,
-there will be a similar Getting Started with the Clojure CLI guide soon!
+you can follow the [Getting Started with the Clojure CLI](/articles/tutorials/getting_started_cli)
+guide here.
 
 Leiningen is "batteries-included", providing the ability to run code, start a
 REPL, run tests, build and deploy a JAR file, create a new project, etc.
@@ -67,7 +68,7 @@ focused on "running Clojure code". The community responded by providing a
 number of tools based on the CLI's underlying library: `tools.deps`.
 The CLI also offered git dependencies out of the box, so that libraries and
 tools could be made available directly on GitHub (or other similar public
-repositories) with needing JAR files to be built and deployed.
+repositories) without needing JAR files to be built and deployed.
 >
 > Since the release of the official Clojure CLI, usage of Leiningen has dropped
 as the community adopted the new CLI and associated libraries such as
@@ -92,10 +93,15 @@ The reality is that you'll probably have to learn at least a bit of the Clojure 
 
 ## Next Stop
 
-Next stop: [the basic Clojure language tutorial](/articles/tutorials/introduction/).
+Next stop:
+either [Getting Started with the Clojure CLI](/articles/tutorials/getting_started_cli)
+or [Getting Started with Clojure and Leiningen](/articles/tutorials/getting_started_lein)
+and then [the basic Clojure language tutorial](/articles/tutorials/introduction/).
 
 
 
 ## Contributors
 
 John Gabriele <jmg3000@gmail.com> (original author)
+
+Sean Corfield <sean@corfield.org>
