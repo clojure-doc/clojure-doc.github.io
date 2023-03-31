@@ -176,11 +176,14 @@ Now we'll create the first version of our source file:
   (route/not-found "Not Found"))
 
 (def app
+  ;; use #' prefix for REPL-friendly code -- see note below
   (wrap-defaults #'app-routes site-defaults))
 
 (defn -main []
   (jetty/run-jetty #'app {:port 3000}))
 ```
+
+> REPL-friendly code: we use the `#'` prefix on var names so that we can update the definitions while the program is running, without needing to restart our program -- see [writing REPL-friendly programs on clojure.org](https://clojure.org/guides/repl/enhancing_your_repl_workflow#writing-repl-friendly-programs).
 
 > Note: the directory has an underscore in it (`my_webapp`) but the namespace has a hyphen in it (`my-webapp`). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake_case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.
 
@@ -190,7 +193,7 @@ At this point you can run this very basic web application from the command-line:
 clojure -M -m my-webapp.handler
 ```
 
-This says we want to run Clojure's main entry point (`-M`) and then `-m my-webapp.handler`
+This says we want to run [Clojure's main entry point](https://clojure.org/reference/repl_and_main) (`-M`) and then `-m my-webapp.handler`
 tells Clojure that we want it to run the `-main` function in that namespace.
 
 It will output something like this (and then "hang" while the web server is running):
@@ -229,12 +232,8 @@ Stop the program (as indicated above) and we'll add more features to it.
 
 Now we're going to create some styling by creating a CSS file:
 
-```bash
-mkdir -p resources/public/css
-touch resources/public/css/styles.css
-```
-
-and put into that file something like:
+Create the folder structure `resources/public/css` and add a `styles.css`
+file this with contents like:
 
 ```css
 // resources/public/css/styles.css
@@ -344,8 +343,8 @@ Note that `sql/query` returns a vector  of maps. Each map
 entry's key is a column name (as a Clojure keyword), and its value is
 the value for that column.
 
-You can try the code out in the `comment` form by evaluating the expressions
-in -- and you should see the same results as the inline comments show.
+You can try the code out in the `comment` form by evaluating each expression
+in it, and you should see the same results as the inline comments show.
 
 You can also try those calls yourself in a standalone REPL,
 if you like:
@@ -372,7 +371,7 @@ my-webapp.db=>
 
 ## Create your Views
 
-Next, we will create the views -- that generate our HTML pages.
+Next, we will create the views, which generate our HTML pages.
 
 Create a `src/my_webapp/views.clj` file and make it look like:
 
@@ -535,6 +534,8 @@ destructuring](https://github.com/weavejester/compojure/wiki/Destructuring-Synta
 
 ## Run your webapp during development
 
+### Running from the command-line
+
 You can run your webapp any time via `clojure -M -m my-webapp.handler` as
 shown above. Once it is running, visit http://localhost:3000 in your
 browser.
@@ -542,6 +543,25 @@ browser.
 You should be able to stop the webapp by
 hitting `ctrl-c` (`ctrl-z` on Windows).
 
+> Note: changes made to your files while the webapp is running from the command-line will not be reflected until you restart the webapp!
+
+### Running interactively (in the REPL)
+
+You can also run your webapp interactively, i.e., in the REPL, which allows
+for changing functions _while your webapp is running_ and seeing those changes
+immediately.
+
+Add the following `comment` form after the `-main` function:
+
+```clojure
+(comment
+  ;; evaluate this def form to start the webapp via the REPL:
+  ;; :join? false runs the web server in the background!
+  (def server (jetty/run-jetty #'app {:port 3000 :join? false}))
+  ;; evaluate this form to stop the webapp via the the REPL:
+  (.stop server)
+  )
+```
 
 
 ## Deploy your webapp
@@ -701,6 +721,8 @@ Now create an uberjar of your webapp:
 clojure -T:build uber
 ```
 
+> Note: the first time you run this command it will download all the libraries it needs for `tools.build` (quite a few libraries)!
+
 And now you can run it directly:
 
     java -jar target/my-webapp.jar 8080
@@ -709,7 +731,7 @@ And now you can run it directly:
 folder, remember to copy the `my-db.mv.db` file to that folder!
 (or else it will create a new database file in that folder)
 
-You could also run it like this:
+You could also run it like this (on macOS/Linux):
 
     PORT=8000 java -jar target/my-webapp.jar
 
