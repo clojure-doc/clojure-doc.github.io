@@ -138,12 +138,13 @@ for CSS files and one for your source code.</p><p>The <code>deps.edn</code> file
   (route/not-found "Not Found"))
 
 (def app
+  ;; use #' prefix for REPL-friendly code -- see note below
   (wrap-defaults #'app-routes site-defaults))
 
 (defn -main []
   (jetty/run-jetty #'app {:port 3000}))
-</code></pre><blockquote><p>Note: the directory has an underscore in it (<code>my_webapp</code>) but the namespace has a hyphen in it (<code>my-webapp</code>). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake_case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.</p></blockquote><p>At this point you can run this very basic web application from the command-line:</p><pre><code class="bash">clojure -M -m my-webapp.handler
-</code></pre><p>This says we want to run Clojure's main entry point (<code>-M</code>) and then <code>-m my-webapp.handler</code>
+</code></pre><blockquote><p>REPL-friendly code: we use the <code>#'</code> prefix on var names so that we can update the definitions while the program is running, without needing to restart our program -- see <a href="https://clojure.org/guides/repl/enhancing_your_repl_workflow#writing-repl-friendly-programs">writing REPL-friendly programs on clojure.org</a>.</p></blockquote><blockquote><p>Note: the directory has an underscore in it (<code>my_webapp</code>) but the namespace has a hyphen in it (<code>my-webapp</code>). This is important in Clojure: we use lowercase names with hyphens to separate "words" -- often called kebab-case -- but the corresponding directory and filenames should be lowercase with underscores to separate "words" -- often called snake_case. This is due to how Clojure maps code onto names that are acceptable to the underlying JVM ecosystem.</p></blockquote><p>At this point you can run this very basic web application from the command-line:</p><pre><code class="bash">clojure -M -m my-webapp.handler
+</code></pre><p>This says we want to run <a href="https://clojure.org/reference/repl_and_main">Clojure's main entry point</a> (<code>-M</code>) and then <code>-m my-webapp.handler</code>
 tells Clojure that we want it to run the <code>-main</code> function in that namespace.</p><p>It will output something like this (and then "hang" while the web server is running):</p><pre><code>2023-03-24 14:03:21.305:INFO::main: Logging initialized @2337ms to org.eclipse.jetty.util.log.StdErrLog
 2023-03-24 14:03:21.752:INFO:oejs.Server:main: jetty-9.4.48.v20220622; built: 2022-06-21T20:42:25.880Z; git: 6b67c5719d1f4371b33655ff2d047d24e171e49a; jvm 19.0.2+7
 2023-03-24 14:03:21.783:INFO:oejs.AbstractConnector:main: Started ServerConnector@43201f84{HTTP/1.1, (http/1.1)}{0.0.0.0:3000}
@@ -155,9 +156,8 @@ see:</p><pre><code>Hello World
 </code></pre><p>If you go to http://localhost:3000/page you should instead see:</p><pre><code>Not Found
 </code></pre><p>This is because <code>defroutes</code> specifies a single route (<code>GET "/"</code>) and then
 <code>route/not-found</code> will match all other requests and present the given string
-<code>"Not Found"</code>.</p><p>Stop the program (as indicated above) and we'll add more features to it.</p><h2 id="add-some-styling">Add some styling</h2><p>Now we're going to create some styling by creating a CSS file:</p><pre><code class="bash">mkdir -p resources/public/css
-touch resources/public/css/styles.css
-</code></pre><p>and put into that file something like:</p><pre><code class="css">// resources/public/css/styles.css
+<code>"Not Found"</code>.</p><p>Stop the program (as indicated above) and we'll add more features to it.</p><h2 id="add-some-styling">Add some styling</h2><p>Now we're going to create some styling by creating a CSS file:</p><p>Create the folder structure <code>resources/public/css</code> and add a <code>styles.css</code>
+file this with contents like:</p><pre><code class="css">// resources/public/css/styles.css
 body {
     background-color: Cornsilk;
 }
@@ -227,8 +227,8 @@ your REPL-connected editor).</p><p>Create a <code>src/my_webapp/db.clj</code> fi
   )
 </code></pre><p>Note that <code>sql/query</code> returns a vector  of maps. Each map
 entry's key is a column name (as a Clojure keyword), and its value is
-the value for that column.</p><p>You can try the code out in the <code>comment</code> form by evaluating the expressions
-in -- and you should see the same results as the inline comments show.</p><p>You can also try those calls yourself in a standalone REPL,
+the value for that column.</p><p>You can try the code out in the <code>comment</code> form by evaluating each expression
+in it, and you should see the same results as the inline comments show.</p><p>You can also try those calls yourself in a standalone REPL,
 if you like:</p><pre><code class="clojure">clj
 Clojure 1.11.1
 user=&gt; (require 'my-webapp.db)
@@ -244,7 +244,7 @@ my-webapp.db=&gt; (sql/query db-spec
 my-webapp.db=&gt; (get-xy 1)
 #:LOCATIONS{:X 8, :Y 9}
 my-webapp.db=&gt;
-</code></pre><blockquote><p>Note: H2 uses UPPERCASE for its table and column names which looks a little ugly in Clojure. Most other databases will use lowercase for table and column names so you would get results like <code>#:locations{:x 8, :y 9}</code> so if you decide to change databases later on, as you evolve this web application, remember to change the case of keys in the <code>views.clj</code> file you'll create next.</p></blockquote><h2 id="create-your-views">Create your Views</h2><p>Next, we will create the views -- that generate our HTML pages.</p><p>Create a <code>src/my_webapp/views.clj</code> file and make it look like:</p><pre><code class="clojure">;; src/my_webapp/views.clj
+</code></pre><blockquote><p>Note: H2 uses UPPERCASE for its table and column names which looks a little ugly in Clojure. Most other databases will use lowercase for table and column names so you would get results like <code>#:locations{:x 8, :y 9}</code> so if you decide to change databases later on, as you evolve this web application, remember to change the case of keys in the <code>views.clj</code> file you'll create next.</p></blockquote><h2 id="create-your-views">Create your Views</h2><p>Next, we will create the views, which generate our HTML pages.</p><p>Create a <code>src/my_webapp/views.clj</code> file and make it look like:</p><pre><code class="clojure">;; src/my_webapp/views.clj
 (ns my-webapp.views
   (:require [hiccup.page :as page]
             [my-webapp.db :as db]
@@ -373,10 +373,19 @@ any HTML you return.</p><p>Incidentally, note the special destructuring that Com
 you in each of those routes. It can pull out url query (and body)
 parameters, as well as pieces of the url path requested, and hand them
 to your views functions. Read more about that at <a href="https://github.com/weavejester/compojure/wiki/Destructuring-Syntax">Compojure
-destructuring</a>.</p><h2 id="run-your-webapp-during-development">Run your webapp during development</h2><p>You can run your webapp any time via <code>clojure -M -m my-webapp.handler</code> as
+destructuring</a>.</p><h2 id="run-your-webapp-during-development">Run your webapp during development</h2><h3 id="running-from-the-command-line">Running from the command-line</h3><p>You can run your webapp any time via <code>clojure -M -m my-webapp.handler</code> as
 shown above. Once it is running, visit http://localhost:3000 in your
 browser.</p><p>You should be able to stop the webapp by
-hitting <code>ctrl-c</code> (<code>ctrl-z</code> on Windows).</p><h2 id="deploy-your-webapp">Deploy your webapp</h2><p>For the final step, we're going to build an "uberjar". This is a file that
+hitting <code>ctrl-c</code> (<code>ctrl-z</code> on Windows).</p><blockquote><p>Note: changes made to your files while the webapp is running from the command-line will not be reflected until you restart the webapp!</p></blockquote><h3 id="running-interactively-in-the-repl">Running interactively (in the REPL)</h3><p>You can also run your webapp interactively, i.e., in the REPL, which allows
+for changing functions <em>while your webapp is running</em> and seeing those changes
+immediately.</p><p>Add the following <code>comment</code> form after the <code>-main</code> function:</p><pre><code class="clojure">(comment
+  ;; evaluate this def form to start the webapp via the REPL:
+  ;; :join? false runs the web server in the background!
+  (def server (jetty/run-jetty #'app {:port 3000 :join? false}))
+  ;; evaluate this form to stop the webapp via the the REPL:
+  (.stop server)
+  )
+</code></pre><h2 id="deploy-your-webapp">Deploy your webapp</h2><p>For the final step, we're going to build an "uberjar". This is a file that
 contains your code plus the Clojure runtime plus all the libraries your
 code depends on: it's a single, self-contained file that can be executed
 by <code>java</code> alone and can easily be deployed to servers or services to put
@@ -473,10 +482,10 @@ environment variable, else default to a specific value (<code>3000</code>).</p><
                              "3000"))]
     (jetty/run-jetty #'app {:port port})))
 </code></pre><h3 id="build-and-run-it">Build and Run it</h3><p>Now create an uberjar of your webapp:</p><pre><code>clojure -T:build uber
-</code></pre><p>And now you can run it directly:</p><pre><code>java -jar target/my-webapp.jar 8080
+</code></pre><blockquote><p>Note: the first time you run this command it will download all the libraries it needs for <code>tools.build</code> (quite a few libraries)!</p></blockquote><p>And now you can run it directly:</p><pre><code>java -jar target/my-webapp.jar 8080
 </code></pre><p>(or on whatever port number you wish). If you run the JAR file from another
 folder, remember to copy the <code>my-db.mv.db</code> file to that folder!
-(or else it will create a new database file in that folder)</p><p>You could also run it like this:</p><pre><code>PORT=8000 java -jar target/my-webapp.jar
+(or else it will create a new database file in that folder)</p><p>You could also run it like this (on macOS/Linux):</p><pre><code>PORT=8000 java -jar target/my-webapp.jar
 </code></pre><h2 id="see-also">See Also</h2><ul><li>To get a head start with a more "batteries-included" project
 template, see <a href="http://www.luminusweb.net/">Luminus</a>.</li></ul><h2 id="contributors">Contributors</h2><p>John Gabriele <a href="mailto:jmg3000@gmail.com">jmg3000@gmail.com</a> (original author)</p><p>Ivan Kryvoruchko <a href="mailto:gildraug@gmail.com">gildraug@gmail.com</a></p><p>Sean Corfield <a href="mailto:sean@corfield.org">sean@corfield.org</a></p>
 
