@@ -63,8 +63,9 @@ Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
 Github</a>.</p><h2 id="overview">Overview</h2><p>This is a brief beginner's introduction to Clojure. If you haven't
 already done so, have a look at the <a href="/articles/tutorials/getting_started/">Getting
-Started</a> tutorial. Before
-continuing, make sure you've got Java and
+Started</a> tutorials. Before
+continuing, make sure you've got Java and either the
+<a href="https://clojure.org/guides/deps_and_cli">Clojure CLI</a> or
 <a href="https://leiningen.org">Leiningen</a> installed, and can create a new
 project and run a REPL in it. The author expects you'll want to have a
 REPL running while following this introduction so you can type
@@ -73,12 +74,21 @@ discussing the REPL, to reduce clutter we've usually omitted showing
 the REPL prompt (ex. "<code>user=&gt;</code>" or "<code>my-proj.core=&gt;</code>").</p><p>Additionally: In Clojure, a semicolon begins a single-line comment,
 and in this document we use "<code>; ⇒</code>" (for trailing comments) and
 "<code>;; ⇒</code>" (for comments on their own line) to indicate what the
-previous expression evaluates to.</p></blockquote><p>This introduction is a whirlwind tutorial of most of the basics of
+previous expression evaluates to.</p><p>Code samples shown with a blue outline around them are interactive:
+the box containing the code is editable and the box containing the
+output/result will automatically update as you edit the code. These
+examples are powered by <a href="https://github.com/viebel/klipse">Klipse</a>.</p></blockquote><p>This introduction is a whirlwind tutorial of most of the basics of
 Clojure. Its goal is to rapidly get you familiar with the core
 areas of the language without wasting your time and also without getting
 too bogged down in details or advanced topics (the various topics will
 get more comprehensive coverage in the topic guides anyway).</p><p>As we said in the Getting Started tutorial, Clojure is a wonderfully
-simple language, and you're going to love it.</p><h2 id="the-basics">The Basics</h2><p>Clojure is a general-purpose programming language, and a quite
+simple language, and you're going to love it.</p><p>This is just one of many Clojure tutorials out there. The official
+Clojure site has a <a href="https://clojure.org/guides/learn/clojure">Learn Clojure</a>
+series tha was not available when this Introduction was originally written.
+The Practical.li website also has an excellent
+<a href="https://practical.li/clojure/">Learn Clojure</a> book and there's also the
+classic <a href="https://www.braveclojure.com/">Clojure for the Brave and True</a>
+(although that is showing its age a bit at this point).</p><h2 id="the-basics">The Basics</h2><p>Clojure is a general-purpose programming language, and a quite
 practical one at that.</p><p>The syntax for Clojure is like Lisp and is very simple: code is made
 up of expressions which are evaluated to some value. Here are some
 examples of expressions:</p><pre><code class="clojure">5                      ; ⇒ 5
@@ -266,12 +276,12 @@ the namespace --- covered in a moment), but Clojure makes all the
 clojure.core functions automatically available by their unqualified
 names (that is, sans namespace) for convenience.</p><p>Fully-qualified names are written "namespace/symbol". The namespace
 may have dots in it, which correspond to directories in your
-filesystem. For example, the function foo-bar.core/my-func corresponds
-to the my-func function in src/foo_bar/core.clj. (It's just a bit of
+filesystem. For example, the function <code>foo-bar.core/my-func</code> corresponds
+to the <code>my-func</code> function in <code>src/foo_bar/core.clj</code>. (It's just a bit of
 the underlying Java platform showing through that you need to use
 underscores in your directory names instead of dashes).</p><p>It's most common for one source code file to correspond to one
 namespace, and often comprise one <em>library</em>. At the top of your source
-file, you write <code>(ns whatever)</code> and that declares the namespace for
+file, you write <code>(ns what.ever)</code> and that declares the namespace for
 the rest of the file.</p><p>In the repl, you can make use of libraries --- and at the same time
 provide a handy alias for them --- by <em>requiring</em> them like so:</p><pre><code class="klipse-clojure nohighlight">(require '[clojure.string :as str])
 </code></pre><p>Now we can use all the functions in the clojure.string library by
@@ -408,7 +418,12 @@ sequentials works on strings. For example:</p><pre><code class="clojure">(first 
 ;; l
 ;; o
 ;; ⇒ nil
-</code></pre><p>Again, see the cheatsheet for more.</p><h2 id="values-immutability-and-persistence">Values, Immutability, and Persistence</h2><p>A <em>value</em> is fundamentally a constant thing; For example, the letter
+</code></pre><p>Again, see the cheatsheet for more.</p><p>Here's an interactive cell for you to experiment more with string functions:</p><pre><code class="klipse-clojure nohighlight">(first "hello")
+(last "hello")
+(rest "hello")
+(nth "hello" 1)
+(doseq [letter "hello"] (println letter))
+</code></pre><h2 id="values-immutability-and-persistence">Values, Immutability, and Persistence</h2><p>A <em>value</em> is fundamentally a constant thing; For example, the letter
 "a" is a value. You don't "set" the letter "a" to some other value; it
 always stays the letter "a". It's immutable. The value 10 is always
 10. You can't ever "set 10 to 11". That makes no sense. If you want
@@ -734,7 +749,14 @@ function "build it up" as you go. For example:</p><pre><code class="clojure">(re
 ;; ⇒  {:hi "hi-29" :hello "hello-42" :bye "bye-10"}
 </code></pre><p>Building up some accumulator using <code>reduce</code> and your own custom
 function is a fairly common pattern (and once again allows us to
-avoid looping and manipulations of anything mutable).</p><h3 id="partial-comp-and-iterate">partial, comp, and iterate</h3><p>With <code>partial</code> you can create a function which wraps another one and
+avoid looping and manipulations of anything mutable).</p><blockquote><p><strong>Note:</strong> sometimes you might want to capture those intermediate values
+from <code>reduce</code> -- 1, 3, 6, 10, 15 from that first example -- and the
+<code>reductions</code> function lets you do that:</p></blockquote><pre><code class="clojure">(reductions + [1 2 3 4 5])
+;; =&gt; (1 3 6 10 15)
+(reductions + 10 [1 2 3 4 5])
+;; =&gt; (10 11 13 16 20 25)
+</code></pre><blockquote><p>In the first case, since you did not provide a starting value, it used
+1, but in the second case it used 10, which you provided.</p></blockquote><h3 id="partial-comp-and-iterate">partial, comp, and iterate</h3><p>With <code>partial</code> you can create a function which wraps another one and
 passes it some standard arguments every time, along with the ones you
 supply right when you call it. For example:</p><pre><code class="klipse-clojure nohighlight">(defn lots-of-args [a b c d] (str/join "-" [a b c d]))
 </code></pre><pre><code class="klipse-clojure nohighlight">(lots-of-args 10 20 30 40)
