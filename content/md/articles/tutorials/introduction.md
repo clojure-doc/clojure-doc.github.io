@@ -28,8 +28,9 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 This is a brief beginner's introduction to Clojure. If you haven't
 already done so, have a look at the [Getting
-Started](/articles/tutorials/getting_started/) tutorial. Before
-continuing, make sure you've got Java and
+Started](/articles/tutorials/getting_started/) tutorials. Before
+continuing, make sure you've got Java and either the
+[Clojure CLI](https://clojure.org/guides/deps_and_cli) or
 [Leiningen](https://leiningen.org) installed, and can create a new
 project and run a REPL in it. The author expects you'll want to have a
 REPL running while following this introduction so you can type
@@ -43,6 +44,11 @@ expressions into it as you go.
 > and in this document we use "`; ⇒`" (for trailing comments) and
 > "`;; ⇒`" (for comments on their own line) to indicate what the
 > previous expression evaluates to.
+>
+> Code samples shown with a blue outline around them are interactive:
+> the box containing the code is editable and the box containing the
+> output/result will automatically update as you edit the code. These
+> examples are powered by [Klipse](https://github.com/viebel/klipse).
 
 This introduction is a whirlwind tutorial of most of the basics of
 Clojure. Its goal is to rapidly get you familiar with the core
@@ -53,7 +59,13 @@ get more comprehensive coverage in the topic guides anyway).
 As we said in the Getting Started tutorial, Clojure is a wonderfully
 simple language, and you're going to love it.
 
-
+This is just one of many Clojure tutorials out there. The official
+Clojure site has a [Learn Clojure](https://clojure.org/guides/learn/clojure)
+series tha was not available when this Introduction was originally written.
+The Practical.li website also has an excellent
+[Learn Clojure](https://practical.li/clojure/) book and there's also the
+classic [Clojure for the Brave and True](https://www.braveclojure.com/)
+(although that is showing its age a bit at this point).
 
 
 ## The Basics
@@ -471,14 +483,14 @@ names (that is, sans namespace) for convenience.
 
 Fully-qualified names are written "namespace/symbol". The namespace
 may have dots in it, which correspond to directories in your
-filesystem. For example, the function foo-bar.core/my-func corresponds
-to the my-func function in src/foo_bar/core.clj. (It's just a bit of
+filesystem. For example, the function `foo-bar.core/my-func` corresponds
+to the `my-func` function in `src/foo_bar/core.clj`. (It's just a bit of
 the underlying Java platform showing through that you need to use
 underscores in your directory names instead of dashes).
 
 It's most common for one source code file to correspond to one
 namespace, and often comprise one *library*. At the top of your source
-file, you write `(ns whatever)` and that declares the namespace for
+file, you write `(ns what.ever)` and that declares the namespace for
 the rest of the file.
 
 In the repl, you can make use of libraries --- and at the same time
@@ -692,6 +704,15 @@ sequentials works on strings. For example:
 
 Again, see the cheatsheet for more.
 
+Here's an interactive cell for you to experiment more with string functions:
+
+```klipse-clojure
+(first "hello")
+(last "hello")
+(rest "hello")
+(nth "hello" 1)
+(doseq [letter "hello"] (println letter))
+```
 
 
 
@@ -1393,6 +1414,19 @@ Building up some accumulator using `reduce` and your own custom
 function is a fairly common pattern (and once again allows us to
 avoid looping and manipulations of anything mutable).
 
+> **Note:** sometimes you might want to capture those intermediate values
+> from `reduce` -- 1, 3, 6, 10, 15 from that first example -- and the
+> `reductions` function lets you do that:
+
+``` clojure
+(reductions + [1 2 3 4 5])
+;; => (1 3 6 10 15)
+(reductions + 10 [1 2 3 4 5])
+;; => (10 11 13 16 20 25)
+```
+
+> In the first case, since you did not provide a starting value, it used
+> 1, but in the second case it used 10, which you provided.
 
 
 ### partial, comp, and iterate
