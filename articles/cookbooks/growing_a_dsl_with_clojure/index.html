@@ -9,11 +9,11 @@
 
 <meta property="og:description" content="Lisps like Clojure are well suited to creating rich DSLs that integrate seamlessly into the language.You may have heard Lisps boasting about code being data and data being code. In this article we will define a DSL that benefits handsomely from this fact.">
 
-<meta property="og:url" content="https://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/growing_a_dsl_with_clojure/" />
 <meta property="og:title" content="Growing a DSL with Clojure" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.org/articles/tutorials/growing_a_dsl_with_clojure/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/cookbooks/growing_a_dsl_with_clojure/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -98,7 +98,7 @@ asdf
   "Returns a String containing the equivalent Bash script
   to its argument."
   (cond
-    (list? a) 
+    (list? a)
     (case (name (first a))
       "println" (str "echo " (second a)))
 
@@ -137,7 +137,7 @@ asdf
               (number? form) :number
               :else (throw (ex-info "Unknown type" form)))))
 
-(defmethod emit-batch 
+(defmethod emit-batch
   :list
   [form]
   (case (name (first form))
@@ -235,13 +235,13 @@ asdf
 
     <div id="prev-next">
         
-        <a href="/articles/tutorials/parsing_xml_with_zippers/">&laquo; Parsing XML in Clojure</a>
+        <a href="/articles/cookbooks/parsing_xml_with_zippers/">&laquo; Parsing XML in Clojure</a>
         
         
         ||
         
         
-        <a href="/articles/ecosystem/web_development/">Web Development (Overview) &raquo;</a>
+        <a href="/articles/tutorials/emacs/">Clojure with Emacs &raquo;</a>
         
     </div>
 </div>
@@ -268,10 +268,6 @@ asdf
                     
                     <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
                     
-                    <li><a href="/articles/tutorials/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
-                    
-                    <li><a href="/articles/tutorials/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
-                    
                     <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
                     
                     <li><a href="/articles/cookbooks/data_structures/">Data Structures (Help wanted)</a></li>
@@ -285,6 +281,10 @@ asdf
                     <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
                     
                     <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
                     
                 </ul>
                 
