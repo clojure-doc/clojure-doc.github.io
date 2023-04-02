@@ -1,5 +1,5 @@
 {:title "Growing a DSL with Clojure"
- :page-index 1700
+ :page-index 4700
  :klipse true
  :layout :page}
 
@@ -178,7 +178,7 @@ So let’s add a clause for lists.
   "Returns a String containing the equivalent Bash script
   to its argument."
   (cond
-    (list? a) 
+    (list? a)
     (case (name (first a))
       "println" (str "echo " (second a)))
 
@@ -205,7 +205,7 @@ Currently, to extend our implementation we add to our function emit-bash-form. E
 
 Essentially emit-bash-form is dispatching on the type of its argument. This dispatch style is a perfect fit for an abstraction Clojure provides called a multimethod.
 
-Let’s define a multimethod called `emit-bash`. 
+Let’s define a multimethod called `emit-bash`.
 
 The multimethod handles dispatch in a similar way to `cond`, but without having to actually write each case. Let’s compare this multimethod with our previous `cond` expression. `defmulti` is used to create a new multimethod, and associates it with a dispatch function.
 
@@ -270,7 +270,7 @@ Let’s say I’m happy with the Bash implementation. I feel like starting a new
               (number? form) :number
               :else (throw (ex-info "Unknown type" form)))))
 
-(defmethod emit-batch 
+(defmethod emit-batch
   :list
   [form]
   (case (name (first form))

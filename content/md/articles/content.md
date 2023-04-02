@@ -257,13 +257,13 @@ This guide covers:
 A brief tutorial/walkthrough of building a small web app using Ring,
 Compojure, Hiccup, and H2.
 
-### [Parsing XML in Clojure](/articles/tutorials/parsing_xml_with_zippers/)
+### [Parsing XML in Clojure](/articles/cookbooks/parsing_xml_with_zippers/)
 
 This guide covers:
 
  * How to parse XML in Clojure with zippers (`clojure.data.zip`)
 
-### [Growing a DSL with Clojure](/articles/tutorials/growing_a_dsl_with_clojure/)
+### [Growing a DSL with Clojure](/articles/cookbooks/growing_a_dsl_with_clojure/)
 
 How to create a simple DSL with Clojure.
 
