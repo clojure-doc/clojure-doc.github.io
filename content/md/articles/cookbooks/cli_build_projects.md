@@ -8,11 +8,14 @@ is a library for building artifacts in Clojure projects, which are typically
 library `.jar` files for deployment to repositories like [Clojars](https://clojars.org)
 for others to use or application `.jar` files to run on servers on in containers.
 
-`tools.build` provides functions to copy files and directories, run arbitrary
-commands and capture their output, with special support for `java` commands,
-to easily run `git` commands,
-create `pom.xml` files, compile Clojure (and Java) code, and build both `.jar`
+`tools.build` provides functions to copy files and directories, to run arbitrary
+commands and capture their output (with special support for `java` commands),
+to easily run `git` commands, to
+create `pom.xml` files, to compile Clojure (and Java) code, and to build both `.jar`
 and `.zip` files.
+
+This cookbook will offer examples that go beyond the basics in the official
+guide, based on real-world projects.
 
 ### Executing functions with the Clojure CLI
 
@@ -174,13 +177,39 @@ You can do the same thing with:
 
     clojure -T:build hello '{:name "Build"}'
 
-### The `tools.build` Library
+## The `tools.build` Library
 
-[work in progress]
+The official guide provides three examples, and talks briefly about passing
+parameters into `build` task functions:
+* [Source library jar build](https://clojure.org/guides/tools_build#_source_library_jar_build)
+* [Compiled uberjar application build](https://clojure.org/guides/tools_build#_compiled_uberjar_application_build)
+* [Mixed Java / Clojure build](https://clojure.org/guides/tools_build#_mixed_java_clojure_build)
 
-Point to API docs and official Guide. Talk about typically things we might
-build. Show examples of library/application JAR. Show how to run tests in
-a process and how to create a CI pipeline. Show Clojars deployment.
+Those examples are a good starting point for simple projects but there is
+so much you can do with `build.clj` to automate all manner of things in
+larger projects:
+* Multi-version testing
+* Continuous Integration pipelines
+* Automated deployments
+* Parameterizing builds using aliases in `deps.edn`
+* Using a "build REPL"
+* Coordinating build tasks across multiple subprojects
 
-* https://clojure.github.io/tools.build/clojure.tools.build.api.html
-* https://clojure.org/guides/tools_build
+For reference, here's the official documentation:
+* [The `tools.build` Guide](https://clojure.org/guides/tools_build)
+* [`clojure.tools.build.api` API Documentation](https://clojure.github.io/tools.build/clojure.tools.build.api.html)
+
+Before we start on more complex tasks, let's first look as a task to run
+an arbitrary process based on aliases.
+
+### Running Tasks based on Aliases
+
+`tools.build` provides functions to construct a Java-based command-line and
+then run it as a subprocess, using a "basis" to control what classpath is
+passed to the `java` command.
+
+For a very simple example:
+
+```clojure
+(defn writers-block [ugh!])
+```
