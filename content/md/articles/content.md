@@ -185,9 +185,9 @@ This guide covers:
  * An overview of Apache Maven
  * Maven Clojure plugin
 
-### [Clojure Library Directory](/articles/ecosystem/libraries_directory/)
+### [The Clojure Toolbox](https://www.clojure-toolbox.com/)
 
-A curated and highly opinionated categorized directory of available Clojure libraries and tools.
+This is a well-maintained directory of libraries, organized by category, and is interactively searchable.
 
 ### [Clojure Community](/articles/ecosystem/community/)
 
