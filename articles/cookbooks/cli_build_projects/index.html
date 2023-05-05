@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Clojure Guides: Building Projects: tools.build and the Clojure CLI</title>
+    
+
+<meta name="description" content="tools.build and the Clojure CLItools.build
+is a library for building artifacts in Clojure projects, which are typically
+library .jar files for deployment to repositories like Clojars
+for others to use or application .jar files to run on servers on in containers.">
+
+<meta property="og:description" content="tools.build and the Clojure CLItools.build
+is a library for building artifacts in Clojure projects, which are typically
+library .jar files for deployment to repositories like Clojars
+for others to use or application .jar files to run on servers on in containers.">
+
+<meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/cli_build_projects/" />
+<meta property="og:title" content="Building Projects: tools.build and the Clojure CLI" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="https://clojure-doc.org/articles/cookbooks/cli_build_projects/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Clojure Guides</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li><a href="https://github.com/clojure-doc/clojure-doc.github.io">Contribute</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="custom-page">
+    <div id="page-header">
+        <h2>Building Projects: tools.build and the Clojure CLI</h2>
+    </div>
+    
+    <h2 id="toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</h2><p><a href="https://github.com/clojure/tools.build"><code>tools.build</code></a>
+is a library for building artifacts in Clojure projects, which are typically
+library <code>.jar</code> files for deployment to repositories like <a href="https://clojars.org">Clojars</a>
+for others to use or application <code>.jar</code> files to run on servers on in containers.</p><p><code>tools.build</code> provides functions to copy files and directories, to run arbitrary
+commands and capture their output (with special support for <code>java</code> commands),
+to easily run <code>git</code> commands, to
+create <code>pom.xml</code> files, to compile Clojure (and Java) code, and to build both <code>.jar</code>
+and <code>.zip</code> files.</p><p>This cookbook will offer examples that go beyond the basics in the official
+guide, based on real-world projects.</p><h3 id="executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</h3><p>The <a href="https://clojure.org/guides/deps_and_cli">Clojure CLI</a> was introduced
+by the core Clojure team in 2018 and focused on starting a REPL and
+running code, and managing dependencies using a <code>deps.edn</code> file.</p><p>Unlike <a href="https://leiningen.org/">Leiningen</a>, which was more of a
+"batteries-included" approach, the CLI assumed that you would declare
+additional tooling through "aliases" in <code>deps.edn</code> that added extra
+dependencies and evolved, over time, to support both traditional
+command-line invocation -- a sequence of string arguments passed to a <code>-main</code>
+function -- and direct invocation of Clojure functions, passing a
+hash map of options from the command-line:</p><pre><code>clojure -X my-proj.api/foo '{:bar 42}'
+</code></pre><p>This will attempt to load the <code>my-proj.api</code> namespace and call the <code>foo</code>
+function, passing in the hash map <code>{:bar 42}</code>. If you have the following
+code:</p><pre><code class="clojure">;; src/my_proj/api.clj
+(ns my-proj.api)
+
+(defn foo [opts]
+  (println (get opts :bar "No :bar passed!")))
+</code></pre><p>Then it will print <code>42</code>. You can also specify the hash map as individual
+key/value pairs on the command-line:</p><p>clojure -X my-proj.api/foo :bar 42</p><p>You can shorten that in two ways:</p><p>Add an alias to your <code>deps.edn</code> file that includes the default namespace
+you want to use:</p><pre><code class="clojure">;; deps.edn
+{
+ :aliases
+ {
+  :api {:ns-default my-proj.api}
+ }}
+</code></pre><p>Now you can omit the namespace from the command-line:</p><pre><code>clojure -X:api foo :bar 42
+</code></pre><p>Or you can specify a default function to run in an alias:</p><pre><code class="clojure">;; deps.edn
+{
+ :aliases
+ {
+  :api {:ns-default my-proj.api}
+  :foo {:exec-fn my-proj.api/foo}
+ }}
+</code></pre><p>Now <code>-X</code> on its own will run that <code>foo</code> function:</p><pre><code>clojure -X :bar 42
+</code></pre><p>The <code>-X</code> option to the Clojure CLI stands for "eXecute function" and it
+uses the same default context as your project, so your source code and its
+dependencies are all available. This is useful for running tests, for
+example, using the
+<a href="https://github.com/cognitect-labs/test-runner">Cognitect Labs' test-runner</a>
+project:</p><pre><code class="clojure">;; deps.edn
+{
+ :aliases
+ {
+  ;; add this to :aliases in deps.edn:
+  :test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}}
+ }}
+</code></pre><p>and now you can run your tests with:</p><pre><code>clojure -X:test cognitect.test-runner.api/test
+</code></pre><p>which you can shorten by specifying the function you want to execute
+by default directly in the alias:</p><pre><code class="clojure">;; deps.edn
+{
+ :aliases
+ {
+  ;; add this to :aliases in deps.edn:
+  :test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :exec-fn cognitect.test-runner.api/test}
+ }}
+</code></pre><p>Now you can run your tests with:</p><pre><code>clojure -X:test
+</code></pre><p>However, sometimes you want to run some tooling without the context of your
+project and the <code>-T</code> option is provided for that -- "execute Tooling":
+it omits the dependencies
+and paths from your project, using only those declared in the aliases you
+specify with <code>-T</code> (if any).</p><p>The functions in <code>tools.build</code> are intended to be used with <code>-T</code> and you
+typically declare a <code>:build</code> alias in <code>deps.edn</code> for this:</p><pre><code class="clojure">;; deps.edn
+{
+ :aliases
+ {
+  ;; add this to :aliases in deps.edn:
+  :build {:deps {io.github.clojure/tools.build
+                 {:git/tag "v0.9.4" :git/sha "76b78fe"}}
+          :ns-default build}
+ }}
+</code></pre><p>The <code>-T</code> option implicitly sets <code>:paths ["."]</code> (as opposed to <code>:paths ["src"]</code>
+which is the default for <code>-M</code> and <code>-X</code>).</p><p>The code for the build processes would typically be in a <code>build.clj</code>
+file in the root of your project -- so its namespace would be <code>build</code> (since
+the file is relative to <code>"."</code> -- the project root). As shown above,
+the <code>:ns-default</code> key then allows you to omit the namespace portion when
+you invoke functions in <code>build.clj</code>:</p><pre><code class="clojure">(ns build
+  (:require [clojure.tools.build.api :as b]))
+
+(defn hello [opts]
+  (println (str "Hello, " (:name opts "World") "!")))
+</code></pre><p>Try this out by running that <code>hello</code> function:</p><pre><code>clojure -T:build hello
+
+clojure -T:build hello :name '"Build"'
+</code></pre><p>The extra quotes in that second example are necessary to pass a Clojure string
+(with double quotes) through the shell as a literal value (with single quotes).
+You can do the same thing with:</p><pre><code>clojure -T:build hello '{:name "Build"}'
+</code></pre><h2 id="the-toolsbuild-library">The <code>tools.build</code> Library</h2><p>The official guide provides three examples, and talks briefly about passing
+parameters into <code>build</code> task functions:</p><ul><li><a href="https://clojure.org/guides/tools_build#_source_library_jar_build">Source library jar build</a></li><li><a href="https://clojure.org/guides/tools_build#_compiled_uberjar_application_build">Compiled uberjar application build</a></li><li><a href="https://clojure.org/guides/tools_build#_mixed_java_clojure_build">Mixed Java / Clojure build</a></li></ul><p>Those examples are a good starting point for simple projects but there is
+so much you can do with <code>build.clj</code> to automate all manner of things in
+larger projects:</p><ul><li>Multi-version testing</li><li>Continuous Integration pipelines</li><li>Automated deployments</li><li>Parameterizing builds using aliases in <code>deps.edn</code></li><li>Using a "build REPL"</li><li>Coordinating build tasks across multiple subprojects</li></ul><p>For reference, here's the official documentation:</p><ul><li><a href="https://clojure.org/guides/tools_build">The <code>tools.build</code> Guide</a></li><li><a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html"><code>clojure.tools.build.api</code> API Documentation</a></li></ul><p>Before we start on more complex tasks, let's first look as a task to run
+an arbitrary process based on aliases.</p><h3 id="running-tasks-based-on-aliases">Running Tasks based on Aliases</h3><p><code>tools.build</code> provides functions to construct a Java-based command-line and
+then run it as a subprocess, using a "basis" to control what classpath is
+passed to the <code>java</code> command.</p><p>For a very simple example:</p><pre><code class="clojure">(defn writers-block [ugh!])
+</code></pre>
+
+    <div id="prev-next">
+        
+        <a href="/articles/ecosystem/web_development/">&laquo; Web Development (Overview)</a>
+        
+        
+        ||
+        
+        
+        <a href="/articles/cookbooks/data_structures/">Data Structures (Help wanted) &raquo;</a>
+        
+    </div>
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    
+                    <li><a href="/articles/about/">About</a></li>
+                    
+                    <li><a href="/articles/content/">Table of Contents</a></li>
+                    
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/tutorials/getting_started/">Getting Started with Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/introduction/">Introduction to Clojure</a></li>
+                    
+                    <li><a href="/articles/tutorials/editors/">Clojure Editors</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
+                    
+                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/cookbooks/cli_build_projects/">Building Projects: tools.build and the Clojure CLI</a></li>
+                    
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures (Help wanted)</a></li>
+                    
+                    <li><a href="/articles/cookbooks/strings/">Strings</a></li>
+                    
+                    <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time (Help wanted)</a></li>
+                    
+                    <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/middleware/">Middleware in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/parsing_xml_with_zippers/">Parsing XML in Clojure</a></li>
+                    
+                    <li><a href="/articles/cookbooks/growing_a_dsl_with_clojure/">Growing a DSL with Clojure</a></li>
+                    
+                </ul>
+                
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2023 Multiple Authors
+        <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
