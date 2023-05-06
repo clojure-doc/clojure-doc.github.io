@@ -11,104 +11,63 @@ are not included in this document.
 
 For more comprehensive overview of the Clojure library ecosystem, please see [ClojureSphere](http://clojuresphere.com/).
 
+Legend:
 
-## Support Libraries
+* If a library is listed here with a description and also on clojure-toolbox, I've left it in place here but marked it with three stars (in case Toolbox wants to add summary lines).
+* If a library is listed here and is not on clojure-toolbox but seems useful and well-maintained, I've marked it with three pluses (and will propose to Toolbox shortly).
 
-### General
-
-  * [useful](https://github.com/clj-commons/useful) ([at clojars](https://clojars.org/org.flatland/useful))
-
-  * [ClojureWerkz Support](https://github.com/clojurewerkz/support) ([at clojars](https://clojars.org/clojurewerkz/support))
-
-  * [medley](https://github.com/weavejester/medley) ([at clojars](https://clojars.org/medley))
-
+> Note: If a library was listed here without a description and also on clojure-toolbox, I've removed it from here. If a library was listed here but seems abandoned, I've removed it from here.
 
 ## Applications & Environment
 
-  * [tools.cli](https://github.com/clojure/tools.cli): a command line argument parser for Clojure
+  * *** [tools.cli](https://github.com/clojure/tools.cli): a command line argument parser for Clojure
 
-  * [environ](https://clojars.org/environ): Manage environment settings from a number of different sources
-
-  * [carica](https://github.com/sonian/carica) ([at clojars](https://clojars.org/sonian/carica)):
-    Flexible config file usage & management library.
-
-
-## Date and Time
-
-  * [clj-time](https://clojars.org/clj-time): A date and time library for Clojure
-
+  * *** [environ](https://clojars.org/environ): Manage environment settings from a number of different sources
 
 ## Testing
 
-  * [clojure.test](https://clojure.github.io/clojure/clojure.test-api.html): the standard unit testing library that ships with Clojure
+  * +++ [cloverage](https://github.com/cloverage/cloverage): a test-coverage tool
 
-  * [Midje](https://clojars.org/midje): a more featureful test framework
+  * *** [expectations](https://clojure-expectations.github.io/): a minimalist's testing framework (diff URL)
 
-  * [cloverage](https://github.com/lshift/cloverage): a test-coverage tool (lein plug-in)
-
-  * [expectations](https://github.com/jaycfields/expectations) ([at clojars](https://clojars.org/expectations)): a minimalist's testing framework
-
-  * [test.generative](https://github.com/clojure/test.generative): generative testing, a la QuickCheck
-
-  * [conjure](https://github.com/amitrathore/conjure) ([at clojars](https://clojars.org/org.clojars.runa/conjure)):
-    mocking and stubbing for unit tests.
-
-
-## Namespaces and Code-as-Data
-
- * [tools.namespace](https://github.com/clojure/tools.namespace)
-
- * [builtitude](https://github.com/Raynes/bultitude) ([at clojars](https://clojars.org/bultitude))
-
- * [findfn](https://github.com/Raynes/findfn) ([at clojars](https://clojars.org/findfn))
-
- * [ns-tracker](https://github.com/weavejester/ns-tracker) ([at clojars](https://clojars.org/ns-tracker))
-
+  * +++ [test.generative](https://github.com/clojure/test.generative): generative testing, a la QuickCheck
 
 
 ## Serialization
 
 ### JSON
 
-  * [cheshire](https://github.com/dakrone/cheshire/) ([at clojars](https://clojars.org/cheshire)): very efficient Clojure JSON and SMILE (binary JSON) encoding/decoding.
+  * *** [cheshire](https://github.com/dakrone/cheshire/): very efficient Clojure JSON and SMILE (binary JSON) encoding/decoding.
 
-  * [data.json](https://github.com/clojure/data.json): JSON parser/generator to/from Clojure data structures.
-
-### Protocol Buffers
-
-  * [clojure-protobuf](https://github.com/flatland/clojure-protobuf) ([at clojars](https://clojars.org/protobuf)): a Clojure interface to Google's protocol buffers
-
-### Kryo
-
-  * [carbonite](https://github.com/revelytix/carbonite)
+  * *** [data.json](https://github.com/clojure/data.json): JSON parser/generator to/from Clojure data structures.
 
 ### Clojure Reader
 
-  * [Nippy](https://github.com/ptaoussanis/nippy) ([at clojars](https://clojars.org/nippy)): a more efficient implementation of the Clojure reader
+  * *** [Nippy](https://github.com/ptaoussanis/nippy): a more efficient implementation of the Clojure reader
 
 ### XML
 
-  * [data.xml](https://github.com/clojure/data.xml): a library for reading and writing XML
+  * *** [data.xml](https://github.com/clojure/data.xml): a library for reading and writing XML
 
 ### Binary Formats
 
-  * [gloss](https://github.com/ztellman/gloss) ([at clojars](https://clojars.org/gloss)): turns complicated byte formats into Clojure data structures
+  * *** [gloss](https://github.com/clj-commons/gloss): turns complicated byte formats into Clojure data structures -- moved to clj-commons
 
 
 ## File formats
 
-  * [clj-pdf](https://clojars.org/clj-pdf): a library for easily generating PDFs from Clojure
+  * *** [clj-pdf](https://clojars.org/clj-pdf): a library for easily generating PDFs from Clojure
 
-  * [Pantomime](https://github.com/michaelklishin/pantomime) ([at clojars](https://clojars.org/pantomime)): a tiny Clojure library that deals with Internet media types (MIME types) and content type detection
+  * *** [Pantomime](https://github.com/michaelklishin/pantomime): a tiny Clojure library that deals with Internet media types (MIME types) and content type detection
 
-  * [data.csv](https://github.com/clojure/data.csv): a CSV parser
+  * *** [data.csv](https://github.com/clojure/data.csv): a CSV parser
 
 
 ## Templating
 
-  * [Stencil](https://clojars.org/stencil): [Mustache](https://mustache.github.io/) for Clojure (logic-less templates). Fast.
+  * *** [Stencil](https://clojars.org/stencil): [Mustache](https://mustache.github.io/) for Clojure (logic-less templates). Fast.
 
-  * [Clostache](https://clojars.org/de.ubercode.clostache/clostache): another nice [Mustache](https://mustache.github.io/) implementation
+  * *** [Clostache](https://clojars.org/de.ubercode.clostache/clostache): another nice [Mustache](https://mustache.github.io/) implementation
 
 
 
@@ -116,24 +75,18 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### Client/Server
 
-  * [HTTP Kit](http://http-kit.org/) ([at
-    clojars](https://clojars.org/http-kit)): High-performance
-    event-driven HTTP client/server for Clojure.
+  * *** [HTTP Kit](http://http-kit.org/): High-performance event-driven HTTP client/server for Clojure.
 
 ### Client
 
-  * [clj-http](https://github.com/dakrone/clj-http) ([at clojars](https://clojars.org/clj-http)): An idiomatic Clojure http client wrapping the apache client.
-
-  * [clj-http-lite](https://github.com/hiredman/clj-http-lite) ([at clojars](https://clojars.org/clj-http-lite)): A lightweight version of clj-http having almost same API, but without any Apache dependencies.
+  * *** [clj-http](https://github.com/dakrone/clj-http): An idiomatic Clojure http client wrapping the apache client.
 
 ## Logging
 
-  * [Timbre](https://clojars.org/com.taoensso/timbre):
+  * *** [Timbre](https://clojars.org/com.taoensso/timbre):
     Simple, flexible, all-Clojure logging. No XML!
 
-  * [tools.logging](https://github.com/clojure/tools.logging/): standard general-purpose logging.
-
-  * [clj-log](https://clojars.org/clj-log): s-expression logger.
+  * *** [tools.logging](https://github.com/clojure/tools.logging/): standard general-purpose logging.
 
 
 
@@ -141,67 +94,54 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### Web Services
 
-  * [Ring](https://github.com/ring-clojure) ([at clojars](https://clojars.org/ring)): foundational
+  * *** [Ring](https://github.com/ring-clojure): foundational
     web application library
 
-  * [Compojure](https://github.com/weavejester/compojure) ([at clojars](https://clojars.org/compojure)):
+  * *** [Compojure](https://github.com/weavejester/compojure):
     concise routing library for Ring
 
-  * [Pedestal](http://pedestal.io/) ([at clojars](https://clojars.org/search?q=pedestal)):
-    an open source tool set for building web applications in Clojure
+  * *** [Pedestal](http://pedestal.io/): an open source tool set for building web applications in Clojure
 
-  * [Luminus](http://www.luminusweb.net/): lein template for creating batteries-included
-    web applications using Ring, Compojure, lib-noir, and other libraries.
+  * *** [Luminus](http://www.luminusweb.net/): lein template for creating batteries-included web applications using Ring, Compojure, lib-noir, and other libraries.
 
-  * [Liberator](https://github.com/clojure-liberator/liberator) ([at clojars](https://clojars.org/liberator)): a Clojure library for building RESTful applications
+  * *** [Liberator](https://github.com/clojure-liberator/liberator): a Clojure library for building RESTful applications
 
-  * [friend](https://github.com/cemerick/friend) ([at clojars](https://clojars.org/com.cemerick/friend)): Authentication and authorization library for Web apps
+  * *** [friend](https://github.com/cemerick/friend): Authentication and authorization library for Web apps
 
 
 ### HTML Generation
 
-  * [hiccup](https://clojars.org/hiccup): Generates HTML from Clojure data structures.
+  * *** [hiccup](https://clojars.org/hiccup): Generates HTML from Clojure data structures.
 
-  * [Stencil](https://github.com/davidsantiago/stencil): Implements the Mustache templating language.
+  * *** [Stencil](https://github.com/davidsantiago/stencil): Implements the Mustache templating language.
 
-  * [markdown-clj](https://clojars.org/markdown-clj): Clojure based Markdown parsers for both Clojure and ClojureScript.
+  * *** [markdown-clj](https://clojars.org/markdown-clj): Clojure based Markdown parsers for both Clojure and ClojureScript.
 
 
 ### HTML Parsers
 
-  * [Crouton](https://clojars.org/crouton): A Clojure wrapper for the JSoup HTML and XML parser that handles real world inputs
-
-  * [Crawlista](https://github.com/michaelklishin/crawlista) ([at clojars](https://clojars.org/clojurewerkz/crawlista)): a support library for applications that crawl the Web
-
-  * [TagSoup](https://search.maven.org/artifact/org.ccil.cowan.tagsoup/tagsoup/): a tool for parsing html as it's found in the wild: poor, nasty, and brutish.
+  * *** [Crouton](https://clojars.org/crouton): A Clojure wrapper for the JSoup HTML and XML parser that handles real world inputs
 
 
 ### Data Validation
 
-  * [Validateur](http://clojurevalidations.info) ([at clojars](https://clojars.org/com.novemberain/validateur)): functional validations library inspired by Ruby's ActiveModel
+  * *** [Validateur](http://clojurevalidations.info): functional validations library inspired by Ruby's ActiveModel
 
-  * [Metis](https://github.com/mylesmegyesi/metis): another validations library inspired by Ruby's ActiveModel
-
-  * [Clj-Schema](https://github.com/runa-dev/clj-schema) ([at clojars](https://clojars.org/org.clojars.runa/clj-schema)): Schemas for Clojure Data: validation and test data generators
-
+  * *** [Metis](https://github.com/mylesmegyesi/metis): another validations library inspired by Ruby's ActiveModel
 
 ### URIs, URLs
 
-  * [Urly](https://github.com/michaelklishin/urly) ([at clojars](https://clojars.org/clojurewerkz/urly)): unifies `java.net.URL`, `java.net.URI` and string URIs, provides parsing and manipulation helpers
-
-  * [Exploding Fish](https://github.com/wtetzner/exploding-fish) ([at clojars](https://clojars.org/org.bovinegenius/exploding-fish)): a URI library for Clojure
-
-  * [route-one](https://github.com/clojurewerkz/route-one) ([at clojars](https://clojars.org/clojurewerkz/route-one)): a tiny Clojure library that generates HTTP resource routes (as in Ruby on Rails, Jersey, and so on)
+  * *** [route-one](https://github.com/clojurewerkz/route-one): a tiny Clojure library that generates HTTP resource routes (as in Ruby on Rails, Jersey, and so on)
 
 
 ### Internationalization (i18n), Localization (l10n)
 
-  * [Tower](https://github.com/ptaoussanis/tower) ([at clojars](https://clojars.org/tower)): a simple, idiomatic internationalization and localization story for Clojure
+  * +++ [Tower](https://github.com/ptaoussanis/tower): a simple, idiomatic internationalization and localization story for Clojure
 
 
 ### RSS
 
-  * [clj-rss](https://clojars.org/clj-rss): RSS feed generation library
+  * *** [clj-rss](https://clojars.org/clj-rss): RSS feed generation library
 
 
 
@@ -209,156 +149,92 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 ### Relational Databases, JDBC
 
-  * [next.jdbc](https://cljdoc.org/d/com.github.seancorfield/next.jdbc/): Modern wrapper for JDBC. Works with all JDBC databases (MySQL, PostgreSQL, Oracle, SQL Server, etc).
+  * *** [next.jdbc](https://cljdoc.org/d/com.github.seancorfield/next.jdbc/): Modern wrapper for JDBC. Works with all JDBC databases (MySQL, PostgreSQL, Oracle, SQL Server, etc).
 
 
 ### CouchDB
 
-  * [Clutch](https://github.com/clojure-clutch/clutch) ([at clojars](https://clojars.org/com.ashafa/clutch)): [Apache CouchDB](http://couchdb.apache.org/) client.
+  * *** [Clutch](https://github.com/clojure-clutch/clutch): [Apache CouchDB](http://couchdb.apache.org/) client.
 
 ### MongoDB
 
-  * [Monger](http://clojuremongodb.info) ([at clojars](https://clojars.org/com.novemberain/monger)): Monger is an idiomatic Clojure MongoDB driver for a more civilized age with solid documentation
+  * *** [Monger](http://clojuremongodb.info): Monger is an idiomatic Clojure MongoDB driver for a more civilized age with solid documentation
 
-  * [congomongo](https://github.com/aboekhoff/congomongo) ([at clojars](https://clojars.org/congomongo)): Basic wrapper for the MongoDB Java driver
-
-  * [Mongoika](https://github.com/yuushimizu/Mongoika) ([at clojars](https://clojars.org/mongoika))
-
-### Riak
-
-  * [Welle](https://clojureriak.info) ([at clojars](https://clojars.org/com.novemberain/welle)): An expressive Clojure client for Riak with solid documentation
+  * *** [congomongo](https://github.com/congomongo/congomongo): Basic wrapper for the MongoDB Java driver
 
 ### Redis
 
-  * [Carmine](https://github.com/ptaoussanis/carmine) ([at clojars](https://clojars.org/com.taoensso/carmine)): a great Clojure client for Redis
+  * *** [Carmine](https://github.com/ptaoussanis/carmine): a great Clojure client for Redis
 
 ### Graph Databases (Neo4J, Titan, etc)
 
-  * [Neocons](http://clojureneo4j.info) ([at clojars](https://clojars.org/clojurewerkz/neocons)): Neocons is a feature rich idiomatic [Clojure client for the Neo4J REST API](http://clojureneo4j.info)  with solid documentation
-
-  * [Titanium](http://titanium.clojurewerkz.org) ([at clojars](https://clojars.org/clojurewerkz/titanium)):
-    a Clojure graph library built on top of Titan
-
-  * [Archimedes](https://github.com/zmaril/archimedes) ([at clojars](https://clojars.org/zmaril/archimedes)):
-    a Clojure wrapper for Tinkerpop Blueprints
-
-  * [Ogre](https://github.com/zmaril/ogre) ([at clojars](https://clojars.org/zmaril/ogre)):
-    a Clojure library for querying Tinkerpop graphs
-
-  * [Borneo](https://github.com/wagjo/borneo) ([at clojars](https://clojars.org/borneo))
+  * *** [Neocons](http://clojureneo4j.info): Neocons is a feature rich idiomatic [Clojure client for the Neo4J REST API](http://clojureneo4j.info)  with solid documentation
+eprints
 
 ### ElasticSearch
 
-  * [Elastisch](http://clojureelasticsearch.info) ([at clojars](https://clojars.org/clojurewerkz/elastisch)): Elastisch is a minimalistic Clojure client for [ElasticSearch](http://elasticsearch.org) with solid documentation.
-
-  * [Esperanto](https://github.com/drewr/esperanto)
+  * *** [Elastisch](http://clojureelasticsearch.info): Elastisch is a minimalistic Clojure client for [ElasticSearch](http://elasticsearch.org) with solid documentation.
 
 ### Memcached, Couchbase, Kestrel
 
-  * [Spyglass](http://clojurememcached.info) ([at clojars](https://clojars.org/clojurewerkz/spyglass)): Spyglass is a very fast Clojure client for Memcached and Couchbase with solid documentation
+  * *** [Spyglass](https://github.com/clojurewerkz/spyglass): Spyglass is a very fast Clojure client for Memcached and Couchbase with solid documentation
 
 ### Apache Cassandra
 
-  * [Cassaforte](https://github.com/clojurewerkz/cassaforte) ([at clojars](https://clojars.org/clojurewerkz/cassaforte)): A young Clojure client for Apache Cassandra
+  * *** [Cassaforte](https://github.com/clojurewerkz/cassaforte): A young Clojure client for Apache Cassandra
 
-  * [clj-hector](https://github.com/pingles/clj-hector) ([at clojars](https://clojars.org/org.clojars.paul/clj-hector)): A simple Clojure client for Cassandra that wraps Hector
-
-  * [Alia](https://github.com/mpenet/alia) ([at clojars](https://clojars.org/cc.qbits/alia)): Cassandra CQL3 client for Clojure, [datastax/java-driver](https://github.com/datastax/java-driver) wrapper
-
-  * [ccm-clj](https://github.com/SMX-LTD/ccm-clj) ([at clojars](https://clojars.org/com.smxemail/ccm-clj): Clojure interface to the Cassandra Cluster Manager, [ccm](https://github.com/pcmanus/ccm)
-
-### Amazon DynamoDB
-
-  * [Rotary](https://github.com/weavejester/rotary) ([at clojars](https://clojars.org/rotary))
-
-### Tokyo Cabinet
-
-  * [tokyocabinet](https://github.com/flatland/tokyocabinet) ([at clojars](https://clojars.org/tokyocabinet)): native Tokyo Cabinet interface for Clojure
-
-### Misc
-
-  * [masai](https://github.com/flatland/masai) ([at clojars](https://clojars.org/masai)): a very simple interface to a number of key-value stores
-
-  * [jiraph](https://github.com/flatland/jiraph) ([at clojars](https://clojars.org/jiraph)): a reasonably licensed embedded graph database with swappable backends
-
+  * *** [Alia](https://github.com/mpenet/alia): Cassandra CQL3 client for Clojure, [datastax/java-driver](https://github.com/datastax/java-driver) wrapper
 
 
 ## Networking
 
- * [Lamina](https://github.com/ztellman/lamina) ([at clojars](https://clojars.org/lamina)): event-driven workflows in Clojure
+  * ***[Lamina](https://github.com/ztellman/lamina): event-driven workflows in Clojure
 
- * [Aleph](https://github.com/clj-commons/aleph) ([at clojars](https://clojars.org/aleph)): asynchronous communication in Clojure
+  * ***[Aleph](https://github.com/clj-commons/aleph): asynchronous communication in Clojure
 
 
 ## Application Servers
 
- * [Immutant](http://immutant.org/) ([at clojars](https://clojars.org/org.immutant/immutant)): a feature rich and integrated application platform for Clojure from Red Hat
+  * ***[Immutant](http://immutant.org/): a feature rich and integrated application platform for Clojure from Red Hat
 
 
 ## Messaging
 
 ### RabbitMQ
 
- * [Langohr](http://clojurerabbitmq.info) ([at clojars](https://clojars.org/com.novemberain/langohr)): a feature complete RabbitMQ client that embraces AMQP 0.9.1 model and learns from others
-
-### ZeroMQ
-
- * [Jilch](https://github.com/mpenet/jilch) ([at clojars](https://clojars.org/jilch)): Clojure ZeroMQ Library using JeroMQ, no native dependencies
+  * ***[Langohr](http://clojurerabbitmq.info): a feature complete RabbitMQ client that embraces AMQP 0.9.1 model and learns from others
 
 ### Beanstalk
 
- * [beanstalk](https://github.com/drsnyder/beanstalk) ([at clojars](https://clojars.org/com.github.drsnyder/beanstalk)): a Beanstalkd client
+  * ***[beanstalk](https://github.com/drsnyder/beanstalk): a Beanstalkd client
 
 ### Amazon SQS
 
- * [Bandalore](https://github.com/cemerick/bandalore): a Clojure client library for Amazon's Simple Queue Service
-
-### HornetQ
-
- * [hornetq-clj](https://github.com/hugoduncan/hornetq-clj) ([at clojars](https://clojars.org/hornetq-clj/client)): a tiny HornetQ client
+  * ***[Bandalore](https://github.com/cemerick/bandalore): a Clojure client library for Amazon's Simple Queue Service
 
 
 ## Data Processing, Computation
 
- * [Twitter Storm](http://storm-project.net/) ([at clojars](https://clojars.org/storm)): distributed realtime computation system
-
- * [Cascalog](http://www.cascalog.org/) ([at clojars](https://clojars.org/cascalog)): data processing on Hadoop without the hassle
+  * ***[Cascalog](http://www.cascalog.org/): data processing on Hadoop without the hassle
 
 
-
-## Natural Language Processing
-
- * [clojure-opennlp](https://github.com/dakrone/clojure-opennlp) ([at clojars](https://clojars.org/clojure-opennlp))
-
-
-## Parsers, Parser Combinators, Language Construction
-
- * [Instaparse](https://github.com/Engelberg/instaparse) ([at clojars](https://clojars.org/instaparse))
-
- * [Kern](https://github.com/blancas/kern) ([at clojars](https://clojars.org/org.blancas/kern))
 
 
 ## Automation, Provisioning, DevOps Tools
 
- * [jclouds](http://www.jclouds.org/): unified APIs for dozens of cloud (IaaS) providers
+ * *** [Amazonica](https://github.com/mcohen01/amazonica): comprehensive Clojure client for the entire AWS API
 
- * [Amazonica](https://github.com/mcohen01/amazonica): comprehensive Clojure client for the entire AWS API
-
- * [clj-ssh](https://github.com/hugoduncan/clj-ssh) ([at clojars](https://clojars.org/clj-ssh)): an SSH client
-
- * [ssh-transport](https://github.com/pallet/ssh-transport): executes commands over SSH
+ * +++ [clj-ssh](https://github.com/clj-commons/clj-ssh): an SSH client
 
 
 ## Monitoring, metrics
 
- * [metrics-clojure](https://github.com/sjl/metrics-clojure) ([at clojars](https://clojars.org/metrics-clojure)):
+ * +++ [metrics-clojure](https://github.com/metrics-clojure/metrics-clojure):
    Clojure library on top of Yammer's Metrics
 
- * [clj-statsd](https://github.com/pyr/clj-statsd) ([at clojars](https://clojars.org/clj-statsd)): simple client library to interface with statsd
+ * +++ [clj-statsd](https://github.com/pyr/clj-statsd): simple client library to interface with statsd
 
- * [pulse](https://github.com/heroku/pulse): Real-time Heroku operations dashboard
-
- * [riemann](http://riemann.io) ([at clojars](https://clojars.org/riemann)): A network event stream processing system, in Clojure.
+ * +++ [riemann](http://riemann.io): A network event stream processing system, in Clojure.
 
 
 ## I/O
@@ -367,147 +243,99 @@ For more comprehensive overview of the Clojure library ecosystem, please see [Cl
 
 File I/O is covered by the JDK and commonly used via `clojure.java.io` functions.
 
-  * [fs](https://github.com/clj-commons/fs) ([at clojars](https://clojars.org/clj-commons/fs)): utilities for working with the file system
-  * [nio](https://github.com/pjstadig/nio): Clojure library for working with for Java NIO classes
+  * *** [fs](https://github.com/clj-commons/fs): utilities for working with the file system
 
 
 ### Standard Streams, Subprocesses
 
-Standard streams I/O is covered by the JDK and commonly used via `clojure.java.io` functions.
 
-  * clojure.java.shell (part of Clojure distribution): Conveniently launch a sub-process providing
-    its stdin and collecting its stdout.
-
-  * [conch](https://clojars.org/conch): for shelling out to external programs.
+  * *** [conch](https://clojars.org/conch): for shelling out to external programs.
     An alternative to clojure.java.shell.
 
-
-### Property Files
-
-  * [propertea](https://github.com/jaycfields/propertea) ([at clojars](https://clojars.org/propertea)): painlessly work with property files
 
 
 ### REPL and Terminal
 
-  * [REPLy](https://github.com/trptcolin/reply) ([at clojars](https://clojars.org/reply)): a Swiss army knife of interactive editing, and better REPL for Clojure
+  * +++ [REPLy](https://github.com/trptcolin/reply): a Swiss army knife of interactive editing, and better REPL for Clojure
 
-  * [clojure-lanterna](https://clojars.org/clojure-lanterna) ([at clojars](https://clojars.org/clojure-lanterna)): for creating TUIs (terminal-based user-interfaces), like ncurses.
-
-
-
-## Concurrency and Parallelism
-
-  * [java.util.concurrent](https://docs.oracle.com/javase/7/docs/technotes/guides/concurrency/index.html): a comprehensive, very mature set of concurrency primitives built into the JDK
-  * [Okku](https://github.com/gaverhae/okku) ([at clojars](https://clojars.org/org.clojure.gaverhae/okku)): Akka API for Clojure
 
 
 
 ## Mathematics
 
-  * [math.numeric-tower](https://github.com/clojure/math.numeric-tower): various utility math functions
+  * *** [math.numeric-tower](https://github.com/clojure/math.numeric-tower): various utility math functions
 
-  * [math.combinatorics](https://github.com/clojure/math.combinatorics): common combinatorial functions
+  * +++ [math.combinatorics](https://github.com/clojure/math.combinatorics): common combinatorial functions
 
-  * [core.matrix](https://github.com/mikera/matrix-api): matrix operations
+  * *** [core.matrix](https://github.com/mikera/matrix-api): matrix operations
 
 
 ## Email
 
-  * [Postal](https://github.com/drewr/postal) ([at clojars](https://clojars.org/com.draines/postal)): generate and send email with Clojure
+  * *** [Postal](https://github.com/drewr/postal): generate and send email with Clojure
 
-  * [Mailer](https://github.com/clojurewerkz/mailer) ([at clojars](https://clojars.org/clojurewerkz/mailer)): generate and send email using Postal and Moustache templates
+  * *** [Mailer](https://github.com/clojurewerkz/mailer): generate and send email using Postal and Moustache templates
 
 
 
 ## Data Structures and Algorithms
 
-### Strings
-
-  * clojure.string
-
-### Sets
-
-  * clojure.set
-
 ### Caching
 
-  * [core.cache](https://github.com/clojure/core.cache): the Clojure API for various cache implementations
-
-### UUIDs
-
-  * [tardis](https://github.com/mpenet/tardis) ([at clojars](https://clojars.org/cc.qbits/tardis)): manages Type 1 UUIDs (time based)
+  * *** [core.cache](https://github.com/clojure/core.cache): the Clojure API for various cache implementations
 
 ### Monads
 
-  * [algo.monads](https://github.com/clojure/algo.monads): macros for defining monads, and definition of the most common monads
+  * *** [algo.monads](https://github.com/clojure/algo.monads): macros for defining monads, and definition of the most common monads
 
-  * [protocol-monads](https://github.com/jduey/protocol-monads): A protocol based monad implementation for clojure
-
-### Memoization
-
-  * [core.memoize](https://github.com/clojure/core.memoize)
-
-### Other
-
-  * [vclock](https://github.com/michaelklishin/vclock) ([at clojars](https://clojars.org/clojurewerkz/vclock)): a vector clocks implementation
-
-  * [chash](https://github.com/michaelklishin/chash) ([at clojars](https://clojars.org/clojurewerkz/chash)): a consistent hashing library
+  * *** [protocol-monads](https://github.com/jduey/protocol-monads): A protocol based monad implementation for clojure
 
 
 ## Scheduling
 
-  * [Quartzite](http://clojurequartz.info) ([at clojars](https://clojars.org/clojurewerkz/quartzite)): a powerful scheduling library
+  * *** [Quartzite](http://clojurequartz.info): a powerful scheduling library
 
 
 ## Graphics and GUI
 
-  * [Quil](https://clojars.org/quil): For making drawings, animations,
+  * *** [Quil](https://clojars.org/quil): For making drawings, animations,
     and artwork ([some examples](https://github.com/quil/quil-examples/blob/master/src/quil_sketches/gen_art/README.md)). Wraps
     the ["Processing"](https://www.processing.org/) graphics environment.
 
-  * [seesaw](https://github.com/clj-commons/seesaw/) ([at clojars](https://clojars.org/seesaw)): A Swing wrapper/DSL.
+  * *** [seesaw](https://github.com/clj-commons/seesaw/): A Swing wrapper/DSL.
 
-  * [clisk](https://github.com/mikera/clisk): Clisk is a DSL-based library for procedural image generation that can be used from Clojure and Java.
+  * *** [clisk](https://github.com/mikera/clisk): Clisk is a DSL-based library for procedural image generation that can be used from Clojure and Java.
 
 ## Security and Sandboxing
 
-  * [Clojail](https://github.com/flatland/clojail) ([at clojars](https://clojars.org/clojail)): a [code execution] sandboxing library
+  * *** [Clojail](https://github.com/flatland/clojail): a [code execution] sandboxing library
 
 
 ## Documentation
 
 ### Literate Programming
 
-  * [Marginalia](https://github.com/gdeer81/marginalia) ([at clojars](https://clojars.org/marginalia)): literate programming implementation for Clojure. See [the Marginalia
+  * *** [Marginalia](https://github.com/gdeer81/marginalia): literate programming implementation for Clojure. See [the Marginalia
     site](https://gdeer81.github.io/marginalia/) for an example.
-
-  * [Marginalia Leiningen plug-in](https://github.com/gdeer81/lein-marginalia) ([at clojars](https://clojars.org/lein-marginalia))
-
 
 ### Generating API Reference
 
-  * [Codox](https://github.com/weavejester/codox) ([at clojars](https://clojars.org/codox)): from the author of Compojure. See [compojure
+  * *** [Codox](https://github.com/weavejester/codox): from the author of Compojure. See [compojure
     api docs](https://weavejester.github.io/compojure/) for an
     example.
 
-  * [Autodoc](https://tomfaulhaber.github.io/autodoc/) ([at clojars](https://clojars.org/autodoc)): used
+  * *** [Autodoc](https://tomfaulhaber.github.io/autodoc/): used
     to generate the official [Clojure API reference](https://clojure.github.io/).
 
 
 ## Tooling
 
- * [Leiningen](https://leiningen.org): the Clojure build tool
+  * *** [Leiningen](https://leiningen.org): the Clojure build tool
 
- * [nREPL](https://nrepl.org): nREPL interface
+  * *** [nREPL](https://nrepl.org): nREPL interface
 
- * [java.jmx](https://github.com/clojure/java.jmx): nice JMX interface
+  * +++ [java.jmx](https://github.com/clojure/java.jmx): nice JMX interface
 
- * [test.benchmark](https://github.com/clojure/test.benchmark): a benchmarking library
+  * *** [tools.trace](https://github.com/clojure/tools.trace): a tracing library
 
- * [tools.trace](https://github.com/clojure/tools.trace): a tracing library
-
- * [criterium](https://github.com/hugoduncan/criterium) ([at clojars](https://clojars.org/criterium)): a benchmarking library that tries to address common benchmarking pitfalls
-
- * [print-foo](https://github.com/AlexBaranosky/print-foo) ([at clojars](https://clojars.org/print-foo)): A library of print debugging macros.
-
- * [gui-diff](https://github.com/AlexBaranosky/gui-diff) ([at clojars](https://clojars.org/gui-diff)): Tools for side-by-side diffing of Clojure data structures and clojure.test failures
+  * *** [criterium](https://github.com/hugoduncan/criterium): a benchmarking library that tries to address common benchmarking pitfalls
