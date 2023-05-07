@@ -5,23 +5,23 @@
     <title>Clojure Guides: Library Development and Distribution</title>
     
 
-<meta name="description" content="Work In Progress: convert to Clojure CLI!This short guide covers how to create your own typical pure Clojure
+<meta name="description" content="Question: should we retain this old Leiningen example but bring it up to date (as well as adding a Clojure CLI version)?This short guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars.
-It uses Clojure 1.11 and the Clojure CLI,
-and requires you have git
+It uses
+Clojure 1.4 and Leiningen 2.0-previewX, and requires you have git
 installed (though very little familiarity with git is required).">
 
-<meta property="og:description" content="Work In Progress: convert to Clojure CLI!This short guide covers how to create your own typical pure Clojure
+<meta property="og:description" content="Question: should we retain this old Leiningen example but bring it up to date (as well as adding a Clojure CLI version)?This short guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars.
-It uses Clojure 1.11 and the Clojure CLI,
-and requires you have git
+It uses
+Clojure 1.4 and Leiningen 2.0-previewX, and requires you have git
 installed (though very little familiarity with git is required).">
 
-<meta property="og:url" content="https://clojure-doc.org/articles/ecosystem/libraries_authoring/" />
+<meta property="og:url" content="https://clojure-doc.org/articles/ecosystem/libraries_authoring_lein/" />
 <meta property="og:title" content="Library Development and Distribution" />
 <meta property="og:type" content="article" />
 
-    <link rel="canonical" href="https://clojure-doc.org/articles/ecosystem/libraries_authoring/">
+    <link rel="canonical" href="https://clojure-doc.org/articles/ecosystem/libraries_authoring_lein/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -66,23 +66,22 @@ installed (though very little familiarity with git is required).">
         <h2>Library Development and Distribution</h2>
     </div>
     
-    <blockquote><p>Work In Progress: convert to Clojure CLI!</p></blockquote><p>This short guide covers how to create your own typical pure Clojure
+    <blockquote><p>Question: should we retain this old Leiningen example but bring it up to date (as well as adding a Clojure CLI version)?</p></blockquote><p>This short guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars.
-It uses Clojure 1.11 and the Clojure CLI,
-and requires you have git
-installed (though very little familiarity with git is required).</p><blockquote><p>Note: you should always ensure you have an up-to-date version of the Clojure CLI installed! See <a href="https://clojure.org/releases/tools">Tools Releases</a>.</p></blockquote><p>It's assumed that you're already somewhat familiar with Clojure. If
+It uses
+Clojure 1.4 and Leiningen 2.0-previewX, and requires you have git
+installed (though very little familiarity with git is required).</p><p>It's assumed that you're already somewhat familiar with Clojure. If
 not, see the <a href="/articles/tutorials/getting_started/">Getting Started</a> and
-<a href="/articles/tutorials/introduction/">Introduction</a> guides.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
+<a href="/articles/tutorials/introduction/">Introduction</a> guides.</p><p>For the purposes of this guide, the library we'll be making is named
+"<a href="https://clojars.org/trivial-library-example">trivial-library-example</a>".</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><blockquote><p>Note: If you're using Leiningen, read the <a href="/articles/ecosystem/libraries_authoring_lein/">Library Development and Distribution with Leiningen</a> section.</p></blockquote><h2 id="creating-new-projects">Creating New Projects</h2><blockquote><p>If you already have <code>deps-new</code> installed as a Clojure "tool", as <code>new</code>, then you can skip this section.</p></blockquote><p>The Clojure CLI allows you to install useful tools for your user account
-so you can use them in any project or even outside projects.</p><p>A useful tool to create new projects is <code>deps-new</code> so we're going to
-install the latest version of that:</p><pre><code>clojure -Ttools install-latest :lib io.github.seancorfield/deps-new :as new
-</code></pre><p>Once <code>deps-new</code> is installed as <code>new</code>, we can use <code>clojure -Tnew</code> to create
-new projects.</p><h2 id="create-the-project">Create the Project</h2><p>Create your new library project. Names are usually hyphen-separated
-lowercase words:</p><pre><code>clojure -Tnew lib :name trivial/library-example
-cd library-example
-</code></pre><p>Typical <code>deps-new</code> usage is <code>clojure -Tnew (lib or app) :name yourname/your-project</code>.</p><p>Our trivial library example project will have a dependency on
+Github</a>.</p><h2 id="create-the-project">Create the Project</h2><p>Create your new library project. Names are usually hyphen-separated
+lowercase words:</p><pre><code>lein new trivial-library-example
+cd trivial-library-example
+</code></pre><p>Typical lein usage is <code>lein new &lt;proj-type&gt; &lt;proj-name&gt;</code>, but if you
+leave out <code>&lt;proj-type&gt;</code> (as we've done above), lein defaults to
+creating a library project for you.</p><p>Our trivial library example project will have a dependency on
 <a href="https://clojars.org/org.flatland/useful">flatland's "useful"</a>
 library.</p><p>Open up our new project.clj file and make a few changes:</p><ol><li>Add our dependency (<code>[org.flatland/useful "0.9.0"]</code>) to the <code>:dependencies</code> vector.</li><li>Remove "-SNAPSHOT" from version string.</li><li>Write a short description.</li><li>Add a url (if not a homepage, then where it's source is hosted online).</li><li>If you're using a different license, change the value for <code>:license</code>.</li></ol><p>Regarding your choice of license, probably the three most common for
 Clojure libs (along with a grossly oversimplified blurb (by this
@@ -126,10 +125,9 @@ git commit -m "The initial commit."
 commit them to the repository:</p><pre><code>git diff
 git add -p
 git commit -m "The commit message."
-</code></pre><h2 id="write-tests">Write Tests</h2><p>In test/trivial/library_example/core_test.clj, add tests as needed.
+</code></pre><h2 id="write-tests">Write Tests</h2><p>In test/trivial_library_example/core_test.clj, add tests as needed.
 An example is provided in there to get you started.</p><h2 id="write-code">Write Code</h2><p>Write code to make your tests pass.</p><p>Remember to add a note at the top of each file indicating copyright
-and the license under which the code is distributed.</p><h2 id="run-tests">Run Tests</h2><p>In your project dir:</p><pre><code>clojure -M:test -m cognitect.test-runner
-</code></pre><p>or:</p><pre><code>clojure -T:build test
+and the license under which the code is distributed.</p><h2 id="run-tests">Run Tests</h2><p>In your project dir:</p><pre><code>lein test
 </code></pre><h2 id="commit-any-remaining-changes">Commit any remaining changes</h2><p>Before continuing to the next step, make sure all tests pass and
 you've committed all your changes. Check to see the status of your
 repo at any time with <code>git status</code> and view changes with <code>git diff</code>.</p><h2 id="create-github-project-and-upload-there">Create github project and Upload there</h2><p>This guide makes use of <a href="https://github.com/">github</a> to host your
@@ -194,19 +192,20 @@ merge those changes into your project (right there, via the web page
 describing the pull-request). Afterwards, update your local repo to
 grab those changes as well:</p><pre><code>git pull
 </code></pre><h2 id="see-also">See Also</h2><p>For more detailed documentation on various aspects of the procedures
-described here, see:</p><ul><li>the <a href="https://github.com/clojars/clojars-web/wiki">Clojars wiki</a></li><li>the <a href="https://clojure.org/guides/deps_and_cli">Clojure CLI Guide</a>
-and <a href="https://clojure.org/reference/deps_and_cli">Clojure CLI Reference</a></li><li>the <a href="https://github.com/slipset/deps-deploy">deps-deploy library</a></li></ul><h2 id="contributors">Contributors</h2><p>John Gabriele <a href="mailto:jmg3000@gmail.com">jmg3000@gmail.com</a> (original author)
-Sean Corfield <a href="mailto:sean@corfield.org">sean@corfield.org</a> (updated to use Clojure CLI)</p>
+described here, see:</p><ul><li>the <a href="https://github.com/clojars/clojars-web/wiki">Clojars wiki</a></li><li>the
+<a href="https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md">Leiningen tutorial</a>
+and <a href="https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md">deploy
+guide</a></li></ul><h2 id="contributors">Contributors</h2><p>John Gabriele <a href="mailto:jmg3000@gmail.com">jmg3000@gmail.com</a> (original author)</p>
 
     <div id="prev-next">
         
-        <a href="/articles/ecosystem/libraries_directory/">&laquo; A Directory of Clojure Libraries</a>
+        <a href="/articles/ecosystem/libraries_authoring/">&laquo; Library Development and Distribution</a>
         
         
         ||
         
         
-        <a href="/articles/ecosystem/libraries_authoring_lein/">Library Development and Distribution &raquo;</a>
+        <a href="/articles/ecosystem/generating_documentation/">Generating Documentation &raquo;</a>
         
     </div>
 </div>
