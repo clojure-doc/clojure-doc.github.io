@@ -1,19 +1,20 @@
 {:title "Library Development and Distribution"
- :layout :page :sidebar-omit? true :page-index 103100}
+ :layout :page :sidebar-omit? true :page-index 103110}
 
-> Work In Progress: convert to Clojure CLI!
+> Question: should we retain this old Leiningen example but bring it up to date (as well as adding a Clojure CLI version)?
 
 This short guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars.
-It uses Clojure 1.11 and the Clojure CLI,
-and requires you have git
+It uses
+Clojure 1.4 and Leiningen 2.0-previewX, and requires you have git
 installed (though very little familiarity with git is required).
-
-> Note: you should always ensure you have an up-to-date version of the Clojure CLI installed! See [Tools Releases](https://clojure.org/releases/tools).
 
 It's assumed that you're already somewhat familiar with Clojure. If
 not, see the [Getting Started](/articles/tutorials/getting_started/) and
 [Introduction](/articles/tutorials/introduction/) guides.
+
+For the purposes of this guide, the library we'll be making is named
+"[trivial-library-example](https://clojars.org/trivial-library-example)".
 
 This work is licensed under a <a rel="license"
 href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
@@ -21,34 +22,20 @@ Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
-> Note: If you're using Leiningen, read the [Library Development and Distribution with Leiningen](/articles/ecosystem/libraries_authoring_lein/) section.
 
-## Creating New Projects
 
-> If you already have `deps-new` installed as a Clojure "tool", as `new`, then you can skip this section.
-
-The Clojure CLI allows you to install useful tools for your user account
-so you can use them in any project or even outside projects.
-
-A useful tool to create new projects is `deps-new` so we're going to
-install the latest version of that:
-
-```
-clojure -Ttools install-latest :lib io.github.seancorfield/deps-new :as new
-```
-
-Once `deps-new` is installed as `new`, we can use `clojure -Tnew` to create
-new projects.
 
 ## Create the Project
 
 Create your new library project. Names are usually hyphen-separated
 lowercase words:
 
-    clojure -Tnew lib :name trivial/library-example
-    cd library-example
+    lein new trivial-library-example
+    cd trivial-library-example
 
-Typical `deps-new` usage is `clojure -Tnew (lib or app) :name yourname/your-project`.
+Typical lein usage is `lein new <proj-type> <proj-name>`, but if you
+leave out `<proj-type>` (as we've done above), lein defaults to
+creating a library project for you.
 
 Our trivial library example project will have a dependency on
 [flatland's "useful"](https://clojars.org/org.flatland/useful)
@@ -163,7 +150,7 @@ commit them to the repository:
 
 ## Write Tests
 
-In test/trivial/library_example/core_test.clj, add tests as needed.
+In test/trivial_library_example/core_test.clj, add tests as needed.
 An example is provided in there to get you started.
 
 
@@ -183,11 +170,7 @@ and the license under which the code is distributed.
 
 In your project dir:
 
-    clojure -M:test -m cognitect.test-runner
-
-or:
-
-    clojure -T:build test
+    lein test
 
 
 
@@ -364,13 +347,13 @@ For more detailed documentation on various aspects of the procedures
 described here, see:
 
   * the [Clojars wiki](https://github.com/clojars/clojars-web/wiki)
-  * the [Clojure CLI Guide](https://clojure.org/guides/deps_and_cli)
-    and [Clojure CLI Reference](https://clojure.org/reference/deps_and_cli)
-  * the [deps-deploy library](https://github.com/slipset/deps-deploy)
+  * the
+    [Leiningen tutorial](https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md)
+    and [deploy
+    guide](https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md)
 
 
 
 ## Contributors
 
 John Gabriele <jmg3000@gmail.com> (original author)
-Sean Corfield <sean@corfield.org> (updated to use Clojure CLI)
