@@ -1,4 +1,4 @@
-{:title "Library Development and Distribution"
+{:title "Library Development and Distribution with Leiningen"
  :layout :page :sidebar-omit? true :page-index 103110}
 
 > Question: should we retain this old Leiningen example but bring it up to date (as well as adding a Clojure CLI version)?

@@ -5,11 +5,12 @@
 
 This short guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars.
-It uses Clojure 1.11 and the Clojure CLI,
+It uses Clojure 1.11 and a recent version of the Clojure CLI
+(at least 1.11.1.1139),
 and requires you have git
 installed (though very little familiarity with git is required).
 
-> Note: you should always ensure you have an up-to-date version of the Clojure CLI installed! See [Tools Releases](https://clojure.org/releases/tools).
+> Note: you should always ensure you have an up-to-date version of the Clojure CLI installed! See [Tools Releases](https://clojure.org/releases/tools). Several of the examples here require 1.11.1.1139 or later: `clojure -version` should tell you the version you have installed.
 
 It's assumed that you're already somewhat familiar with Clojure. If
 not, see the [Getting Started](/articles/tutorials/getting_started/) and
@@ -49,6 +50,8 @@ lowercase words:
     cd library-example
 
 Typical `deps-new` usage is `clojure -Tnew (lib or app) :name yourname/your-project`.
+
+> Why "useful"?
 
 Our trivial library example project will have a dependency on
 [flatland's "useful"](https://clojars.org/org.flatland/useful)
