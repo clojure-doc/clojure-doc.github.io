@@ -164,26 +164,23 @@ This guide includes definitons of various Clojure-related terminology.
 
 ## The Clojure Ecosystem
 
-
-### [Getting Started with Leiningen](https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md)
-
-This guide covers:
-
- * What is Leiningen and what it can do for you
- * How to create a project with Leiningen
- * How to manage project dependencies
- * Accessing the REPL
- * How to run tests for your project
- * How to run the app
- * How to compile your code and dependencies into a single JAR for deployment ("überjar")
- * How to share (publish) a library
-
-### [Maven for Clojure Development](/articles/ecosystem/maven/)
+### [Getting Started with the Clojure CLI](/articles/tutorials/getting_started_cli/)
 
 This guide covers:
 
- * An overview of Apache Maven
- * Maven Clojure plugin
+  * How to install the Clojure CLI
+  * Accessing the REPL
+  * How to create a minimal project
+  * What is interactive development
+
+### [Library Development and Distribution](/articles/ecosystem/libraries_authoring/)
+
+This guide covers:
+
+ * Creating new library projects with the Clojure CLI
+ * Basic setup for library development
+ * How to publish a library to GitHub
+ * How to publish a library to Clojars
 
 ### [The Clojure Toolbox](https://www.clojure-toolbox.com/)
 
@@ -198,13 +195,19 @@ This guide covers:
  * Local Clojure user groups
  * Other Clojure community resources
 
-### [Library Development and Distribution](/articles/ecosystem/libraries_authoring/)
+
+### [Getting Started with Leiningen](https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md)
 
 This guide covers:
 
- * Basic setup for library development
- * How to publish a library to Clojars
-
+ * What is Leiningen and what it can do for you
+ * How to create a project with Leiningen
+ * How to manage project dependencies
+ * Accessing the REPL
+ * How to run tests for your project
+ * How to run the app
+ * How to compile your code and dependencies into a single JAR for deployment ("überjar")
+ * How to share (publish) a library
 
 ### [Leiningen Profiles](https://github.com/technomancy/leiningen/blob/master/doc/PROFILES.md)
 
@@ -233,6 +236,12 @@ This guide covers:
  * How to develop plugins
  * How to distribute plugins
 
+### [Maven for Clojure Development](/articles/ecosystem/maven/)
+
+This guide covers:
+
+ * An overview of Apache Maven
+ * Maven Clojure plugin
 
 ### [Documentation Tools](/articles/ecosystem/generating_documentation/)
 
