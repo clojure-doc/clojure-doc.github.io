@@ -4,11 +4,24 @@
 > Work In Progress: convert to Clojure CLI!
 
 This short guide covers how to create your own typical pure Clojure
-library and distribute it to the community via Clojars.
-It uses Clojure 1.11 and a recent version of the Clojure CLI
-(at least 1.11.1.1139),
-and requires you have git
-installed (though very little familiarity with git is required).
+library and distribute it to the community via Clojars, as well as
+making it available in source form on a public repository such as
+[GitHub](https://github.com).
+
+## Prequisites
+
+This guide assumes you have an account on a public hosting service
+like GitHub and you will need to use your account name as part of
+your project. In this guide, we use `clojure-example-library` as the
+account name: you should substitute your own account name wherever you
+see `clojure-example-library` in this guide! We will use `my-cool-lib`
+as the name of the new project we create and publish here, but you
+can use whatever name you want -- just remember to substitute that
+wherever you see `my-cool-lib` in this guide.
+
+This guide uses Clojure 1.11 and a recent version of the Clojure CLI
+(at least 1.11.1.1139), and requires you have `git`
+installed (though very little familiarity with `git` is required).
 
 > Note: you should always ensure you have an up-to-date version of the Clojure CLI installed! See [Tools Releases](https://clojure.org/releases/tools). Several of the examples here require 1.11.1.1139 or later: `clojure -version` should tell you the version you have installed.
 
@@ -24,7 +37,118 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 > Note: If you're using Leiningen, read the [Library Development and Distribution with Leiningen](/articles/ecosystem/libraries_authoring_lein/) section.
 
+## Publishing Libraries
+
+Prior to the appearance of the Clojure CLI in 2018, it was generally
+assumed that you would publish the source of your library to a
+public service like GitHub, but that you would also need to package
+your library as a JAR file and deploy it to Clojars (or Maven Central)
+so that it was available for others to use in their projects as a
+dependency.
+
+The Clojure CLI can treat projects hosted on public services like GitHub as first-class
+dependencies, so that it is no longer necessary to package and deploy
+your library elsewhere -- if you expect your users to consume the library
+directly in source form. In order to make your library available to users
+who are working with Leiningen (or other build tools), it is still required
+to package and deploy your project as a JAR file -- which this guide also
+covers.
+
+### Publishing to GitHub
+
+If you don't already have a GitHub account, create one,
+then log into it. GitHub provides good documentation on how to [get
+started](https://help.github.com/articles/set-up-git) and how to
+[create an SSH key
+pair](https://help.github.com/articles/generating-ssh-keys). If you
+haven't already done so, get that set up before continuing.
+
+Go to the Repositories tab and
+create a new repository there for your project using the icon/button/link
+(near the top-right if you already have existing projects, else prominently
+in the middle if this is your first repository).
+
+> You will have your local repository, and also a remote duplicate of
+> it at GitHub.
+
+For the repository name, we'll use `my-cool-lib` in this guide (but you
+can use whatever name you want).
+Provide a one-line description if you want, **make sure to select Public**
+so that others can access your project, and hit "Create repository".
+
+You do not need GitHub to provide a README, a `.gitignore` file, or
+a license, since we'll add those.
+
+For a project published to GitHub as `clojure-example-library/my-cool-lib`,
+the default dependency for others to use would be:
+
+```clojure
+  io.github.clojure-example-library/my-cool-lib {:git/sha "..."}
+```
+
+Where the `"..."` value would be the full SHA (hex string) for the version
+that they wanted to use (e.g., from the latest commit).
+
+If you have tagged a release on GitHub, e.g., `v0.1.0` then you can use
+`:git/tag "v0.1.0"` and the `:git/sha` value can be the "short SHA" -- just
+the first seven characters of the hex string.
+
+The Clojure CLI understands that `io.github.<account>/<repo>` maps to
+`https://github.com/<account>/<repo>` in order to fetch the repository.
+The CLI understands
+[several source code repositories](https://clojure.org/reference/deps_and_cli#_coord_attributes)
+so you could use GitLab, BitBucket, Beanstalk, or Sourcehut (as of May 2023).
+
+### Publishing to Clojars
+
+If you don't already have an account, you will need to
+[register on Clojars](https://clojars.org/register).
+It will convenient for you to use the same email account as you use
+for GitHub, so that you can login to Clojars in future via GitHub,
+which will automatically verify your GitHub-associated "group ID"
+with Clojars (e.g., `io.github.<account>`).
+See [Verified Group Names](https://github.com/clojars/clojars-web/wiki/Verified-Group-Names)
+for more details.
+
+You will also need to set up at least one
+[deploy token](https://github.com/clojars/clojars-web/wiki/Deploy-Tokens)
+and provide environment variables when you get to the point of actually
+deploying your library JAR to Clojars:
+
+* `CLOJARS_USERNAME` -- set to your Clojars username
+* `CLOJARS_PASSWORD` -- set to a valid deploy token
+
+If you don't want to connect your Clojars account to your GitHub account,
+you can use `net.clojars.<username>` as your "group ID" for deploying
+projects. That style of group name is always verified for Clojars.
+
+
 ## Creating New Projects
+
+If you only ever intend to publish your library to GitHub and not to Clojars,
+you can create a fairly minimal project (`deps.edn` file, `src/` folder) and
+rely on `io.github.<account>/<project>` as coordinates that the Clojure CLI
+understands.
+
+If you plan to deploy to Clojars at any point, you'll need to be able to
+build a JAR file and deploy it. You _can_ learn to do all that manually
+via [`tools.build`](https://github.com/clojure/tools.build)
+and a `build.clj` file,
+and using [`deps-deploy`](https://github.com/slipset/deps-deploy)
+once you've built the JAR file. It's going to be easier if you use a
+tool to create a "fully-fleshed" library project for you, that adds all
+of that configuration for you.
+
+In either case, you're probably going to want to add tests and run them,
+so you'll either need to add those manually or, again, rely on a tool to
+set up a project with testing already built in.
+
+For this guide, we're going to use
+[`deps-new`](https://github.com/seancorfield/deps-new)
+which can create "batteries-included" library (and application) projects
+for you.
+
+### Installing `deps-new`
 
 > If you already have `deps-new` installed as a Clojure "tool", as `new`, then you can skip this section.
 
@@ -41,15 +165,32 @@ clojure -Ttools install-latest :lib io.github.seancorfield/deps-new :as new
 Once `deps-new` is installed as `new`, we can use `clojure -Tnew` to create
 new projects.
 
-## Create the Project
+### Create the Project with `deps-new`
+
+Bearing in mind the comments about groups and accounts and usernames above,
+we're going to create our example project with the name:
+
+```
+io.github.clojure-example-library/my-cool-lib
+```
+
+Our project will live on GitHub as https://github.com/clojure-example-library/my-cool-lib
+and can be used directly from there using the full project name shown above.
+We will also deploy it to Clojars so that people can depend on it as a
+JAR file dependency.
 
 Create your new library project. Names are usually hyphen-separated
 lowercase words:
 
-    clojure -Tnew lib :name trivial/library-example
-    cd library-example
+    clojure -Tnew lib :name io.github.clojure-example-library/my-cool-lib
+    cd my-cool-lib
 
 Typical `deps-new` usage is `clojure -Tnew (lib or app) :name yourname/your-project`.
+If you use just `<yourname>`, the project coordinates will be assumed to be
+`net.clojars.<yourname>/<your-project>`, which is why we used `io.github.` as
+a prefix above.
+
+## Making the Project your own
 
 > Why "useful"?
 
@@ -207,21 +348,8 @@ repo at any time with `git status` and view changes with `git diff`.
 ## Create github project and Upload there
 
 This guide makes use of [github](https://github.com/) to host your
-project code. If you don't already have a github account, create one,
-then log into it. Github provides good documentation on how to [get
-started](https://help.github.com/articles/set-up-git) and how to
-[create an SSH key
-pair](https://help.github.com/articles/generating-ssh-keys). If you
-haven't already done so, get that set up before continuing.
+project code.
 
-Create a new repo there for your project using the icon/button/link
-near the top-right.
-
-> You will have your local repository, and also a remote duplicate of
-> it at github.
-
-For the repository name, use the same name as your project directory.
-Provide a one-line description and hit "Create repository".
 
 Once this remote repo has been created, follow the instructions on the
 resulting page to "Push an existing repository from the command
