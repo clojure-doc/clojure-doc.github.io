@@ -1,9 +1,7 @@
 {:title "Library Development and Distribution"
- :layout :page :sidebar-omit? true :page-index 103100}
+ :layout :page :page-index 3500}
 
-> Work In Progress: convert to Clojure CLI!
-
-This short guide covers how to create your own typical pure Clojure
+This guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars, as well as
 making it available in source form on a public repository such as
 [GitHub](https://github.com).
@@ -35,7 +33,7 @@ Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
-> Note: If you're using Leiningen, read the [Library Development and Distribution with Leiningen](/articles/ecosystem/libraries_authoring_lein/) section.
+> Note: If you're using Leiningen, read the [Library Development and Distribution with Leiningen](/articles/ecosystem/libraries_authoring_lein/) guide.
 
 ## Publishing Libraries
 
@@ -46,7 +44,8 @@ your library as a JAR file and deploy it to Clojars (or Maven Central)
 so that it was available for others to use in their projects as a
 dependency.
 
-The Clojure CLI can treat projects hosted on public services like GitHub as first-class
+The Clojure CLI can treat projects hosted on public services,
+like GitHub, as first-class
 dependencies, so that it is no longer necessary to package and deploy
 your library elsewhere -- if you expect your users to consume the library
 directly in source form. In order to make your library available to users
@@ -127,7 +126,7 @@ projects. That style of group name is always verified for Clojars.
 
 If you only ever intend to publish your library to GitHub and not to Clojars,
 you can create a fairly minimal project (`deps.edn` file, `src/` folder) and
-rely on `io.github.<account>/<project>` as coordinates that the Clojure CLI
+rely on `io.github.<account>/<project>` as the coordinates that the Clojure CLI
 understands.
 
 If you plan to deploy to Clojars at any point, you'll need to be able to
@@ -190,25 +189,49 @@ If you use just `<yourname>`, the project coordinates will be assumed to be
 `net.clojars.<yourname>/<your-project>`, which is why we used `io.github.` as
 a prefix above.
 
+### A Note Regarding Project Naming
+
+A line near of your `build.clj` includes something like:
+
+```clojure
+(def lib 'io.github.clojure-example-library/my-cool-lib)
+```
+
+This means that your project has an *artifact ID*
+of `my-cool-lib`, and a *group ID* of
+`io.github.clojure-example-library`.
+
+The artifact ID is the name of your project. The group ID is used
+to distinguish your `my-cool-lib` from anyone else's `my-cool-lib`.
+It typically identifies the group or organization to which a project belongs.
+
+The maintainers of Clojars
+[require that new libs be published using verified groups](https://github.com/clojars/clojars-web/wiki/Verified-Group-Names),
+such as `org.my-domain`.
+
+Read more about groups at
+<https://github.com/clojars/clojars-web/wiki/Groups>.
+
 ## Making the Project your own
 
-> Why "useful"?
-
-Our trivial library example project will have a dependency on
-[flatland's "useful"](https://clojars.org/org.flatland/useful)
+Our cool library example project will add a dependency on
+[flatland's "useful"](https://github.com/clj-commons/useful)
 library.
 
-Open up our new project.clj file and make a few changes:
+Open up our new `deps.edn` file and make add our dependency
+(`org.flatland/useful {:mvn/version "0.11.6"}`) to the `:deps` hash map.
 
- 1. Add our dependency (`[org.flatland/useful "0.9.0"]`) to the `:dependencies` vector.
- 2. Remove "-SNAPSHOT" from version string.
- 3. Write a short description.
- 4. Add a url (if not a homepage, then where it's source is hosted online).
- 5. If you're using a different license, change the value for `:license`.
+In `build.clj`, remove `-SNAPSHOT` from `version` (so it is just `"0.1.0"`).
 
-Regarding your choice of license, probably the three most common for
-Clojure libs (along with a grossly oversimplified blurb (by this
-author) for each) are:
+## Licensing
+
+If you created your project using `deps-new`, it will have added a
+`LICENSE` file pertaining to the [Eclipse Public License] and an
+explanation at the end of the `README.md` that this is just a default.
+
+You can choose to license your project however you want.
+The most common licenses for Clojure libraries (along with grossly
+oversimplified blurbs, by this author John Gabriele, for each) are:
 
   * The [Eclipse Public License] (the default).
   * The [LGPL](http://www.gnu.org/licenses/lgpl.html) (focused most on
@@ -220,40 +243,20 @@ author) for each) are:
     License](http://directory.fsf.org/wiki/License:Expat).
 
 [Eclipse Public License]: http://directory.fsf.org/wiki/License:EPLv1.0
-[GPL]: http://www.gnu.org/licenses/gpl.html
 [FSF's recommendations]: http://www.gnu.org/licenses/license-recommendations.html
 [instructions for use]: http://www.gnu.org/licenses/gpl-howto.html
 [MIT]: http://opensource.org/licenses/MIT
 
-Whichever one you choose, update your project.clj (if necessary) to
+Another option is the [Apache Source License](https://apache.org/licenses/LICENSE-2.0)
+which is a commercial-friendly license (this author Sean Corfield tends to
+prefer ASL for projects where the default, EPL, is not used).
+
+Whichever one you choose, update your `README.md` to
 reflect that choice and save the text of the license as a file named
-"LICENSE" or "COPYING" in your project directory.
+`LICENSE` in your project directory. Some licenses may encourage
+you to add a portion of the license text to the header comment in your
+source files.
 
-
-### A Note Regarding Project Naming
-
-The top line of your project.clj includes something like `defproject
-my-project-name`.  This means that your project has an *artifact-id*
-of "my-project-name", but it also implies a *group-id* of
-"my-project-name" (group-id = artifact-id).
-
-The artifact-id is the name of your project. The group-id is used for
-namespacing (not the same thing as Clojure namespaces) --- it
-identifies to which group/organization a project belongs. Some
-examples of group-id's: clojurewerkz, sonian, and org.*your-domain*.
-
-You may choose to explicitly use a group-id for your project, if you
-like. For example:
-
-    (defproject org.my-domain/my-project-name ...
-    ...)
-
-The maintainers of Clojars
-[require that new libs be published using verified groups](https://github.com/clojars/clojars-web/wiki/Verified-Group-Names),
-such as org.my-domain.
-
-Read more about groups at
-<https://github.com/clojars/clojars-web/wiki/Groups>.
 
 
 ## Update the README
@@ -265,16 +268,22 @@ might also be appreciated. Add acknowledgements near the end, if
 appropriate.  Adjust the copyright and license info at the bottom of
 the README as needed.
 
-Lein provides you with a doc directory and a starter doc/intro.md
+`deps-new` provides you with a `doc` directory and a starter `doc/intro.md`
 file. If you find that you have more to say than will comfortably fit
-into the README.md, consider moving content into the doc dir.
+into the `README.md`, consider moving content into the `doc` directory.
 
-Other goodies you might include in your README.md or doc/\*.md files:
+This guide mentions `cljdoc.org` below as a great option for providing
+online documentation, so feel free to expand your `doc` directory
+per [Cljdoc for Library Authors](https://github.com/cljdoc/cljdoc/blob/master/doc/userguide/for-library-authors.adoc#basic-setup)
+which explains how to provide structure and organization for your
+documentation.
+
+Other goodies you might include in your `README.md` or `doc/*.md` files:
 tutorial, news, bugs, limitations, alternatives, troubleshooting,
 configuration.
 
 Note that you generally won't add hand-written API documentation into
-your readme or other docs, as there are tools for creating that
+your `README.md` or other documentation, as there are tools for creating that
 directly from your source (discussed later).
 
 
@@ -307,7 +316,7 @@ commit them to the repository:
 
 ## Write Tests
 
-In test/trivial/library_example/core_test.clj, add tests as needed.
+In `test/clojure_example_library/my_cool_lib_test.clj`, add tests as needed.
 An example is provided in there to get you started.
 
 
@@ -347,20 +356,16 @@ repo at any time with `git status` and view changes with `git diff`.
 
 ## Create github project and Upload there
 
-This guide makes use of [github](https://github.com/) to host your
-project code.
-
-
-Once this remote repo has been created, follow the instructions on the
+Once you remote repository has been created, follow the instructions on the
 resulting page to "Push an existing repository from the command
 line". You'll of course run the `git` commands from your project
 directory:
 
-    git remote add origin git@github.com:uvtc/trivial-library-example.git
+    git remote add origin git@github.com:clojure-example-library/my-cool-lib.git
     git push -u origin master
 
 You can now access your online repo. For this tutorial, it's
-<https://github.com/uvtc/trivial-library-example>.
+<https://github.com/clojure-example-library/my-cool-lib>.
 
 Any changes you commit to your local repository can now be pushed
 to the remote one at github:
@@ -373,82 +378,88 @@ git push
 ```
 
 
-## Create a GPG key for signing your releases
+### Making a Release on GitHub
 
-You'll need to create a [gpg](http://www.gnupg.org/) key pair, which
-will be used by lein to sign any release you make to Clojars. Make
-sure you've got gpg installed and kick the tires:
+At this point, prior to deploying your project to Clojars, it is common
+to make a release on GitHub describing this new version of your project.
 
-    gpg --list-keys
+You can update `version` in `build.clj` to reflect the new version you
+want to publish, then add, commit, and push those changes.
 
-(The first time that command is run, you'll see some notices about
-it creating necessary files in your home dir.)
+On GitHub, navigate to the Releases section of your project and click
+the icon/button/link to create a new release.
 
-To create a key pair:
+> For example, for `clojure-example-library/my-cool-lib` this would be
+<https://github.com/clojure-example-library/my-cool-lib/releases/new>.
 
-    gpg --gen-key
+Choose a tag that reflects the version you are about to release, e.g., `v0.1.0`.
 
-Take the default key type (RSA and RSA), and default key size (2048).
-When asked for how long the key should remain valid, choose a year or
-two. Give it your real name and email address. When it prompts you for
-a comment, you might add one as it can be helpful if you have multiple
-keys to keep track of. When prompted for a passphrase, come up with one
-that is different from the one used with your ssh key.
+Enter the release name or number, e.g., `0.1.0` (it is typically the version
+without the leading `v`).
 
-When gpg has completed generating your keypair, you can have it list
-what keys it knows about:
+Enter a description, explaining the changes in this version, new features,
+bug fixes, etc, and create the release.
 
-    gpg --list-keys
+You should see the release name/number with a tag and a short SHA, e.g.,
 
-We'll use that public key in the next section.
-
-
+    0.1.0
+    ... v0.1.0 ec74557
 
 
 ## Upload to Clojars
 
-If you don't already have an account at <https://clojars.org/>, create
-one. After doing so, you'll need to supply your ssh and gpg public
-keys to Clojars.  For the ssh public key, you can use the same one as
-used with github. For the gpg public key, get it by running:
-
-    gpg --export -a <your-key-id>
-
-where `<your-key-id>` is in the output of `gpg --list-keys` (the
-8-character part following the forward slash on the line starting with
-"pub"). Copy/paste that output (including the "-----BEGIN PGP PUBLIC
-KEY BLOCK-----" and "-----END PGP PUBLIC KEY BLOCK-----") into the
-form on your Clojars profile page.
-
+See **Publishing to Clojars** above to get started.
 For more info on working with Clojars, see [the Clojars
 wiki](https://github.com/clojars/clojars-web/wiki/About).
+
+Run the tests one more time and build the JAR file:
+
+    clojure -T:build ci
 
 Once your Clojars account is all set up, and it has your public keys,
 upload your library to Clojars like so:
 
-    lein deploy clojars
+    clojure -T:build deploy
 
-You will be asked for your (Clojars) username and password.
+If you haven't already setup your environment variables, you can supply
+them as part of that `deploy` command -- see
+[`deps-deploy` usage](https://github.com/slipset/deps-deploy#usage):
 
-Then you'll be asked for your gpg passphrase. (You won't be asked for
-your ssh passphrase because `lein deploy clojars` uses http rather
-than scp --- though Clojars supports both.)
+    env CLOJARS_USERNAME=username CLOJARS_PASSWORD=clojars-token clojure -T:build deploy
 
 You should now be able to see your lib's Clojars page: for example,
-<https://clojars.org/trivial-library-example>!
+<https://clojars.org/net.clojars.clojure-example-library/my-cool-lib>!
 
+> Note: to deploy that example library, the `lib` var inside `build.clj` was
+changed to `net.clojars.clojure-example-library/my-cool-lib` which is a default
+verified group name, to avoid verifying via GitHub, since `clojure-example-library`
+is a GitHub organization rather than an individual account. If you use your
+GitHub username to login to Clojars to verify your account, you can use `io.github.<username>`.
 
+If everything goes smoothly, all of the links on that Clojars page
+should work and clicking `this git tree` in the **Pushed by** section
+should take you to GitHub, showing the source code at that version, e.g.,
+<https://github.com/clojure-example-library/my-cool-lib/tree/v0.1.0>
 
+In addition, if you clicked on the `cljdoc` link on that Clojars page,
+it will take you to a page where you can build the API docs for your
+library. Once that build has completed, you should be able to visit
+the generated documentation, e.g.,
+<https://cljdoc.org/d/net.clojars.clojure-example-library/my-cool-lib/0.1.0/doc/readme>
+
+See the next section for more details.
 
 
 ## Generate API docs (optional)
 
 For larger library projects, you may want to automatically generate
-API docs (from your docstrings). See
-[codox](https://github.com/weavejester/codox). If your library project
-is hosted at github, you can use [github
-pages](https://pages.github.com/) to host the resulting docs.
+API docs (from your docstrings). See [cljdoc](https://cljdoc.org/)
+for the most common, automated documentation site used for Clojure
+libraries.
 
+If you've followed all the steps above, that should go smoothly, but
+if you get into trouble, the `#cljdoc` channel on the Clojurians Slack
+is a great place to get help.
 
 
 
@@ -456,9 +467,9 @@ pages](https://pages.github.com/) to host the resulting docs.
 ## Announce (optional)
 
 You're welcome to announce the availability of your new library
-on the [Clojure Mailing List](https://groups.google.com/forum/?fromgroups#!forum/clojure).
-
-
+wherever you choose -- e.g., on Clojurians Slack, Twitter,
+Mastodon, the Clojure mailing list, r/Clojure (Reddit), ClojureVerse. Just
+make sure to follow the etiquette about announcements, wherever you post!
 
 
 ## Make Updates to your library
@@ -467,14 +478,24 @@ Making updates to your lib follows the same pattern as described above:
 
 ```bash
 # work test work test
-# update version string in project.clj
+# document the updates in CHANGELOG.md
+# update the version in README.md
+# update version string in build.clj
 git add -p
 git commit
 git push
-lein deploy clojars
+# make a new release on GitHub for this new version
+
+# final testing and build the JAR file
+clojure -T:build ci
+# deploy to Clojars
+clojure -T:build deploy
 ```
 
-And optionally announce the release on the ML.
+And optionally announce the release (Clojurians Slack prefers that you
+use `#releases` for small, frequent announcements, and only use
+`#announcements` for an initial release and then only about once
+a month for major releases or "round-up" announcements of multiple releases).
 
 
 
