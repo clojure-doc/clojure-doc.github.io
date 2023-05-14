@@ -173,7 +173,7 @@ we're going to create our example project with the name:
 io.github.clojure-example-library/my-cool-lib
 ```
 
-Our project will live on GitHub as https://github.com/clojure-example-library/my-cool-lib
+Our project will live on GitHub as <https://github.com/clojure-example-library/my-cool-lib>
 and can be used directly from there using the full project name shown above.
 We will also deploy it to Clojars so that people can depend on it as a
 JAR file dependency.
@@ -191,7 +191,7 @@ a prefix above.
 
 ### A Note Regarding Project Naming
 
-A line near of your `build.clj` includes something like:
+A line near the top of your `build.clj` includes something like:
 
 ```clojure
 (def lib 'io.github.clojure-example-library/my-cool-lib)
@@ -207,7 +207,7 @@ It typically identifies the group or organization to which a project belongs.
 
 The maintainers of Clojars
 [require that new libs be published using verified groups](https://github.com/clojars/clojars-web/wiki/Verified-Group-Names),
-such as `org.my-domain`.
+such as `org.my-domain` or `io.github.<account>` or `net.clojars.<account>`.
 
 Read more about groups at
 <https://github.com/clojars/clojars-web/wiki/Groups>.
@@ -223,7 +223,7 @@ Open up our new `deps.edn` file and make add our dependency
 
 In `build.clj`, remove `-SNAPSHOT` from `version` (so it is just `"0.1.0"`).
 
-## Licensing
+### Licensing
 
 If you created your project using `deps-new`, it will have added a
 `LICENSE` file pertaining to the [Eclipse Public License] and an
@@ -259,7 +259,7 @@ source files.
 
 
 
-## Update the README
+### Update the README
 
 Aside from providing a good overview, rationale, and introduction at
 the top, you're encouraged to provide some usage examples as well.  A
@@ -292,7 +292,7 @@ directly from your source (discussed later).
 ## Create your project's local git repository
 
 Before going much further, you probably want to get your project under
-version control. Make sure you've got git installed and configured to
+version control. Make sure you've got `git` installed and configured to
 know your name and email address (i.e., that at some point you've run
 `git config --global user.name "Your Name"` and
 `git config --global user.email "your-email@somewhere.org"`).
@@ -319,6 +319,8 @@ commit them to the repository:
 In `test/clojure_example_library/my_cool_lib_test.clj`, add tests as needed.
 An example is provided in there to get you started.
 
+> Note: the example test created by `deps-new` fails deliberately in order
+for you to get accustomed to writing tests!
 
 
 
@@ -327,8 +329,13 @@ An example is provided in there to get you started.
 Write code to make your tests pass.
 
 Remember to add a note at the top of each file indicating copyright
-and the license under which the code is distributed.
+(and the license under which the code is distributed, if applicable).
 
+For example:
+
+```clojure
+;; copyright (c) 2023 -- Sean Corfield, all rights reserved.
+```
 
 
 
@@ -354,9 +361,9 @@ repo at any time with `git status` and view changes with `git diff`.
 
 
 
-## Create github project and Upload there
+## Complete the GitHub Project Setup and Upload your Code
 
-Once you remote repository has been created, follow the instructions on the
+Once your remote repository has been created, follow the instructions on the
 resulting page to "Push an existing repository from the command
 line". You'll of course run the `git` commands from your project
 directory:
@@ -368,7 +375,7 @@ You can now access your online repo. For this tutorial, it's
 <https://github.com/clojure-example-library/my-cool-lib>.
 
 Any changes you commit to your local repository can now be pushed
-to the remote one at github:
+to the remote one at GitHub:
 
 ```bash
 # work work work
@@ -416,7 +423,7 @@ Run the tests one more time and build the JAR file:
 
     clojure -T:build ci
 
-Once your Clojars account is all set up, and it has your public keys,
+Once your Clojars account is all set up,
 upload your library to Clojars like so:
 
     clojure -T:build deploy
