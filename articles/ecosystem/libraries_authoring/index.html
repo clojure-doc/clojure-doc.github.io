@@ -148,7 +148,7 @@ install the latest version of that:</p><pre><code>clojure -Ttools install-latest
 </code></pre><p>Once <code>deps-new</code> is installed as <code>new</code>, we can use <code>clojure -Tnew</code> to create
 new projects.</p><h3 id="create-the-project-with-deps-new">Create the Project with <code>deps-new</code></h3><p>Bearing in mind the comments about groups and accounts and usernames above,
 we're going to create our example project with the name:</p><pre><code>io.github.clojure-example-library/my-cool-lib
-</code></pre><p>Our project will live on GitHub as https://github.com/clojure-example-library/my-cool-lib
+</code></pre><p>Our project will live on GitHub as <a href="https://github.com/clojure-example-library/my-cool-lib">https://github.com/clojure-example-library/my-cool-lib</a>
 and can be used directly from there using the full project name shown above.
 We will also deploy it to Clojars so that people can depend on it as a
 JAR file dependency.</p><p>Create your new library project. Names are usually hyphen-separated
@@ -157,18 +157,18 @@ cd my-cool-lib
 </code></pre><p>Typical <code>deps-new</code> usage is <code>clojure -Tnew (lib or app) :name yourname/your-project</code>.
 If you use just <code>&lt;yourname&gt;</code>, the project coordinates will be assumed to be
 <code>net.clojars.&lt;yourname&gt;/&lt;your-project&gt;</code>, which is why we used <code>io.github.</code> as
-a prefix above.</p><h3 id="a-note-regarding-project-naming">A Note Regarding Project Naming</h3><p>A line near of your <code>build.clj</code> includes something like:</p><pre><code class="clojure">(def lib 'io.github.clojure-example-library/my-cool-lib)
+a prefix above.</p><h3 id="a-note-regarding-project-naming">A Note Regarding Project Naming</h3><p>A line near the top of your <code>build.clj</code> includes something like:</p><pre><code class="clojure">(def lib 'io.github.clojure-example-library/my-cool-lib)
 </code></pre><p>This means that your project has an <em>artifact ID</em>
 of <code>my-cool-lib</code>, and a <em>group ID</em> of
 <code>io.github.clojure-example-library</code>.</p><p>The artifact ID is the name of your project. The group ID is used
 to distinguish your <code>my-cool-lib</code> from anyone else's <code>my-cool-lib</code>.
 It typically identifies the group or organization to which a project belongs.</p><p>The maintainers of Clojars
 <a href="https://github.com/clojars/clojars-web/wiki/Verified-Group-Names">require that new libs be published using verified groups</a>,
-such as <code>org.my-domain</code>.</p><p>Read more about groups at
+such as <code>org.my-domain</code> or <code>io.github.&lt;account&gt;</code> or <code>net.clojars.&lt;account&gt;</code>.</p><p>Read more about groups at
 <a href="https://github.com/clojars/clojars-web/wiki/Groups">https://github.com/clojars/clojars-web/wiki/Groups</a>.</p><h2 id="making-the-project-your-own">Making the Project your own</h2><p>Our cool library example project will add a dependency on
 <a href="https://github.com/clj-commons/useful">flatland's "useful"</a>
 library.</p><p>Open up our new <code>deps.edn</code> file and make add our dependency
-(<code>org.flatland/useful {:mvn/version "0.11.6"}</code>) to the <code>:deps</code> hash map.</p><p>In <code>build.clj</code>, remove <code>-SNAPSHOT</code> from <code>version</code> (so it is just <code>"0.1.0"</code>).</p><h2 id="licensing">Licensing</h2><p>If you created your project using <code>deps-new</code>, it will have added a
+(<code>org.flatland/useful {:mvn/version "0.11.6"}</code>) to the <code>:deps</code> hash map.</p><p>In <code>build.clj</code>, remove <code>-SNAPSHOT</code> from <code>version</code> (so it is just <code>"0.1.0"</code>).</p><h3 id="licensing">Licensing</h3><p>If you created your project using <code>deps-new</code>, it will have added a
 <code>LICENSE</code> file pertaining to the <a href="http://directory.fsf.org/wiki/License:EPLv1.0">Eclipse Public License</a> and an
 explanation at the end of the <code>README.md</code> that this is just a default.</p><p>You can choose to license your project however you want.
 The most common licenses for Clojure libraries (along with grossly
@@ -183,7 +183,7 @@ prefer ASL for projects where the default, EPL, is not used).</p><p>Whichever on
 reflect that choice and save the text of the license as a file named
 <code>LICENSE</code> in your project directory. Some licenses may encourage
 you to add a portion of the license text to the header comment in your
-source files.</p><h2 id="update-the-readme">Update the README</h2><p>Aside from providing a good overview, rationale, and introduction at
+source files.</p><h3 id="update-the-readme">Update the README</h3><p>Aside from providing a good overview, rationale, and introduction at
 the top, you're encouraged to provide some usage examples as well.  A
 link to the lib's (future) Clojars page (which we'll get to below)
 might also be appreciated. Add acknowledgements near the end, if
@@ -199,7 +199,7 @@ tutorial, news, bugs, limitations, alternatives, troubleshooting,
 configuration.</p><p>Note that you generally won't add hand-written API documentation into
 your <code>README.md</code> or other documentation, as there are tools for creating that
 directly from your source (discussed later).</p><h2 id="create-your-projects-local-git-repository">Create your project's local git repository</h2><p>Before going much further, you probably want to get your project under
-version control. Make sure you've got git installed and configured to
+version control. Make sure you've got <code>git</code> installed and configured to
 know your name and email address (i.e., that at some point you've run
 <code>git config --global user.name "Your Name"</code> and
 <code>git config --global user.email "your-email@somewhere.org"</code>).</p><p>Then, in your project dir, run:</p><pre><code>git init
@@ -210,19 +210,21 @@ commit them to the repository:</p><pre><code>git diff
 git add -p
 git commit -m "The commit message."
 </code></pre><h2 id="write-tests">Write Tests</h2><p>In <code>test/clojure_example_library/my_cool_lib_test.clj</code>, add tests as needed.
-An example is provided in there to get you started.</p><h2 id="write-code">Write Code</h2><p>Write code to make your tests pass.</p><p>Remember to add a note at the top of each file indicating copyright
-and the license under which the code is distributed.</p><h2 id="run-tests">Run Tests</h2><p>In your project dir:</p><pre><code>clojure -M:test -m cognitect.test-runner
+An example is provided in there to get you started.</p><blockquote><p>Note: the example test created by <code>deps-new</code> fails deliberately in order
+for you to get accustomed to writing tests!</p></blockquote><h2 id="write-code">Write Code</h2><p>Write code to make your tests pass.</p><p>Remember to add a note at the top of each file indicating copyright
+(and the license under which the code is distributed, if applicable).</p><p>For example:</p><pre><code class="clojure">;; copyright (c) 2023 -- Sean Corfield, all rights reserved.
+</code></pre><h2 id="run-tests">Run Tests</h2><p>In your project dir:</p><pre><code>clojure -M:test -m cognitect.test-runner
 </code></pre><p>or:</p><pre><code>clojure -T:build test
 </code></pre><h2 id="commit-any-remaining-changes">Commit any remaining changes</h2><p>Before continuing to the next step, make sure all tests pass and
 you've committed all your changes. Check to see the status of your
-repo at any time with <code>git status</code> and view changes with <code>git diff</code>.</p><h2 id="create-github-project-and-upload-there">Create github project and Upload there</h2><p>Once you remote repository has been created, follow the instructions on the
+repo at any time with <code>git status</code> and view changes with <code>git diff</code>.</p><h2 id="complete-the-github-project-setup-and-upload-your-code">Complete the GitHub Project Setup and Upload your Code</h2><p>Once your remote repository has been created, follow the instructions on the
 resulting page to "Push an existing repository from the command
 line". You'll of course run the <code>git</code> commands from your project
 directory:</p><pre><code>git remote add origin git@github.com:clojure-example-library/my-cool-lib.git
 git push -u origin master
 </code></pre><p>You can now access your online repo. For this tutorial, it's
 <a href="https://github.com/clojure-example-library/my-cool-lib">https://github.com/clojure-example-library/my-cool-lib</a>.</p><p>Any changes you commit to your local repository can now be pushed
-to the remote one at github:</p><pre><code class="bash"># work work work
+to the remote one at GitHub:</p><pre><code class="bash"># work work work
 git add -p
 git commit -m "commit message here"
 git push
@@ -237,7 +239,7 @@ bug fixes, etc, and create the release.</p><p>You should see the release name/nu
 </code></pre><h2 id="upload-to-clojars">Upload to Clojars</h2><p>See <strong>Publishing to Clojars</strong> above to get started.
 For more info on working with Clojars, see <a href="https://github.com/clojars/clojars-web/wiki/About">the Clojars
 wiki</a>.</p><p>Run the tests one more time and build the JAR file:</p><pre><code>clojure -T:build ci
-</code></pre><p>Once your Clojars account is all set up, and it has your public keys,
+</code></pre><p>Once your Clojars account is all set up,
 upload your library to Clojars like so:</p><pre><code>clojure -T:build deploy
 </code></pre><p>If you haven't already setup your environment variables, you can supply
 them as part of that <code>deploy</code> command -- see
