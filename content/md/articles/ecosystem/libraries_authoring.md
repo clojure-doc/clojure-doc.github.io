@@ -349,6 +349,7 @@ or:
 
     clojure -T:build test
 
+> Note: if you didn't use `deps-new` to create your library project, you'll want to add a `:test` alias that adds [Cognitect's `test-runner`](https://github.com/cognitect-labs/test-runner) to your project -- see [**Configuration**](https://github.com/cognitect-labs/test-runner#configuration) in that project's `README`. The `:test` alias `deps-new` generates does not have `:exec-fn` or `:main-opts` because it expects you to run tests via the `build.clj` file, although you can provide `-m cognitect.test-runner` on the command-line to run tests directly via the CLI, as shown above.
 
 
 
