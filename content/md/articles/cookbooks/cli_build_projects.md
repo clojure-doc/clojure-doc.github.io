@@ -48,7 +48,7 @@ code:
 Then it will print `42`. You can also specify the hash map as individual
 key/value pairs on the command-line:
 
-   clojure -X my-proj.api/foo :bar 42
+    clojure -X my-proj.api/foo :bar 42
 
 You can shorten that in two ways:
 
@@ -188,10 +188,10 @@ parameters into `build` task functions:
 Those examples are a good starting point for simple projects but there is
 so much you can do with `build.clj` to automate all manner of things in
 larger projects:
+* Parameterizing builds using aliases in `deps.edn`
 * Multi-version testing
 * Continuous Integration pipelines
 * Automated deployments
-* Parameterizing builds using aliases in `deps.edn`
 * Using a "build REPL"
 * Coordinating build tasks across multiple subprojects
 
@@ -208,8 +208,140 @@ an arbitrary process based on aliases.
 then run it as a subprocess, using a "basis" to control what classpath is
 passed to the `java` command.
 
-For a very simple example:
+Given the `deps.edn` above (containing the `:build` alias) and the `build.clj`
+above (containing the `hello` function), we're going to start out by adding
+a `run` function that will run a specific Java-based command-line. Then we'll
+parameterize it using aliases in `deps.edn:
 
 ```clojure
-(defn writers-block [ugh!])
+(defn run [opts]
+  (let [cmd (b/java-command {:basis     (b/create-basis)
+                             :main      'clojure.main
+                             :main-args ["-e" "(clojure-version)"]})]
+    (b/process cmd)))
+```
+
+We can run this with:
+
+    clojure -T:build run
+
+and we'll see the version of Clojure we're running: `"1.11.1"`.
+
+Since we will generally want the build to fail if the command exits with
+a non-zero status, we'll check the return value of `b/process` and throw
+an exception if the exit status is non-zero:
+
+```clojure
+    (when-not (zero? (:exit (b/process cmd)))
+      (throw (ex-info (str "run failed for " aliases) opts)))
+```
+
+We want to parameterize this so we can run any command-line we want, so
+we will pass `:aliases` in the `opts` and use that to construct the
+basis and also to retrieve both the `:main` class to run and the `:main-args`
+we want to use with it.
+
+We will need to use `tools.deps` to process the aliases, so that we can
+retrieve data from those aliases in `deps.edn`:
+
+```clojure
+(ns build
+  (:require [clojure.tools.build.api :as b]
+            ;; add this:
+            [clojure.tools.deps :as t]))
+
+;; change run to this:
+(defn run [{:keys [aliases] :as opts}]
+  (let [basis      (b/create-basis {:aliases aliases})
+        alias-data (t/combine-aliases basis aliases)
+        cmd        (b/java-command
+                    {:basis     basis
+                     :main      (get alias-data :main/class 'clojure.main)
+                     :main-args (get alias-data :main/args
+                                     ["-e" "(clojure-version)"])})]
+    (when-not (zero? (:exit (b/process cmd)))
+      (throw (ex-info (str "run failed for " aliases) opts)))))
+```
+
+We need the `:aliases` in `create-basis` so paths and dependencies from those
+aliases are taken into account for building the classpath. We've added the
+call to `combine-aliases` so that we can get the raw data from those aliases
+in `deps.edn` -- we'll get back a hash map which is the merge of the values
+identified by those aliases.
+
+> Note: we're using qualified keys to avoid conflicts with the keys that the CLI recognizes, and make it clear this is data we are providing. It's likely that we'll use the `clojure.main` default for all of our tasks but `:main/class` allows us to override that if we do need it at some point.
+
+Next we're going to add `:main/args` to the `:test` alias in `deps.edn`:
+
+```clojure
+  :test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :exec-fn cognitect.test-runner.api/test
+         ;; add this:
+         :main/args ["-m" "cognitect.test-runner"]}
+```
+
+If we pass the `:test` alias to our `run` task like this:
+
+    clojure -T:build run :aliases '[:test]'
+
+we'll see the test runner output (assuming you don't have any tests yet):
+
+    Running tests in #{"test"}
+
+    Testing user
+
+    Ran 0 tests containing 0 assertions.
+    0 failures, 0 errors.
+
+Let's add a `test` function to `build.clj` to make this easier to run:
+
+```clojure
+(defn test [opts]
+  (run (update opts :aliases conj :test)))
+```
+
+Since `test` is also a function in `clojure.core`, we'll suppress the warning
+that would cause by excluding `test` from being referred in:
+
+```clojure
+(ns build
+  ;; add this:
+  (:refer-clojure :exclude [test])
+  (:require [clojure.tools.build.api :as b]
+            [clojure.tools.deps :as t]))
+```
+
+Now we can run the tests with:
+
+    clojure -T:build test
+
+### Multi-Version Testing
+
+With the above `run` and `test` functions in place, we can automatically
+run our tests for multiple versions of Clojure. We'll add aliases to `deps.edn`
+that specify versions of Clojure to test against, and then use those in a
+new `test-multi` function in `build.clj`.
+
+Add these aliases to `deps.edn`:
+
+```clojure
+  :1.9  {:override-deps {org.clojure/clojure {:mvn/version "1.9.0"}}}
+  :1.10 {:override-deps {org.clojure/clojure {:mvn/version "1.10.3"}}}
+  :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.1"}}}
+```
+
+When these aliases are used in combination with other aliases, the default
+version of Clojure will be overridden with the specified version. We can see
+this by running `clojure -T:build run :aliases '[:1.9]'` and seeing `"1.9.0"`
+for example.
+
+Here's our `test-multi` function:
+
+```clojure
+(defn test-multi [opts]
+  (doseq [v [:1.9 :1.10 :1.11]]
+    (println "\nTest with Clojure" v)
+    (test (update opts :aliases conj v))))
 ```
