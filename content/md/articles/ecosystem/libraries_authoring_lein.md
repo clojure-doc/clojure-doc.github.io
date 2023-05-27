@@ -1,12 +1,10 @@
 {:title "Library Development and Distribution with Leiningen"
  :layout :page :sidebar-omit? true :page-index 103110}
 
-> Question: should we retain this old Leiningen example but bring it up to date (as well as adding a Clojure CLI version)?
-
 This short guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars.
 It uses
-Clojure 1.4 and Leiningen 2.0-previewX, and requires you have git
+Clojure 1.10 and Leiningen 2.9.1, and requires you have git
 installed (though very little familiarity with git is required).
 
 It's assumed that you're already somewhat familiar with Clojure. If
