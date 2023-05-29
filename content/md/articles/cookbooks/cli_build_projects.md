@@ -75,14 +75,14 @@ Or you can specify a default function to run in an alias:
 {
  :aliases
  {
-  :api {:ns-default my-proj.api}
-  :foo {:exec-fn my-proj.api/foo}
+  :api {:ns-default my-proj.api
+        :exec-fn my-proj.api/foo}
  }}
 ```
 
-Now `-X` on its own will run that `foo` function:
+Now `-X:api` on its own will run that `foo` function:
 
-    clojure -X :bar 42
+    clojure -X:api :bar 42
 
 The `-X` option to the Clojure CLI stands for "eXecute function" and it
 uses the same default context as your project, so your source code and its
