@@ -102,10 +102,10 @@ you want to use:</p><pre><code class="clojure">;; deps.edn
 {
  :aliases
  {
-  :api {:ns-default my-proj.api}
-  :foo {:exec-fn my-proj.api/foo}
+  :api {:ns-default my-proj.api
+        :exec-fn my-proj.api/foo}
  }}
-</code></pre><p>Now <code>-X</code> on its own will run that <code>foo</code> function:</p><pre><code>clojure -X :bar 42
+</code></pre><p>Now <code>-X:api</code> on its own will run that <code>foo</code> function:</p><pre><code>clojure -X:api :bar 42
 </code></pre><p>The <code>-X</code> option to the Clojure CLI stands for "eXecute function" and it
 uses the same default context as your project, so your source code and its
 dependencies are all available. This is useful for running tests, for
