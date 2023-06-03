@@ -199,7 +199,7 @@ For reference, here's the official documentation:
 * [The `tools.build` Guide](https://clojure.org/guides/tools_build)
 * [`clojure.tools.build.api` API Documentation](https://clojure.github.io/tools.build/clojure.tools.build.api.html)
 
-Before we start on more complex tasks, let's first look as a task to run
+Before we start on more complex tasks, let's first look at a task to run
 an arbitrary process based on aliases.
 
 ### Running Tasks based on Aliases
@@ -236,6 +236,10 @@ an exception if the exit status is non-zero:
       (throw (ex-info (str "run failed for " aliases) opts)))
 ```
 
+In addition, we'll make all our function return the `opts` map, so that
+we can chain them together in a pipeline, either within another function
+or when we get to the "build REPL" section later.
+
 We want to parameterize this so we can run any command-line we want, so
 we will pass `:aliases` in the `opts` and use that to construct the
 basis and also to retrieve both the `:main` class to run and the `:main-args`
@@ -252,15 +256,17 @@ retrieve data from those aliases in `deps.edn`:
 
 ;; change run to this:
 (defn run [{:keys [aliases] :as opts}]
-  (let [basis      (b/create-basis {:aliases aliases})
+  (let [basis      (b/create-basis opts) ; primarily using :aliases here
         alias-data (t/combine-aliases basis aliases)
-        cmd        (b/java-command
-                    {:basis     basis
-                     :main      (get alias-data :main/class 'clojure.main)
-                     :main-args (get alias-data :main/args
-                                     ["-e" "(clojure-version)"])})]
+        cmd-opts   (merge {:basis     basis
+                           :main      'clojure.main
+                           :main-args ["-e" "(clojure-version)"]}
+                          opts
+                          alias-data)
+        cmd        (b/java-command cmd-opts)]
     (when-not (zero? (:exit (b/process cmd)))
-      (throw (ex-info (str "run failed for " aliases) opts)))))
+      (throw (ex-info (str "run failed for " aliases) opts)))
+    opts))
 ```
 
 We need the `:aliases` in `create-basis` so paths and dependencies from those
@@ -269,17 +275,15 @@ call to `combine-aliases` so that we can get the raw data from those aliases
 in `deps.edn` -- we'll get back a hash map which is the merge of the values
 identified by those aliases.
 
-> Note: we're using qualified keys to avoid conflicts with the keys that the CLI recognizes, and make it clear this is data we are providing. It's likely that we'll use the `clojure.main` default for all of our tasks but `:main/class` allows us to override that if we do need it at some point.
-
-Next we're going to add `:main/args` to the `:test` alias in `deps.edn`:
+Next we're going to add `:main-args` to the `:test` alias in `deps.edn`:
 
 ```clojure
   :test {:extra-paths ["test"]
          :extra-deps {io.github.cognitect-labs/test-runner
                       {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
          :exec-fn cognitect.test-runner.api/test
-         ;; add this:
-         :main/args ["-m" "cognitect.test-runner"]}
+         ;; add this alias data for build.clj:
+         :main-args ["-m" "cognitect.test-runner"]}
 ```
 
 If we pass the `:test` alias to our `run` task like this:
@@ -317,6 +321,12 @@ Now we can run the tests with:
 
     clojure -T:build test
 
+There are several important things to note here:
+* All our `build.clj` functions return the `opts` map, possibly augmented by the function itself. This will help us chain functions together later.
+* Each function can set up defaults, which can be overridden by the caller via the `opts` map, and then by the alias data from `deps.edn`.
+* We pass full options and alias data hash maps to all the `b/*` functions, so that we can provide arbitrary additional options to those functions, via the command-line, other functions, or via alias data in `deps.edn`. This follows Clojure's "open map" approach to data to support flexibility and extensibility.
+* We do not return the `:basis` from a function because we want each function to be able to control that independently, although our functions can accept a `:basis` in the `opts` map so the caller can still override that if needed.
+
 ### Multi-Version Testing
 
 With the above `run` and `test` functions in place, we can automatically
@@ -343,5 +353,52 @@ Here's our `test-multi` function:
 (defn test-multi [opts]
   (doseq [v [:1.9 :1.10 :1.11]]
     (println "\nTest with Clojure" v)
-    (test (update opts :aliases conj v))))
+    (test (update opts :aliases conj v)))
+  opts)
+```
+
+If we add the following `test/example_test.clj` file to our project, we can
+verify the tests are running against the correct version of Clojure:
+
+```clojure
+(ns example-test
+  (:require [clojure.test :refer :all]))
+
+(deftest version-test
+  (println (clojure-version))
+  (is true))
+```
+
+Now when we run `clojure -T:build test-multi` we see:
+
+```
+Test with Clojure :1.9
+
+Running tests in #{"test"}
+
+Testing example-test
+1.9.0
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+
+Test with Clojure :1.10
+
+Running tests in #{"test"}
+
+Testing example-test
+1.10.3
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+
+Test with Clojure :1.11
+
+Running tests in #{"test"}
+
+Testing example-test
+1.11.1
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
 ```
