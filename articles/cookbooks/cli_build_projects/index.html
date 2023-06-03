@@ -166,7 +166,7 @@ You can do the same thing with:</p><pre><code>clojure -T:build hello '{:name "Bu
 </code></pre><h2 id="the-toolsbuild-library">The <code>tools.build</code> Library</h2><p>The official guide provides three examples, and talks briefly about passing
 parameters into <code>build</code> task functions:</p><ul><li><a href="https://clojure.org/guides/tools_build#_source_library_jar_build">Source library jar build</a></li><li><a href="https://clojure.org/guides/tools_build#_compiled_uberjar_application_build">Compiled uberjar application build</a></li><li><a href="https://clojure.org/guides/tools_build#_mixed_java_clojure_build">Mixed Java / Clojure build</a></li></ul><p>Those examples are a good starting point for simple projects but there is
 so much you can do with <code>build.clj</code> to automate all manner of things in
-larger projects:</p><ul><li>Parameterizing builds using aliases in <code>deps.edn</code></li><li>Multi-version testing</li><li>Continuous Integration pipelines</li><li>Automated deployments</li><li>Using a "build REPL"</li><li>Coordinating build tasks across multiple subprojects</li></ul><p>For reference, here's the official documentation:</p><ul><li><a href="https://clojure.org/guides/tools_build">The <code>tools.build</code> Guide</a></li><li><a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html"><code>clojure.tools.build.api</code> API Documentation</a></li></ul><p>Before we start on more complex tasks, let's first look as a task to run
+larger projects:</p><ul><li>Parameterizing builds using aliases in <code>deps.edn</code></li><li>Multi-version testing</li><li>Continuous Integration pipelines</li><li>Automated deployments</li><li>Using a "build REPL"</li><li>Coordinating build tasks across multiple subprojects</li></ul><p>For reference, here's the official documentation:</p><ul><li><a href="https://clojure.org/guides/tools_build">The <code>tools.build</code> Guide</a></li><li><a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html"><code>clojure.tools.build.api</code> API Documentation</a></li></ul><p>Before we start on more complex tasks, let's first look at a task to run
 an arbitrary process based on aliases.</p><h3 id="running-tasks-based-on-aliases">Running Tasks based on Aliases</h3><p><code>tools.build</code> provides functions to construct a Java-based command-line and
 then run it as a subprocess, using a "basis" to control what classpath is
 passed to the <code>java</code> command.</p><p>Given the <code>deps.edn</code> above (containing the <code>:build</code> alias) and the <code>build.clj</code>
@@ -182,7 +182,9 @@ parameterize it using aliases in `deps.edn:</p><pre><code class="clojure">(defn 
 a non-zero status, we'll check the return value of <code>b/process</code> and throw
 an exception if the exit status is non-zero:</p><pre><code class="clojure">    (when-not (zero? (:exit (b/process cmd)))
       (throw (ex-info (str "run failed for " aliases) opts)))
-</code></pre><p>We want to parameterize this so we can run any command-line we want, so
+</code></pre><p>In addition, we'll make all our function return the <code>opts</code> map, so that
+we can chain them together in a pipeline, either within another function
+or when we get to the "build REPL" section later.</p><p>We want to parameterize this so we can run any command-line we want, so
 we will pass <code>:aliases</code> in the <code>opts</code> and use that to construct the
 basis and also to retrieve both the <code>:main</code> class to run and the <code>:main-args</code>
 we want to use with it.</p><p>We will need to use <code>tools.deps</code> to process the aliases, so that we can
@@ -193,25 +195,27 @@ retrieve data from those aliases in <code>deps.edn</code>:</p><pre><code class="
 
 ;; change run to this:
 (defn run [{:keys [aliases] :as opts}]
-  (let [basis      (b/create-basis {:aliases aliases})
+  (let [basis      (b/create-basis opts) ; primarily using :aliases here
         alias-data (t/combine-aliases basis aliases)
-        cmd        (b/java-command
-                    {:basis     basis
-                     :main      (get alias-data :main/class 'clojure.main)
-                     :main-args (get alias-data :main/args
-                                     ["-e" "(clojure-version)"])})]
+        cmd-opts   (merge {:basis     basis
+                           :main      'clojure.main
+                           :main-args ["-e" "(clojure-version)"]}
+                          opts
+                          alias-data)
+        cmd        (b/java-command cmd-opts)]
     (when-not (zero? (:exit (b/process cmd)))
-      (throw (ex-info (str "run failed for " aliases) opts)))))
+      (throw (ex-info (str "run failed for " aliases) opts)))
+    opts))
 </code></pre><p>We need the <code>:aliases</code> in <code>create-basis</code> so paths and dependencies from those
 aliases are taken into account for building the classpath. We've added the
 call to <code>combine-aliases</code> so that we can get the raw data from those aliases
 in <code>deps.edn</code> -- we'll get back a hash map which is the merge of the values
-identified by those aliases.</p><blockquote><p>Note: we're using qualified keys to avoid conflicts with the keys that the CLI recognizes, and make it clear this is data we are providing. It's likely that we'll use the <code>clojure.main</code> default for all of our tasks but <code>:main/class</code> allows us to override that if we do need it at some point.</p></blockquote><p>Next we're going to add <code>:main/args</code> to the <code>:test</code> alias in <code>deps.edn</code>:</p><pre><code class="clojure">  :test {:extra-paths ["test"]
+identified by those aliases.</p><p>Next we're going to add <code>:main-args</code> to the <code>:test</code> alias in <code>deps.edn</code>:</p><pre><code class="clojure">  :test {:extra-paths ["test"]
          :extra-deps {io.github.cognitect-labs/test-runner
                       {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
          :exec-fn cognitect.test-runner.api/test
-         ;; add this:
-         :main/args ["-m" "cognitect.test-runner"]}
+         ;; add this alias data for build.clj:
+         :main-args ["-m" "cognitect.test-runner"]}
 </code></pre><p>If we pass the <code>:test</code> alias to our <code>run</code> task like this:</p><pre><code>clojure -T:build run :aliases '[:test]'
 </code></pre><p>we'll see the test runner output (assuming you don't have any tests yet):</p><pre><code>Running tests in #{"test"}
 
@@ -228,7 +232,7 @@ that would cause by excluding <code>test</code> from being referred in:</p><pre>
   (:require [clojure.tools.build.api :as b]
             [clojure.tools.deps :as t]))
 </code></pre><p>Now we can run the tests with:</p><pre><code>clojure -T:build test
-</code></pre><h3 id="multi-version-testing">Multi-Version Testing</h3><p>With the above <code>run</code> and <code>test</code> functions in place, we can automatically
+</code></pre><p>There are several important things to note here:</p><ul><li>All our <code>build.clj</code> functions return the <code>opts</code> map, possibly augmented by the function itself. This will help us chain functions together later.</li><li>Each function can set up defaults, which can be overridden by the caller via the <code>opts</code> map, and then by the alias data from <code>deps.edn</code>.</li><li>We pass full options and alias data hash maps to all the <code>b/*</code> functions, so that we can provide arbitrary additional options to those functions, via the command-line, other functions, or via alias data in <code>deps.edn</code>. This follows Clojure's "open map" approach to data to support flexibility and extensibility.</li><li>We do not return the <code>:basis</code> from a function because we want each function to be able to control that independently, although our functions can accept a <code>:basis</code> in the <code>opts</code> map so the caller can still override that if needed.</li></ul><h3 id="multi-version-testing">Multi-Version Testing</h3><p>With the above <code>run</code> and <code>test</code> functions in place, we can automatically
 run our tests for multiple versions of Clojure. We'll add aliases to <code>deps.edn</code>
 that specify versions of Clojure to test against, and then use those in a
 new <code>test-multi</code> function in <code>build.clj</code>.</p><p>Add these aliases to <code>deps.edn</code>:</p><pre><code class="clojure">  :1.9  {:override-deps {org.clojure/clojure {:mvn/version "1.9.0"}}}
@@ -240,7 +244,44 @@ this by running <code>clojure -T:build run :aliases '[:1.9]'</code> and seeing <
 for example.</p><p>Here's our <code>test-multi</code> function:</p><pre><code class="clojure">(defn test-multi [opts]
   (doseq [v [:1.9 :1.10 :1.11]]
     (println "\nTest with Clojure" v)
-    (test (update opts :aliases conj v))))
+    (test (update opts :aliases conj v)))
+  opts)
+</code></pre><p>If we add the following <code>test/example_test.clj</code> file to our project, we can
+verify the tests are running against the correct version of Clojure:</p><pre><code class="clojure">(ns example-test
+  (:require [clojure.test :refer :all]))
+
+(deftest version-test
+  (println (clojure-version))
+  (is true))
+</code></pre><p>Now when we run <code>clojure -T:build test-multi</code> we see:</p><pre><code>Test with Clojure :1.9
+
+Running tests in #{"test"}
+
+Testing example-test
+1.9.0
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+
+Test with Clojure :1.10
+
+Running tests in #{"test"}
+
+Testing example-test
+1.10.3
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+
+Test with Clojure :1.11
+
+Running tests in #{"test"}
+
+Testing example-test
+1.11.1
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
 </code></pre>
 
     <div id="prev-next">
