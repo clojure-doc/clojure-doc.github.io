@@ -282,7 +282,78 @@ Testing example-test
 
 Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
-</code></pre>
+</code></pre><h3 id="tips-for-building-jar-files">Tips for Building JAR Files</h3><p>Although the official <code>tools.build</code> has examples for
+<a href="https://clojure.org/guides/tools_build#_source_library_jar_build">Source library jar build</a>
+and
+<a href="https://clojure.org/guides/tools_build#_compiled_uberjar_application_build">Compiled uberjar application build</a>,
+and both of these first define a number of global variables, and then use
+those to construct distinct hash maps of options for the <code>b/*</code> function calls,
+if we want to parameterize our builds, it is more convenient to write a
+function that takes the options as a parameter, and returns the full options
+hash map with those "global" defaults merged in.</p><p>The only "gotcha" about doing this is that there are five <code>b/*</code> functions
+that accept <code>:src-dirs</code> and they typically have different values for each
+of those calls. Depending on how your project is structured, you might be
+able to get away with using <code>["src" "resources"]</code> for <code>:src-dirs</code> and
+adding <code>(take 1 ..)</code> around it for <code>b/write-pom</code> and/or <code>b/compile-clj</code>.
+For <code>b/javac</code>, you probably want a separate <code>:src-dirs</code> value since any
+Java source code in your project is likely to be separate from your Clojure
+code and won't be copied into your JAR (but it will be compiled and the
+classes that produces will be included in the JAR).</p><p>An alternative approach is to use a <code>:src-dirs</code> value of <code>["src"]</code> in your
+options hash map that is passed "everywhere" and then for <code>b/copy-dir</code> use
+<code>["src" "resources"]</code> explicitly for <code>:src-dirs</code>. This is the approach used
+in both
+<a href="https://github.com/seancorfield/next-jdbc/blob/develop/build.clj"><code>next.jdbc</code></a>
+and
+<a href="https://github.com/seancorfield/honeysql/blob/develop/build.clj">HoneySQL</a>
+for example.</p><p>Those <code>build.clj</code> files are also examples of providing a <code>jar-opts</code> function
+that can set up all the options needed for <code>b/write-pom</code> and <code>b/jar</code> in one
+place, although neither allows for the default options to be overridden from
+the command-line or by other functions (except for selection of whether to
+build a SNAPSHOT or a release version of the library).</p><p>The global variables defining <code>lib</code>, <code>version</code>, etc could be moved to the
+<code>jar-opts</code> function but some people will find it easier to read your <code>build.clj</code>
+file if they are defined at the top of the file.</p><p>You might end up with something like:</p><pre><code class="clojure">(defn- jar-opts [opts]
+  (let [lib     'my/lib
+        version "1.2.3"
+        target  "target"
+        classes (str target "/classes")]
+    (assoc opts
+           :lib        lib
+           :version    version
+           :jar-file   (format "target/%s-%s.jar" lib version)
+           :scm  {:tag (str "v" version)}
+           :basis      (b/create-basis {})
+           :class-dir  classes
+           :target-dir classes ; for b/copy-dir
+           :target     target
+           :path       target ; for b/delete
+           :src-dirs   ["src"])))
+
+(defn jar [opts]
+  (let [opts (jar-opts opts)]
+    ;; clojure.tools.build.api functions return nil:
+    (b/delete opts)
+    (b/write-pom opts)
+    (b/copy-dir (update opts :src-dirs conj "resources"))
+    (println "\nWriting" (:jar-file opts))
+    (b/jar opts))
+  ;; return original opts for chaining:
+  opts)
+</code></pre><blockquote><p>Note: in the above <code>jar-opts</code> function, we do not allow the JAR-related options to be overridden by the <code>opts</code> passed in. If you want to allow that, you can use <code>merge</code> instead of <code>assoc</code> in the <code>jar-opts</code> function (with a literal hash map of the JAR-related options followed by <code>opts</code>). You may need to do extra work if you want <code>:lib</code>, <code>:version</code>, and/or <code>:target</code> to be overridden but still have <code>:jar-file</code>, <code>:class-dir</code>, and <code>:target-dir</code> be derived from those values.</p></blockquote><blockquote><p>Note: the basis is a huge hash map so we don't want to return it from our <code>jar</code> function (unless it was passed in via <code>opts</code>) in case we either want to use this from the "build REPL" (later) or from another function where we might want control over the basis used. If you decide to return the merged options from <code>jar</code>, you should probably use <code>dissoc</code> to remove the basis from the options returned (unless it was passed in via <code>opts</code>).</p></blockquote><h3 id="continuous-integration-pipelines">Continuous Integration Pipelines</h3><p>Now that we have testing and JAR-building covered, we can add a <code>ci</code> function
+to our <code>build.clj</code> file to run our tests and build a JAR file:</p><pre><code class="clojure">(defn ci [opts]
+  (-&gt; opts
+      (test-multi)
+      ;; run any other linters or testing you need here...
+      ;; ...then build the JAR if everything passes:
+      (jar)))
+</code></pre><p>The <a href="https://github.com/seancorfield/honeysql/blob/develop/build.clj">HoneySQL</a><code>build.clj</code> file has a <code>ci</code> function that runs tests for multiple Clojure versions,
+for ClojureScript, and runs "doc tests" (validating all the examples in the
+documentation), as well as running the
+<a href="https://github.com/jonase/eastwood">Eastwood linter</a>
+-- all before building the JAR file.</p><p>Your pipeline configuration for continuous integration could now be as simple as:</p><pre><code>clojure -T:build ci
+</code></pre><p>If you need to set up databases for testing, you could write that as a function
+in your <code>build.clj</code> file and call it from <code>ci</code> before running the tests, possibly
+configured via aliases.</p><p>You might also want your CI pipeline to perform a deployment step, which we'll
+cover next.</p><h3 id="automating-deployments">Automating Deployments</h3><p>(to be written)</p>
 
     <div id="prev-next">
         
