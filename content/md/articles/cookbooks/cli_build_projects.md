@@ -402,3 +402,116 @@ Testing example-test
 Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
 ```
+
+### Tips for Building JAR Files
+
+Although the official `tools.build` has examples for
+[Source library jar build](https://clojure.org/guides/tools_build#_source_library_jar_build)
+and
+[Compiled uberjar application build](https://clojure.org/guides/tools_build#_compiled_uberjar_application_build),
+and both of these first define a number of global variables, and then use
+those to construct distinct hash maps of options for the `b/*` function calls,
+if we want to parameterize our builds, it is more convenient to write a
+function that takes the options as a parameter, and returns the full options
+hash map with those "global" defaults merged in.
+
+The only "gotcha" about doing this is that there are five `b/*` functions
+that accept `:src-dirs` and they typically have different values for each
+of those calls. Depending on how your project is structured, you might be
+able to get away with using `["src" "resources"]` for `:src-dirs` and
+adding `(take 1 ..)` around it for `b/write-pom` and/or `b/compile-clj`.
+For `b/javac`, you probably want a separate `:src-dirs` value since any
+Java source code in your project is likely to be separate from your Clojure
+code and won't be copied into your JAR (but it will be compiled and the
+classes that produces will be included in the JAR).
+
+An alternative approach is to use a `:src-dirs` value of `["src"]` in your
+options hash map that is passed "everywhere" and then for `b/copy-dir` use
+`["src" "resources"]` explicitly for `:src-dirs`. This is the approach used
+in both
+[`next.jdbc`](https://github.com/seancorfield/next-jdbc/blob/develop/build.clj)
+and
+[HoneySQL](https://github.com/seancorfield/honeysql/blob/develop/build.clj)
+for example.
+
+Those `build.clj` files are also examples of providing a `jar-opts` function
+that can set up all the options needed for `b/write-pom` and `b/jar` in one
+place, although neither allows for the default options to be overridden from
+the command-line or by other functions (except for selection of whether to
+build a SNAPSHOT or a release version of the library).
+
+The global variables defining `lib`, `version`, etc could be moved to the
+`jar-opts` function but some people will find it easier to read your `build.clj`
+file if they are defined at the top of the file.
+
+You might end up with something like:
+
+```clojure
+(defn- jar-opts [opts]
+  (let [lib     'my/lib
+        version "1.2.3"
+        target  "target"
+        classes (str target "/classes")]
+    (assoc opts
+           :lib        lib
+           :version    version
+           :jar-file   (format "target/%s-%s.jar" lib version)
+           :scm  {:tag (str "v" version)}
+           :basis      (b/create-basis {})
+           :class-dir  classes
+           :target-dir classes ; for b/copy-dir
+           :target     target
+           :path       target ; for b/delete
+           :src-dirs   ["src"])))
+
+(defn jar [opts]
+  (let [opts (jar-opts opts)]
+    ;; clojure.tools.build.api functions return nil:
+    (b/delete opts)
+    (b/write-pom opts)
+    (b/copy-dir (update opts :src-dirs conj "resources"))
+    (println "\nWriting" (:jar-file opts))
+    (b/jar opts))
+  ;; return original opts for chaining:
+  opts)
+```
+
+> Note: in the above `jar-opts` function, we do not allow the JAR-related options to be overridden by the `opts` passed in. If you want to allow that, you can use `merge` instead of `assoc` in the `jar-opts` function (with a literal hash map of the JAR-related options followed by `opts`). You may need to do extra work if you want `:lib`, `:version`, and/or `:target` to be overridden but still have `:jar-file`, `:class-dir`, and `:target-dir` be derived from those values.
+
+> Note: the basis is a huge hash map so we don't want to return it from our `jar` function (unless it was passed in via `opts`) in case we either want to use this from the "build REPL" (later) or from another function where we might want control over the basis used. If you decide to return the merged options from `jar`, you should probably use `dissoc` to remove the basis from the options returned (unless it was passed in via `opts`).
+
+### Continuous Integration Pipelines
+
+Now that we have testing and JAR-building covered, we can add a `ci` function
+to our `build.clj` file to run our tests and build a JAR file:
+
+```clojure
+(defn ci [opts]
+  (-> opts
+      (test-multi)
+      ;; run any other linters or testing you need here...
+      ;; ...then build the JAR if everything passes:
+      (jar)))
+```
+
+The [HoneySQL](https://github.com/seancorfield/honeysql/blob/develop/build.clj)
+`build.clj` file has a `ci` function that runs tests for multiple Clojure versions,
+for ClojureScript, and runs "doc tests" (validating all the examples in the
+documentation), as well as running the
+[Eastwood linter](https://github.com/jonase/eastwood)
+-- all before building the JAR file.
+
+Your pipeline configuration for continuous integration could now be as simple as:
+
+    clojure -T:build ci
+
+If you need to set up databases for testing, you could write that as a function
+in your `build.clj` file and call it from `ci` before running the tests, possibly
+configured via aliases.
+
+You might also want your CI pipeline to perform a deployment step, which we'll
+cover next.
+
+### Automating Deployments
+
+(to be written)
