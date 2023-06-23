@@ -63,7 +63,7 @@ for others to use or application .jar files to run on servers on in containers."
     <div id="page-header">
         <h2>Building Projects: tools.build and the Clojure CLI</h2>
     </div>
-    
+    <ol class="toc"><li><a href="#toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</a></li><ol><li><a href="#executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</a></li></ol><li><a href="#the-toolsbuild-library">The <code>tools.build</code> Library</a></li><ol><li><a href="#running-tasks-based-on-aliases">Running Tasks based on Aliases</a></li><li><a href="#multi-version-testing">Multi-Version Testing</a></li><li><a href="#tips-for-building-jar-files">Tips for Building JAR Files</a></li><li><a href="#continuous-integration-pipelines">Continuous Integration Pipelines</a></li><li><a href="#using-a-build-repl">Using a "build REPL"</a></li></ol><li><a href="#working-with-multiple-subprojects">Working with Multiple Subprojects</a></li></ol>
     <h2 id="toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</h2><p><a href="https://github.com/clojure/tools.build"><code>tools.build</code></a>
 is a library for building artifacts in Clojure projects, which are typically
 library <code>.jar</code> files for deployment to repositories like <a href="https://clojars.org">Clojars</a>
@@ -166,7 +166,7 @@ You can do the same thing with:</p><pre><code>clojure -T:build hello '{:name "Bu
 </code></pre><h2 id="the-toolsbuild-library">The <code>tools.build</code> Library</h2><p>The official guide provides three examples, and talks briefly about passing
 parameters into <code>build</code> task functions:</p><ul><li><a href="https://clojure.org/guides/tools_build#_source_library_jar_build">Source library jar build</a></li><li><a href="https://clojure.org/guides/tools_build#_compiled_uberjar_application_build">Compiled uberjar application build</a></li><li><a href="https://clojure.org/guides/tools_build#_mixed_java_clojure_build">Mixed Java / Clojure build</a></li></ul><p>Those examples are a good starting point for simple projects but there is
 so much you can do with <code>build.clj</code> to automate all manner of things in
-larger projects:</p><ul><li>Parameterizing builds using aliases in <code>deps.edn</code></li><li>Multi-version testing</li><li>Continuous Integration pipelines</li><li>Automated deployments</li><li>Using a "build REPL"</li><li>Coordinating build tasks across multiple subprojects</li></ul><p>For reference, here's the official documentation:</p><ul><li><a href="https://clojure.org/guides/tools_build">The <code>tools.build</code> Guide</a></li><li><a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html"><code>clojure.tools.build.api</code> API Documentation</a></li></ul><p>Before we start on more complex tasks, let's first look at a task to run
+larger projects:</p><ul><li>Parameterizing builds using aliases in <code>deps.edn</code></li><li>Multi-version testing</li><li>Continuous Integration pipelines</li><li>Using a "build REPL"</li><li>Coordinating build tasks across multiple subprojects</li></ul><p>For reference, here's the official documentation:</p><ul><li><a href="https://clojure.org/guides/tools_build">The <code>tools.build</code> Guide</a></li><li><a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html"><code>clojure.tools.build.api</code> API Documentation</a></li></ul><p>Before we start on more complex tasks, let's first look at a task to run
 an arbitrary process based on aliases.</p><h3 id="running-tasks-based-on-aliases">Running Tasks based on Aliases</h3><p><code>tools.build</code> provides functions to construct a Java-based command-line and
 then run it as a subprocess, using a "basis" to control what classpath is
 passed to the <code>java</code> command.</p><p>Given the <code>deps.edn</code> above (containing the <code>:build</code> alias) and the <code>build.clj</code>
@@ -353,7 +353,7 @@ documentation), as well as running the
 </code></pre><p>If you need to set up databases for testing, you could write that as a function
 in your <code>build.clj</code> file and call it from <code>ci</code> before running the tests, possibly
 configured via aliases.</p><p>You might also want your CI pipeline to perform a deployment step, which we'll
-cover next.</p><h3 id="automating-deployments">Automating Deployments</h3><p>(to be written)</p>
+cover next.</p><h3 id="using-a-build-repl">Using a "build REPL"</h3><p>(to be written)</p><h2 id="working-with-multiple-subprojects">Working with Multiple Subprojects</h2><p>(to be written)</p>
 
     <div id="prev-next">
         
