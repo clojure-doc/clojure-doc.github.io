@@ -1,5 +1,5 @@
 {:title "Library Development and Distribution"
- :layout :page :page-index 3500}
+ :layout :page :toc true :page-index 3500}
 
 This guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars, as well as

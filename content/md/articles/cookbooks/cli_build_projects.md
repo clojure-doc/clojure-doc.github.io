@@ -1,5 +1,6 @@
 {:title "Building Projects: tools.build and the Clojure CLI"
- :layout :page :page-index 4000}
+ :layout :page :page-index 4000
+ :toc true}
 
 ## `tools.build` and the Clojure CLI
 
@@ -191,7 +192,6 @@ larger projects:
 * Parameterizing builds using aliases in `deps.edn`
 * Multi-version testing
 * Continuous Integration pipelines
-* Automated deployments
 * Using a "build REPL"
 * Coordinating build tasks across multiple subprojects
 
@@ -512,6 +512,10 @@ configured via aliases.
 You might also want your CI pipeline to perform a deployment step, which we'll
 cover next.
 
-### Automating Deployments
+### Using a "build REPL"
+
+(to be written)
+
+## Working with Multiple Subprojects
 
 (to be written)

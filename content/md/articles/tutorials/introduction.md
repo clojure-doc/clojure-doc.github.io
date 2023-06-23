@@ -1,6 +1,6 @@
 {:title "Introduction to Clojure"
  :page-index 1100
- :klipse true
+ :klipse true :toc true
  :layout :page}
 
 This guide covers:

@@ -1,5 +1,5 @@
 {:title "Basic Web Development"
- :page-index 1500
+ :page-index 1500 :toc true
  :layout :page}
 
 

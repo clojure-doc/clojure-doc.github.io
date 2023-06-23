@@ -1,6 +1,6 @@
 {:title "Getting Started with Clojure and Leiningen"
  :sidebar-omit? true :page-index 1002
- :layout :page}
+ :layout :page :toc true}
 
 This guide covers:
 
