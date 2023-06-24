@@ -202,7 +202,7 @@ For reference, here's the official documentation:
 Before we start on more complex tasks, let's first look at a task to run
 an arbitrary process based on aliases.
 
-### Running Tasks based on Aliases
+## Running Tasks based on Aliases
 
 `tools.build` provides functions to construct a Java-based command-line and
 then run it as a subprocess, using a "basis" to control what classpath is
@@ -327,7 +327,7 @@ There are several important things to note here:
 * We pass full options and alias data hash maps to all the `b/*` functions, so that we can provide arbitrary additional options to those functions, via the command-line, other functions, or via alias data in `deps.edn`. This follows Clojure's "open map" approach to data to support flexibility and extensibility.
 * We do not return the `:basis` from a function because we want each function to be able to control that independently, although our functions can accept a `:basis` in the `opts` map so the caller can still override that if needed.
 
-### Multi-Version Testing
+## Multi-Version Testing
 
 With the above `run` and `test` functions in place, we can automatically
 run our tests for multiple versions of Clojure. We'll add aliases to `deps.edn`
@@ -403,7 +403,7 @@ Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
 ```
 
-### Tips for Building JAR Files
+## Tips for Building JAR Files
 
 Although the official `tools.build` has examples for
 [Source library jar build](https://clojure.org/guides/tools_build#_source_library_jar_build)
@@ -480,7 +480,7 @@ You might end up with something like:
 
 > Note: the basis is a huge hash map so we don't want to return it from our `jar` function (unless it was passed in via `opts`) in case we either want to use this from the "build REPL" (later) or from another function where we might want control over the basis used. If you decide to return the merged options from `jar`, you should probably use `dissoc` to remove the basis from the options returned (unless it was passed in via `opts`).
 
-### Continuous Integration Pipelines
+## Continuous Integration Pipelines
 
 Now that we have testing and JAR-building covered, we can add a `ci` function
 to our `build.clj` file to run our tests and build a JAR file:
@@ -512,7 +512,7 @@ configured via aliases.
 You might also want your CI pipeline to perform a deployment step, which we'll
 cover next.
 
-### Using a "build REPL"
+## Using a "build REPL"
 
 While you can write task functions that combine multiple steps, it can be
 useful to work interactively with the build process, so you can run each
