@@ -514,7 +514,54 @@ cover next.
 
 ### Using a "build REPL"
 
-(to be written)
+While you can write task functions that combine multiple steps, it can be
+useful to work interactively with the build process, so you can run each
+step -- or a subset of steps -- individually. You can do this by starting
+a "build REPL" with:
+
+    clj -M:build -i build.clj -e "(in-ns 'build)" -r
+
+This will start a REPL with the `build.clj` file loaded and the `b/*` functions
+available, since you will be in the `build` namespace.
+
+Let's break this down:
+* `-M:build` -- this says "run `clojure.main` with the `:build` alias as the context", so you have the `tools.build` dependencies available, and everything that follows is an argument to `clojure.main`,
+* `-i build.clj` -- this says "load the `build.clj` file before starting the REPL",
+* `-e "(in-ns 'build)"` -- this switches you into the `build` namespace (after it was loaded by `-i`),
+* `-r` -- this says "start a REPL after loading the file and switching namespaces".
+
+Now you can run individual tasks, or combinations of tasks, interactively:
+
+```clojure
+build=> (test-multi {})
+...
+build=> (-> {} (test-multi) (jar))
+```
+
+Because you have a "build REPL" running, you don't have to pay the startup
+time cost for each task, like you would for `clojure -T:build test-multi` etc.
+
+Using an example from where I work, I might run some or all of the following
+steps within a "build REPL":
+
+```clojure
+build=> (-> {} (check-all) (ancient) (cve-check) (cold-start) (test-stable) (build-uberjars))
+```
+
+There is a subtlety to be aware of here: `clojure -T:build` not only uses the
+dependencies declared in the `:build` alias to be added to the classpath, it
+also sets the `:paths` to be `["."]` -- just the current directory -- so your
+project source code (and dependencies) are **not** available directly in
+`build.clj` code. When you run `clojure -M:build`, your project
+source code **is** available directly in the "build REPL" -- but its
+dependencies are not, and any local files your `build.clj` expects to be able
+to read from the classpath (or load as namespaces) will not be available.
+If that matters, you can add `-Sdeps '{:paths ["."]}'` to the command:
+
+    clj -Sdeps '{:paths ["."]}' -M:build -i build.clj -e "(in-ns 'build)" -r
+
+That's quite a mouthful so you probably want to put it in a shell script
+somewhere on your `PATH`, for convenience!
 
 ## Working with Multiple Subprojects
 
