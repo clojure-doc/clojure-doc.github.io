@@ -353,7 +353,28 @@ documentation), as well as running the
 </code></pre><p>If you need to set up databases for testing, you could write that as a function
 in your <code>build.clj</code> file and call it from <code>ci</code> before running the tests, possibly
 configured via aliases.</p><p>You might also want your CI pipeline to perform a deployment step, which we'll
-cover next.</p><h3 id="using-a-build-repl">Using a "build REPL"</h3><p>(to be written)</p><h2 id="working-with-multiple-subprojects">Working with Multiple Subprojects</h2><p>(to be written)</p>
+cover next.</p><h3 id="using-a-build-repl">Using a "build REPL"</h3><p>While you can write task functions that combine multiple steps, it can be
+useful to work interactively with the build process, so you can run each
+step -- or a subset of steps -- individually. You can do this by starting
+a "build REPL" with:</p><pre><code>clj -M:build -i build.clj -e "(in-ns 'build)" -r
+</code></pre><p>This will start a REPL with the <code>build.clj</code> file loaded and the <code>b/*</code> functions
+available, since you will be in the <code>build</code> namespace.</p><p>Let's break this down:</p><ul><li><code>-M:build</code> -- this says "run <code>clojure.main</code> with the <code>:build</code> alias as the context", so you have the <code>tools.build</code> dependencies available, and everything that follows is an argument to <code>clojure.main</code>,</li><li><code>-i build.clj</code> -- this says "load the <code>build.clj</code> file before starting the REPL",</li><li><code>-e "(in-ns 'build)"</code> -- this switches you into the <code>build</code> namespace (after it was loaded by <code>-i</code>),</li><li><code>-r</code> -- this says "start a REPL after loading the file and switching namespaces".</li></ul><p>Now you can run individual tasks, or combinations of tasks, interactively:</p><pre><code class="clojure">build=&gt; (test-multi {})
+...
+build=&gt; (-&gt; {} (test-multi) (jar))
+</code></pre><p>Because you have a "build REPL" running, you don't have to pay the startup
+time cost for each task, like you would for <code>clojure -T:build test-multi</code> etc.</p><p>Using an example from where I work, I might run some or all of the following
+steps within a "build REPL":</p><pre><code class="clojure">build=&gt; (-&gt; {} (check-all) (ancient) (cve-check) (cold-start) (test-stable) (build-uberjars))
+</code></pre><p>There is a subtlety to be aware of here: <code>clojure -T:build</code> not only uses the
+dependencies declared in the <code>:build</code> alias to be added to the classpath, it
+also sets the <code>:paths</code> to be <code>["."]</code> -- just the current directory -- so your
+project source code (and dependencies) are <strong>not</strong> available directly in
+<code>build.clj</code> code. When you run <code>clojure -M:build</code>, your project
+source code <strong>is</strong> available directly in the "build REPL" -- but its
+dependencies are not, and any local files your <code>build.clj</code> expects to be able
+to read from the classpath (or load as namespaces) will not be available.
+If that matters, you can add <code>-Sdeps '{:paths ["."]}'</code> to the command:</p><pre><code>clj -Sdeps '{:paths ["."]}' -M:build -i build.clj -e "(in-ns 'build)" -r
+</code></pre><p>That's quite a mouthful so you probably want to put it in a shell script
+somewhere on your <code>PATH</code>, for convenience!</p><h2 id="working-with-multiple-subprojects">Working with Multiple Subprojects</h2><p>(to be written)</p>
 
     <div id="prev-next">
         
