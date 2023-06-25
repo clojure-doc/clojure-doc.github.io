@@ -192,6 +192,7 @@ larger projects:
 * Parameterizing builds using aliases in `deps.edn`
 * Multi-version testing
 * Continuous Integration pipelines
+* Automating deployments
 * Using a "build REPL"
 * Coordinating build tasks across multiple subprojects
 
@@ -511,6 +512,50 @@ configured via aliases.
 
 You might also want your CI pipeline to perform a deployment step, which we'll
 cover next.
+
+## Automating deployments
+
+`tools.build` itself does not provide any direct support for deploying artifacts
+so you will need to use additional libraries. If you are deploying to Clojars,
+then [deps-deploy](https://github.com/slipset/deps-deploy) is a good option.
+
+Add the following to your `:build` alias in `deps.edn` (in the `:deps` map):
+
+```clojure
+                 slipset/deps-deploy {:mvn/version "0.2.1"}
+```
+
+And add the following task to your `build.clj` file:
+
+```clojure
+(defn deploy "Deploy the JAR to Clojars." [opts]
+  (let [{:keys [jar-file] :as opts} (jar-opts opts)]
+    (dd/deploy {:installer :remote :artifact (b/resolve-path jar-file)
+                :pom-file (b/pom-path (select-keys opts [:lib :class-dir]))}))
+  opts)
+```
+
+Per the `deps-deploy` README, you'll need to set up environment variables
+for your Clojars username and token: `CLOJARS_USERNAME` and `CLOJARS_PASSWORD`
+(even tho' it is **not** your password, it's a deployment token you need to
+setup in your Clojars account).
+
+You can now deploy your JAR file to Clojars with:
+
+    clojure -T:build deploy
+
+At this point, you can automate building and deploying snapshot or full
+release versions of your library, using GitHub Actions or whatever CI
+pipeline service you prefer.
+
+The `next.jdbc` library project builds and deploys a snapshot version for
+every successful commit to the `develop` branch and builds and deploys a
+release version whenever a release tag is created:
+
+* [`snapshot` and `version` in `build.clj`](https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L18-L22)
+* [selecting the version based on options](https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L38-L41)
+* [test, build, and deploy a snapshot](https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-snapshot.yml#L40-L51)
+* [test, build, and deploy a release](https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-release.yml#L42-L53)
 
 ## Using a "build REPL"
 
