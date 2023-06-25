@@ -390,7 +390,26 @@ dependencies are not, and any local files your <code>build.clj</code> expects to
 to read from the classpath (or load as namespaces) will not be available.
 If that matters, you can add <code>-Sdeps '{:paths ["."]}'</code> to the command:</p><pre><code>clj -Sdeps '{:paths ["."]}' -M:build -i build.clj -e "(in-ns 'build)" -r
 </code></pre><p>That's quite a mouthful so you probably want to put it in a shell script
-somewhere on your <code>PATH</code>, for convenience!</p><h2 id="working-with-multiple-subprojects">Working with Multiple Subprojects</h2><p>(to be written)</p>
+somewhere on your <code>PATH</code>, for convenience!</p><h2 id="working-with-multiple-subprojects">Working with Multiple Subprojects</h2><p>If you have a project with multiple subprojects, you can use <code>tools.build</code>
+to build them all, and run tests for them all, with a single <code>build.clj</code>
+file in the root of the project.</p><p><code>tools.build</code> has the concept of a "project root" which is exposed as a
+dynamic variable <code>b/*project-root*</code> and which is used by the various other
+functions to resolve paths relative to the project root.</p><p>You can loop over your subprojects and use <code>binding</code> to set the project root
+for each one while you call <code>tools.build</code> functions to test, build, and deploy
+each subproject.</p><p>If you're working with <code>tools.deps</code> directly as well in your <code>build.clj</code> file,
+you might also want to use <code>clojure.tools.deps.util.dir/with-dir</code> to set the
+project root for <code>tools.deps</code> operations. Note that <code>with-dir</code> takes a
+<code>java.io.File</code> for a directory,
+whereas <code>clojure.tools.build.api/*project-root*</code> expects a
+<code>java.lang.String</code> for the path to the project root!</p><p>A fairly comprehensive example can be found in the
+<a href="https://github.com/polyfy/polylith/blob/master/build.clj">Polylith <code>build.clj</code> file</a>
+Polylith has multiple subprojects under the <code>projects/</code> directory.
+The <code>deploy</code> task function
+<a href="https://github.com/polyfy/polylith/blob/master/build.clj#L209-L213">loops over all the subprojects</a>
+and calls <code>jar</code> which uses
+<a href="https://github.com/polyfy/polylith/blob/master/build.clj#L127-L131">both <code>with-dir</code> and <code>binding</code></a>
+to set the project root while performing <code>tools.deps</code> and <code>tools.build</code>
+operations.</p>
 
     <div id="prev-next">
         
