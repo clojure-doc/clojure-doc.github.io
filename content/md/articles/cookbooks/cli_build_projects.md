@@ -178,6 +178,9 @@ You can do the same thing with:
 
     clojure -T:build hello '{:name "Build"}'
 
+For more background reading, see the
+[Practical.li CLI Execution options](https://practical.li/clojure/clojure-cli/execution-options/) guide.
+
 ## The `tools.build` Library
 
 The official guide provides three examples, and talks briefly about passing
