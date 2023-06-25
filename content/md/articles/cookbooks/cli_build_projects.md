@@ -610,4 +610,31 @@ somewhere on your `PATH`, for convenience!
 
 ## Working with Multiple Subprojects
 
-(to be written)
+If you have a project with multiple subprojects, you can use `tools.build`
+to build them all, and run tests for them all, with a single `build.clj`
+file in the root of the project.
+
+`tools.build` has the concept of a "project root" which is exposed as a
+dynamic variable `b/*project-root*` and which is used by the various other
+functions to resolve paths relative to the project root.
+
+You can loop over your subprojects and use `binding` to set the project root
+for each one while you call `tools.build` functions to test, build, and deploy
+each subproject.
+
+If you're working with `tools.deps` directly as well in your `build.clj` file,
+you might also want to use `clojure.tools.deps.util.dir/with-dir` to set the
+project root for `tools.deps` operations. Note that `with-dir` takes a
+`java.io.File` for a directory,
+whereas `clojure.tools.build.api/*project-root*` expects a
+`java.lang.String` for the path to the project root!
+
+A fairly comprehensive example can be found in the
+[Polylith `build.clj` file](https://github.com/polyfy/polylith/blob/master/build.clj)
+Polylith has multiple subprojects under the `projects/` directory.
+The `deploy` task function
+[loops over all the subprojects](https://github.com/polyfy/polylith/blob/master/build.clj#L209-L213)
+and calls `jar` which uses
+[both `with-dir` and `binding`](https://github.com/polyfy/polylith/blob/master/build.clj#L127-L131)
+to set the project root while performing `tools.deps` and `tools.build`
+operations.
