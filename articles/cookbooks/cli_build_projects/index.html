@@ -63,7 +63,7 @@ for others to use or application .jar files to run on servers on in containers."
     <div id="page-header">
         <h2>Building Projects: tools.build and the Clojure CLI</h2>
     </div>
-    <ol class="toc"><li><a href="#toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</a></li><ol><li><a href="#executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</a></li></ol><li><a href="#the-toolsbuild-library">The <code>tools.build</code> Library</a></li><li><a href="#running-tasks-based-on-aliases">Running Tasks based on Aliases</a></li><li><a href="#multi-version-testing">Multi-Version Testing</a></li><li><a href="#tips-for-building-jar-files">Tips for Building JAR Files</a></li><li><a href="#continuous-integration-pipelines">Continuous Integration Pipelines</a></li><li><a href="#using-a-build-repl">Using a "build REPL"</a></li><li><a href="#working-with-multiple-subprojects">Working with Multiple Subprojects</a></li></ol>
+    <ol class="toc"><li><a href="#toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</a></li><ol><li><a href="#executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</a></li></ol><li><a href="#the-toolsbuild-library">The <code>tools.build</code> Library</a></li><li><a href="#running-tasks-based-on-aliases">Running Tasks based on Aliases</a></li><li><a href="#multi-version-testing">Multi-Version Testing</a></li><li><a href="#tips-for-building-jar-files">Tips for Building JAR Files</a></li><li><a href="#continuous-integration-pipelines">Continuous Integration Pipelines</a></li><li><a href="#automating-deployments">Automating deployments</a></li><li><a href="#using-a-build-repl">Using a "build REPL"</a></li><li><a href="#working-with-multiple-subprojects">Working with Multiple Subprojects</a></li></ol>
     <h2 id="toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</h2><p><a href="https://github.com/clojure/tools.build"><code>tools.build</code></a>
 is a library for building artifacts in Clojure projects, which are typically
 library <code>.jar</code> files for deployment to repositories like <a href="https://clojars.org">Clojars</a>
@@ -166,7 +166,7 @@ You can do the same thing with:</p><pre><code>clojure -T:build hello '{:name "Bu
 </code></pre><h2 id="the-toolsbuild-library">The <code>tools.build</code> Library</h2><p>The official guide provides three examples, and talks briefly about passing
 parameters into <code>build</code> task functions:</p><ul><li><a href="https://clojure.org/guides/tools_build#_source_library_jar_build">Source library jar build</a></li><li><a href="https://clojure.org/guides/tools_build#_compiled_uberjar_application_build">Compiled uberjar application build</a></li><li><a href="https://clojure.org/guides/tools_build#_mixed_java_clojure_build">Mixed Java / Clojure build</a></li></ul><p>Those examples are a good starting point for simple projects but there is
 so much you can do with <code>build.clj</code> to automate all manner of things in
-larger projects:</p><ul><li>Parameterizing builds using aliases in <code>deps.edn</code></li><li>Multi-version testing</li><li>Continuous Integration pipelines</li><li>Using a "build REPL"</li><li>Coordinating build tasks across multiple subprojects</li></ul><p>For reference, here's the official documentation:</p><ul><li><a href="https://clojure.org/guides/tools_build">The <code>tools.build</code> Guide</a></li><li><a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html"><code>clojure.tools.build.api</code> API Documentation</a></li></ul><p>Before we start on more complex tasks, let's first look at a task to run
+larger projects:</p><ul><li>Parameterizing builds using aliases in <code>deps.edn</code></li><li>Multi-version testing</li><li>Continuous Integration pipelines</li><li>Automating deployments</li><li>Using a "build REPL"</li><li>Coordinating build tasks across multiple subprojects</li></ul><p>For reference, here's the official documentation:</p><ul><li><a href="https://clojure.org/guides/tools_build">The <code>tools.build</code> Guide</a></li><li><a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html"><code>clojure.tools.build.api</code> API Documentation</a></li></ul><p>Before we start on more complex tasks, let's first look at a task to run
 an arbitrary process based on aliases.</p><h2 id="running-tasks-based-on-aliases">Running Tasks based on Aliases</h2><p><code>tools.build</code> provides functions to construct a Java-based command-line and
 then run it as a subprocess, using a "basis" to control what classpath is
 passed to the <code>java</code> command.</p><p>Given the <code>deps.edn</code> above (containing the <code>:build</code> alias) and the <code>build.clj</code>
@@ -353,7 +353,23 @@ documentation), as well as running the
 </code></pre><p>If you need to set up databases for testing, you could write that as a function
 in your <code>build.clj</code> file and call it from <code>ci</code> before running the tests, possibly
 configured via aliases.</p><p>You might also want your CI pipeline to perform a deployment step, which we'll
-cover next.</p><h2 id="using-a-build-repl">Using a "build REPL"</h2><p>While you can write task functions that combine multiple steps, it can be
+cover next.</p><h2 id="automating-deployments">Automating deployments</h2><p><code>tools.build</code> itself does not provide any direct support for deploying artifacts
+so you will need to use additional libraries. If you are deploying to Clojars,
+then <a href="https://github.com/slipset/deps-deploy">deps-deploy</a> is a good option.</p><p>Add the following to your <code>:build</code> alias in <code>deps.edn</code> (in the <code>:deps</code> map):</p><pre><code class="clojure">                 slipset/deps-deploy {:mvn/version "0.2.1"}
+</code></pre><p>And add the following task to your <code>build.clj</code> file:</p><pre><code class="clojure">(defn deploy "Deploy the JAR to Clojars." [opts]
+  (let [{:keys [jar-file] :as opts} (jar-opts opts)]
+    (dd/deploy {:installer :remote :artifact (b/resolve-path jar-file)
+                :pom-file (b/pom-path (select-keys opts [:lib :class-dir]))}))
+  opts)
+</code></pre><p>Per the <code>deps-deploy</code> README, you'll need to set up environment variables
+for your Clojars username and token: <code>CLOJARS_USERNAME</code> and <code>CLOJARS_PASSWORD</code>
+(even tho' it is <strong>not</strong> your password, it's a deployment token you need to
+setup in your Clojars account).</p><p>You can now deploy your JAR file to Clojars with:</p><pre><code>clojure -T:build deploy
+</code></pre><p>At this point, you can automate building and deploying snapshot or full
+release versions of your library, using GitHub Actions or whatever CI
+pipeline service you prefer.</p><p>The <code>next.jdbc</code> library project builds and deploys a snapshot version for
+every successful commit to the <code>develop</code> branch and builds and deploys a
+release version whenever a release tag is created:</p><ul><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L18-L22"><code>snapshot</code> and <code>version</code> in <code>build.clj</code></a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L38-L41">selecting the version based on options</a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-snapshot.yml#L40-L51">test, build, and deploy a snapshot</a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-release.yml#L42-L53">test, build, and deploy a release</a></li></ul><h2 id="using-a-build-repl">Using a "build REPL"</h2><p>While you can write task functions that combine multiple steps, it can be
 useful to work interactively with the build process, so you can run each
 step -- or a subset of steps -- individually. You can do this by starting
 a "build REPL" with:</p><pre><code>clj -M:build -i build.clj -e "(in-ns 'build)" -r
