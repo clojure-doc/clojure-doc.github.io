@@ -7,7 +7,7 @@
 [`tools.build`](https://github.com/clojure/tools.build)
 is a library for building artifacts in Clojure projects, which are typically
 library `.jar` files for deployment to repositories like [Clojars](https://clojars.org)
-for others to use or application `.jar` files to run on servers on in containers.
+for others to use or application `.jar` files to run on servers or in containers.
 
 `tools.build` provides functions to copy files and directories, to run arbitrary
 commands and capture their output (with special support for `java` commands),
@@ -26,8 +26,8 @@ running code, and managing dependencies using a `deps.edn` file.
 
 Unlike [Leiningen](https://leiningen.org/), which was more of a
 "batteries-included" approach, the CLI assumed that you would declare
-additional tooling through "aliases" in `deps.edn` that added extra
-dependencies and evolved, over time, to support both traditional
+additional tooling through "aliases" in `deps.edn`, to add extra
+dependencies, and evolved over time to support both traditional
 command-line invocation -- a sequence of string arguments passed to a `-main`
 function -- and direct invocation of Clojure functions, passing a
 hash map of options from the command-line:
@@ -77,6 +77,7 @@ Or you can specify a default function to run in an alias:
  :aliases
  {
   :api {:ns-default my-proj.api
+        ;; could use :exec-fn foo since my-proj.api is the default namespace:
         :exec-fn my-proj.api/foo}
  }}
 ```
