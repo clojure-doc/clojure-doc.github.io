@@ -8,12 +8,12 @@
 <meta name="description" content="tools.build and the Clojure CLItools.build
 is a library for building artifacts in Clojure projects, which are typically
 library .jar files for deployment to repositories like Clojars
-for others to use or application .jar files to run on servers on in containers.">
+for others to use or application .jar files to run on servers or in containers.">
 
 <meta property="og:description" content="tools.build and the Clojure CLItools.build
 is a library for building artifacts in Clojure projects, which are typically
 library .jar files for deployment to repositories like Clojars
-for others to use or application .jar files to run on servers on in containers.">
+for others to use or application .jar files to run on servers or in containers.">
 
 <meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/cli_build_projects/" />
 <meta property="og:title" content="Building Projects: tools.build and the Clojure CLI" />
@@ -67,7 +67,7 @@ for others to use or application .jar files to run on servers on in containers."
     <h2 id="toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</h2><p><a href="https://github.com/clojure/tools.build"><code>tools.build</code></a>
 is a library for building artifacts in Clojure projects, which are typically
 library <code>.jar</code> files for deployment to repositories like <a href="https://clojars.org">Clojars</a>
-for others to use or application <code>.jar</code> files to run on servers on in containers.</p><p><code>tools.build</code> provides functions to copy files and directories, to run arbitrary
+for others to use or application <code>.jar</code> files to run on servers or in containers.</p><p><code>tools.build</code> provides functions to copy files and directories, to run arbitrary
 commands and capture their output (with special support for <code>java</code> commands),
 to easily run <code>git</code> commands, to
 create <code>pom.xml</code> files, to compile Clojure (and Java) code, and to build both <code>.jar</code>
@@ -76,8 +76,8 @@ guide, based on real-world projects.</p><h3 id="executing-functions-with-the-clo
 by the core Clojure team in 2018 and focused on starting a REPL and
 running code, and managing dependencies using a <code>deps.edn</code> file.</p><p>Unlike <a href="https://leiningen.org/">Leiningen</a>, which was more of a
 "batteries-included" approach, the CLI assumed that you would declare
-additional tooling through "aliases" in <code>deps.edn</code> that added extra
-dependencies and evolved, over time, to support both traditional
+additional tooling through "aliases" in <code>deps.edn</code>, to add extra
+dependencies, and evolved over time to support both traditional
 command-line invocation -- a sequence of string arguments passed to a <code>-main</code>
 function -- and direct invocation of Clojure functions, passing a
 hash map of options from the command-line:</p><pre><code>clojure -X my-proj.api/foo '{:bar 42}'
@@ -103,6 +103,7 @@ you want to use:</p><pre><code class="clojure">;; deps.edn
  :aliases
  {
   :api {:ns-default my-proj.api
+        ;; could use :exec-fn foo since my-proj.api is the default namespace:
         :exec-fn my-proj.api/foo}
  }}
 </code></pre><p>Now <code>-X:api</code> on its own will run that <code>foo</code> function:</p><pre><code>clojure -X:api :bar 42
