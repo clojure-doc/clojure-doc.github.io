@@ -20,6 +20,8 @@ guide, based on real-world projects.
 
 ### Executing functions with the Clojure CLI
 
+_If you are already familiar with the `-X` and `-T` options to the Clojure CLI, you can skip this section._
+
 The [Clojure CLI](https://clojure.org/guides/deps_and_cli) was introduced
 by the core Clojure team in 2018 and focused on starting a REPL and
 running code, and managing dependencies using a `deps.edn` file.
