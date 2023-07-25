@@ -622,7 +622,7 @@ file in the root of the project.
 dynamic variable `b/*project-root*` and which is used by the various other
 functions to resolve paths relative to the project root.
 
-You can loop over your subprojects and use `binding` to set the project root
+You can loop over your subprojects and use `with-project-root` to set the project root
 for each one while you call `tools.build` functions to test, build, and deploy
 each subproject.
 
@@ -637,8 +637,8 @@ A fairly comprehensive example can be found in the
 [Polylith `build.clj` file](https://github.com/polyfy/polylith/blob/master/build.clj)
 Polylith has multiple subprojects under the `projects/` directory.
 The `deploy` task function
-[loops over all the subprojects](https://github.com/polyfy/polylith/blob/master/build.clj#L209-L213)
+[loops over all the subprojects](https://github.com/polyfy/polylith/blob/master/build.clj#L208)
 and calls `jar` which uses
-[both `with-dir` and `binding`](https://github.com/polyfy/polylith/blob/master/build.clj#L127-L131)
+[both `with-dir` and `with-project-root`](https://github.com/polyfy/polylith/blob/master/build.clj#L146-L147)
 to set the project root while performing `tools.deps` and `tools.build`
 operations.
