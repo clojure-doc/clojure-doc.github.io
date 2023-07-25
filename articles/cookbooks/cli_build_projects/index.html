@@ -371,7 +371,7 @@ setup in your Clojars account).</p><p>You can now deploy your JAR file to Clojar
 release versions of your library, using GitHub Actions or whatever CI
 pipeline service you prefer.</p><p>The <code>next.jdbc</code> library project builds and deploys a snapshot version for
 every successful commit to the <code>develop</code> branch and builds and deploys a
-release version whenever a release tag is created:</p><ul><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L18-L22"><code>snapshot</code> and <code>version</code> in <code>build.clj</code></a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L38-L41">selecting the version based on options</a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-snapshot.yml#L40-L51">test, build, and deploy a snapshot</a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-release.yml#L42-L53">test, build, and deploy a release</a></li></ul><h2 id="using-a-build-repl">Using a "build REPL"</h2><p>While you can write task functions that combine multiple steps, it can be
+release version whenever a release tag is created:</p><ul><li><a href="https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/build.clj#L18-L22"><code>snapshot</code> and <code>version</code> in <code>build.clj</code></a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/build.clj#L38-L41">selecting the version based on options</a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/.github/workflows/test-and-snapshot.yml#L40-L51">test, build, and deploy a snapshot</a></li><li><a href="https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/.github/workflows/test-and-release.yml#L42-L53">test, build, and deploy a release</a></li></ul><h2 id="using-a-build-repl">Using a "build REPL"</h2><p>While you can write task functions that combine multiple steps, it can be
 useful to work interactively with the build process, so you can run each
 step -- or a subset of steps -- individually. You can do this by starting
 a "build REPL" with:</p><pre><code>clj -M:build -i build.clj -e "(in-ns 'build)" -r
@@ -407,9 +407,9 @@ whereas <code>clojure.tools.build.api/*project-root*</code> expects a
 <a href="https://github.com/polyfy/polylith/blob/master/build.clj">Polylith <code>build.clj</code> file</a>
 Polylith has multiple subprojects under the <code>projects/</code> directory.
 The <code>deploy</code> task function
-<a href="https://github.com/polyfy/polylith/blob/master/build.clj#L208">loops over all the subprojects</a>
+<a href="https://github.com/polyfy/polylith/blob/9053b190d5f3b0680ac4fe5c5f1851f7c0d40830/build.clj#L208">loops over all the subprojects</a>
 and calls <code>jar</code> which uses
-<a href="https://github.com/polyfy/polylith/blob/master/build.clj#L146-L147">both <code>with-dir</code> and <code>with-project-root</code></a>
+<a href="https://github.com/polyfy/polylith/blob/9053b190d5f3b0680ac4fe5c5f1851f7c0d40830/build.clj#L146-L147">both <code>with-dir</code> and <code>with-project-root</code></a>
 to set the project root while performing <code>tools.deps</code> and <code>tools.build</code>
 operations.</p>
 
