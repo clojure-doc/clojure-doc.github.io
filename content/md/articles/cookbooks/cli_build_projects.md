@@ -558,10 +558,10 @@ The `next.jdbc` library project builds and deploys a snapshot version for
 every successful commit to the `develop` branch and builds and deploys a
 release version whenever a release tag is created:
 
-* [`snapshot` and `version` in `build.clj`](https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L18-L22)
-* [selecting the version based on options](https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L38-L41)
-* [test, build, and deploy a snapshot](https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-snapshot.yml#L40-L51)
-* [test, build, and deploy a release](https://github.com/seancorfield/next-jdbc/blob/develop/.github/workflows/test-and-release.yml#L42-L53)
+* [`snapshot` and `version` in `build.clj`](https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/build.clj#L18-L22)
+* [selecting the version based on options](https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/build.clj#L38-L41)
+* [test, build, and deploy a snapshot](https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/.github/workflows/test-and-snapshot.yml#L40-L51)
+* [test, build, and deploy a release](https://github.com/seancorfield/next-jdbc/blob/fd95a69b5c41354fda55a36f4c6d6d5f088b7384/.github/workflows/test-and-release.yml#L42-L53)
 
 ## Using a "build REPL"
 
@@ -639,8 +639,8 @@ A fairly comprehensive example can be found in the
 [Polylith `build.clj` file](https://github.com/polyfy/polylith/blob/master/build.clj)
 Polylith has multiple subprojects under the `projects/` directory.
 The `deploy` task function
-[loops over all the subprojects](https://github.com/polyfy/polylith/blob/master/build.clj#L208)
+[loops over all the subprojects](https://github.com/polyfy/polylith/blob/9053b190d5f3b0680ac4fe5c5f1851f7c0d40830/build.clj#L208)
 and calls `jar` which uses
-[both `with-dir` and `with-project-root`](https://github.com/polyfy/polylith/blob/master/build.clj#L146-L147)
+[both `with-dir` and `with-project-root`](https://github.com/polyfy/polylith/blob/9053b190d5f3b0680ac4fe5c5f1851f7c0d40830/build.clj#L146-L147)
 to set the project root while performing `tools.deps` and `tools.build`
 operations.
