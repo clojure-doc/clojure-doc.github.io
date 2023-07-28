@@ -26,6 +26,8 @@ The [Clojure CLI](https://clojure.org/guides/deps_and_cli) was introduced
 by the core Clojure team in 2018 and focused on starting a REPL and
 running code, and managing dependencies using a `deps.edn` file.
 
+#### -X eXecute function
+
 Unlike [Leiningen](https://leiningen.org/), which was more of a
 "batteries-included" approach, the CLI assumed that you would declare
 additional tooling through "aliases" in `deps.edn`, to add extra
@@ -131,6 +133,9 @@ Now you can run your tests with:
 
     clojure -X:test
 
+
+#### -T execute Tooling
+
 However, sometimes you want to run some tooling without the context of your
 project and the `-T` option is provided for that -- "execute Tooling":
 it omits the dependencies
@@ -209,16 +214,18 @@ For reference, here's the official documentation:
 Before we start on more complex tasks, let's first look at a task to run
 an arbitrary process based on aliases.
 
-## Running Tasks based on Aliases
+### Running Tasks based on Aliases
 
 `tools.build` provides functions to construct a Java-based command-line and
 then run it as a subprocess, using a "basis" to control what classpath is
 passed to the `java` command.
 
+**Simple Example**
+
 Given the `deps.edn` above (containing the `:build` alias) and the `build.clj`
 above (containing the `hello` function), we're going to start out by adding
 a `run` function that will run a specific Java-based command-line. Then we'll
-parameterize it using aliases in `deps.edn:
+parameterize it using aliases in `deps.edn`:
 
 ```clojure
 (defn run [opts]
@@ -234,6 +241,8 @@ We can run this with:
 
 and we'll see the version of Clojure we're running: `"1.11.1"`.
 
+**Error Handling**
+
 Since we will generally want the build to fail if the command exits with
 a non-zero status, we'll check the return value of `b/process` and throw
 an exception if the exit status is non-zero:
@@ -242,6 +251,8 @@ an exception if the exit status is non-zero:
     (when-not (zero? (:exit (b/process cmd)))
       (throw (ex-info (str "run failed for " aliases) opts)))
 ```
+
+**Extra Options**
 
 In addition, we'll make all our function return the `opts` map, so that
 we can chain them together in a pipeline, either within another function
@@ -252,7 +263,9 @@ we will pass `:aliases` in the `opts` and use that to construct the
 basis and also to retrieve both the `:main` class to run and the `:main-args`
 we want to use with it.
 
-We will need to use `tools.deps` to process the aliases, so that we can
+**Require `clojure.tools.deps`**
+
+We will need to use `clojure.tools.deps` to process the aliases, so that we can
 retrieve data from those aliases in `deps.edn`:
 
 ```clojure
@@ -306,6 +319,8 @@ we'll see the test runner output (assuming you don't have any tests yet):
     Ran 0 tests containing 0 assertions.
     0 failures, 0 errors.
 
+**Create `test` build function**
+
 Let's add a `test` function to `build.clj` to make this easier to run:
 
 ```clojure
@@ -327,6 +342,8 @@ that would cause by excluding `test` from being referred in:
 Now we can run the tests with:
 
     clojure -T:build test
+
+**Wrap up**
 
 There are several important things to note here:
 * All our `build.clj` functions return the `opts` map, possibly augmented by the function itself. This will help us chain functions together later.
@@ -525,11 +542,15 @@ cover next.
 so you will need to use additional libraries. If you are deploying to Clojars,
 then [deps-deploy](https://github.com/slipset/deps-deploy) is a good option.
 
+**`:build` Alias**
+
 Add the following to your `:build` alias in `deps.edn` (in the `:deps` map):
 
 ```clojure
                  slipset/deps-deploy {:mvn/version "0.2.1"}
 ```
+
+**`deploy` build function**
 
 And add the following task to your `build.clj` file:
 
@@ -541,6 +562,8 @@ And add the following task to your `build.clj` file:
   opts)
 ```
 
+**Clojars credentials**
+
 Per the `deps-deploy` README, you'll need to set up environment variables
 for your Clojars username and token: `CLOJARS_USERNAME` and `CLOJARS_PASSWORD`
 (even tho' it is **not** your password, it's a deployment token you need to
@@ -549,6 +572,8 @@ setup in your Clojars account).
 You can now deploy your JAR file to Clojars with:
 
     clojure -T:build deploy
+
+**CI integration**
 
 At this point, you can automate building and deploying snapshot or full
 release versions of your library, using GitHub Actions or whatever CI
