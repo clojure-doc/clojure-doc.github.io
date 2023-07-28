@@ -55,10 +55,12 @@ key/value pairs on the command-line:
 
     clojure -X my-proj.api/foo :bar 42
 
+**Shortening command line invocations**
+
 You can shorten that in two ways:
 
-Add an alias to your `deps.edn` file that includes the default namespace
-you want to use:
+1. **Add an alias** to your `deps.edn` file that includes the default namespace
+you want to use:**
 
 ```clojure
 ;; deps.edn
@@ -73,7 +75,7 @@ Now you can omit the namespace from the command-line:
 
     clojure -X:api foo :bar 42
 
-Or you can specify a default function to run in an alias:
+2. Specify a **default function** to run in an alias:
 
 ```clojure
 ;; deps.edn
@@ -89,6 +91,8 @@ Or you can specify a default function to run in an alias:
 Now `-X:api` on its own will run that `foo` function:
 
     clojure -X:api :bar 42
+
+**Running Tests**
 
 The `-X` option to the Clojure CLI stands for "eXecute function" and it
 uses the same default context as your project, so your source code and its
