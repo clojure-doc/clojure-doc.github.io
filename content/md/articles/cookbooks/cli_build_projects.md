@@ -28,17 +28,21 @@ running code, and managing dependencies using a `deps.edn` file.
 
 Unlike [Leiningen](https://leiningen.org/), which was more of a
 "batteries-included" approach, the CLI assumed that you would declare
-additional tooling through "aliases" in `deps.edn`, to add extra
-dependencies, and evolved over time to support both traditional
-command-line invocation -- a sequence of string arguments passed to a `-main`
-function -- and direct invocation of Clojure functions, passing a
-hash map of options from the command-line:
+additional tooling and dependencies through "aliases" in `deps.edn`. The
+clojure cli has since evolved over time to also support traditional
+command line invocation via:
+- `-M`: sequence of string arguments passed to a `-main` function
+- `-X`: direct invocation of Clojure functions
+- `-T`: execution of build functions written in Clojure
+
+#### -X eXecute Function
 
     clojure -X my-proj.api/foo '{:bar 42}'
 
 This will attempt to load the `my-proj.api` namespace and call the `foo`
-function, passing in the hash map `{:bar 42}`. If you have the following
-code:
+function, passing in the hash map `{:bar 42}`. 
+
+If you have the following code:
 
 ```clojure
 ;; src/my_proj/api.clj
@@ -53,7 +57,15 @@ key/value pairs on the command-line:
 
     clojure -X my-proj.api/foo :bar 42
 
-You can shorten that in two ways:
+<!-- A lot of descriptions use references like "this", "those", "that", or "it".
+    "This" can be much harder to follow than being more explicit. Being
+    more explicit is usually easier to understand and is not typically
+    any more verbose.
+-->
+You can shorten the command line invocation in two ways:
+<!-- If you refer to two methods, it's nice to use bullet points, headers, or
+    some other styling to clearly mark the two options.
+-->
 
 Add an alias to your `deps.edn` file that includes the default namespace
 you want to use:
@@ -133,6 +145,8 @@ Now you can run your tests with:
 
 However, sometimes you want to run some tooling without the context of your
 project and the `-T` option is provided for that -- "execute Tooling":
+<!-- Rather than "it":
+  The `-T` cli option omits dependencies. -->
 it omits the dependencies
 and paths from your project, using only those declared in the aliases you
 specify with `-T` (if any).
@@ -158,7 +172,7 @@ which is the default for `-M` and `-X`).
 The code for the build processes would typically be in a `build.clj`
 file in the root of your project -- so its namespace would be `build` (since
 the file is relative to `"."` -- the project root). As shown above,
-the `:ns-default` key then allows you to omit the namespace portion when
+the `:ns-default` key then allows you to omit the namespace argument when
 you invoke functions in `build.clj`:
 
 ```clojure
@@ -169,12 +183,17 @@ you invoke functions in `build.clj`:
   (println (str "Hello, " (:name opts "World") "!")))
 ```
 
-Try this out by running that `hello` function:
+<!-- More explicit: -->
+Try omitting the namespace argument out by running that `hello` function:
 
     clojure -T:build hello
 
     clojure -T:build hello :name '"Build"'
 
+<!-- I think -X argument handling deserves its own section. 
+    I don't think this short example will only make sense to 
+    users who already know how -X argument handling works.
+-->
 The extra quotes in that second example are necessary to pass a Clojure string
 (with double quotes) through the shell as a literal value (with single quotes).
 You can do the same thing with:
@@ -192,7 +211,8 @@ parameters into `build` task functions:
 * [Compiled uberjar application build](https://clojure.org/guides/tools_build#_compiled_uberjar_application_build)
 * [Mixed Java / Clojure build](https://clojure.org/guides/tools_build#_mixed_java_clojure_build)
 
-Those examples are a good starting point for simple projects but there is
+<!-- More explicit: -->
+The examples in the official guide are a good starting point for simple projects but there is
 so much you can do with `build.clj` to automate all manner of things in
 larger projects:
 * Parameterizing builds using aliases in `deps.edn`
@@ -215,8 +235,12 @@ an arbitrary process based on aliases.
 then run it as a subprocess, using a "basis" to control what classpath is
 passed to the `java` command.
 
+
 Given the `deps.edn` above (containing the `:build` alias) and the `build.clj`
 above (containing the `hello` function), we're going to start out by adding
+<!-- Which `deps.edn` above? I don't see any reason not to explicitly include
+    the deps.edn you expect someone to use here.
+-->
 a `run` function that will run a specific Java-based command-line. Then we'll
 parameterize it using aliases in `deps.edn:
 
@@ -228,7 +252,7 @@ parameterize it using aliases in `deps.edn:
     (b/process cmd)))
 ```
 
-We can run this with:
+We can run our `run` build command with:
 
     clojure -T:build run
 
@@ -243,14 +267,16 @@ an exception if the exit status is non-zero:
       (throw (ex-info (str "run failed for " aliases) opts)))
 ```
 
-In addition, we'll make all our function return the `opts` map, so that
-we can chain them together in a pipeline, either within another function
-or when we get to the "build REPL" section later.
+<!-- I think this would be easier to follow using bullet points: -->
 
-We want to parameterize this so we can run any command-line we want, so
-we will pass `:aliases` in the `opts` and use that to construct the
-basis and also to retrieve both the `:main` class to run and the `:main-args`
-we want to use with it.
+We'll also make some other changes to make our `run` 
+function more flexbile and easier to use:
+- All our function now return the `opts` map. 
+  Returning the options map means we can chain them together in a pipeline, either within another function
+or when we get to the "build REPL" section later.
+- Our `run` function will accept an `:aliases` in the `opts` and use that to construct the
+basis which allows us to combine aliases.
+- Our run function will retrieve both the `:main` class to run and the `:main-args`. Now the run function can work with any command.
 
 We will need to use `tools.deps` to process the aliases, so that we can
 retrieve data from those aliases in `deps.edn`:
