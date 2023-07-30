@@ -70,12 +70,14 @@ Videos of talks about Clojure are often made available on [InfoQ](https://www.in
  * [Clojure Koans Walkthroughs](https://www.youtube.com/playlist?list=PL1p6TgkbKXqyOwq6iSkce_EY5YWFHciHt)
  * [Eric Normand](https://ericnormand.me/)
  * [Clojure Tutorials by Tim Baldridge](https://tbaldridge.pivotshare.com/)
-
+ * [Practicalli YouTube Channel](https://www.youtube.com/practicalli) -- including [Learning Clojure with Practicalli](https://www.youtube.com/playlist?list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv)
 
 ## Podcasts About Clojure
 
  * [Cognicast](https://cognitect.com/cognicast/) by Craig Andera often discusses topics relevant to Clojure and ClojureScript.
-
+ * [Clojure Design Club](https://clojuredesign.club/) by Christoph Neumann and Nate Jones -- Functional Design in Clojure: Group therapy for recovering object-oriented developers.
+ * [ClojureStream](https://clojure.stream/podcast) by Jacek Schae -- Explore unusually expressive programming language with Lisp roots that runs on JavaScript, Java Virtual Machine, and CLR.
+* [The REPL](https://www.therepl.net/episodes/) by Daniel Compton -- A weekly newsletter and podcast diving into Clojure programs and libraries.
 
 ## Code Repositories
 
