@@ -20,7 +20,9 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
   * [Clojurians Zulip](https://clojurians.zulipchat.com/) -- free, open source community, includes an archive of most channels from the Clojurians Slack (via `@zulip-mirror-bot` on Slack)
   * [Clojure SubReddit](https://www.reddit.com/r/Clojure/) -- r/Clojure -- the right-hand sidebar has links to many Clojure resources
   * [ClojureVerse](https://clojureverse.org) -- online forum
-  * [Clojurians Discord](https://discordapp.com/invite/v9QMy9D)
+  * [Clojure Q&A](https://ask.clojure.org/)
+  * [Clojurians Discord](https://discord.gg/discljord)
+  * [clj.social](https://clj.social/)
   * See also the [Clojure Discussion section on clojure.org](https://clojure.org/community/resources) for more online communities
 
 ## Clojure Mailing List
@@ -30,21 +32,15 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Clojure IRC Channels
 
-### Main Channels
-
-* `#clojure` on [irc.freenode.net](https://freenode.net)
-* `#clojure-beginners` on [irc.freenode.net](https://freenode.net)
 * `#clojure` on [Libera.Chat](https://libera.chat)
-
-Channel logs are available at ???.
-
 
 ## Documentation
 
   * Official [clojure.org Guides](https://clojure.org/guides/guides)
   * Official [clojure.org Reference documentation](https://clojure.org/reference/documentation)
   * Official [clojure.org API documentation](https://clojure.org/api/api)
-  * [ClojureDocs](https://clojuredocs.org/): Clojure API reference, with examples
+  * [ClojureDocs](https://clojuredocs.org/): Clojre API reference, with examples
+  * [Clojure-Doc](https://clojure-doc.org/): Clojure tutorials, cookbooks, etc
   * [Clojure API Cheatsheet](https://clojure.org/api/cheatsheet) (hosted on clojure.org)
   * Community [Clojure Style Guide](https://guide.clojure.style/)
   * [Clojure Koans](http://clojurekoans.com/)
@@ -72,7 +68,6 @@ Videos of talks about Clojure are often made available on [InfoQ](https://www.in
  * [Clojure Concurrency Tutorial](https://pluralsight.com/training/Courses/TableOfContents/clojure-concurrency-tutorial)
  * [Clojure Inside Out](https://www.oreilly.com/library/view/clojure-inside-out/9781449368647/) from O'Reilly
  * [Clojure Koans Walkthroughs](https://www.youtube.com/playlist?list=PL1p6TgkbKXqyOwq6iSkce_EY5YWFHciHt)
- * [Clojure Fundamentals](https://pluralsight.com/training/courses/TableOfContents?courseName=clojure-fundamentals-part-one)
  * [Eric Normand](https://ericnormand.me/)
  * [Clojure Tutorials by Tim Baldridge](https://tbaldridge.pivotshare.com/)
 
