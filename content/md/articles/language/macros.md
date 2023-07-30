@@ -57,8 +57,7 @@ produces data structures (aka the AST) and performs *macroexpansion*. Macros are
 bytecode. That bytecode is executed at *run time*.
 
 Clojure code is compiled when it is loaded with `clojure.core/load` or `clojure.core/require`
-or can be ahead of time (AOT compilation) using tools such as [Leiningen](https://leiningen.org)
-or the [Clojure Maven plugin](/articles/ecosystem/maven/).
+or can be ahead of time (AOT compilation) using tools such as [Leiningen](https://leiningen.org).
 
 
 ## Clojure Reader

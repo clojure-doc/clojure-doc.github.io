@@ -236,27 +236,10 @@ This guide covers:
  * How to develop plugins
  * How to distribute plugins
 
-### [Maven for Clojure Development](/articles/ecosystem/maven/)
-
-This guide covers:
-
- * An overview of Apache Maven
- * Maven Clojure plugin
-
 ### [Documentation Tools](/articles/ecosystem/generating_documentation/)
 
  * Tools for generating documentation from docstrings and other project
 metadata.
-
-
-### [Data Processing (Overview)](/articles/ecosystem/data_processing/) (TBD)
-
-This guide covers:
-
- * An overview of why Clojure is an excellent choice for data processing
- * Popular tools and libraries in the area
-
-
 
 
 ## Tutorials and Cookbooks
