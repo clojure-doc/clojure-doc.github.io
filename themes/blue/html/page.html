@@ -19,10 +19,10 @@
     {{page.content|safe}}
 
     <div id="prev-next">
-        {% if page.prev %}
+        {% if all page.prev page.prev.page-index %}
         <a href="{{page.prev.uri}}">&laquo; {{page.prev.title}}</a>
         {% endif %}
-        {% if all page.prev page.next %}
+        {% if all page.prev page.prev.page-index page.next %}
         ||
         {% endif %}
         {% if page.next %}
