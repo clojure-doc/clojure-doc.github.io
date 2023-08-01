@@ -271,8 +271,8 @@ resulting string. So you can use functions like <code>print</code>, <em>even in
 nested functions</em>, and get the resulting string at the end.</p><pre><code class="clojure">(let [shrimp-varieties ["shrimp-kabobs" "shrimp creole" "shrimp gumbo"]]
   (with-out-str
     (print "We have ")
-    (doseq [name (str/join ", " shrimp-varieties)]
-      (print name))
+    (let [names (str/join ", " shrimp-varieties)]
+      (print names))
     (print "...")))
 ;=&gt; "We have shrimp-kabobs, shrimp creole, shrimp gumbo..."
 </code></pre><h4 id="format-strings">Format strings</h4><p>Java's templating mini-language helps you build many strings
