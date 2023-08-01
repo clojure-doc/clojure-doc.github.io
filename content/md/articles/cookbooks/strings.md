@@ -288,8 +288,8 @@ nested functions*, and get the resulting string at the end.
 (let [shrimp-varieties ["shrimp-kabobs" "shrimp creole" "shrimp gumbo"]]
   (with-out-str
     (print "We have ")
-    (doseq [name (str/join ", " shrimp-varieties)]
-      (print name))
+    (let [names (str/join ", " shrimp-varieties)]
+      (print names))
     (print "...")))
 ;=> "We have shrimp-kabobs, shrimp creole, shrimp gumbo..."
 ```

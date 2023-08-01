@@ -1,5 +1,5 @@
 {:title "Library Development and Distribution with Leiningen"
- :layout :page :sidebar-omit? true :page-index 103110}
+ :layout :page :sidebar-omit? true :x-page-index 103110}
 
 This short guide covers how to create your own typical pure Clojure
 library and distribute it to the community via Clojars.
