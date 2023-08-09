@@ -60,7 +60,7 @@ key/value pairs on the command-line:
 You can shorten that in two ways:
 
 1. **Add an alias** to your `deps.edn` file that includes the default namespace
-you want to use:**
+you want to use:
 
 ```clojure
 ;; deps.edn
@@ -218,7 +218,7 @@ For reference, here's the official documentation:
 Before we start on more complex tasks, let's first look at a task to run
 an arbitrary process based on aliases.
 
-### Running Tasks based on Aliases
+## Running Tasks based on Aliases
 
 `tools.build` provides functions to construct a Java-based command-line and
 then run it as a subprocess, using a "basis" to control what classpath is
@@ -269,7 +269,7 @@ we want to use with it.
 
 **Require `clojure.tools.deps`**
 
-We will need to use `clojure.tools.deps` to process the aliases, so that we can
+We will need to use the `clojure.tools.deps` namespace from `tools.deps` to process the aliases, so that we can
 retrieve data from those aliases in `deps.edn`:
 
 ```clojure
@@ -323,7 +323,7 @@ we'll see the test runner output (assuming you don't have any tests yet):
     Ran 0 tests containing 0 assertions.
     0 failures, 0 errors.
 
-**Create `test` build function**
+**Create `test` function**
 
 Let's add a `test` function to `build.clj` to make this easier to run:
 
@@ -554,7 +554,7 @@ Add the following to your `:build` alias in `deps.edn` (in the `:deps` map):
                  slipset/deps-deploy {:mvn/version "0.2.1"}
 ```
 
-**`deploy` build function**
+**Create `deploy` function**
 
 And add the following task to your `build.clj` file:
 
