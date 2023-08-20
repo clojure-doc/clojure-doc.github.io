@@ -1,10 +1,6 @@
 {:title "Data Structures (Help wanted)"
- :layout :page :page-index 4050}
+ :layout :page :page-index 4050 :toc :ul}
 
-
-## Help wanted
-
-Please follow the [instructions](https://github.com/clojure-doc/clojure-doc.github.io/tree/source#how-to-contribute) on how to contribute and start writing over [here](https://github.com/clojure-doc/clojure-doc.github.io/blob/source/content/md/articles/cookbooks/data_structures.md)
 
 This work is licensed under a <a rel="license"
 href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
@@ -143,6 +139,9 @@ user=> (indexes-of 15 [5 10 15 30 15 5])
 
 ## Maps
 
+### Intro
+Maps can be hashed or sorted (array maps are also available, but are mostly used for maps with < 10 entries). Sorted maps aren't as fast to lookup by key, but the sorting by key makes them useful for iteration in some circumstances.
+
 ### Building Maps
 
 `zipmap` associates corresponding entries from two seqs into a map. This is used here to assign people to teams.
@@ -181,6 +180,15 @@ user=> (-> "the cat in the hat fell in the vat"
            (str/split #" ")
            frequencies)
 {"the" 3, "cat" 1, "in" 2, "hat" 1, "fell" 1, "vat" 1}
+```
+
+`clojure.set` has a `map-invert` function that will swap the keys and values. The "unique key" facet of maps means that duplicate values in the input map will get one of the keys.
+```clojure
+user=> (require '[clojure.set :as set])
+user=> (let [squares {1 1, 2 4, 3 9, 4 16}
+             sqrts (set/map-invert squares)]
+        (sqrts 9))
+3
 ```
 
 ### Accessing Entries
