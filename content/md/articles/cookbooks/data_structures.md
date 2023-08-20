@@ -20,6 +20,9 @@ This cookbook covers some common tasks with core Clojure data structures. It ass
 
 ## Vectors
 
+### Intro
+Vectors are probably the most commonly used data structure for sequential data that isn't code. The random access capability and the fact that vectors aren't treated as function calls make them often a better choice than lists.
+
 ### Constructing Vectors
 
 `mapv` and `filterv` are eager versions of `map` and `filter` that return vectors
