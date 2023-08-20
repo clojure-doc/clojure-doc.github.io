@@ -164,7 +164,7 @@ user=> (-> (group-by val {"Mike" 1, "Tina" 2, "Alice" 1, "Fred" 2})
 {1 ["Mike" "Alice"], 2 ["Tina" "Fred"]}
 ```
 
-`reduce-kv` allows more control over the values, meaning it's possible to go directly to "clean" output.
+`reduce-kv` allows more control over the values, meaning it's possible to go directly to "clean" output (and maybe even different data structures).
 ```clojure
 user=> (reduce-kv
         (fn [acc k v] (update acc v (fnil conj #{}) k))
@@ -172,8 +172,32 @@ user=> (reduce-kv
 {1 #{"Alice" "Mike"}, 2 #{"Tina" "Fred"}}
 ```
 
-### Lists
+`frequencies` takes a collection and returns a map of elements in that collection to how many times it appears. This is used here for a rudimentary word counter.
+```clojure
+user=> (-> "the cat in the hat fell in the vat"
+           (str/split #" ")
+           frequencies)
+{"the" 3, "cat" 1, "in" 2, "hat" 1, "fell" 1, "vat" 1}
+```
 
-### Sets
+### Accessing Entries
 
-### Sequences
+While `select-keys` can be used to create a submap, it is sometimes desirable to pull some keys into a sequence. In this example, `juxt` is used to make a vector of the `:x` and `:y` values of maps for passing to another function.
+```clojure
+user=> (defn manhattan-distance [[x1 y1] [x2 y2]]
+        (let [distance (comp abs -)]
+         (+ (distance x1 x2) (distance y1 y2))))
+#'user/manhattan-distance
+user=> (let [point1 {:x 2 :y 0}
+             point2 {:x 0 :y 2}
+             xy-coords (juxt :x :y)]
+        (manhattan-distance (xy-coords point1)
+                            (xy-coords point2)))
+4 
+```
+
+## Lists
+
+## Sets
+
+## Sequences
