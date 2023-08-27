@@ -59,31 +59,42 @@
     </div>
     
     <p>This guide covers:</p><ul><li>Collections in Clojure</li><li>Sequences in Clojure</li><li>Core collection types</li><li>Key operations on collections and sequences</li><li>Other topics related to collections and sequences</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure provides a number of powerful abstractions including <em>collections</em> and <em>sequences</em>.
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="overview">Overview</h2><p>Clojure provides a number of powerful abstractions including <em>collections</em> and <em>sequences</em>.
 When working with Clojure,
 many operations are expressed as a series of operations on collections or sequences.</p><p>Most of Clojure's core library treats collections and sequences the same way, although
-sometimes a distinction has to be made (e.g. with lazy infinite sequences).</p><p><code>clojure.core</code> provides many fundamental operations on collections, such as: <code>map</code>, <code>filter</code>,
-<code>remove</code>, <code>take</code>, and <code>drop</code>. Basic operations on collections and sequences are combined
-to implement more complex operations.</p><h3 id="clojure-collections-are-immutable-persistent">Clojure Collections are Immutable (Persistent)</h3><p>Clojure collections are <em>immutable</em> (<em>persistent</em>). The term "persistent data structures" has
+sometimes a distinction has to be made (e.g. with lazy infinite sequences).</p><p><code>clojure.core</code> provides many fundamental operations on collections, such as:
+<code>map</code>, <code>filter</code>, <code>remove</code>, <code>take</code>, and <code>drop</code>.
+Basic operations on collections and sequences can be combined to implement
+more complex operations.</p><h3 id="clojure-collections-are-immutable-persistent">Clojure Collections are Immutable (Persistent)</h3><p>Clojure collections are <em>immutable</em> (<em>persistent</em>). The term "persistent data structures" has
 nothing to do with durably storing them on disk. What it means is that collections are
 mutated (updated) by producing new collections. To quote Wikipedia:</p><blockquote><p>In computing, a persistent data structure is a data structure that always preserves
 the previous version of itself when it is modified. Such data structures are effectively
 immutable, as their operations do not (visibly) update the structure in-place, but instead
 always yield a new updated structure.</p></blockquote><p>Clojure's persistent data structures are implemented as trees and <a href="https://en.wikipedia.org/wiki/Hash_array_mapped_trie"><em>tries</em></a> and
-have O(log<sub>32</sub> <em>n</em>) access complexity where <em>n</em> is the number of elements.</p><h2 id="the-collection-abstraction">The Collection Abstraction</h2><p>Clojure has a collection abstraction with several key operations supported for
-all collection implementations. They are</p><ul><li><code>=</code>: checks value equality of a collection compared to other collections</li><li><code>count</code>: returns number of elements in a collection</li><li><code>conj</code>: adds an item to a collection in the most efficient way</li><li><code>empty</code>: returns an empty collection of the same type as the argument</li><li><code>seq</code>: gets a sequence of a collection</li></ul><p>These functions work on all core Clojure collection types.</p><h2 id="core-collection-types">Core Collection Types</h2><p>Clojure has several core collection types:</p><ul><li>Maps (called hashes or dictionaries in some other languages)</li><li>Vectors</li><li>Lists</li><li>Sets</li></ul><h3 id="maps">Maps</h3><p>Maps associate keys with values. Boths keys and values can be of any type, but
+typically have O(log<sub>32</sub> <em>n</em>) access complexity where <em>n</em> is the number of elements.</p><h2 id="the-collection-abstraction">The Collection Abstraction</h2><p>Clojure has a collection abstraction with several key operations supported for
+all collection implementations. They are</p><ul><li><code>=</code>: checks value equality of a collection compared to other collections</li><li><code>count</code>: returns number of elements in a collection</li><li><code>conj</code>: adds an item to a collection in the most efficient way</li><li><code>empty</code>: returns an empty collection of the same type as the argument</li><li><code>seq</code>: gets a sequence of a collection</li></ul><p>Collections satisfy the <code>coll?</code> predicate.</p><p>These functions work on all core Clojure collection types.</p><h2 id="core-collection-types">Core Collection Types</h2><p>Clojure has several core collection types:</p><ul><li>Maps (called hashes or dictionaries in some other languages)</li><li>Vectors</li><li>Lists</li><li>Sets</li></ul><h3 id="maps">Maps</h3><p>Maps associate keys with values. Both keys and values can be of any type, but
 keys must be comparable. There are several implementations of maps with
-different guarantees about ordering. Hash maps are typically instantiated with literals:</p><pre><code class="clojure">{:language "Clojure" :creator "Rich Hickey"}
+different guarantees about ordering but the general hash map in Clojure is
+unordered.
+Hash maps are typically instantiated with literals:</p><pre><code class="clojure">{:language "Clojure" :creator "Rich Hickey"}
 </code></pre><p>Commas can be used in map literals (Clojure compiler treats the comma as whitespace):</p><pre><code class="clojure">{:language "Clojure", :creator "Rich Hickey"}
 </code></pre><p><code>clojure.core/sorted-map</code> and <code>clojure.core/array-map</code> produce ordered maps:</p><pre><code class="klipse-clojure nohighlight">(sorted-map :language "Clojure" :creator "Rich Hickey")
 ;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
 </code></pre><pre><code class="klipse-clojure nohighlight">(array-map :language "Clojure" :creator "Rich Hickey")
-;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
+;; ⇒ {:language "Clojure", :creator "Rich Hickey"}
 </code></pre><p>Unsurprisingly, map literals must contain an even number of forms (as many keys as values). Otherwise
 the code will not compile:</p><pre><code class="klipse-clojure nohighlight">{:language "Clojure" :creator}
 </code></pre><p>In general, the only major difference between Clojure maps and maps/hashes/dictionaries in some other languages
 is that Clojure maps are <em>immutable</em>. When a Clojure map is modified, the result is a new map that internally
-has structural sharing (for efficiency reasons) but semantically is a separate immutable value.</p><h4 id="maps-as-functions">Maps As Functions</h4><p>Maps in Clojure can be used as functions on their keys. See the <a href="/articles/language/functions/#maps-as-functions">Functions guide</a>
+has structural sharing (for efficiency reasons) but semantically is a separate immutable value.</p><p>You can <code>conj</code> a key/value pair into a map:</p><pre><code class="klipse-clojure nohighlight">(conj {:language "Clojure"} [:creator "Rich Hickey"])
+;; ⇒ {:creator "Rich Hickey", :language "Clojure"}
+</code></pre><p>Maps can be iterated over in their "natural order" so they are <code>seqable?</code>
+-- you can call <code>seq</code> on them -- but they are not <code>sequential?</code> as they have
+no guaranteed order. You can get
+a sequence of keys by calling <code>keys</code> or a sequence of values by calling <code>vals</code>
+on the map, and the order of those sequences will be consistent with each other and also
+with the order of key/value pairs you get by calling <code>seq</code> on the same map.
+Maps are also <code>associative?</code> and <code>counted?</code>.</p><p>See also the <a href="https://clojure.org/guides/learn/hashed_colls#_maps">official Clojure guide for maps</a> on clojure.org.</p><h4 id="maps-as-functions">Maps As Functions</h4><p>Maps in Clojure can be used as functions on their keys. See the <a href="/articles/language/functions/#maps-as-functions">Functions guide</a>
 for more information.</p><h4 id="keywords-as-functions">Keywords As Functions</h4><p>Keywords in Clojure can be used as functions on maps. See the <a href="/articles/language/functions/#keywords-as-functions">Functions guide</a>
 for more information.</p><h3 id="vectors">Vectors</h3><p>Vectors are collections that offer efficient random access (by index). They are typically instantiated with
 literals:</p><pre><code class="clojure">[1 2 3 4]
@@ -93,7 +104,15 @@ literals:</p><pre><code class="clojure">[1 2 3 4]
 the comma as whitespace):</p><pre><code class="clojure">["clojure", "scala", "erlang", "f#", "haskell", "ocaml"]
 </code></pre><p>Unlike lists, vectors are not used for function invocation. They are, however, used to make certain
 forms (e.g. the list of locals in <code>let</code> or parameters in <code>defn</code>) stand out visually. This was
-an intentional decision in Clojure design.</p><h3 id="lists">Lists</h3><p>Lists in Clojure are singly linked lists. Access or modifications of list head is efficient, random access
+an intentional decision in Clojure design.</p><p>You can <code>conj</code> a value into a vector and it will be appended:</p><pre><code class="klipse-clojure nohighlight">(conj [1 2 3 4] 5)
+;; ⇒ [1 2 3 4 5]
+</code></pre><p>Vectors are both <code>seqable?</code> and <code>sequential?</code> as their natural order is based
+on the indices into the vector. Vectors are <code>associative?</code> and <code>counted?</code>.
+Vectors are associative on their indices:</p><pre><code class="klipse-clojure nohighlight">(get [1 2 3 4] 2)
+;; =&gt; 3
+</code></pre><pre><code class="klipse-clojure nohighlight">(assoc [1 2 3 4] 2 :three)
+;; ⇒ [1 2 :three 4]
+</code></pre><p>See also the <a href="https://clojure.org/guides/learn/sequential_colls#_vectors">official Clojure guide for vectors</a> on clojure.org.</p><h3 id="lists">Lists</h3><p>Lists in Clojure are singly linked lists. Access or modifications of list head is efficient, random access
 is not.</p><p>Lists in Clojure are special because they represent code forms, from function calls to macro calls to special forms.
 Code is data in Clojure and it is represented primarily as lists:</p><pre><code class="klipse-clojure nohighlight">(empty? [])
 </code></pre><p>First item on the list is said to be in the <em>calling position</em>.</p><p>When used as "just" data structures, lists are typically instantiated with literals with quoting:</p><pre><code class="klipse-clojure nohighlight">'(1 2 3 4)
@@ -102,14 +121,26 @@ Code is data in Clojure and it is represented primarily as lists:</p><pre><code 
 ;; ⇒ (1 2 3 4)
 </code></pre><p>Commas can be used to separate list elements (Clojure compiler treats
 the comma as whitespace):</p><pre><code class="klipse-clojure nohighlight">'("clojure", "scala", "erlang", "f#", "haskell", "ocaml")
-</code></pre><h4 id="lists-and-metaprogramming-in-clojure">Lists and Metaprogramming in Clojure</h4><p>Metaprogramming in Clojure (and other Lisp dialects) is different from metaprogramming in, say, Ruby, because
+</code></pre><p>You can <code>conj</code> a value into a list and it will be prepended:</p><pre><code class="klipse-clojure nohighlight">(conj '(1 2 3 4) 5)
+;; ⇒ (5 1 2 3 4)
+</code></pre><p>Lists are both <code>seqable?</code> and <code>sequential?</code> but not all lists are <code>counted?</code>:
+lazily constructed lists, such as <code>(cons 1 (list 1 2 3 4))</code>, are not <code>counted?</code>
+because they do not have a known length until they are fully realized. You
+can still call <code>count</code> on such lists (as long as they are not infinite!) but
+that will cause the entire list to be realized.</p><p>See also the <a href="https://clojure.org/guides/learn/sequential_colls#_lists">official Clojure guide for lists</a> on clojure.org.</p><h4 id="lists-and-metaprogramming-in-clojure">Lists and Metaprogramming in Clojure</h4><p>Metaprogramming in Clojure (and other Lisp dialects) is different from metaprogramming in, say, Ruby, because
 in Ruby metaprogramming is <em>primarily</em> about producing strings while in Clojure it is about producing
 <em>data structures</em> (mostly <em>lists</em>). For sophisticated DSLs, producing data structures directly lets
 developers avoid a lot of incidental complexity that string generation brings along.</p><p>This topic is covered in detail in the <a href="/articles/language/macros/">Macros and Metaprogramming</a>.</p><h3 id="sets">Sets</h3><p>Sets are collections that offer efficient membership check operation and only allow each element to appear in the collection
 once. They are typically instantiated with literals:</p><pre><code class="klipse-clojure nohighlight">#{1 2 3 4}
 </code></pre><pre><code class="klipse-clojure nohighlight">#{"clojure" "scala" "erlang" "f#" "haskell" "ocaml"}
 </code></pre><p>Commas can be used to separate set elements (Clojure compiler treats the as whitespace):</p><pre><code class="klipse-clojure nohighlight">#{"clojure", "scala", "erlang", "f#", "haskell", "ocaml"}
-</code></pre><h4 id="sets-as-functions">Sets As Functions</h4><p>Sets in Clojure can be used as functions on their elements. See the <a href="/articles/language/functions/#sets-as-functions">Functions guide</a>
+</code></pre><p>You can <code>conj</code> a value into a set:</p><pre><code class="klipse-clojure nohighlight">(conj #{:tea :coffee} :juice)
+;; ⇒ #{:coffee :tea :juice}
+</code></pre><p>Like maps, sets are <code>seqable?</code> but not <code>sequential?</code> because they have no
+guaranteed order. You can call <code>seq</code> on a set to get a sequence of its elements
+in "natural order" (based on the hash of the elements, essentially).
+Sets are <code>counted?</code> but they are not <code>associative?</code> (they support lookup by
+their elements but have no associated values for those "keys").</p><p>See also the <a href="https://clojure.org/guides/learn/hashed_colls#_sets">official Clojure guide for sets</a> on clojure.org.</p><h4 id="sets-as-functions">Sets As Functions</h4><p>Sets in Clojure can be used as functions on their elements. See the <a href="/articles/language/functions/#sets-as-functions">Functions guide</a>
 for more information.</p><h4 id="set-membership-checks">Set Membership Checks</h4><p>The most common way of checking if an element is in a set is by using set as a function:</p><pre><code class="klipse-clojure nohighlight">(#{1 2 3 4} 1)
 ;; ⇒ 1
 </code></pre><pre><code class="klipse-clojure nohighlight">(#{1 2 3 4} 10)
@@ -124,9 +155,10 @@ Data types that <code>clojure.core/seq</code> can produce a sequence over are ca
 ;; ⇒ (1 2 3)
 </code></pre><p>When given an empty collection or sequence, <code>clojure.core/seq</code> returns nil:</p><pre><code class="klipse-clojure nohighlight">(seq [])
 ;; ⇒ nil
-</code></pre><p>this is commonly used in the following pattern:</p><pre><code class="klipse-clojure nohighlight">(if (seq xs)
-  (comment "Do something with this sequence")
-  (comment "Do something else"))
+</code></pre><p>this is commonly used in the following pattern:</p><pre><code class="klipse-clojure nohighlight">(def xs [1 2 3])
+(if (seq xs)
+  (println "Do something with this sequence")
+  (println "Do something else"))
 </code></pre><p>Another function that constructs sequences is <code>clojure.core/cons</code>. It prepends values to the head of
 the given sequence:</p><pre><code class="klipse-clojure nohighlight">(cons 0 (range 1 3))
 ;; ⇒ (0 1 2)
@@ -134,17 +166,29 @@ the given sequence:</p><pre><code class="klipse-clojure nohighlight">(cons 0 (ra
 ;; ⇒ (0 1 2 3 4)
 </code></pre><p><code>clojure.core/cons</code> and <code>clojure.core/list*</code> are primarily used to produce lazy sequences and in metaprogramming (when writing
 macros). As far as metaprogramming goes, sequences and lists are the same and it is common to
-add items in the beginning of the list (into the <em>calling position</em>).</p><p>Note that <code>clojure.core/cons</code> does not create cons cells and lists in Clojure are not implemented
-as linked cons cells (like in many other dialects of Lisp).</p><h3 id="first-rest-next">first, rest, next</h3><p><code>clojure.core/first</code> returns the first item in the sequence. <code>clojure.core/next</code> and <code>clojure.core/rest</code>
-return the rest:</p><pre><code class="klipse-clojure nohighlight">(first (seq [1 2 3 4 5 6]))
+add items in the beginning of the list (into the <em>calling position</em>).</p><p>Note that <code>clojure.core/cons</code> does not create "cons cells" and lists in Clojure are not implemented
+as linked "cons cells" (like in many other dialects of Lisp).</p><h3 id="first-rest-next">first, rest, next</h3><p><code>clojure.core/first</code> returns the first item in the sequence. <code>clojure.core/next</code> and <code>clojure.core/rest</code>
+return the sequence without the first element:</p><pre><code class="klipse-clojure nohighlight">(first (seq [1 2 3 4 5 6]))
 ;; ⇒ 1
 
 (rest (seq [1 2 3 4 5 6]))
 ;; ⇒ (2 3 4 5 6)
-</code></pre><p>the difference between them is what they return on a single element sequence:</p><pre><code class="klipse-clojure nohighlight">(rest (seq [:one]))
+
+(next (seq [1 2 3 4 5 6]))
+;; ⇒ (2 3 4 5 6)
+</code></pre><p>The difference between them is what they return on a single element sequence:</p><pre><code class="klipse-clojure nohighlight">(rest (seq [:one]))
 ;; ⇒ ()
 </code></pre><pre><code class="klipse-clojure nohighlight">(next (seq [:one]))
 ;; ⇒ nil
+</code></pre><p>Note that all three functions implicitly call <code>seq</code> on their argument so you
+can omit the explicit call:</p><pre><code class="klipse-clojure nohighlight">(first [1 2 3 4 5 6])
+;; ⇒ 1
+
+(rest [1 2 3 4 5 6])
+;; ⇒ (2 3 4 5 6)
+
+(next [1 2 3 4 5 6])
+;; ⇒ (2 3 4 5 6)
 </code></pre><h3 id="lazy-sequences-in-clojure">Lazy Sequences in Clojure</h3><p><em>Lazy sequences</em> are produced by performing computation or I/O. They can be infinite
 or not have exact length (e.g. a sequence of all powers of 2 or an audio stream).</p><p>Lazy sequences is an broad topic and covered in the <a href="/articles/language/laziness/">Laziness</a> guide.</p><h2 id="key-operations-on-collections-and-sequences">Key Operations on Collections and Sequences</h2><p>Below is an overview of <code>clojure.core</code> functions that work on collections and sequences. Most of them
 work the same way for all types of collections, however, there are exception to this rule. For example,
@@ -163,16 +207,19 @@ be ignored. Keep this in mind.</p><p>You can find more information in the <a hre
 Keep in mind that lazy sequences must be realized to get a count of the items. This is often not intended and
 can cause a variety of otherwise cryptic errors.</p><pre><code class="klipse-clojure nohighlight">(counted? "Hello")
 ;; ⇒ false
-</code></pre><pre><code class="klipse-clojure nohighlight">;; will be fully realized when using (count (range 10))
+</code></pre><p>(even tho' Clojure strings are Java <code>String</code>s and have a known length without iteration)</p><pre><code class="klipse-clojure nohighlight">;; will be fully realized when using (count (range 10))
 (counted? (range 10))
+;; ⇒ true
+</code></pre><p>(a range with an upper bound knows its length without iteration)</p><pre><code class="klipse-clojure nohighlight">;; (range) is an infinite sequence
+(counted? (range))
 ;; ⇒ false
-</code></pre><pre><code class="klipse-clojure nohighlight">;; Constant time return of (count)
+</code></pre><p>(an unbounded range has no known length)</p><pre><code class="klipse-clojure nohighlight">;; Constant time return of (count)
 (counted? [1 2 3 4 5])
 ;; ⇒ true
 </code></pre><h3 id="conj">conj</h3><p><code>conj</code> is short for "conjoin". As the name implies, <code>conj</code> takes a collection and argument(s) and returns the collection with those arguments added.</p><p>Adding items to a collection occurs at different places depending on the concrete type of collection.</p><p>List addition occurs at the beginning of the list. This is because accessing the head of the list is a constant time operation, and accessing
 the tail requires traversal of the entire list.</p><pre><code class="klipse-clojure nohighlight">(conj '(1 2) 3)
 ;; ⇒ (3 1 2)
-</code></pre><p>Vectors have constant time access across the entire data structure. `'conj' thusly appends to the end of a vector.</p><pre><code class="klipse-clojure nohighlight">(conj [1 2] 3)
+</code></pre><p>Vectors have constant time access across the entire data structure. <code>conj</code> appends to the end of a vector.</p><pre><code class="klipse-clojure nohighlight">(conj [1 2] 3)
 ;; ⇒ [1 2 3]
 </code></pre><p>Maps do not have guaranteed ordering, so the location that items are added is irrelevant. <code>conj</code> requires vectors of [key value] pairs to be
 added to the map.</p><pre><code class="klipse-clojure nohighlight">(conj {:a 1 :b 2 :c 3} [:d 4])
@@ -183,7 +230,8 @@ added to the map.</p><pre><code class="klipse-clojure nohighlight">(conj {:a 1 :
 ;; ⇒ #{1 4 5}
 </code></pre><pre><code class="klipse-clojure nohighlight">(conj #{:a :b :c} :b :c :d :e)
 ;; ⇒ #{:a :c :b :d :e}
-</code></pre><h3 id="get">get</h3><p><code>get</code> returns the value for the specified key in a map or record, index of a vector or value in a set. If the key is not present,
+</code></pre><h3 id="get">get</h3><p><code>get</code> returns the value for the specified key in a map or record, for the
+index of a vector or for the value in a set. If the key is not present,
 <code>get</code> returns nil or a supplied default value.</p><pre><code class="klipse-clojure nohighlight">;; val of a key in a map
 (get {:a 1 :b 2 :c 3} :b)
 ;; ⇒ 2
@@ -210,7 +258,7 @@ added to the map.</p><pre><code class="klipse-clojure nohighlight">(conj {:a 1 :
 </code></pre><pre><code class="klipse-clojure nohighlight">;; key :c does not exist, so return default value of 3
 (get {:a 1 :b 2} :c 3)
 ;; ⇒ 3
-</code></pre><h3 id="assoc">assoc</h3><p><code>assoc</code> takes a key and a value and returns a collection of the same type as the supplied collection with the key mapped to the new value.</p><p><code>assoc</code> is similar to <code>get</code> in how it works with maps, records or vectors. When applied to a map or record, the same type is returned with the key/value pairs added or modified.  When applied to a vector, a vector is returned with the key acting as an index and the index being replaced by the value.</p><p>Since maps and records can not contain multiple equivalent keys, supplying <code>assoc</code> with a key/value that exists in the one will cause <code>assoc</code> to return modify the key at that value in the result and not duplicate the key.</p><pre><code class="klipse-clojure nohighlight">(assoc {:a 1} :b 2)
+</code></pre><h3 id="assoc">assoc</h3><p><code>assoc</code> takes a collection, a key, and a value and returns a collection of the same type as the supplied collection with the key mapped to the new value.</p><p><code>assoc</code> is similar to <code>get</code> in how it works with maps, records or vectors. When applied to a map or record, the same type is returned with the key/value pairs added or modified.  When applied to a vector, a vector is returned with the key acting as an index and the index being replaced by the value.</p><p>Since maps and records can not contain multiple equivalent keys, supplying <code>assoc</code> with a key/value that exists in the one will cause <code>assoc</code> to return modify the key at that value in the result and not duplicate the key.</p><pre><code class="klipse-clojure nohighlight">(assoc {:a 1} :b 2)
 ;; ⇒ {:b 2, :a 1}
 </code></pre><pre><code class="klipse-clojure nohighlight">(assoc {:a 1 :b 45 :c 3} :b 2)
 ;; ⇒ {:a 1, :c 3, :b 2}
@@ -222,7 +270,8 @@ The key must be &lt;= (count vector) or an index out of bounds error will occur.
 </code></pre><pre><code class="klipse-clojure nohighlight">;; index 5 does not exist. valid indexes for this vector are: 0, 1, 2
 (assoc [1 2 3] 5 6)
 ;; the error here is slightly different in Clojure/Script
-</code></pre><p>When the key is equal to (count vector) <code>assoc</code> will add an item to the vector.</p><pre><code class="klipse-clojure nohighlight">(assoc [1 2 3] 3 4) ; ⇒ [1 2 3 4]
+</code></pre><p>When the key is equal to <code>(count vector)</code>, <code>assoc</code> will add an item to the
+end of the vector.</p><pre><code class="klipse-clojure nohighlight">(assoc [1 2 3] 3 4) ; ⇒ [1 2 3 4]
 </code></pre><h3 id="dissoc">dissoc</h3><p><code>dissoc</code> returns a map with the supplied keys, and subsequently their values, removed. Unlike <code>assoc</code>, <code>dissoc</code> does not work on vectors. When a record is provided, <code>dissoc</code> returns a map. For similar functionality with vectors, see <code>subvec</code> and <code>concat</code>.</p><pre><code class="klipse-clojure nohighlight">(dissoc {:a 1 :b 2 :c 3} :b)
 ;; ⇒ {:a 1, :c 3}
 </code></pre><pre><code class="klipse-clojure nohighlight">(dissoc {:a 1 :b 14 :c 390 :d 75 :e 2 :f 51} :b :c :e)
@@ -238,7 +287,7 @@ The key must be &lt;= (count vector) or an index out of bounds error will occur.
 ;; ⇒ :floor
 </code></pre><pre><code class="klipse-clojure nohighlight">(first [])
 ;; ⇒ nil
-</code></pre><h3 id="rest">rest</h3><p><code>rest</code> returns a seq of items starting with the second element in the collection. <code>rest</code> returns an empty seq if the collection only contains a single item.</p><p><code>rest</code> should also not be relied on when using maps and sets unless you are sure ordering is guaranteed.</p><pre><code class="klipse-clojure nohighlight">(rest [13 1 16 -4])
+</code></pre><h3 id="rest">rest</h3><p><code>rest</code> returns a seq of items starting with the second element in the collection. <code>rest</code> returns an empty seq if the collection only contains a single item.</p><p><code>rest</code> should also not be relied on when using maps and sets unless you are sure ordering is guaranteed (or you don't care about ordering at all).</p><pre><code class="klipse-clojure nohighlight">(rest [13 1 16 -4])
 ;; ⇒ (1 16 -4)
 </code></pre><pre><code class="klipse-clojure nohighlight">(rest '(:french-fry))
 ;; ⇒ '()
@@ -282,9 +331,10 @@ The key must be &lt;= (count vector) or an index out of bounds error will occur.
 </code></pre><pre><code class="klipse-clojure nohighlight">;; lists are not supported. contains? won't traverse a collection for a result.
 (contains? '(1 2 3) 0)
 ;; ⇒ java.lang.IllegalArgumentException: contains? not supported on type: clojure.lang.PersistentList
-</code></pre><h3 id="some">some</h3><p><code>some</code> will apply a predicate to each value in a collection until a non-false/nil result is returned then immediately return that result.</p><p>Since collections are "true" values, this makes it possible to return the first result itself rather than simply <code>true</code>.</p><pre><code class="klipse-clojure nohighlight">(some even? [1 2 3 4 5])
+;; =&gt; ClojureScript produces false here
+</code></pre><p>(in Clojure, this throws an exception; in ClojureScript, it produces <code>false</code>)</p><h3 id="some">some</h3><p><code>some</code> will apply a predicate to each value in a collection until a non-false/nil result is returned then immediately return that result.</p><pre><code class="klipse-clojure nohighlight">(some even? [1 2 3 4 5])
 ;; ⇒ true
-</code></pre><pre><code class="klipse-clojure nohighlight">;; predicate returns the value rather than simply true
+</code></pre><p>If you want to return the element itself, rather than the result of applying the predicate:</p><pre><code class="klipse-clojure nohighlight">;; predicate returns the value rather than simply true
 (some #(if (even? %) %) [1 2 3 4 5])
 ;; ⇒ 2
 </code></pre><p>Since maps can be used as functions, you can use a map as a predicate. This will return the value of the first key in the collection that is also in the map.</p><pre><code class="klipse-clojure nohighlight">(some {:a 1 :b 5} [:h :k :d :b])
@@ -296,13 +346,16 @@ The key must be &lt;= (count vector) or an index out of bounds error will occur.
 </code></pre><pre><code class="klipse-clojure nohighlight">;; set can be used to see if collection only contains items in the set.
 (every? #{2 3 4} [2 3 4 2 3 4])
 ;; ⇒ true
-</code></pre><h3 id="map">map</h3><p><code>map</code> is used to sequence of values and generate a new sequence of
-values.</p><p>Essentially, you're creating a <em>mapping</em> from an old sequence of values
+</code></pre><h3 id="map-mapv">map, mapv</h3><p><code>map</code> is used to sequence of values and generate a new sequence of
+values. <code>map</code> produces a lazy sequence. <code>mapv</code> is the same as <code>map</code> but
+produces a vector (and is not lazy).</p><p>Essentially, you're creating a <em>mapping</em> from an old sequence of values
 to a new sequence of values.</p><pre><code class="klipse-clojure nohighlight">(def numbers
   (range 1 10))
 ;; ⇒ (1 2 3 4 5 6 7 8 9)
 </code></pre><pre><code class="klipse-clojure nohighlight">(map (partial * 2) numbers)
 ;; ⇒ (2 4 6 8 10 12 14 16 18)
+</code></pre><pre><code class="klipse-clojure nohighlight">(mapv (partial * 2) numbers)
+;; ⇒ [2 4 6 8 10 12 14 16 18]
 </code></pre><pre><code class="klipse-clojure nohighlight">(def scores
   {:clojure 10
    :scala 9
@@ -327,8 +380,11 @@ single value.</p><pre><code class="klipse-clojure nohighlight">(def numbers
 </code></pre><pre><code class="klipse-clojure nohighlight">;; Provide an initial value for the calculation
 (reduce + 10 (vals scores))
 ;; ⇒ 37
-</code></pre><h3 id="filter">filter</h3><p><code>filter</code> returns a lazy sequence of items that return <code>true</code> for the provided predicate. Contrast to <code>remove</code>.</p><pre><code class="klipse-clojure nohighlight">(filter even? (range 10))
+</code></pre><h3 id="filter-filterv">filter, filterv</h3><p><code>filter</code> returns a lazy sequence of items that return <code>true</code> for the provided predicate. Contrast to <code>remove</code>.
+<code>filterv</code> is the same as <code>filter</code> but produces a vector (and is not lazy).</p><pre><code class="klipse-clojure nohighlight">(filter even? (range 10))
 ;; ⇒ (0 2 4 6 8)
+</code></pre><pre><code class="klipse-clojure nohighlight">(filterv even? (range 10))
+;; ⇒ [0 2 4 6 8]
 </code></pre><pre><code class="klipse-clojure nohighlight">(filter #(if (&lt; (count %) 5) %) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
 ;; ⇒ ("Paul" "Rudd")
 </code></pre><p>When using sets with <code>filter</code>, remember that if nil or false is in the set and in the collection, then the predicate will return itself: <code>nil</code>.</p><p>In this example, when nil and false are tested with the predicate, the predicate returns nil. This is because if the item is present in the set it is returned. This will cause that item to /not/ be included in the returned lazy-sequence.</p><pre><code class="klipse-clojure nohighlight">(filter #{:nothing :something nil}
@@ -339,8 +395,10 @@ single value.</p><pre><code class="klipse-clojure nohighlight">(def numbers
 </code></pre><pre><code class="klipse-clojure nohighlight">;; relative complement. probably useless?
 (remove {:a 1 :b 2} [:h :k :z :b :s])
 ;; ⇒ (:h :k :z :s)
-</code></pre><p>When using sets with <code>remove</code>, remember that if nil or false is in the set and in the collection, then the predicate will return itself: <code>nil</code>.
-This will cause that item to be included in the returned lazy sequence.</p><p>In this example, when nil and false are tested with the predicate, the predicate returns nil. This is because if the item is present in the set it is returned.</p><pre><code class="klipse-clojure nohighlight">(remove #{:nothing :something nil}
+</code></pre><p>When using sets with <code>remove</code>, remember that if nil or false is in the set and
+in the collection, then the predicate will return that falsey value, and the
+item will not be removed -- the item will be included in the returned lazy sequence.</p><p>In this example, when nil and false are tested with the predicate, the predicate
+returns falsey. This is because if the item is present in the set it is returned.</p><pre><code class="klipse-clojure nohighlight">(remove #{:nothing :something nil false}
         [:nothing :something :things :someone nil false :pigeons])
 ;; ⇒ (:things :someone nil false :pigeons)
 </code></pre><h3 id="iterate">iterate</h3><p><code>iterate</code> takes a function and an initial value, returns the result of
@@ -397,12 +455,12 @@ reference.</p><p>The "update" function takes the old value and returns a new val
 </code></pre><pre><code class="klipse-clojure nohighlight">(update-in family [:dad :pants] inc)
 
 ;; ⇒ {:son {:toy 5, :homework 1}, :mom {:dress {:work 6, :casual 7}, :book 3}, :dad {:shoes 4, :shirt 5, :pants 7}}
-</code></pre><p>Notice that "pants" gets incremented</p><pre><code class="klipse-clojure nohighlight">(def locations
+</code></pre><p>Notice that "pants" gets incremented but the original <code>family</code> data is untouched.</p><pre><code class="klipse-clojure nohighlight">(def locations
   [:office :home :school])
 
 (update-in locations [2] #(keyword (str "high-" (name %))))
 ;; ⇒ [:office :home :high-school]
-</code></pre><h3 id="assoc-in">assoc-in</h3><p><code>assoc-in</code> is used to <em>associate</em> a new value deep inside a structure
+</code></pre><p>Again, the original <code>locations</code> data is untouched.</p><h3 id="assoc-in">assoc-in</h3><p><code>assoc-in</code> is used to <em>associate</em> a new value deep inside a structure
 <em>in-place</em>.</p><p>Note that since data structures are immutable, it only returns a
 "modified" data structure, it does not actually alter the original
 reference.</p><p>Note the difference between <code>update-in</code> and <code>assoc-in</code>: <code>update-in</code>
@@ -418,12 +476,12 @@ whereas <code>assoc-in</code> takes a new value as-is.</p><pre><code class="klip
          :homework 1}})
 </code></pre><pre><code class="klipse-clojure nohighlight">(assoc-in family [:son :crayon] 3)
 ;; ⇒ {:son {:toy 5, :crayon 3, :homework 1}, :mom {:dress {:work 6, :casual 7}, :book 3}, :dad {:shoes 4, :shirt 5, :pants 6}}
-</code></pre><pre><code class="klipse-clojure nohighlight">(def locations
+</code></pre><p>As with <code>update-in</code>, the original <code>family</code> data is untouched.</p><pre><code class="klipse-clojure nohighlight">(def locations
   [:office :home :school])
 
 (assoc-in locations [3] :high-school)
 ;; ⇒ [:office :home :school :high-school]
-</code></pre><h3 id="keys">keys</h3><p><code>keys</code> returns a sequence of the keys in a map or record.</p><pre><code class="klipse-clojure nohighlight">(keys {1 "one" 2 "two" 3 "three"})
+</code></pre><p>Similarly, the original <code>locations</code> data is untouched.</p><h3 id="keys">keys</h3><p><code>keys</code> returns a sequence of the keys in a map or record.</p><pre><code class="klipse-clojure nohighlight">(keys {1 "one" 2 "two" 3 "three"})
 ;; ⇒ (1 2 3)
 </code></pre><pre><code class="klipse-clojure nohighlight">(defrecord Hand [index middle ring pinky thumb])
 (keys (Hand. 2 4 3 1 2))
@@ -474,17 +532,20 @@ performance penalty and additional GC pressure.</p><p>For cases when raw perform
 Clojure provides mutable versions of vectors and unsorted maps. They are known
 as <em>transients</em> and should only be used for locals and as an optimization
 technique after profiling.</p><p>Transients are produced from immutable data structures using the <code>clojure.core/transient</code>
-function:</p><pre><code class="klipse-clojure nohighlight">(let [m (transient {})]
-  (assoc! m :key "value") ;; mutates the transient in place!
+function:</p><pre><code class="klipse-clojure nohighlight">(let [m (transient {})
+      ;; assoc! returns the updated transient
+      m (assoc! m :key "value")]
   (count m))
 ;; ⇒ 1
-</code></pre><p>Note that <code>clojure.core/transient</code> does not affect nested collections, for
+</code></pre><p>Operations on a transient may update in place or they may return an updated
+collection so you must still bind or reuse their return values, and not rely
+on the original transient being updated.</p><p>Note that <code>clojure.core/transient</code> does not affect nested collections, for
 example, values in a map of keywords to vectors.</p><p>To mutate transients, use <code>clojure.core/assoc!</code>, <code>clojure.core/dissoc!</code> and
 <code>clojure.core/conj!</code>. The exclamation point at the end hints that these
-functions work on transients and modify data structures in place, which
-is not safe of data structures are shared between threads.</p><p>To create an immutable data structure out of a transient, use <code>clojure.core/persistent!</code>:</p><pre><code class="klipse-clojure nohighlight">(let [m (transient {})]
-        (assoc! m :key "value")
-        (persistent! m)) ;; ⇒ {:key "value"}
+functions work on transients and may modify data structures in place, which
+is not safe if transient data structures are shared between threads.</p><p>To create an immutable data structure out of a transient, use <code>clojure.core/persistent!</code>:</p><pre><code class="klipse-clojure nohighlight">(let [m (transient {})
+      m (assoc! m :key "value")]
+  (persistent! m)) ;; ⇒ {:key "value"}
 </code></pre><p>In conclusion: use transients only as an optimization technique and only
 after profiling and identifying hot spots in your code. Guessing is the
 shortest way we know to blowing the performance.</p><h2 id="custom-collections-and-sequences">Custom Collections and Sequences</h2><p>It is possible to develop custom collection types in Clojure or Java and have
@@ -498,13 +559,13 @@ satoru <a href="mailto:satorulogic@gmail.com">satorulogic@gmail.com</a></p>
 
     <div id="prev-next">
         
-        <a href="/articles/language/polymorphism/">&laquo; :anguage: Polymorphism</a>
+        <a href="/articles/language/core_overview/">&laquo; Language: clojure.core</a>
         
         
         ||
         
         
-        <a href="/articles/language/concurrency_and_parallelism/">Language: Concurrency and Parallelism &raquo;</a>
+        <a href="/articles/language/namespaces/">Language: Namespaces &raquo;</a>
         
     </div>
 </div>
@@ -530,6 +591,8 @@ satoru <a href="mailto:satorulogic@gmail.com">satorulogic@gmail.com</a></p>
                     <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
                     
                     <li><a href="/articles/language/functions/">Language: Functions</a></li>
+                    
+                    <li><a href="/articles/language/collections_and_sequences/">Language: Collections and Sequences</a></li>
                     
                     <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
                     
