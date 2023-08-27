@@ -1,5 +1,5 @@
 {:title "Language: Java Interop"
- :sidebar-omit? true :page-index 2300
+ :sidebar-omit? true :page-index 2500
  :layout :page}
 
 This guide covers:

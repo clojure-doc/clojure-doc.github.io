@@ -1,5 +1,5 @@
-{:title ":anguage: Polymorphism"
- :sidebar-omit? true :page-index 2500
+{:title "Language: Polymorphism"
+ :sidebar-omit? true :page-index 2600
  :klipse true
  :layout :page}
 

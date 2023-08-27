@@ -80,20 +80,15 @@ This guide covers:
  * Key vars of `clojure.core`
 
 
-### [Interoperability with Java](/articles/language/interop/)
-
-The Clojure language implementation is symbiotic with its host
-platform (the JVM), providing direct interoperability.
+### [Collections and Sequences](/articles/language/collections_and_sequences/)
 
 This guide covers:
 
- * How to instantiate Java classes
- * How to invoke Java methods
- * How to extend Java classes with proxy
- * How to implement Java interfaces with reify
- * How to generate Java classes with gen-class
- * Other topics related to interop
-
+ * Collections in Clojure
+ * Sequences in Clojure
+ * Core collection types
+ * Key operations on collections and sequences
+ * Other topics related to collections and sequences
 
 ### [Namespaces](/articles/language/namespaces/)
 
@@ -109,6 +104,21 @@ This guide covers:
  * Common compilation exceptions and their causes
  * How code compilation works in Clojure
 
+### [Interoperability with Java](/articles/language/interop/)
+
+The Clojure language implementation is symbiotic with its host
+platform (the JVM), providing direct interoperability.
+
+This guide covers:
+
+ * How to instantiate Java classes
+ * How to invoke Java methods
+ * How to extend Java classes with proxy
+ * How to implement Java interfaces with reify
+ * How to generate Java classes with gen-class
+ * Other topics related to interop
+
+
 
 ### [Polymorphism: Protocols and Multimethods](/articles/language/polymorphism/)
 
@@ -119,16 +129,6 @@ This guide covers:
  * Ad-hoc polymorphism with multimethods
  * How to create your own data types that behave like core Clojure data types
 
-
-### [Collections and Sequences](/articles/language/collections_and_sequences/)
-
-This guide covers:
-
- * Collections in Clojure
- * Sequences in Clojure
- * Core collection types
- * Key operations on collections and sequences
- * Other topics related to collections and sequences
 
 
 ### [Concurrency & Parallelism](/articles/language/concurrency_and_parallelism/)
