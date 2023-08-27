@@ -1,5 +1,5 @@
-{:title "Laziness in Clojure"
- :sidebar-omit? true :page-index 102400
+{:title "Language: Laziness"
+ :sidebar-omit? true :page-index 2900
  :klipse true
  :layout :page}
 

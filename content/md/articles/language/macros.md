@@ -1,5 +1,5 @@
-{:title "Clojure Macros and Metaprogramming"
- :sidebar-omit? true :page-index 102600
+{:title "Language: Macros"
+ :sidebar-omit? true :page-index 2800
  :klipse true
  :layout :page}
 

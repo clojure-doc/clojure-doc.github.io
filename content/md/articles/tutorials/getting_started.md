@@ -1,4 +1,4 @@
-{:title "Getting Started with Clojure"
+{:title "Getting Started"
  :page-index 1000
  :layout :page}
 

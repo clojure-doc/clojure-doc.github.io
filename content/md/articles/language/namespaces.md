@@ -1,5 +1,5 @@
-{:title "Clojure Namespaces and Vars"
- :sidebar-omit? true :page-index 102100
+{:title "Language: Namespaces"
+ :sidebar-omit? true :page-index 2400
  :layout :page}
 
 This guide covers:

@@ -1,5 +1,5 @@
-{:title "Collections and Sequences in Clojure"
- :sidebar-omit? true :page-index 102200
+{:title "Language: Collections and Sequences"
+ :sidebar-omit? true :page-index 2600
  :klipse true
  :layout :page}
 

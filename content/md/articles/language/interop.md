@@ -1,5 +1,5 @@
-{:title "Clojure interoperability with Java"
- :sidebar-omit? true :page-index 102500
+{:title "Language: Java Interop"
+ :sidebar-omit? true :page-index 2300
  :layout :page}
 
 This guide covers:
