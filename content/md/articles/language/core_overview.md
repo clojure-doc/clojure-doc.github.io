@@ -1,5 +1,5 @@
 {:title "Language: clojure.core"
- :sidebar-omit? true :page-index 2200
+ :page-index 2200
  :klipse true
  :layout :page}
 
@@ -18,7 +18,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.5.
+This guide covers Clojure 1.11.
 
 
 ## Binding
@@ -43,7 +43,7 @@ A basic example:
   (println x y))
 ```
 
-Let can be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.
+`let` can be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.
 
 This example basically demonstrates the lexical scoping of the let form.
 
@@ -54,7 +54,7 @@ This example basically demonstrates the lexical scoping of the let form.
     (println x))) ; prints 2
 ```
 
-Let bindings are immutable and can be destructured.
+`let` bindings are immutable and can be destructured.
 
 See: Sections about destructuring in
 [Introduction](/articles/tutorials/introduction/#destructuring) and
@@ -69,7 +69,8 @@ pages.
 (def symbol doc-string? init?)
 ```
 
-`def` takes a symbol and an optional init value.
+`def` takes a symbol, an optional docstring, and an optional init value
+(although it is very rare that you would omit the init value).
 
 If an init value is supplied, the root binding of the var is assigned to that value. Redefining a var with an init value will re-assign the root binding.
 
@@ -77,11 +78,9 @@ A root binding is a value that is shared across all threads.
 
 The `let` form is the preferred method of creating local bindings. It is strongly suggested to prefer it where possible, and never use `def` within another form.
 
-
-``` clojure
-;; TBD - reference to var documentation, basic example
-;; TBD - metadata
-```
+See [Vars and the Global Environment](https://clojure.org/reference/vars) in
+the official Clojure reference documentation for more details, which also
+covers how to attach metadata to such Vars.
 
 <a id="declare_desc"></a>
 ### declare
@@ -90,11 +89,14 @@ The `let` form is the preferred method of creating local bindings. It is strongl
 ([& names])
 ```
 
-`declare` takes a variable number of symbols.
+`declare` takes one or more symbols and behaves as if you had used `def` on
+each without an init value.
 
-`declare` provides a simple way of creating 'forward declarations'. `declare` defs the supplied symbols with no init values. This allows for referencing of a var before it has been supplied a value.
+`declare` provides a simple way of creating 'forward declarations'.
+This allows for referencing of a var before it has been supplied a value.
 
-There are much better methods of value-based dispatch or code architecture in general, but this presents a simple situation forward declarations would be necessary.
+There are much better methods of value-based dispatch or code architecture in
+general, but this presents a simple situation forward declarations would be necessary.
 
 ```klipse-clojure
 (declare func<10 func<20)
@@ -135,9 +137,9 @@ convenient definition of metadata about its argslist and documentation
 functions that can be retrieved with `doc`. This feature should be
 used almost universally.
 
-Without `defn`, a var would be directly bound to a function definition
-and explicit metadata about the doc string and argslits would be added
-manually.
+Without `defn`, a var could be directly bound to a function definition
+and explicit metadata about the doc string and argslist could be added
+manually:
 
 ``` clojure
 (def func (fn [x] x))
@@ -156,9 +158,9 @@ manually.
   x)
 ```
 
-``` clojure
-;; TBD - link to doc and metadata
-```
+See the [`def` Special Form](https://clojure.org/reference/special_forms#def)
+for more detail about how `defn` provides additional metadata and convenience
+over `def`.
 
 ## Branching
 
@@ -169,13 +171,18 @@ manually.
 (if test then else?)
 ```
 
-`if` takes 2 expressions, and an optional third.
+`if` takes two or three expressions -- a condition expression followed by one
+or two result expressions.
 
 `if` is the primary method of conditional execution and other conditionals are built upon `if`.
 
-If the return value of the first expression is anything except nil or false, the second expression is evaluated and the result returned..
+If the return value of the first expression is truthy -- anything except `nil`
+or `false` -- the second expression is evaluated and the result returned
+(and the third expression, if present, is not evaluated).
 
-If a third expression is provided, when the first expression returns nil or false the third expression is evaluated and returned.
+If a third expression is provided and the first expression returns `nil` or
+`false` the third expression is evaluated and returned
+(and the second expression is not evaluated).
 
 
 ```klipse-clojure
@@ -205,15 +212,19 @@ If a third expression is provided, when the first expression returns nil or fals
 ([test & body])
 ```
 
-`when` takes 2 expressions.
+`when` takes one or more expressions.
 
-`when` provides an implicit do form that is evaluated if an expression returns true, otherwise nil is returned. `when` does not provide an 'else'.
+`when` provides an implicit `do` form that wraps the second and any subsequent
+expressions, and is evaluated if the first expression returns truthy --
+anything except `nil` or `false` -- otherwise `nil` is returned.
 
 ```klipse-clojure
+;; (= 1 2) is false so the other expressions are not evaluated
 (when (= 1 2) (print "hey") 10)
 ```
 
 ```klipse-clojure
+;; (< 10 11) is true so both expressions are evaluated and the last value returned
 (when (< 10 11) (print "hey") 10)
 ```
 
@@ -238,7 +249,7 @@ See: [doseq](#doseq_desc)
 
 `recur` takes a number of arguments identical to the point of recursion. `recur` will evaluate those arguments, rebind them at the point of recursion and resume execution at that point.
 
-The point of recursion is the nearest `fn` or `loop` form determined lexically.
+The point of recursion is the nearest function (`defn`, `fn`) or `loop` form determined lexically.
 
 `recur` must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined and.
 
