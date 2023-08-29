@@ -60,21 +60,25 @@
     
     <p>This guide covers:</p><ul><li>Key functions of <code>clojure.core</code></li><li>Key macros of <code>clojure.core</code></li><li>Key vars of <code>clojure.core</code></li><li>Essential special forms</li></ul><p>This guide is <strong>by no means comprehensive</strong> and does not try to explain each function/macro/form in depth. It is an overview,
 the goal is to briefly explain the purpose of each item and provide links to other articles with more information.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="binding">Binding</h2><p><a id="let_desc"></a></p><h3 id="let">let</h3><pre><code class="clojure">(let [bindings*] exprs*)
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="binding">Binding</h2><p><a id="let_desc"></a></p><h3 id="let">let</h3><pre><code class="clojure">(let [bindings*] exprs*)
 </code></pre><p><code>let</code> takes a vector of symbol value pairs followed by a variable number of expressions.</p><p><code>let</code> allows binding of locals (roughly equivalent to variables in many other languages) and defines an explicit scope for those bindings.</p><p>The body of a <code>let</code> statement also provides an implicit <code>do</code> that allows for multiple statements in the body of <code>let</code>.</p><p>A basic example:</p><pre><code class="klipse-clojure nohighlight">(let [x 1 y 2]
   (println x y))
-</code></pre><p>Let can be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.</p><p>This example basically demonstrates the lexical scoping of the let form.</p><pre><code class="klipse-clojure nohighlight">(let [x 1]
+</code></pre><p><code>let</code> can be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.</p><p>This example basically demonstrates the lexical scoping of the let form.</p><pre><code class="klipse-clojure nohighlight">(let [x 1]
   (println x) ; prints 1
   (let [x 2]
     (println x))) ; prints 2
-</code></pre><p>Let bindings are immutable and can be destructured.</p><p>See: Sections about destructuring in
+</code></pre><p><code>let</code> bindings are immutable and can be destructured.</p><p>See: Sections about destructuring in
 <a href="/articles/tutorials/introduction/#destructuring">Introduction</a> and
 <a href="/articles/language/functions/#destructuring-of-function-arguments">Functions</a>
 pages.</p><p><a id="def_desc"></a></p><h3 id="def">def</h3><pre><code class="clojure">(def symbol doc-string? init?)
-</code></pre><p><code>def</code> takes a symbol and an optional init value.</p><p>If an init value is supplied, the root binding of the var is assigned to that value. Redefining a var with an init value will re-assign the root binding.</p><p>A root binding is a value that is shared across all threads.</p><p>The <code>let</code> form is the preferred method of creating local bindings. It is strongly suggested to prefer it where possible, and never use <code>def</code> within another form.</p><pre><code class="clojure">;; TBD - reference to var documentation, basic example
-;; TBD - metadata
-</code></pre><p><a id="declare_desc"></a></p><h3 id="declare">declare</h3><pre><code class="clojure">([&amp; names])
-</code></pre><p><code>declare</code> takes a variable number of symbols.</p><p><code>declare</code> provides a simple way of creating 'forward declarations'. <code>declare</code> defs the supplied symbols with no init values. This allows for referencing of a var before it has been supplied a value.</p><p>There are much better methods of value-based dispatch or code architecture in general, but this presents a simple situation forward declarations would be necessary.</p><pre><code class="klipse-clojure nohighlight">(declare func&lt;10 func&lt;20)
+</code></pre><p><code>def</code> takes a symbol, an optional docstring, and an optional init value
+(although it is very rare that you would omit the init value).</p><p>If an init value is supplied, the root binding of the var is assigned to that value. Redefining a var with an init value will re-assign the root binding.</p><p>A root binding is a value that is shared across all threads.</p><p>The <code>let</code> form is the preferred method of creating local bindings. It is strongly suggested to prefer it where possible, and never use <code>def</code> within another form.</p><p>See <a href="https://clojure.org/reference/vars">Vars and the Global Environment</a> in
+the official Clojure reference documentation for more details, which also
+covers how to attach metadata to such Vars.</p><p><a id="declare_desc"></a></p><h3 id="declare">declare</h3><pre><code class="clojure">([&amp; names])
+</code></pre><p><code>declare</code> takes one or more symbols and behaves as if you had used <code>def</code> on
+each without an init value.</p><p><code>declare</code> provides a simple way of creating 'forward declarations'.
+This allows for referencing of a var before it has been supplied a value.</p><p>There are much better methods of value-based dispatch or code architecture in
+general, but this presents a simple situation forward declarations would be necessary.</p><pre><code class="klipse-clojure nohighlight">(declare func&lt;10 func&lt;20)
 
 ;; without declare you will receive an error similar to:
 ;; "Unable to resolve symbol: func10 in this context"
@@ -96,9 +100,9 @@ map, a vector of arguments and a variable number of expressions.</p><p><code>def
 convenient definition of metadata about its argslist and documentation
 (docstrings). <code>defn</code> inherently allows for quick documentation of
 functions that can be retrieved with <code>doc</code>. This feature should be
-used almost universally.</p><p>Without <code>defn</code>, a var would be directly bound to a function definition
-and explicit metadata about the doc string and argslits would be added
-manually.</p><pre><code class="clojure">(def func (fn [x] x))
+used almost universally.</p><p>Without <code>defn</code>, a var could be directly bound to a function definition
+and explicit metadata about the doc string and argslist could be added
+manually:</p><pre><code class="clojure">(def func (fn [x] x))
 
 ;; same as:
 (defn func [x]
@@ -112,18 +116,28 @@ manually.</p><pre><code class="clojure">(def func (fn [x] x))
   "documentation!"
   [x]
   x)
-</code></pre><pre><code class="clojure">;; TBD - link to doc and metadata
-</code></pre><h2 id="branching">Branching</h2><p><a id="if_desc"></a></p><h3 id="if">if</h3><pre><code class="clojure">(if test then else?)
-</code></pre><p><code>if</code> takes 2 expressions, and an optional third.</p><p><code>if</code> is the primary method of conditional execution and other conditionals are built upon <code>if</code>.</p><p>If the return value of the first expression is anything except nil or false, the second expression is evaluated and the result returned..</p><p>If a third expression is provided, when the first expression returns nil or false the third expression is evaluated and returned.</p><pre><code class="klipse-clojure nohighlight">(if 0 "second") ; 0 is a 'true' value. Only false or nil are 'false'
+</code></pre><p>See the <a href="https://clojure.org/reference/special_forms#def"><code>def</code> Special Form</a>
+for more detail about how <code>defn</code> provides additional metadata and convenience
+over <code>def</code>.</p><h2 id="branching">Branching</h2><p><a id="if_desc"></a></p><h3 id="if">if</h3><pre><code class="clojure">(if test then else?)
+</code></pre><p><code>if</code> takes two or three expressions -- a condition expression followed by one
+or two result expressions.</p><p><code>if</code> is the primary method of conditional execution and other conditionals are built upon <code>if</code>.</p><p>If the return value of the first expression is truthy -- anything except <code>nil</code>
+or <code>false</code> -- the second expression is evaluated and the result returned
+(and the third expression, if present, is not evaluated).</p><p>If a third expression is provided and the first expression returns <code>nil</code> or
+<code>false</code> the third expression is evaluated and returned
+(and the second expression is not evaluated).</p><pre><code class="klipse-clojure nohighlight">(if 0 "second") ; 0 is a 'true' value. Only false or nil are 'false'
 </code></pre><pre><code class="klipse-clojure nohighlight">(if nil "second" "third")
 </code></pre><pre><code class="klipse-clojure nohighlight">(if (&lt; 10 9) "second" "third") ; (&lt; 9 10) returns false
 </code></pre><pre><code class="klipse-clojure nohighlight">(if (seq '()) "second") ; seq returns nil for an empty sequence
 </code></pre><pre><code class="klipse-clojure nohighlight">(if (nil? (= 1 2)) "second" "third") ; differentiate between nil and false if needed
 </code></pre><p><a id="when_desc"></a></p><h3 id="when">when</h3><pre><code class="clojure">([test &amp; body])
-</code></pre><p><code>when</code> takes 2 expressions.</p><p><code>when</code> provides an implicit do form that is evaluated if an expression returns true, otherwise nil is returned. <code>when</code> does not provide an 'else'.</p><pre><code class="klipse-clojure nohighlight">(when (= 1 2) (print "hey") 10)
-</code></pre><pre><code class="klipse-clojure nohighlight">(when (&lt; 10 11) (print "hey") 10)
-</code></pre><h3 id="for">for</h3><p>See: <a href="#for_desc">for</a></p><h3 id="doseq">doseq</h3><p>See: <a href="#doseq_desc">doseq</a></p><h2 id="looping">Looping</h2><p><a id="recur_desc"></a></p><h3 id="recur">recur</h3><pre><code class="clojure">(recur exprs*)
-</code></pre><p><code>recur</code> allows for self-recursion without consuming stack space proportional to the number of recursive calls made. Due to the lack of tail-call optimization on the JVM currently, this is the only method of recursion that does not consume excess stack space.</p><p><code>recur</code> takes a number of arguments identical to the point of recursion. <code>recur</code> will evaluate those arguments, rebind them at the point of recursion and resume execution at that point.</p><p>The point of recursion is the nearest <code>fn</code> or <code>loop</code> form determined lexically.</p><p><code>recur</code> must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined and.</p><p><code>recur</code> does not bind <code>&amp;</code> in variadic functions and in these situations an empty seq must be passed by <code>recur</code>.</p><pre><code class="klipse-clojure nohighlight">(defn count-up
+</code></pre><p><code>when</code> takes one or more expressions.</p><p><code>when</code> provides an implicit <code>do</code> form that wraps the second and any subsequent
+expressions, and is evaluated if the first expression returns truthy --
+anything except <code>nil</code> or <code>false</code> -- otherwise <code>nil</code> is returned.</p><pre><code class="klipse-clojure nohighlight">;; (= 1 2) is false so the other expressions are not evaluated
+(when (= 1 2) (print "hey") 10)
+</code></pre><pre><code class="klipse-clojure nohighlight">;; (&lt; 10 11) is true so both expressions are evaluated and the last value returned
+(when (&lt; 10 11) (print "hey") 10)
+</code></pre><h3 id="for">for</h3><p>See: <a href="#for_desc">for</a> under <strong>Looping</strong> below.</p><h3 id="doseq">doseq</h3><p>See: <a href="#doseq_desc">doseq</a> under <strong>Looping</strong> below.</p><h2 id="looping">Looping</h2><p><a id="recur_desc"></a></p><h3 id="recur">recur</h3><pre><code class="clojure">(recur exprs*)
+</code></pre><p><code>recur</code> allows for self-recursion without consuming stack space proportional to the number of recursive calls made. Due to the lack of tail-call optimization on the JVM currently, this is the only method of recursion that does not consume excess stack space.</p><p><code>recur</code> takes a number of arguments identical to the point of recursion. <code>recur</code> will evaluate those arguments, rebind them at the point of recursion and resume execution at that point.</p><p>The point of recursion is the nearest function (<code>defn</code>, <code>fn</code>) or <code>loop</code> form determined lexically.</p><p><code>recur</code> must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined and.</p><p><code>recur</code> does not bind <code>&amp;</code> in variadic functions and in these situations an empty seq must be passed by <code>recur</code>.</p><pre><code class="klipse-clojure nohighlight">(defn count-up
   [result x y]
   (if (= x y)
     result
@@ -140,7 +154,7 @@ manually.</p><pre><code class="clojure">(def func (fn [x] x))
 
 (factorial 10)
 ;; ⇒ 3628800
-</code></pre><p>TBD: more examples</p><p><a id="loop_desc"></a></p><h3 id="loop">loop</h3><pre><code class="clojure">(loop [bindings*] exprs*)
+</code></pre><p><a id="loop_desc"></a></p><h3 id="loop">loop</h3><pre><code class="clojure">(loop [bindings*] exprs*)
 </code></pre><p><code>loop</code> takes a vector of symbol value pairs followed by a variable number of expressions.</p><p><code>loop</code> establishes a recursion point for a <code>recur</code> expression inside its body. <code>loop</code> provides an implicit <code>let</code> for bindings.</p><p>The implicit <code>let</code> that <code>loop</code> provides binds each symbol to the init-expression. <code>recur</code> then binds new values when returning the execution point to <code>loop</code>.</p><pre><code class="klipse-clojure nohighlight">(defn count-up
   [start total]
   (loop [result []
@@ -162,7 +176,7 @@ manually.</p><pre><code class="clojure">(def func (fn [x] x))
 
 (factorial 10)
 ;; ⇒ 3628800
-</code></pre><p>TBD: more examples</p><p><a id="trampoline_desc"></a></p><h3 id="trampoline">trampoline</h3><pre><code class="clojure">([f])
+</code></pre><p><a id="trampoline_desc"></a></p><h3 id="trampoline">trampoline</h3><pre><code class="clojure">([f])
 ([f &amp; args])
 </code></pre><p><code>trampoline</code> takes a function and a variable number of arguments to pass to that function.</p><p><code>trampoline</code> allows for mutual recursion without consuming stack space proportional to the number of recursive calls made.</p><p>If the return value of that function is a function, <code>trampoline</code> calls that function with no arguments. If the return value is not a function, <code>trampoline</code> simply returns that value.</p><p>Since <code>trampoline</code> calls the returned functions with no arguments, you must supply an anonymous function that takes no arguments and calls the function you wish to recur to. This is usually done with anonymous function literals <code>#()</code></p><pre><code class="klipse-clojure nohighlight">(declare count-up1 count-up2) ;; see `declare` for why this is needed
 
@@ -177,45 +191,65 @@ manually.</p><pre><code class="clojure">(def func (fn [x] x))
     result
     #(count-up1 (conj result start) (inc start) total))) ;; returns an anonymous function
 
-    #_(trampoline count-up1 [] 0 10)
+;; delete #_ to run the example:
+#_(trampoline count-up1 [] 0 10)
 ;; ⇒ [0 1 2 3 4 5 6 7 8 9]
-</code></pre><p>TBD: a trivial example that would not be easily solved with self-recursion</p><p><a id="for_desc"></a></p><h3 id="for-1">for</h3><pre><code class="clojure">([seq-exprs body-expr])
-</code></pre><p><code>for</code> takes a vector of pairs of [binding collection].</p><p><code>for</code> allows for list comprehensions. <code>for</code>  assigns each sequential value in the collection to the binding form and evaluates them rightmost first. The results are returned in a lazy sequence.</p><p><code>for</code> allows for explicit let, when and while through use of ":let []" ":when (expression)" ":while (expression)" in the binding vector.</p><pre><code class="klipse-clojure nohighlight">(for [x [1 2 3] y [4 5 6]]
+</code></pre><p><a id="for_desc"></a></p><h3 id="for-1">for</h3><pre><code class="clojure">([seq-exprs body-expr])
+</code></pre><p><code>for</code> takes a vector of pairs of [binding collection].</p><p><code>for</code> allows for list comprehensions. <code>for</code>  assigns each sequential value in the collection to the binding form and evaluates them rightmost first. The results are returned in a lazy sequence.</p><p><code>for</code> allows for explicit let, when and while through use of <code>:let []</code>, <code>:when (expression)</code>, and <code>:while (expression)</code> in the binding vector.</p><pre><code class="klipse-clojure nohighlight">(for [x [1 2 3] y [4 5 6]]
   [x y])
 ;; ⇒ ([1 4] [1 5] [1 6] [2 4] [2 5] [2 6] [3 4] [3 5] [3 6])
-</code></pre><p>:when only evaluates the body when a true value is returned by the expression provided</p><pre><code class="klipse-clojure nohighlight">(for [x [1 2 3] y [4 5 6]
+</code></pre><p><code>:when</code> only evaluates the body when a truthy value is returned by the expression provided</p><pre><code class="klipse-clojure nohighlight">(for [x [1 2 3] y [4 5 6]
       :when (and
              (even? x)
              (odd? y))]
   [x y])
 ;; ⇒ ([2 5])
-</code></pre><p>:while evaluates the body until a non-true value is reached. Note that the rightmost collection is fully bound to y before a non-true value of (&lt; x 2) is reached. This demonstrates the order of the comprehension.</p><pre><code class="klipse-clojure nohighlight">(for [x [1 2 3] y [4 5 6]
+</code></pre><p><code>:while</code> evaluates the body until a falsey value is reached. Note that elements of the second collection are bound to <code>y</code> before a falsey value of <code>(&lt; x 2)</code> is reached in the following example. This demonstrates the order of the comprehension.</p><pre><code class="klipse-clojure nohighlight">(for [x [1 2 3] y [4 5 6]
       :while (&lt; x 2)]
   [x y])
 ;; ⇒ ([1 4] [1 5] [1 6])
 </code></pre><p><a id="doseq_desc"></a></p><h3 id="doseq-1">doseq</h3><pre><code class="clojure">([seq-exprs &amp; body])
-</code></pre><p><code>doseq</code> takes a vector of pairs of [binding collection].</p><p><code>doseq</code> is similar to <code>for</code> except it does not return a sequence of results. <code>doseq</code> is generally intended for execution of side-effects in the body, and thusly returns nil.</p><p><code>doseq</code> supports the same bindings as for - :let :when :while. For examples of these, see for.</p><pre><code class="klipse-clojure nohighlight">(doseq [x [1 2 3] y [4 5 6]]
+</code></pre><p><code>doseq</code> takes a vector of pairs of <code>[binding collection]</code>
+and then one or more expressions as the <code>body</code>.</p><p><code>doseq</code> is similar to <code>for</code> except it does not return a sequence of results. <code>doseq</code> is generally intended for execution of side-effects in the body, and thus returns <code>nil</code>.</p><p><code>doseq</code> supports the same bindings as for - <code>:let</code>, <code>:when</code>, <code>:while</code>. For examples of those, see <code>for</code> above.</p><pre><code class="klipse-clojure nohighlight">(doseq [x [1 2 3] y [4 5 6]]
   (println [x y]))
 
 ;; [1 4][1 5][1 6][2 4][2 5][2 6][3 4][3 5][3 6]
 ;; ⇒ nil
+</code></pre><p><a id="run_desc"></a></p><h3 id="run">run!</h3><pre><code class="clojure">([proc coll])
+</code></pre><p>If you have a single collection to loop over, just for side-effects,
+and a single function to call on each element, you might prefer to use
+<code>run!</code> instead of <code>doseq</code>. The following are equivalent:</p><pre><code class="clojure">(doseq [x [1 2 3]]
+  (println x))
+(run! println [1 2 3])
 </code></pre><p><a id="iterate_desc"></a></p><h3 id="iterate">iterate</h3><pre><code class="clojure">([f x])
-</code></pre><p><code>iterate</code> takes a function and an argument to the function.</p><p>A lazy sequence is returned consisting of the argument then each subsequent entry is the function evaluated with the previous entry in the lazy sequence.</p><pre><code class="clojure">TBD: Examples
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="reduce_desc"></a></p><h3 id="reduce">reduce</h3><pre><code class="clojure">([f coll])
+</code></pre><p><code>iterate</code> takes a function and an argument to the function.</p><p>A lazy sequence is returned consisting of the argument then each subsequent entry is the function evaluated with the previous entry in the lazy sequence. In other words, the function is applied repeatedly to produce each new entry in the sequence.</p><p>Since it is an infinite sequence, you need to use <code>take</code> or similar to get a finite number of elements.</p><pre><code class="klipse-clojure nohighlight">(take 10 (iterate inc 0))
+;; ⇒ (0 1 2 3 4 5 6 7 8 9)
+</code></pre><p><a id="reduce_desc"></a></p><h3 id="reduce">reduce</h3><pre><code class="clojure">([f coll])
 ([f val coll])
-</code></pre><p><code>reduce</code> takes a function, an optional initial value and a collection.</p><p><code>reduce</code> takes the first item of the collection and either the second
-item of the collection or the provided initial value, then evaluates
-the function with those arguments. The function is then evaluated with
-that result and the next item in the collection. This is repeated
-until the collection is exhausted and the value of the final function
-call is returned.</p><pre><code class="clojure">TBD: examples
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="reductions_desc"></a></p><h3 id="reductions">reductions</h3><pre><code class="clojure">([f coll])
+</code></pre><p><code>reduce</code> takes a function, an optional initial value and a collection.</p><p>If an initial value is provided, <code>reduce</code> applies the function to that
+initial value and the first item in the collection. The function is
+then applied to that result and the second item in the collection, and
+so on. If the collection is empty, the initial value is returned (and
+the function is not called).</p><p>If an initial value is not provided, and the behavior is a bit more
+complicated:</p><ul><li>If the collection is empty, the function is called with no arguments and the result is returned,</li><li>If the collection has one element, that element is returned, and the function is not called,</li><li>Otherwise, the function is called with the first two elements of the collection, and then with the result of that call and the third element, and so on.</li></ul><pre><code class="klipse-clojure nohighlight">(reduce + 0 [1 2 3 4 5]) ; (+ 0 1) then (+ 1 2), (+ 3 3), (+ 6 4), (+ 10 5)
+;; ⇒ 15
+</code></pre><pre><code class="klipse-clojure nohighlight">(reduce + 0 []) ; 0 -- + is not called
+;; ⇒ 0
+</code></pre><pre><code class="klipse-clojure nohighlight">(reduce + [1 2 3 4 5]) ; (+ 1 2) then (+ 3 3), (+ 6 4), (+ 10 5)
+;; ⇒ 15
+</code></pre><pre><code class="klipse-clojure nohighlight">(reduce + [1]) ; 1 -- + is not called
+;; ⇒ 1
+</code></pre><pre><code class="klipse-clojure nohighlight">(reduce + []) ; 0 -- (+) is called and produces zero
+;; ⇒ 0
+</code></pre><p><a id="reductions_desc"></a></p><h3 id="reductions">reductions</h3><pre><code class="clojure">([f coll])
 ([f val coll])
-</code></pre><p><code>reductions</code> takes a function, an optional initial value and a collection.</p><p><code>reductions</code> returns a lazy sequence consisting of the first item in
-the collection, or the provided initial value followed by the result
-of the function evaluated with the previous result and the next item
-in the collection.</p><pre><code class="clojure">TBD: examples
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="map_desc"></a></p><h3 id="map">map</h3><pre><code class="clojure">([f coll])
+</code></pre><p><code>reductions</code> takes a function, an optional initial value and a collection.</p><p><code>reductions</code> returns a lazy sequence of the intermediate values that would
+be produced during calls to <code>reduce</code> with the same arguments.</p><p>Like <code>reduce</code>,
+if no initial value is provided, and the collection is empty, the function
+is called with no arguments and the result is the only value in the lazy
+sequence; if no initial value is provided, and the collection has only one
+element, that element is the only value in the lazy sequence, and the
+function is not called.</p><p><a id="map_desc"></a></p><h3 id="map">map</h3><pre><code class="clojure">([f coll])
 ([f c1 c2])
 ([f c1 c2 c3])
 ([f c1 c2 c3 &amp; colls])
@@ -223,9 +257,20 @@ in the collection.</p><pre><code class="clojure">TBD: examples
 item from each collection, in order, to the function and returns a
 lazy sequence of the results.</p><p>The function provided to <code>map</code> must support an arity matching the
 number of collections passed. Due to this, when using more than one
-collection, map stops processing items when any collection runs out of
-items.</p><pre><code class="clojure">TBD: Examples
-</code></pre><p>TBD: Simple image accompaniment.</p><h2 id="collection-and-sequence-modification">Collection and Sequence Modification</h2><p><a id="conj_desc"></a></p><h3 id="conj">conj</h3><pre><code class="clojure">([coll x])
+collection, <code>map</code> stops processing items when any collection runs out of
+items.</p><p><a id="mapv_desc"></a></p><h3 id="mapv">mapv</h3><pre><code class="clojure">([f coll])
+([f c1 c2])
+([f c1 c2 c3])
+([f c1 c2 c3 &amp; colls])
+</code></pre><p><code>mapv</code> takes a function and one or more collections.  <code>mapv</code> passes an
+item from each collection, in order, to the function and returns a
+vector of the results. Unlike <code>map</code>, <code>mapv</code> is <strong>not</strong> lazy.</p><p>If <code>mapv</code>
+is called with a single collection, it will use a transient vector to build
+the result for efficiency.</p><p>If <code>mapv</code> is called with multiple collections, it will first call <code>map</code> on them
+and then turn the result into a vector (using <code>into []</code>).</p><p>The function provided to <code>mapv</code> must support an arity matching the
+number of collections passed. Due to this, when using more than one
+collection, <code>mapv</code> stops processing items when any collection runs out of
+items, like <code>map</code>.</p><h2 id="collection-and-sequence-modification">Collection and Sequence Modification</h2><p><a id="conj_desc"></a></p><h3 id="conj">conj</h3><pre><code class="clojure">([coll x])
 ([coll x &amp; xs])
 </code></pre><p><code>conj</code> takes a collection and a variable number of arguments.</p><p><code>conj</code> is short for "conjoin". As the name implies, <code>conj</code> returns the
 collection with those arguments added.</p><p>Adding items to a collection occurs at different places depending on
@@ -344,10 +389,7 @@ you are sure ordering is guaranteed.</p><pre><code class="klipse-clojure nohighl
 ;; ⇒ (1 16 -4)
 </code></pre><pre><code class="klipse-clojure nohighlight">(rest '(:french-fry))
 ;; ⇒ '()
-</code></pre><p>The behaviour of <code>rest</code> should be contrasted with <code>next</code>. <code>next</code>
-returns nil if the collection only has a single item. This is
-important when considering "truthiness" of values since an empty seq
-is "true" but nil is not.</p><pre><code class="klipse-clojure nohighlight">(if (rest '("stuff"))
+</code></pre><p>The behaviour of <code>rest</code> should be contrasted with <code>next</code>. <code>next</code> returns <code>nil</code> if the collection only has a single item. This is important when considering "truthiness" of values since an empty seq is still a truthy value but <code>nil</code> is not.</p><pre><code class="klipse-clojure nohighlight">(if (rest '("stuff"))
   (print "Does this print?")) ;; yes, it prints.
 </code></pre><pre><code class="clojure">;; NEVER FINISHES EXECUTION!
 ;; "done" is never reached because (rest x) is always a "true" value
@@ -385,7 +427,7 @@ returns nil or a supplied default value.</p><pre><code class="klipse-clojure noh
 (get {:a 1 :b 2} :c 3)
 ;; ⇒ 3
 </code></pre><p><a id="contains?_desc"></a></p><h3 id="contains">contains?</h3><pre><code class="clojure">([coll key])
-</code></pre><p><code>contains?</code> takes a map and a key.</p><p><code>contains</code> returns true if the provided <em>key</em> is present in a
+</code></pre><p><code>contains?</code> takes a collection and a key.</p><p><code>contains</code> returns true if the provided <em>key</em> is present in a
 collection. <code>contains</code> is similar to <code>get</code> in that vectors treat the
 key as an index. <code>contains</code> will always return false for lists.</p><pre><code class="klipse-clojure nohighlight">(contains? {:a 1 :b 2 :c 3} :c)
 ;; ⇒ true
@@ -399,8 +441,7 @@ key as an index. <code>contains</code> will always return false for lists.</p><p
 (contains? ["John" "Mary" "Paul"] "Paul")
 ;; ⇒ false
 </code></pre><pre><code class="klipse-clojure nohighlight">;; lists are not supported. contains? won't traverse a collection for a result.
-(contains? '(1 2 3) 0)
-;; ⇒ java.lang.IllegalArgumentException: contains? not supported on type: clojure.lang.PersistentList
+(contains? '(1 2 3) 0) ; false in ClojureScript, an exception in Clojure
 </code></pre><p><a id="keys_desc"></a></p><h3 id="keys">keys</h3><pre><code class="clojure">([map])
 </code></pre><p><code>keys</code> takes a map or record.</p><p><code>keys</code> returns a sequence of the keys in a map or record.</p><pre><code class="klipse-clojure nohighlight">(keys {1 "one" 2 "two" 3 "three"})
 ;; ⇒ (1 2 3)
@@ -416,10 +457,8 @@ key as an index. <code>contains</code> will always return false for lists.</p><p
 </code></pre><p><a id="take_desc"></a></p><h3 id="take">take</h3><pre><code class="clojure">([n coll])
 </code></pre><p><code>take</code> takes a number and a collection.</p><p><code>take</code> returns a lazy sequence starting with the first value of the
 collection and n sequential items after that.</p><p>If the number of items in the collection is less than the provided
-number, the entire collection is returned lazily.</p><pre><code class="clojure">TBD: example
-</code></pre><p><a id="drop_desc"></a></p><h3 id="drop">drop</h3><pre><code class="clojure">([n coll])
-</code></pre><p><code>drop</code> takes a number and a collection.</p><p><code>drop</code> returns a lazy sequence starting at the nth item of the collection.</p><pre><code class="clojure">TBD: example
-</code></pre><p><a id="take-while_desc"></a></p><h3 id="take-while">take-while</h3><pre><code class="clojure">([pred coll])
+number, the entire collection is returned lazily.</p><p><a id="drop_desc"></a></p><h3 id="drop">drop</h3><pre><code class="clojure">([n coll])
+</code></pre><p><code>drop</code> takes a number and a collection.</p><p><code>drop</code> returns a lazy sequence starting at the nth item of the collection.</p><p><a id="take-while_desc"></a></p><h3 id="take-while">take-while</h3><pre><code class="clojure">([pred coll])
 </code></pre><p><code>take-while</code> takes a function that accepts a single-argument and a
 collection.</p><p><code>take-while</code> returns a lazy sequence of sequential items until the
 function returns nil/false value for that item.</p><pre><code class="clojure">TBD: example
@@ -428,18 +467,26 @@ function returns nil/false value for that item.</p><pre><code class="clojure">TB
 collection.</p><p><code>drop-while</code> returns a lazy sequence starting at the first item in the
 collection that the function returns nil/false.</p><p><a id="filter_desc"></a></p><h3 id="filter">filter</h3><pre><code class="clojure">([pred coll])
 </code></pre><p><code>filter</code> takes a function that accepts a single argument and a
-collection.</p><p><code>filters</code> returns a lazy sequence of items that return <code>true</code> for the
-provided predicate. Contrast to <code>remove</code>.</p><pre><code class="klipse-clojure nohighlight">(filter even? (range 10))
+collection.</p><p><code>filter</code> returns a lazy sequence of items for which the
+provided predicate produces a truthy value. Contrast to <code>remove</code>.</p><pre><code class="klipse-clojure nohighlight">(filter even? (range 10))
 ;; ⇒ (0 2 4 6 8)
 </code></pre><pre><code class="klipse-clojure nohighlight">(filter #(if (&lt; (count %) 5) %) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
 ;; ⇒ ("Paul" "Rudd")
-</code></pre><p>When using sets with <code>filter</code>, remember that if nil or false is in the
-set and in the collection, then the predicate will return itself:
-<code>nil</code>.</p><p>In this example, when nil and false are tested with the predicate, the
-predicate returns nil. This is because if the item is present in the
-set it is returned. This will cause that item to /not/ be included in
-the returned lazy-sequence.</p><pre><code class="klipse-clojure nohighlight">(filter #{:nothing :something nil} [:nothing :something :things :someone nil false :pigeons])
+</code></pre><p>When using sets with <code>filter</code>, remember that if <code>nil</code> or <code>false</code> is in the
+set and in the collection, then the predicate will return falsey and the item
+will be omitted.</p><pre><code class="klipse-clojure nohighlight">(filter #{:nothing :something nil false} [:nothing :something :things :someone nil false :pigeons])
 ;; ⇒ (:nothing :something)
+</code></pre><p><a id="filterv_desc"></a></p><h3 id="filterv">filterv</h3><pre><code class="clojure">([pred coll])
+</code></pre><p><code>filterv</code> takes a function that accepts a single argument and a
+collection.</p><p><code>filterv</code> returns a vector of items for which the
+provided predicate produces a truthy value. Contrast to <code>remove</code>.</p><pre><code class="klipse-clojure nohighlight">(filterv even? (range 10))
+;; ⇒ [0 2 4 6 8]
+</code></pre><pre><code class="klipse-clojure nohighlight">(filterv #(if (&lt; (count %) 5) %) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
+;; ⇒ ["Paul" "Rudd"]
+</code></pre><p>When using sets with <code>filterv</code>, remember that if <code>nil</code> or <code>false</code> is in the
+set and in the collection, then the predicate will return falsey and the item
+will be omitted.</p><pre><code class="klipse-clojure nohighlight">(filterv #{:nothing :something nil false} [:nothing :something :things :someone nil false :pigeons])
+;; ⇒ [:nothing :something]
 </code></pre><p><a id="keep_desc"></a></p><h3 id="keep">keep</h3><p><code>(keep f coll)</code></p><p><code>keep</code> takes a function that accepts a single argument and a
 collection.</p><p><code>keep</code> returns a lazy sequence of non-nil results of the function
 applied to each item in the collection in sequence.</p><pre><code class="clojure">TBD: examples
@@ -474,7 +521,7 @@ collection that is also in the map.</p><pre><code class="klipse-clojure nohighli
 the collection that is present in the set.</p><pre><code class="klipse-clojure nohighlight">(some #{4} (range 20))
 ;; ⇒ 4
 </code></pre><p><a id="every?_desc"></a></p><h3 id="every">every?</h3><pre><code class="clojure">([pred coll])
-</code></pre><p><code>every</code> takes a function that accepts a single argument and a collection.</p><p><code>every</code> returns true if the predicate returns true for every item in
+</code></pre><p><code>every?</code> takes a function that accepts a single argument and a collection.</p><p><code>every?</code> returns true if the predicate returns true for every item in
 the collection, otherwise it returns false.</p><pre><code class="klipse-clojure nohighlight">(every? even? (range 0 10 2))
 ;; ⇒ true
 </code></pre><pre><code class="klipse-clojure nohighlight">;; set can be used to see if collection only contains items in the set.
@@ -494,7 +541,11 @@ lazy sequence will be padded with the padding collection to achieve
 the desired partitioning size.</p><p>If there is no padding collection provided and there is not enough
 items to fill the last list in the returned lazy sequence, those items
 will be not used.</p><pre><code class="clojure">TBD: example
-</code></pre><p><a id="partition-all_desc"></a></p><h3 id="partition-all">partition-all</h3><pre><code class="clojure">([n coll])
+</code></pre><p><a id="partitionv_desc"></a></p><h3 id="partitionv">partitionv</h3><pre><code class="clojure">([n coll])
+([n step coll])
+([n step pad coll])
+</code></pre><p><code>partitionv</code> is just like <code>partition</code> above, except it returns a
+lazy sequence of vectors instead of a lazy sequence of lists.</p><p><a id="partition-all_desc"></a></p><h3 id="partition-all">partition-all</h3><pre><code class="clojure">([n coll])
 ([n step coll])
 </code></pre><p><code>partition-all</code> takes a number, an optional step and a collection.</p><p><code>partition-all</code> sequentially takes a provided number of items from the
 collection in sequence and puts them into lists. This lazy sequence of
@@ -502,26 +553,29 @@ lists is returned.</p><p>If a step is provided, the lists in the returned lazy s
 at offsets in the provided collection of that number items in the
 list.</p><p>If there are not enough items to fill the last list in the returned
 lazy sequence, the remaining items will be used in the last list.</p><pre><code class="clojure">TBD: example
-</code></pre><h3 id="filter-1">filter</h3><p>See: <a href="filter_desc">filter</a></p><h3 id="remove-1">remove</h3><p>See: <a href="remove_desc">remove</a></p><h3 id="for-2">for</h3><p>See: <a href="for_desc">for</a></p><h3 id="map-1">map</h3><p>See: <a href="map_desc">map</a></p><h3 id="remove-2">remove</h3><p>See: <a href="remove_desc">remove</a></p><h3 id="empty-2">empty?</h3><p>See: <a href="empty?_desc">empty</a></p><h3 id="not-empty-1">not-empty</h3><p>See: <a href="not-empty_desc">not-empty</a></p><h2 id="function-composition-and-application">Function Composition and Application</h2><p><a id="juxt_desc"></a></p><h3 id="juxt">juxt</h3><pre><code class="clojure">([])
+</code></pre><p><a id="partitionv-all_desc"></a></p><h3 id="partitionv-all">partitionv-all</h3><pre><code class="clojure">([n coll])
+([n step coll])
+</code></pre><p><code>partitionv-all</code> is just like <code>partition-all</code> above, except it returns a
+lazy sequence of vectors instead of a lazy sequence of lists.</p><h3 id="filter-1">filter</h3><p>See: <a href="filter_desc">filter</a></p><h3 id="filterv-1">filterv</h3><p>See: <a href="filterv_desc">filterv</a></p><h3 id="remove-1">remove</h3><p>See: <a href="remove_desc">remove</a></p><h3 id="for-2">for</h3><p>See: <a href="for_desc">for</a></p><h3 id="map-1">map</h3><p>See: <a href="map_desc">map</a></p><h3 id="mapv-1">mapv</h3><p>See: <a href="mapv_desc">mapv</a></p><h3 id="remove-2">remove</h3><p>See: <a href="remove_desc">remove</a></p><h3 id="empty-2">empty?</h3><p>See: <a href="empty?_desc">empty</a></p><h3 id="not-empty-1">not-empty</h3><p>See: <a href="not-empty_desc">not-empty</a></p><h2 id="function-composition-and-application">Function Composition and Application</h2><p><a id="juxt_desc"></a></p><h3 id="juxt">juxt</h3><pre><code class="clojure">([])
 ([f])
 ([f g])
 ([f g h])
 ([f1 f2 f3 &amp; fs])
 </code></pre><p><code>juxt</code> takes a variable number of functions.</p><p><code>juxt</code> returns a function that will return a vector consisting of the
-result of each of those functions to a provided argument.</p><pre><code class="clojure">TBD: examples
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="comp_desc"></a></p><h3 id="comp">comp</h3><pre><code class="clojure">([])
+result of applying each of those functions to a provided argument.</p><pre><code class="clojure">TBD: examples
+</code></pre><p><a id="comp_desc"></a></p><h3 id="comp">comp</h3><pre><code class="clojure">([])
 ([f])
 ([f g])
 ([f g h])
 ([f1 f2 f3 &amp; fs])
 </code></pre><p><code>comp</code> takes a variable number of functions.</p><p><code>comp</code> returns a function that will return the result of applying the
 rightmost function to the provided argument, then the second rightmost
-function to the result of that etc.</p><pre><code class="clojure">TBD: examples
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="fnil_desc"></a></p><h3 id="fnil">fnil</h3><pre><code class="clojure">([f x])
+function to the result of that etc.</p><pre><code class="clojure">(let [cf (comp f g h)]
+  (cf x)) ; the same as (f (g (h x)))
+</code></pre><p><a id="fnil_desc"></a></p><h3 id="fnil">fnil</h3><pre><code class="clojure">([f x])
 ([f x y])
 ([f x y z])
-</code></pre><p><code>fnil</code> takes a function and one to three arguments.</p><p><code>fnil</code> returns a function that replaces any nil arguments with the
-provided values. <code>fnil</code> only supports supports patching 3 arguments,
+</code></pre><p><code>fnil</code> takes a function and one to three arguments.</p><p><code>fnil</code> returns a function that replaces any <code>nil`` arguments with the provided values.</code>fnil` only supports supports patching 3 arguments,
 but will pass any arguments beyond that un-patched.</p><pre><code class="klipse-clojure nohighlight">(defn say-info [name location hobby]
   (println name "is from" location "and enjoys" hobby))
 
@@ -543,29 +597,42 @@ list of arguments to the supplied function.</p><pre><code class="klipse-clojure 
 ;; ⇒ (2 4 6)
 </code></pre><pre><code class="klipse-clojure nohighlight">(apply + 1 2 3 [4 5 6]) ;; same as  (+ 1 2 3 4 5 6)
 ;; ⇒ 21
-</code></pre><p>Note that apply can not be used with macros.</p><p><a id="-_desc"></a></p><h3 id="-">-&gt;</h3><pre><code class="clojure">([x])
+</code></pre><p>Note that apply can not be used with macros.</p><p><a id="-gt_desc"></a></p><h3 id="-">-&gt;</h3><pre><code class="clojure">([x])
 ([x form])
 ([x form &amp; more])
 </code></pre><p><code>-&gt;</code> takes a value and optionally one or more expressions.</p><p><code>-&gt;</code> takes the first argument and inserts it as the second item in the
 next form, or creates a list with the first argument as the second
 item. The return value of that expression is inserted as the second
 item in the next form, making a list if necessary.  This continues
-until all expressions are evaluated and the final value is returned.</p><pre><code class="clojure">TBD: example
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="-_desc"></a></p><h3 id="--1">-&gt;&gt;</h3><pre><code class="clojure">([x])
+until all expressions are evaluated and the final value is returned.</p><pre><code class="clojure">(-&gt; 5
+    (inc)
+    (- 3)
+    (* 2))
+;; ⇒ 6
+(-&gt; {:a 1 :b 2}
+    :b
+    (inc))
+;; ⇒ 3
+</code></pre><p><a id="-gtgt_desc"></a></p><h3 id="--1">-&gt;&gt;</h3><pre><code class="clojure">([x])
 ([x form])
 ([x form &amp; more])
 </code></pre><p><code>-&gt;&gt;</code> takes a value and optionally one or more expressions.</p><p><code>-&gt;&gt;</code> takes the first argument and inserts it as the last item in the
 next form, or creates a list with the first argument as the last
 item. The return value of that expression is inserted as the last item
 in the next form, making a list if necessary.  This continues until
-all expressions are evaluated and the final value is returned.</p><p>TBD: Simple image accompaniment.</p><h2 id="associative-collections">Associative Collections</h2><p><a id="get-in_desc"></a></p><h3 id="get-in">get-in</h3><pre><code class="clojure">([m ks] [m ks not-found])
+all expressions are evaluated and the final value is returned.</p><pre><code class="clojure">(-&gt;&gt; (range 5) ; (0 1 2 3 4)
+     (map inc) ; (1 2 3 4 5)
+     (filter even?) ; (2 4)
+     (reduce +)) ; (+ 2 4)
+;; ⇒ 6
+</code></pre><h2 id="associative-collections">Associative Collections</h2><p><a id="get-in_desc"></a></p><h3 id="get-in">get-in</h3><pre><code class="clojure">([m ks] [m ks not-found])
 </code></pre><p><code>get-in</code> takes an associative collection, a sequence of keys and an optional default value.</p><p><code>get-in</code> takes the first value in the sequence of keys and retrieves
 the value, then applies each subsequent key to to the most recently
 returned value and returns the final result. If any key is not present
 when evaluated then either nil, or a provided default value is
 returned.</p><pre><code class="klipse-clojure nohighlight">(get-in {:profile {:personal {:age 28}}} [:profile :personal :age])
 ;= 28
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="update-in_desc"></a></p><h3 id="update-in">update-in</h3><pre><code class="clojure">([m [k &amp; ks] f &amp; args])
+</code></pre><p><a id="update-in_desc"></a></p><h3 id="update-in">update-in</h3><pre><code class="clojure">([m [k &amp; ks] f &amp; args])
 </code></pre><p><code>update-in</code> takes an associative collection, a sequence of keys, a
 function and optional arguments to supply to that function.</p><p><code>update-in</code> takes the first value in the sequence of keys and
 retrieves the value, then applies each subsequent key to to the most
@@ -576,16 +643,16 @@ does not exist. The returned collection will have a nested structure
 correlating to the provided sequence along with the result of the
 function and optional arguments as the value of the final key.</p><pre><code class="klipse-clojure nohighlight">(update-in {:profile {:personal {:age 28}}} [:profile :personal :age] inc)
 ;= {:profile {:personal {:age 29}}}
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="assoc-in_desc"></a></p><h3 id="assoc-in">assoc-in</h3><pre><code class="clojure">([m [k &amp; ks] v])
+</code></pre><p><a id="assoc-in_desc"></a></p><h3 id="assoc-in">assoc-in</h3><pre><code class="clojure">([m [k &amp; ks] v])
 </code></pre><p><code>assoc-in</code> takes an associative collection, a sequence of keys and a value.</p><p><code>assoc-in</code> takes the first value in the sequence of keys and retrieves
 the value, then applies each subsequent key to to the most recently
 returned value. The final key is assigned the provided value and a new
-nested collection is returned.</p><p><code>update-in</code> will create new hash-maps if a key in the sequence of keys
+nested collection is returned.</p><p><code>assoc-in</code> will create new hash-maps if a key in the sequence of keys
 does not exist. The returned collection will have a nested structure
 correlating to the provided sequence along with the provided value as
 the value of the final key.</p><pre><code class="klipse-clojure nohighlight">(assoc-in {:profile {:personal {:age 28}}} [:profile :personal :location] "Vancouver, BC")
 ;= {:profile {:personal {:location "Vancouver, BC", :age 28}}}
-</code></pre><p>TBD: Simple image accompaniment.</p><p><a id="select-keys_desc"></a></p><h3 id="select-keys">select-keys</h3><pre><code class="clojure">([map keyseq])
+</code></pre><p><a id="select-keys_desc"></a></p><h3 id="select-keys">select-keys</h3><pre><code class="clojure">([map keyseq])
 </code></pre><p><code>select-keys</code> takes an associative collection and a sequence of keys.</p><p><code>select-keys</code> returns a map containing only the entries that have a
 key which is also present in the sequence of keys.</p><pre><code class="klipse-clojure nohighlight">(select-keys {:a 1 :b 2 :c 3} [:a :b])
 ;= {:b 2, :a 1}
@@ -627,6 +694,8 @@ Nguyễn Hà Dương <a href="mailto:cmpitg@gmail.com">cmpitg@gmail.com</a></p>
                     <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
                     
                     <li><a href="/articles/language/functions/">Language: Functions</a></li>
+                    
+                    <li><a href="/articles/language/core_overview/">Language: clojure.core</a></li>
                     
                     <li><a href="/articles/language/collections_and_sequences/">Language: Collections and Sequences</a></li>
                     
