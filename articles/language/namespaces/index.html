@@ -59,15 +59,15 @@
     </div>
     
     <p>This guide covers:</p><ul><li>An overview of Clojure namespaces and vars</li><li>How to define namespaces</li><li>How to use functions in other namespaces</li><li><code>require</code>, <code>refer</code> and <code>use</code></li><li>Common compilation errors and typical problems that cause them</li><li>Namespaces and their relation to code compilation in Clojure</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure functions are organized into <em>namespaces</em>. Clojure namespaces
-are very similar to Java packages and Python modules. Namespaces are
-basically maps (dictionaries) that map names to <em>vars</em>. In many cases,
-those vars store functions in them.</p><h2 id="defining-a-namespace">Defining a Namespace</h2><p>Namespaces are usually defined using the <code>clojure.core/ns</code> macro. In its basic
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="overview">Overview</h2><p>Clojure functions are organized into <em>namespaces</em>. Clojure namespaces
+are similar to Java packages and Python modules. Namespaces are
+like maps (dictionaries) that map names to <em>vars</em>. In many cases,
+those vars store functions in them.</p><h2 id="defining-a-namespace">Defining a Namespace</h2><p>Namespaces are usually defined using the <code>clojure.core/ns</code> macro. In its most basic
 form, it takes a name as a symbol:</p><pre><code class="clojure">(ns superlib.core)
 </code></pre><p>Namespaces can have multiple segments, separated by a dot:</p><pre><code class="clojure">(ns megacorp.service.core)
 </code></pre><p>It is <strong>highly recommended</strong> to avoid using single segment namespaces
-(e.g. <code>superlib</code>) to avoid inconvenient conflicts other developers
-will have to work around. If a library or application belongs to an
+(e.g. <code>(ns superlib)</code>) to avoid potential conflicts with the way Java
+handles default packages. If a library or application belongs to an
 organization or a group of projects, the
 <code>[organization].[library|app].[group-of-functions]</code> pattern is
 recommended. For example:</p><pre><code class="clojure">(ns clojurewerkz.welle.kv)
@@ -82,14 +82,30 @@ namespaces from your code. For example:</p><pre><code class="clojure">(ns megaco
 </code></pre><p>This will make sure the <code>clojure.set</code> namespace is loaded, compiled, and available as <code>clojure.set</code>
 (using its fully qualified name). It is possible (and common) to make a namespace available
 under an alias:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
-  (:require [clojure.set :as cs]))
+  (:require [clojure.set :as set]))
 
 ;; Now it is possible to do:
-;; (cs/difference #{1 2 3} #{3 4 5})
-</code></pre><p>One more example with two required namespaces:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
-  (:require [clojure.set  :as cs]
+;; (set/difference #{1 2 3} #{3 4 5})
+</code></pre><p>It is common to use the last segment of the namespace name as the alias,
+as long as this does not cause a conflict with other namespaces that
+would have the same alias. Some namespaces have widely-used aliases
+that do not follow this pattern (e.g., <code>clojure.string</code> is usually
+aliased as <code>str</code>).</p><p>One more example with two required namespaces:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:require [clojure.set  :as set]
             [clojure.walk :as walk]))
-</code></pre><h4 id="the-refer-option">The :refer Option</h4><p>To make functions in <code>clojure.set</code> available in the defined namespace via short names
+</code></pre><p>When you <code>:require</code> / <code>:as</code>, the referenced namespace is loaded (and
+compiled) and therefore must exist as a source namespace. If you are
+working with qualified keywords, such as Spec names, you may want an
+alias to a qualified keyword that does not match a source namespace.
+<code>:require</code> / <code>:as-alias</code> can be used in that case to introduce an
+alias for a qualified name, without attempting to load a namespace.</p><pre><code class="clojure">(ns megacorp.profitd.example
+  (:require [megacorp.profitd.scheduling :as scheduling]
+            [megacorp.profitd :as-alias profitd]))
+</code></pre><p><code>megacorp.profitd.scheduling</code> must exist as a source namespace
+and will be loaded and compiled. <code>megacorp.profitd</code> does not need to
+exist as a source namespace and no attempt will be made to load it.
+You can then use <code>::profitd/data</code> to refer to the qualified keyword
+<code>:megacorp.profitd/data</code> without having to type the full name.</p><p>See <a href="https://guide.clojure.style/#use-idiomatic-namespace-aliases">Use Idiomatic Namespace Aliases</a> in the community style guide for more information on namespace aliases.</p><h4 id="the-refer-option">The :refer Option</h4><p>To make functions in <code>clojure.set</code> available in the defined namespace via short names
 (i.e., their unqualified names, without the <code>clojure.set</code> or other prefix), you can tell Clojure compiler
 to <em>refer</em> to certain functions:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
   (:require [clojure.set :refer [difference intersection]]))
@@ -101,7 +117,9 @@ to <em>refer</em> to certain functions:</p><pre><code class="clojure">(ns megaco
 
 ;; Now it is possible to do:
 ;; (difference #{1 2 3} #{3 4 5})
-</code></pre><h3 id="the-import-helper-form">The :import Helper Form</h3><p>The <code>:import</code> helper form is for setting up access to Java classes
+</code></pre><p>It is recommended you avoid <code>:refer :all</code> and prefer an alias instead.
+Use <code>:refer</code> to make specific functions available if it makes the
+code easier to read. A couple of good examples are:</p><ul><li><code>(:require [clojure.test :as test :refer [deftest is are]])</code></li><li><code>(:require [clojure.core.async :as async :refer [&lt;! &lt;!! &gt;! &gt;!!]])</code></li></ul><h3 id="the-import-helper-form">The :import Helper Form</h3><p>The <code>:import</code> helper form is for setting up access to Java classes
 from your Clojure code. For example:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
   (:import java.util.concurrent.Executors))
 </code></pre><p>This will make sure the <code>java.util.concurrent.Executors</code> class is imported and can be used by its short
@@ -114,19 +132,20 @@ it is possible to avoid some duplication by using an <em>import list</em>. The f
 of an import list is the package and other elements are class names in that package:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
   (:import [java.util.concurrent Executors TimeUnit]
            java.util.Date))
-</code></pre><p>Even though <em>import list</em> is called a list, it can be any Clojure collection (typically
-vectors are used).</p><h3 id="the-current-namespace">The Current Namespace</h3><p>Under the hood, Clojure keeps <strong>current namespace</strong> a special var, <a href="https://clojuredocs.org/clojure.core/*ns*">*ns*</a>.
+</code></pre><p>Even though <em>import list</em> is called a list, it can be a vector as
+shown here. Some people prefer to use lists for import lists, on
+the grounds that the first element is special: it's a package name
+and subsequent elements are class names.</p><h3 id="the-current-namespace">The Current Namespace</h3><p>Under the hood, Clojure tracks the <strong>current namespace</strong> in a special var, <a href="https://clojuredocs.org/clojure.core/*ns*">*ns*</a>.
 When vars are defined using the <a href="https://clojuredocs.org/clojure.core/def">def</a> special form, they are
 added to the current namespace.</p><h3 id="the-refer-clojure-helper-form">The :refer-clojure Helper Form</h3><p>Functions like <code>clojure.core/get</code> and macros like <code>clojure.core/defn</code> can be used without
-namespace qualification because they reside in the <code>clojure.core</code> namespace and Clojure
-compiler automatically <em>refers</em> all vars in it. Therefore, if your
+namespace qualification because they reside in the <code>clojure.core</code> namespace and the <code>ns</code> macro automatically <em>refers</em> all vars in <code>cloure.core</code> by default. Therefore, if your
 namespace defines a function with the same name (e.g. <code>find</code>), you will get a warning
 from the compiler, like this:</p><pre><code>WARNING: find already refers to: #'clojure.core/find in namespace: megacorp.profitd.scheduling, being replaced by: #'megacorp.profitd.scheduling/find
 </code></pre><p>This means that in the <code>megacorp.profitd.scheduling</code> namespace, <code>find</code> already refers to
 a value which happens to be <code>clojure.core/find</code>, but it is being replaced by a
 different value. Remember, Clojure is a very dynamic language and namespaces are
 basically maps, as far as the implementation goes. Most of the time, however,
-replacing vars like this is not intentional and Clojure compiler emits a warning.</p><p>To solve this problem, you can either rename your function, or else
+replacing vars like this is not intentional and Clojure compiler emits a warning.</p><p>To address this warning, you can either rename your function, or else
 exclude certain <code>clojure.core</code> functions from being
 referred using the <code>(:refer-clojure ...)</code> form within the <code>ns</code>:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
   (:refer-clojure :exclude [find]))
@@ -143,6 +162,23 @@ qualified name: <code>clojure.core/find</code>:</p><pre><code class="clojure">(n
   "Finds a needle in the haystack."
   [^String haystack]
   (clojure.core/find haystack :needle))
+</code></pre><p>Or introduce an alias for <code>clojure.core</code> to reduce the amount of typing:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find])
+  (:require [clojure.core :as core]))
+
+(defn find
+  "Finds a needle in the haystack."
+  [^String haystack]
+  (core/find haystack :needle))
+</code></pre><p><code>cc</code> is also a common alias used for <code>clojure.core</code> so it is less
+likely to conflict with a <code>core</code> alias from another namespace:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+  (:refer-clojure :exclude [find])
+  (:require [clojure.core :as cc]))
+
+(defn find
+  "Finds a needle in the haystack."
+  [^String haystack]
+  (cc/find haystack :needle))
 </code></pre><h3 id="the-use-helper-form">The :use Helper Form</h3><p>In Clojure versions before 1.4, there was no <code>:refer</code> support for the
 <code>(:require ...)</code> form. Instead, a separate form was used: <code>(:use ...)</code>:</p><pre><code class="clojure">(ns megacorp.profitd.scheduling-test
   (:use clojure.test))
@@ -153,22 +189,22 @@ functions that will be referred:</p><pre><code class="clojure">(ns megacorp.prof
   (:use clojure.test :only [deftest testing is]))
 </code></pre><p>which is a pre-1.4 alternative of</p><pre><code class="clojure">(ns megacorp.profitd.scheduling-test
   (:require clojure.test :refer [deftest testing is]))
-</code></pre><p>It is highly recommended to use <code>(:require ...)</code> (optionally with <code>... :refer [...]</code>) on Clojure 1.4
-and later releases. <code>(:use ...)</code> is a thing of the past and now that
+</code></pre><p>It is highly recommended to use <code>(:require ...)</code> (optionally with <code>... :refer [...]</code>) in modern Clojure code.
+<code>(:use ...)</code> is a thing of the past and now that
 <code>(:require ...)</code> with <code>:refer</code> is capable of doing the same thing when you
-need it, it is a good idea to let <code>(:use ...)</code> go.</p><h3 id="the-gen-class-helper-form">The :gen-class Helper Form</h3><p><em>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></em></p><h3 id="documentation-and-metadata">Documentation and Metadata</h3><p>Namespaces can have documentation strings. You can add one with the optional
-<code>ns</code> macro parameter:</p><pre><code class="clojure">(ns superlib.core
+need it, it is a good idea to let <code>(:use ...)</code> go.</p><h3 id="the-gen-class-helper-form">The :gen-class Helper Form</h3><p><em>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></em></p><h3 id="documentation-and-metadata">Documentation and Metadata</h3><p>Namespaces can have documentation strings. You can add one after
+the namespace name in the <code>ns</code> macro:</p><pre><code class="clojure">(ns superlib.core
   "Core functionality of Superlib.
 
    Other parts of Superlib depend on functions and macros in this namespace."
   (:require [clojure.set :refer [union difference]]))
-</code></pre><p>or metadata:</p><pre><code class="clojure">(ns ^{:doc "Core functionality of Superlib.
+</code></pre><p>or via metadata before the namespace name:</p><pre><code class="clojure">(ns ^{:doc "Core functionality of Superlib.
             Other parts of Superlib depend on functions and macros in this namespace."
       :author "Joe Smith"}
    superlib.core
   (:require [clojure.set :refer [union difference]]))
 </code></pre><p>Metadata can contain any additional keys such as <code>:author</code> which may be of use to various tools
-(such as <a href="https://clojars.org/codox">Codox</a>, <a href="https://clojars.org/cadastre">Cadastre</a>, or <a href="https://clojars.org/lein-clojuredocs">lein-clojuredocs</a>).</p><h2 id="how-to-use-functions-from-other-namespaces-in-the-repl">How to Use Functions From Other Namespaces in the REPL</h2><p>The <code>ns</code> macro is how you usually require functions from other namespaces.
+(such as <a href="https://clojars.org/codox">Codox</a> or <a href="https://cljdoc.org">cljdoc.org</a>).</p><h2 id="how-to-use-functions-from-other-namespaces-in-the-repl">How to Use Functions From Other Namespaces in the REPL</h2><p>The <code>ns</code> macro is how you usually require functions from other namespaces.
 However, it is not very convenient in the REPL. For that case, the <code>clojure.core/require</code> function
 can be used directly:</p><pre><code class="clojure">;; Will be available as clojure.set, e.g. clojure.set/difference.
 (require 'clojure.set)
@@ -176,13 +212,15 @@ can be used directly:</p><pre><code class="clojure">;; Will be available as cloj
 ;; Will be available as io, e.g. io/resource.
 (require '[clojure.java.io :as io])
 </code></pre><p>It takes a quoted <em><a href="/articles/language/glossary/#libspec">libspec</a></em>. The libspec is either a namespace name or
-a collection (typically a vector) of <code>[name :as alias]</code> or <code>[name :refer [fns]]</code>:</p><pre><code class="clojure">(require '[clojure.set :refer [difference]])
+a collection (typically a vector) of <code>[name :as alias]</code>,
+<code>[name :as-alias alias]</code>,
+or <code>[name :refer [fns]]</code>:</p><pre><code class="clojure">(require '[clojure.set :refer [difference]])
 
 (difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
-</code></pre><p>The <code>:as</code> and <code>:refer</code> options can be used together:</p><pre><code class="clojure">(require '[clojure.set :as cs :refer [difference]])
+</code></pre><p>The <code>:as</code> and <code>:refer</code> options can be used together:</p><pre><code class="clojure">(require '[clojure.set :as set :refer [difference]])
 
 (difference #{1 2 3} #{3 4 5 6})  ; ⇒ #{1 2}
-(cs/union #{1 2 3} #{3 4 5 6})    ; ⇒ #{1 2 3 4 5 6}
+(set/union #{1 2 3} #{3 4 5 6})    ; ⇒ #{1 2 3 4 5 6}
 </code></pre><p><code>clojure.core/use</code> does the same thing as <code>clojure.core/require</code> but with the
 <code>:refer</code> option (as discussed above). It is not generally recommended to use <code>use</code> with Clojure
 versions starting with 1.4. Use <code>clojure.core/require</code> with <code>:refer</code>
@@ -201,29 +239,38 @@ specify that a function is private: either via metadata or by using the <code>de
 (defn- data-stream
   [source]
   (comment ...))
-</code></pre><h2 id="constant-vars">Constant Vars</h2><p>Vars can be constant. This is done by setting the <code>:const</code> metadata key to <code>true</code>. This
-will cause Clojure compiler to compile it as a constant:</p><pre><code class="clojure">(ns megacorp.epicgame)
-
-;;
-;; Implementation
-;;
-
-(def ^{:const true}
-  default-score 100)
-</code></pre><h2 id="how-to-look-up-and-invoke-a-function-by-name">How to Look up and Invoke a Function by Name</h2><p>It is possible to look up a function in particular namespace by-name with <code>clojure.core/ns-resolve</code>. This takes
+</code></pre><h2 id="how-to-look-up-and-invoke-a-function-by-name">How to Look up and Invoke a Function by Name</h2><p>It is possible to look up a function in a particular namespace by-name with <code>clojure.core/ns-resolve</code>. This takes
 quoted names of the namespace and function. The returned value can be used just like any other
-function, for example, passed as an argument to a higher order function:</p><pre><code class="clojure">(ns-resolve 'clojure.set 'difference)  ; ⇒ #'clojure.set/difference
+function, for example, passed as an argument to a higher order function:</p><pre><code class="clojure">(require 'clojure.set) ; must happen before ns-resolve
+
+(ns-resolve 'clojure.set 'difference)  ; ⇒ #'clojure.set/difference
 
 (let [f (ns-resolve 'clojure.set 'difference)]
    (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
+</code></pre><p>The namespace must have already been loaded and compiled. If it has not, <code>ns-resolve</code> will throw an exception.</p><p>To resolve a symbol in the current namespace: <code>(ns-resolve *ns* 'foo)</code>.</p><p>A more commonly-used alternative to <code>ns-resolve</code> is <code>clojure.core/resolve</code> which takes a symbol (which may be qualified or not) and
+tries to resolve the symbol against the current namespace:</p><pre><code class="clojure">(require 'clojure.set) ; must happen before resolve
+
+(resolve 'clojure.set/difference)  ; ⇒ #'clojure.set/difference
+
+(let [f (resolve 'clojure.set/difference)]
+   (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
+</code></pre><p>Unlike <code>ns-resolve</code>, if the namespace has not already been loaded and compiled, <code>resolve</code> will return <code>nil</code> instead of throwing an exception.</p><p>If you want to resolve a symbol in a namespace that has not yet
+been loaded and compiled, use <code>requiring-resolve</code>:</p><pre><code class="clojure">;; no require of clojure.set needed:
+(let [f (requiring-resolve 'clojure.set/difference)]
+   (f #{1 2 3} #{3 4 5 6}))  ; ⇒ #{1 2}
 </code></pre><h2 id="compiler-exceptions">Compiler Exceptions</h2><p>This section describes some common compilation errors.</p><h3 id="classnotfoundexception">ClassNotFoundException</h3><p>This exception means that JVM could not load a class. It is either misspelled or not on the
 <a href="/articles/language/glossary/#classpath">classpath</a>.
-Potentially your project has unsatisfied dependency (some dependencies may be optional).</p><p>Example:</p><pre><code class="clojure">user=&gt; (import java.uyil.concurrent.TimeUnit)
-ClassNotFoundException java.uyil.concurrent.TimeUnit  java.net.URLClassLoader$1.run (URLClassLoader.java:366)
-</code></pre><p>In the example above, <code>java.uyil.concurrent.TimeUnit</code> should have been <code>java.util.concurrent.TimeUnit</code>.</p><h3 id="compilerexception-javalangruntimeexception-no-such-var">CompilerException java.lang.RuntimeException: No such var</h3><p>This means that somewhere in the code a non-existent var is used. It may be a typo, an
+Potentially your project has an unsatisfied dependency.</p><p>Example:</p><pre><code class="clojure">user=&gt; (import java.uyil.concurrent.TimeUnit)
+Execution error (ClassNotFoundException) at java.net.URLClassLoader/findClass (URLClassLoader.java:445).
+java.uyil.concurrent.TimeUnit
+</code></pre><p>In the example above, <code>java.uyil.concurrent.TimeUnit</code> should have been <code>java.util.concurrent.TimeUnit</code>:</p><pre><code class="clojure">user=&gt; (import java.util.concurrent.TimeUnit)
+java.util.concurrent.TimeUnit
+</code></pre><p>Note that <code>import</code> is a macro so the package and class names do not need to be quoted (unlike <code>require</code> which is a function and evaluates
+its arguments first).</p><h3 id="compilerexception-javalangruntimeexception-no-such-var">CompilerException java.lang.RuntimeException: No such var</h3><p>This means that somewhere in the code a non-existent var is used. It may be a typo, an
 incorrect macro-generated var name or a similar issue. Example:</p><pre><code class="clojure">user=&gt; (clojure.java.io/resouce "thought_leaders_quotes.csv")
-CompilerException java.lang.RuntimeException: No such var: clojure.java.io/resouce, compiling:(NO_SOURCE_PATH:1)
-</code></pre><p>In the example above, <code>clojure.java.io/resouce</code> should have been <code>clojure.java.io/resource</code>. <code>NO_SOURCE_PATH</code>
+Syntax error compiling at (REPL:1:1).
+No such var: clojure.java.io/resouce
+</code></pre><p>In the example above, <code>clojure.java.io/resouce</code> should have been <code>clojure.java.io/resource</code>. <code>REPL:1:1</code>
 means that compilation was triggered from the REPL and not a Clojure source file.</p><h2 id="temporarily-overriding-vars-in-namespaces">Temporarily Overriding Vars in Namespaces</h2><p><em>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></em></p><h2 id="getting-information-about-and-programmatically-manipulating-namespaces">Getting Information About and Programmatically Manipulating Namespaces</h2><p><em>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></em></p><h2 id="wrapping-up">Wrapping Up</h2><p>Namespaces are basically maps (dictionaries) that map names to
 vars. In many cases, those vars store functions in them.</p><p>This implementation lets Clojure have many of its highly dynamic
 features at a very reasonable runtime overhead cost. For example, vars
@@ -267,6 +314,8 @@ in namespaces can be temporarily altered for unit testing purposes.</p><h2 id="c
                     <li><a href="/articles/language/core_overview/">Language: clojure.core</a></li>
                     
                     <li><a href="/articles/language/collections_and_sequences/">Language: Collections and Sequences</a></li>
+                    
+                    <li><a href="/articles/language/namespaces/">Language: Namespaces</a></li>
                     
                     <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
                     
