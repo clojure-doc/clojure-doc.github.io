@@ -719,7 +719,7 @@ Note that for collections that do not guarantee order like some maps and sets, t
 ;; ⇒ '()
 ```
 
-The behaviour of `rest` should be contrasted with `next`. `next` returns nil if the collection only has a single item. This is important when considering "truthiness" of values since an empty seq is "true" but nil is not.
+The behaviour of `rest` should be contrasted with `next`. `next` returns `nil` if the collection only has a single item. This is important when considering "truthiness" of values since an empty seq is still a truthy value but `nil` is not.
 
 ```klipse-clojure
 (if (rest '("stuff"))
