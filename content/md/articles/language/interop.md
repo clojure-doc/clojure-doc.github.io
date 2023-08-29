@@ -1,5 +1,5 @@
 {:title "Language: Java Interop"
- :sidebar-omit? true :page-index 2500
+ :page-index 2500
  :layout :page}
 
 This guide covers:
@@ -16,25 +16,26 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.5.
+This guide covers Clojure 1.11.
 
 
 ## Overview
 
-Clojure was designed to be a hosted language that directly interoperates with its host platform (JVM, CLR and so on).
-Clojure code is compiled to JVM bytecode. For method calls on Java objects, Clojure compiler
+Clojure was designed to be a hosted language that directly interoperates with its host platform (JVM, JS, CLR and so on).
+Clojure code is compiled to JVM bytecode. For method calls on Java objects, the Clojure compiler
 will try to emit the same bytecode `javac` would produce.
 
-It is possible to implement interfaces, extend and generate Java classes in Clojure.
+It is possible to implement interfaces, and to extend and generate Java classes in Clojure.
 
-Clojure also provides convenient functions and macros that make consuming of Java libraries
+Clojure also provides convenient functions and macros that make consuming Java libraries
 easier and often more concise than it would be in Java code.
 
+See also the [official Java interop reference](https://clojure.org/reference/java_interop) on clojure.org.
 
 ## Imports
 
 Java classes can be referenced either using their fully-qualified names (FQNs) such as
-`java.util.Date` or be *imported* in the current Clojure namespace using `clojure.core/import` and
+`java.util.Date` or be *imported* in the current Clojure namespace using `clojure.core/import` (or the `:import` clause of `ns`) and
 referenced by short names:
 
 ``` clojure
@@ -47,7 +48,7 @@ java.util.Date  ; ⇒ java.util.Date
 Date  ; ⇒ java.util.Date
 ```
 
-`ns` macro supports imports, too:
+The `ns` macro supports imports, too:
 ``` clojure
 (ns myservice.main
   (:import java.util.Date))
@@ -60,7 +61,7 @@ protocol/service/feature and it is not possible to tell which one should be used
 
 ### Automatic Imports For java.lang.*
 
-Classes from the `java.lang` package are automatically imported. For example, you can use `String` or `Math`
+Most classes from the `java.lang` package are automatically imported. For example, you can use `String` or `Math`
 without explicitly importing them:
 
 ``` clojure
@@ -70,6 +71,14 @@ without explicitly importing them:
 
 (Math/round 0.7886)
 ```
+
+You can avoid most direct uses of `java.lang.String` by using the
+`clojure.string` namespace.
+You can avoid most uses of `java.lang.Math` by using the `clojure.math`
+namespace (added in Clojure 1.11).
+
+Clojure is compatible with Java 8 and later, so classes and interfaces
+added to Java 9 and later are not automatically imported.
 
 
 ### Inner (Nested) Classes
@@ -148,7 +157,7 @@ Static methods can be invoked with the same `.` special form:
 (. Math floor 5.677)  ; ⇒ 5.0
 ```
 
-or (typically) to sugared version, `ClassName/methodName`:
+or (typically) the sugared version, `ClassName/methodName`:
 
 ``` clojure
 (Math/floor 5.677)  ; ⇒ 5.0
@@ -163,13 +172,13 @@ or (typically) to sugared version, `ClassName/methodName`:
 It is possible to chain method calls using the `..` special form:
 
 ``` clojure
-(.. (java.util.Date.) getTime toString)  ; ⇒ "1349821993809"
+(.. (java.util.Date.) getTime toString)  ; ⇒ "1693344712616"
 ```
 
 
 ### Multiple Calls On the Same Object
 
-If you need to call a bunch of methods on a mutable object, you
+If you need to call several methods on the same (mutable) object, you
 can use the `doto` macro:
 
 ``` clojure
@@ -188,7 +197,8 @@ can use the `doto` macro:
     (.translate  0 10)))  ; ⇒ #<Point java.awt.point[x=10,y=10]
 ```
 
-The `doto` macro returns its first argument as a result.
+Each method is called on the original object -- the first argument
+to `doto` -- and it returns that same object as the result.
 
 
 ## How to Access Java Fields
@@ -206,7 +216,7 @@ It's done with the same dot special form:
   (. pt y))  ; ⇒ 10
 ```
 
-and just like with instance methods, it is much more common to see the following version:
+and just like with instance methods, it is more common to see the following version:
 
 ``` clojure
 (import java.awt.Point)
@@ -218,6 +228,19 @@ and just like with instance methods, it is much more common to see the following
   (.y pt))  ; ⇒ 10
 ```
 
+For compatibility with ClojureScript, the following syntax is also supported for field access:
+
+``` clojure
+(import java.awt.Point)
+
+(let [pt (Point. 0 10)]
+  (.-x pt))  ; ⇒ 0
+
+(let [pt (Point. 0 10)]
+  (.-y pt))  ; ⇒ 10
+```
+
+This is to distinguish between field access and method access.
 
 ## How to Set Java Fields
 
@@ -228,8 +251,8 @@ demonstrated earlier and a new value:
 (import java.awt.Point)
 
 (let [pt (Point. 0 10)]
-  (set! (.y pt) 100)
-  (.y pt))  ; ⇒ 100
+  (set! (.-y pt) 100)
+  (.-y pt))  ; ⇒ 100
 ```
 
 Fortunately, mutable public fields are rare to meet in the JVM ecosystem so you won't need
@@ -239,7 +262,7 @@ to do this often.
 ## How To Work With Enums
 
 [Enums (enumeration) type](https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html) values are accessed
-the same way as fields, except on enum classes and not objects:
+the same way as static fields, except on enum classes:
 
 ``` clojure
 java.util.concurrent.TimeUnit/MILLISECONDS  ; ⇒ #< MILLISECONDS>
@@ -258,7 +281,7 @@ To get class of a particular value, pass it to `clojure.core/class`:
 ```
 
 As this example demonstrates, Clojure strings are JVM strings, integer literals are compiled
-as longs and floating point literals are compiled as doubles.
+as (boxed) longs and floating point literals are compiled as (boxed) doubles.
 
 You can also use `clojure.core/type` to return either the class of the
 Java object, or the `:type` metadata if it exists:
@@ -282,8 +305,18 @@ To obtain a class reference by its string name (fully qualified), use `Class/for
 ### Array Types, Primitives
 
 JVM has what is called **primitive types** (numerics, chars, booleans) that are not "real" objects.
-In addition, array types have pretty obscure internal names. If you need to obtain a reference to
-an array of longs, for example, pass `"[[J"` to `Class/forName`. Below is the full table:
+In addition, array types have pretty obscure internal names.
+
+An array of `String`, has a name of `"[Ljava.lang.String;"`.
+You can construct an array of `String` using `into-array`:
+
+``` clojure
+(class (into-array String ["foo" "bar" "baz"]))
+;; ⇒ [Ljava.lang.String;
+```
+
+If you need to obtain a reference to
+an array of primitives, for example longs, pass `"[J"` to `Class/forName`. Below is the full table:
 
 <table class="table-striped table-bordered table">
   <thead>
@@ -295,39 +328,49 @@ an array of longs, for example, pass `"[[J"` to `Class/forName`. Below is the fu
 
   <tbody>
     <tr>
-      <td><pre>"[[S"</pre></td>
+      <td><pre>"[S"</pre></td>
       <td>short</td>
     </tr>
     <tr>
-      <td><pre>"[[I"</pre></td>
+      <td><pre>"[I"</pre></td>
       <td>integer</td>
     </tr>
     <tr>
-      <td><pre>"[[J"</pre></td>
+      <td><pre>"[J"</pre></td>
       <td>long</td>
     </tr>
     <tr>
-      <td><pre>"[[F"</pre></td>
+      <td><pre>"[F"</pre></td>
       <td>float</td>
     </tr>
     <tr>
-      <td><pre>"[[D"</pre></td>
+      <td><pre>"[D"</pre></td>
       <td>double</td>
     </tr>
     <tr>
-      <td><pre>"[[B"</pre></td>
+      <td><pre>"[B"</pre></td>
       <td>byte</td>
     </tr>
     <tr>
-      <td><pre>"[[C"</pre></td>
+      <td><pre>"[C"</pre></td>
       <td>char</td>
     </tr>
     <tr>
-      <td><pre>"[[Z"</pre></td>
+      <td><pre>"[Z"</pre></td>
       <td>boolean</td>
     </tr>
   </tbody>
 </table>
+
+For convenience, Clojure has `*-array` functions for each of the above
+types that help you create an array of primitive values:
+
+``` clojure
+user=> (char-array [\h \e \l \l \o])
+#object["[C" 0x7df60067 "[C@7df60067"]
+user=> (apply str *1)
+"hello"
+```
 
 If this does not make much sense, don't worry. Just remember to come
 back to this guide when you need to extend a protocol for an array of
@@ -347,6 +390,7 @@ Interfaces are implemented using the `reify` special form.
 Given the following Java interface:
 
 ``` java
+/* from java.io package */
 public
 interface FilenameFilter {
     /**
@@ -390,7 +434,7 @@ the interface:
 (let [ff (reify java.io.FilenameFilter
            (accept [this dir name]
              true))]
-  (instance? java.io.FileFilter ff))  ; ⇒ true
+  (instance? java.io.FilenameFilter ff))  ; ⇒ true
 ```
 
 `reify` can be used to implement multiple interfaces at once:
@@ -408,16 +452,18 @@ the interface:
 
 ### reify, Parameter Destructuring and Varargs
 
-`reify` does not support destructuring or variadic number of arguments in method signatures.
-For example, the following will not work and won't even compile in Clojure 1.5:
+`reify` does not support destructuring or variadic arguments in method signatures. You will not always get an error from the compiler if you try to use them, but the resulting code will not work the way you expect.
+For example:
 
 ``` clojure
-(reify com.megacorp.api.AnInterface
-  (aMethod [a [b c]]
-    (comment ...))
-  (anotherMethod [a & rest]
+(reify java.io.FilenameFilter
+  (accept [a & more]
     (comment ...)))
 ```
+
+This will compile without error but when called, the first argument to
+`accept` -- the directory object -- will be bound to `&` and the second
+argument to `accept` -- the filename string -- will be bound to `more`.
 
 ### Example 1
 
@@ -425,12 +471,13 @@ The following example demonstrates how instances created with `reify` are passed
 as regular Java objects:
 
 ``` clojure
+(require '[clojure.string :as str])
 (import java.io.File)
 
 ;; a file filter implementation that keeps only .clj files
 (let [ff (reify java.io.FilenameFilter
            (accept [this dir name]
-             (.endsWith name ".clj")))
+             (str/ends-with? name ".clj")))
     dir  (File. "/Users/antares/Development/ClojureWerkz/neocons.git/")]
   (into [] (.listFiles dir ff)))
 ;; ⇒ [#<File /Users/antares/Development/ClojureWerkz/neocons.git/project.clj>]
@@ -443,8 +490,8 @@ methods delegate to Clojure functions. The same example, rewritten with delegati
 user> (import java.io.File)
 
 ;; a file filter implementation that keeps only .clj files
-(let [f  (fn [^File dir ^String name]
-           (.endsWith name ".clj"))
+(let [f  (fn [_dir name]
+           (str/ends-with? name ".clj"))
       ff (reify java.io.FilenameFilter
            (accept [this dir name]
              (f dir name)))
@@ -453,34 +500,37 @@ user> (import java.io.File)
 ;; ⇒ [#<File /Users/antares/Development/ClojureWerkz/neocons.git/project.clj>]
 ```
 
-Note that unlike in the "inline" implementation, Clojure compiler cannot infer types of
-`dir` and `name` parameters in the function that does the filtering, so we added type hints
-to avoid reflective calls. When methods are implemented "inline", types can be inferred from
+We have used `clojure.string/ends-with?` so that no type hints
+are required: unlike in the "inline" implementation (above),
+the Clojure compiler would not be able to infer the types of
+`_dir` and `name` parameters in the function that does the filtering.
+When methods are implemented "inline", types can be inferred from
 method signatures in the interface.
 
 
 ## Extending Java Classes With proxy
 
 `proxy` is one of two ways to generate instances of anonymous classes in Clojure.
-`proxy` takes two vectors: one listing its superclass and (optional) interfaces, another constructor signatures, as well as
-method implementations. Method implementations are basically identical to `reify` except that the `this` argument is
+`proxy` takes two vectors: one listing its superclass and (optional) interfaces, the other listing constructor signatures, as well as
+zero or more
+method implementations. Method implementations are identical to `reify` except that the `this` argument is
 not necessary.
 
 A very minimalistic example, we instantiate an anonymous class that extends `java.lang.Object`, implements no
-interfaces, has no explictly defined constructors and overrides `#toString`:
+interfaces, has no explicitly defined constructors and overrides `#toString`:
 
 ``` clojure
 (proxy [Object] []
-        (toString []
-          "I am an instance of an anonymous class generated via proxy"))
+       (toString []
+         "I am an instance of an anonymous class generated via proxy"))
 ;; ⇒ #<Object$0 I am an instance of an anonymous class generated via proxy>
 ```
 
-Clojure compiler will generate an anonymous class for this `proxy` and at runtime, the cost of
-a `proxy` call is the cost of instantiating this class (the class is not generated anew on every single call).
+The Clojure compiler will generate an anonymous class for this `proxy` and, at runtime, the cost of
+a `proxy` call is the cost of instantiating this class (the class itself is generated just once).
 
 A slightly more complex example where the generated class also implements `java.lang.Runnable` (runnable objects
-are commonly used with threads and `java.util.concurrent` classes) which defines one method, `#run`:
+are commonly used with threads and `java.util.concurrent` classes) which defines one method, `run`:
 
 ``` clojure
 ;; extends java.lang.Object, implements java.lang.Runnable
@@ -525,26 +575,27 @@ For example, to run a function in a new thread:
 Or submit a function for execution to a thread pool (in JDK terms: an execution service):
 
 ``` clojure
-(import '[java.util.concurrent Executors ExecutorService Callable])
+(import [java.util.concurrent Executors ExecutorService Callable])
 
 (let [^ExecutorService pool (Executors/newFixedThreadPool 16)
-      ^Callable  clbl       (cast Callable (fn []
-                                             (reduce + (range 0 10000))))
+      ^Callable  clbl       (fn []
+                              (reduce + (range 0 10000)))
       task                  (.submit pool clbl)]
   (.get task))
 ;; ⇒ 49995000
 ```
 
-Note that without the cast, Clojure compiler would not be able to determine
+Note that without the `^Callable` type, Clojure compiler would not be able to determine
 which exact version of the method we intend to invoke, because `java.util.concurrent.ExecutionService/submit`
 has two versions, one for `Runnable` and one for `Callable`. They work very much the same but return
-slightly different results (`Callable` produces a value while `Runnable` always returns nil when
+slightly different results (`Callable` produces a value while `Runnable` always returns `nil` when
 executed).
 
-The exception we would get without the cast is
+The exception we would get without the type hint is
 
 ```
-CompilerException java.lang.IllegalArgumentException: More than one matching method found: submit, compiling:(NO_SOURCE_PATH:2)
+Syntax error (IllegalArgumentException) compiling . at (REPL:4:29).
+More than one matching method found: submit
 ```
 
 
@@ -554,7 +605,7 @@ CompilerException java.lang.IllegalArgumentException: More than one matching met
 
 `gen-class` is a Clojure feature for implementing Java classes in Clojure. It is relatively
 rarely used compared to `proxy` and `reify` but is needed to implement executable classes
-(that `java` runner and IDEs can as program entry points).
+(that `java` runners and IDEs can use as program entry points).
 
 Unlike `proxy` and `reify`, `gen-class` defines named classes. They can be passed to Java
 APIs that expect class references. Classes defined with `gen-class` can extend
