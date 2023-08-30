@@ -259,7 +259,7 @@ documentation for each editor.
 A brief tutorial/walkthrough of building a small web app using Ring,
 Compojure, Hiccup, and H2.
 
-### [Building Projects: `tools.build` and the Clojure CLI](/articles/cookbook/cli_build_projects/)
+### [Building Projects: `tools.build` and the Clojure CLI](/articles/cookbooks/cli_build_projects/)
 
 This cookbook shows you the power of the `tools.build`
 library, which is used with a `build.clj` file and the
