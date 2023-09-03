@@ -209,6 +209,21 @@ user=> (let [point1 {:x 2 :y 0}
 
 ## Lists
 
+### Intro
+Lists are primarily used for code in Clojure. While there aren't a ton of functions aimed specifically at lists, lists do implement the sequence interface, so all sequence functions work on lists without any conversion.
+
+### Accessing Elements
+Like vectors, lists implement the stack protocol, but unlike vectors, the 'top' of the stack is the front of the list. So, 'first' on a list returns the same element as peek (the top of the stack), but on a vector 'first' returns the bottom of the stack (this can be useful for queueing in LIFO vs FIFO order, for example).
+```clojure
+user=> (peek '(1 2 3))
+1
+user=> (pop '(1 2 3))
+(2 3)
+```
+
 ## Sets
+
+### Intro
+
 
 ## Sequences
