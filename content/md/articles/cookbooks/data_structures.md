@@ -1,4 +1,4 @@
-{:title "Data Structures (Help wanted)"
+{:title "Data Structures"
  :layout :page :page-index 4050 :toc :ul}
 
 
@@ -265,5 +265,3 @@ user=> (let [owners #{{:name "Jane" :pet "Fido"}
 #{{:name "Jane", :species "dog"} 
   {:name "Tim", :species "snake"}}
 ```
-
-## Sequences
