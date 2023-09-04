@@ -1,5 +1,5 @@
-{:title "Polymorphism in Clojure: Protocols and Multimethods"
- :sidebar-omit? true :page-index 102700
+{:title "Language: Polymorphism"
+ :page-index 2600
  :klipse true
  :layout :page}
 
@@ -15,7 +15,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.5.
+This guide covers Clojure 1.11.
 
 
 ## Overview
@@ -27,7 +27,7 @@ According to Wikipedia,
 Polymorphism is not at all unique to object-oriented programming languages. Clojure has excellent support for
 polymorphism.
 
-For example, when a function can be used on multiple data types or behave differently based on additional argument
+For example, when a function can be used on multiple data types or behave differently based on the arguments
 (often called *dispatch value*), that function is *polymorphic*. A simple example of such function is a function that
 serializes its input to JSON (or other format).
 
@@ -46,49 +46,45 @@ The former is implemented using *protocols*, a feature first introduced in Cloju
 ## Type-based Polymorphism With Protocols
 
 It is common for polymorphic functions to *dispatch* (pick implementation) on the type of the first argument. For example,
-in Java or Ruby, when calling `#toString` or `#to_s` on an object, the exact implementation is located using that object's
+in Java or Ruby, when calling `toString()` or `#to_s` on an object, the exact implementation is located using that object's
 type.
 
 Because this is a common case and because JVM can optimize this dispatch logic very well, Clojure 1.2 introduced a new
-feature called *protocols*. Protocols are simply groups of functions. Each of the functions can have different
-implementations for different data types.
+feature called *protocols*. Protocols are groups of functions
+that are intended to be implemented for multiple data types.
+Each function can have a different
+implementation for each different data types.
 
-Protocols are defined using the `clojure.core/defprotocol` special form. The example below defines a protocol for working with URLs and URIs.
+Protocols are defined using the `clojure.core/defprotocol` macro. The example below defines a protocol for working with URLs and URIs.
 While URLs and URIs are not the same thing, some operations make sense for both:
 
 ``` clojure
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
-  (^String protocol-of  [input] "Returns protocol of given input")
-  (^String host-of      [input] "Returns host of given input")
-  (^String port-of      [input] "Returns port of given input")
-  (^String user-info-of [input] "Returns user information of given input")
-  (^String path-of      [input] "Returns path of given input")
-  (^String query-of     [input] "Returns query string of given input")
-  (^String fragment-of  [input] "Returns fragment of given input"))
+  (protocol-of  [input] "Returns protocol of given input")
+  (host-of      [input] "Returns host of given input")
+  (port-of      [input] "Returns port of given input")
+  (user-info-of [input] "Returns user information of given input")
+  (path-of      [input] "Returns path of given input")
+  (query-of     [input] "Returns query string of given input")
+  (fragment-of  [input] "Returns fragment of given input"))
 ```
 
 `clojure.core/defprotocol` takes the name of the protocol and one or more lists of
 **function name**, **argument list**, **documentation string**:
 
 ``` clojure
-(^String protocol-of  [input] "Returns protocol of given input")
-(^String host-of      [input] "Returns host of given input")
+(protocol-of  [input] "Returns protocol of given input")
+(host-of      [input] "Returns host of given input")
 ```
 
-The example above uses return type hints. This makes sense in the example but is not necessary. It could have been written
-it as
+If you need to type hint a protocol function's return type, the
+hint should go before the argument list, as in a regular Clojure
+function:
 
-```clojure
-(defprotocol URLLike
-  "Unifies operations on URLs and URIs"
-  (protocol-of  [input] "Returns protocol of given input")
-  (host-of      [input] "Returns hostname of given input")
-  (port-of      [input] "Returns port of given input")
-  (user-info-of [input] "Returns user information (username:password) of given input")
-  (path-of      [input] "Returns path of given input")
-  (query-of     [input] "Returns query string of given input")
-  (fragment-of  [input] "Returns fragment of given input"))
+``` clojure
+(protocol-of  ^String [input] "Returns protocol of given input")
+(host-of      ^String [input] "Returns host of given input")
 ```
 
 There are 3 ways URIs and URLs are commonly represented on the JVM:
@@ -98,7 +94,7 @@ There are 3 ways URIs and URLs are commonly represented on the JVM:
  * Strings
 
 When a new protocol imlementation is added for a type, it is called **extending the protocol**. The most common way to extend
-a protocol is via the `clojure.core/extend-protocol`:
+a protocol is via `clojure.core/extend-protocol`:
 
 ``` clojure
 (import java.net.URI)
@@ -142,8 +138,8 @@ a protocol is via the `clojure.core/extend-protocol`:
 Protocol functions are used just like regular Clojure functions:
 
 ``` clojure
-(protocol-of (URI. "https://clojure-doc.org")) ;= "http"
-(protocol-of (URL. "https://clojure-doc.org")) ;= "http"
+(protocol-of (URI. "https://clojure-doc.org")) ;= "https"
+(protocol-of (URL. "https://clojure-doc.org")) ;= "https"
 
 (path-of (URL. "https://clojure-doc.org/articles/content.html")) ;= "/articles/content/"
 (path-of (URI. "https://clojure-doc.org/articles/content.html")) ;= "/articles/content/"
@@ -151,7 +147,7 @@ Protocol functions are used just like regular Clojure functions:
 
 ### Using Protocols From Different Namespaces
 
-Protocol functions are required and used the same way as regular protocol functions. Consider a
+Protocol functions are required and used the same way as regular functions. Consider a
 namespace that looks like this
 
 ``` clojure
@@ -160,13 +156,13 @@ namespace that looks like this
 
 (defprotocol URLLike
   "Unifies operations on URLs and URIs"
-  (^String protocol-of  [input] "Returns protocol of given input")
-  (^String host-of      [input] "Returns host of given input")
-  (^String port-of      [input] "Returns port of given input")
-  (^String user-info-of [input] "Returns user information of given input")
-  (^String path-of      [input] "Returns path of given input")
-  (^String query-of     [input] "Returns query string of given input")
-  (^String fragment-of  [input] "Returns fragment of given input"))
+  (protocol-of   [input] "Returns protocol of given input")
+  (host-of       [input] "Returns host of given input")
+  (port-of       [input] "Returns port of given input")
+  (user-info-of  [input] "Returns user information of given input")
+  (path-of       [input] "Returns path of given input")
+  (query-of      [input] "Returns query string of given input")
+  (fragment-of   [input] "Returns fragment of given input"))
 
 (extend-protocol URLLike
   URI
@@ -290,7 +286,7 @@ Implementation for circles looks very similar, we choose `:circle` as a reasonab
 ;= 28.274333882308138
 ```
 
-For the record, `Math/PI` in this example refers to `java.lang.Math/PI`, a field that stores the value of Pi.
+For the record, `Math/PI` in this example refers to `java.lang.Math/PI`, a field that contains the value of Pi.
 
 Finally, an implementation for triangles. Here you can see that exact implementations can take different number of
 arguments. To calculate the area of a triangle, we multiple base by height and divide it by 2:

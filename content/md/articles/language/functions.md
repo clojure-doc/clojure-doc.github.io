@@ -1,5 +1,5 @@
-{:title "Functions in Clojure"
- :sidebar-omit? true :page-index 102300
+{:title "Language: Functions"
+ :page-index 2100
  :klipse true
  :layout :page}
 
@@ -17,7 +17,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.5.
+This guide covers Clojure 1.11.
 
 
 ## Overview
@@ -47,6 +47,16 @@ are part of the public API:
     (/ (Math/floor (* d factor)) factor)))
 ```
 
+The benefit of writing docstrings is that they show up in editors and the REPL:
+
+``` clojure
+user=> (doc round)
+user/round
+([d precision])
+Round down a double to the given precision (number of significant digits)
+nil
+```
+
 In Clojure, function arguments may have optional type hints:
 
 ``` clojure
@@ -56,24 +66,50 @@ In Clojure, function arguments may have optional type hints:
     (/ (Math/floor (* d factor)) factor)))
 ```
 
-Type hints sometimes allow the compiler to avoid reflective method calls and/or produce significantly more efficient bytecode.
-However, as a rule of thumb, it is usually not necessary to use type hints. Start writing your code without them. The compiler
+The result of a function can also have a type hint (note that it goes in
+front of the argument list, not in front of the function name):
+
+``` clojure
+(defn round
+  ^double [^double d ^long precision]
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+```
+
+Type hints sometimes allow the compiler to avoid reflective method calls
+when using Java interop (as the above examples do) and may produce
+significantly more efficient bytecode.
+However, as a rule of thumb, it is usually not necessary to use type hints.
+Start writing your code without them. The compiler
 is also free to ignore provided hints.
 
+The examples above use Java interop (static methods of the `java.lang.Math` class).
+As of Clojure 1.11, `clojure.math` is available and provides a more idiomatic
+way to perform mathematical operations that do not need type hints:
+
+``` clojure
+(require '[clojure.math :as math])
+(defn round
+  [d precision]
+  (let [factor (math/pow 10 precision)]
+    (/ (math/floor (* d factor)) factor)))
+```
 
 Functions can also define *preconditions* and *postconditions* that put restrictions on argument values and
 the value function returns:
 
 ``` clojure
+(require '[clojure.math :as math])
 (defn round
   "Round down a double to the given precision (number of significant digits)"
-  [^double d ^long precision]
+  [d precision]
   {:pre [(not-nil? d) (not-nil? precision)]}
-  (let [factor (Math/pow 10 precision)]
-    (/ (Math/floor (* d factor)) factor)))
+  (let [factor (math/pow 10 precision)]
+    (/ (math/floor (* d factor)) factor)))
 ```
 
-In the example above, we use preconditions to check that both arguments are not nil. The `not-nil?` macro (or function) is not
+In the example above, we use preconditions to check that both arguments are not
+nil. The `not-nil?` macro (or function) is not
 demonstrated in this example and assumed to be implemented elsewhere.
 
 
@@ -86,7 +122,7 @@ Anonymous functions are defined using the `fn` special form:
   (* 2 x))
 ```
 
-Anonymous functions can be assigned to locals, passed between functions (higher order functions are covered later in this document)
+Anonymous functions can be bound to locals, passed between functions (higher order functions are covered later in this document)
 and returned from functions:
 
 ```klipse-clojure
@@ -115,7 +151,7 @@ Please **use this reader macro sparingly**; excessive use may lead to unreadable
 
 ## How To Invoke Functions
 
-Functions are invoked by placing a function to the leading position (*the calling position*) of a list:
+Functions are invoked by placing a function in the leading position (*the calling position*) of a list:
 
 <pre style="visibility:hidden; height:0;"><code class="klipse-clojure" >
 (import '(goog.string format))
@@ -151,11 +187,12 @@ as a collection.
 Functions in Clojure can have multiple *arities*, or sets of arguments:
 
 ``` clojure
+(require '[clojure.math :as math])
 (defn tax-amount
   ([amount]
      (tax-amount amount 35))
   ([amount rate]
-     (Math/round (double (* amount (/ rate 100))))))
+     (math/round (double (* amount (/ rate 100))))))
 ```
 
 In the example above, the version of the function that takes only one argument (so called *one-arity* or *1-arity* function)
@@ -163,19 +200,20 @@ calls another version (*2-arity*) with a default parameter. This is a common use
 argument values. Clojure is a hosted language and JVM (and JavaScript VMs, for that matter) does not support default argument
 values, however, it does support *method overloading* and Clojure takes advantage of this.
 
-Arities in Clojure can only differ by the number of arguments, not types. This is because Clojure is strongly dynamically typed language and type information about
+Arities in Clojure can only differ by the number of arguments, not types.
+This is because Clojure is a strongly dynamically typed language and type information about
 parameters may or may not be available to the compiler.
 
 A larger example:
 
 ``` clojure
-(defn range
+(defn my-range
   ([]
-    (range 0 Double/POSITIVE_INFINITY 1))
+    (my-range 0 Double/POSITIVE_INFINITY 1))
   ([end]
-    (range 0 end 1))
+    (my-range 0 end 1))
   ([start end]
-    (range start end 1))
+    (my-range start end 1))
   ([start end step]
     (comment Omitted for clarity)))
 ```
@@ -372,7 +410,9 @@ As you can see, optional arguments (`args`) are packed into a list.
 
 Named parameters are achieved through the use of destructuring a variadic function.
 
-Approaching named parameters from the standpoint of destructuring a variadic function allows for more clearly readable function invocations.  This is an example of named parameters:
+Approaching named parameters from the standpoint of destructuring a variadic
+function allows for more clearly readable function invocations.
+This is an example of named parameters:
 
 ```klipse-clojure
 (defn job-info
@@ -395,6 +435,22 @@ Using the function looks like this:
 ```
 
 Without the use of a variadic argument list, you would have to call the function with a single map argument such as `{:name "Robert" :job "Engineer}`.
+
+As of Clojure 1.11, you can also pass named parameters as a map:
+
+``` clojure
+(job-info {:name "Robert" :job "Engineer"})
+;;=> ["Robert" "Engineer" "$0.00"]
+```
+
+``` clojure
+(job-info {}:job "Engineer"})
+;;=> No name specified
+```
+
+This allows for easier programmatic invocation of functions with named parameters
+where you might be building a map of parameters and passing it through your code.
+
 
 Keyword default values are assigned by use of the `:or` keyword followed by a map of keywords to their default value.
 Keywords not present and not given a default will be nil.
@@ -446,8 +502,8 @@ and the `->` macro:
 
 ```klipse-clojure
 (-> [{:age 45 :name "Joe"} {:age 42 :name "Jill"}]
-     first
-     :name)
+    first
+    :name)
 ;; ⇒ "Joe"
 ```
 

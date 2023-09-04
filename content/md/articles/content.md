@@ -34,6 +34,13 @@ editor setup that allows you to program interactively.
 
 If you're new to Clojure, this is a good place to start.
 
+This guide covers:
+
+  * How to install the Clojure CLI (or Leiningen)
+  * Accessing the REPL
+  * How to create a minimal project
+  * What is interactive development
+
 
 ### [Introduction](/articles/tutorials/introduction/)
 
@@ -73,20 +80,15 @@ This guide covers:
  * Key vars of `clojure.core`
 
 
-### [Interoperability with Java](/articles/language/interop/)
-
-The Clojure language implementation is symbiotic with its host
-platform (the JVM), providing direct interoperability.
+### [Collections and Sequences](/articles/language/collections_and_sequences/)
 
 This guide covers:
 
- * How to instantiate Java classes
- * How to invoke Java methods
- * How to extend Java classes with proxy
- * How to implement Java interfaces with reify
- * How to generate Java classes with gen-class
- * Other topics related to interop
-
+ * Collections in Clojure
+ * Sequences in Clojure
+ * Core collection types
+ * Key operations on collections and sequences
+ * Other topics related to collections and sequences
 
 ### [Namespaces](/articles/language/namespaces/)
 
@@ -102,6 +104,21 @@ This guide covers:
  * Common compilation exceptions and their causes
  * How code compilation works in Clojure
 
+### [Interoperability with Java](/articles/language/interop/)
+
+The Clojure language implementation is symbiotic with its host
+platform (the JVM), providing direct interoperability.
+
+This guide covers:
+
+ * How to instantiate Java classes
+ * How to invoke Java methods
+ * How to extend Java classes with proxy
+ * How to implement Java interfaces with reify
+ * How to generate Java classes with gen-class
+ * Other topics related to interop
+
+
 
 ### [Polymorphism: Protocols and Multimethods](/articles/language/polymorphism/)
 
@@ -112,16 +129,6 @@ This guide covers:
  * Ad-hoc polymorphism with multimethods
  * How to create your own data types that behave like core Clojure data types
 
-
-### [Collections and Sequences](/articles/language/collections_and_sequences/)
-
-This guide covers:
-
- * Collections in Clojure
- * Sequences in Clojure
- * Core collection types
- * Key operations on collections and sequences
- * Other topics related to collections and sequences
 
 
 ### [Concurrency & Parallelism](/articles/language/concurrency_and_parallelism/)
@@ -164,14 +171,21 @@ This guide includes definitons of various Clojure-related terminology.
 
 ## The Clojure Ecosystem
 
-### [Getting Started with the Clojure CLI](/articles/tutorials/getting_started_cli/)
+### [Clojure Community](/articles/ecosystem/community/)
 
 This guide covers:
 
-  * How to install the Clojure CLI
-  * Accessing the REPL
-  * How to create a minimal project
-  * What is interactive development
+ * Planet Clojure, mailing lists, IRC channel
+ * Clojure conferences
+ * Local Clojure user groups
+ * Other Clojure community resources
+
+### The Official Clojure CLI
+
+* [Getting Started with the Clojure CLI](/articles/tutorials/getting_started_cli/) on this site
+* The [official `deps.edn` and CLI guide](https://clojure.org/guides/deps_and_cli) on clojure.org
+* The [official `deps.edn` and CLI reference](https://clojure.org/reference/deps_and_cli) on clojure.org
+
 
 ### [Library Development and Distribution](/articles/ecosystem/libraries_authoring/)
 
@@ -186,55 +200,36 @@ This guide covers:
 
 This is a well-maintained directory of libraries, organized by category, and is interactively searchable.
 
-### [Clojure Community](/articles/ecosystem/community/)
 
-This guide covers:
+### Leiningen
 
- * Planet Clojure, mailing lists, IRC channel
- * Clojure conferences
- * Local Clojure user groups
- * Other Clojure community resources
+* [Getting Started with Leiningen](https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md) covers
+  * What is Leiningen and what it can do for you
+  * How to create a project with Leiningen
+  * How to manage project dependencies
+  * Accessing the REPL
+  * How to run tests for your project
+  * How to run the app
+  * How to compile your code and dependencies into a single JAR for deployment ("überjar")
+  * How to share (publish) a library
+* [Leiningen Profiles](https://github.com/technomancy/leiningen/blob/master/doc/PROFILES.md) covers
+  * What are Leiningen profiles
+  * How to use them
+* [Distributing Libraries with Leiningen](https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md) covers
+  * How Clojure libraries are distributed
+  * How to publish Clojure libraries to clojars.org
+  * How to publish Clojure libraries to Maven Central
+  * How to publish Clojure libraries to your own Maven repository
+* [Writing Leiningen Plugins](https://github.com/technomancy/leiningen/blob/master/doc/PLUGINS.md) covers
+  * What Leiningen plugins can do
+  * How to install Leiningen plugins
+  * How to develop plugins
+  * How to distribute plugins
 
+### [Web Development Overview](/articles/ecosystem/web_development/) (incomplete)
 
-### [Getting Started with Leiningen](https://github.com/technomancy/leiningen/blob/master/doc/TUTORIAL.md)
-
-This guide covers:
-
- * What is Leiningen and what it can do for you
- * How to create a project with Leiningen
- * How to manage project dependencies
- * Accessing the REPL
- * How to run tests for your project
- * How to run the app
- * How to compile your code and dependencies into a single JAR for deployment ("überjar")
- * How to share (publish) a library
-
-### [Leiningen Profiles](https://github.com/technomancy/leiningen/blob/master/doc/PROFILES.md)
-
-This guide covers:
-
- * What are Leiningen profiles
- * How to use them
-
-
-### [Distributing Libraries with Leiningen](https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md)
-
-This guide covers:
-
- * How Clojure libraries are distributed
- * How to publish Clojure libraries to clojars.org
- * How to publish Clojure libraries to Maven Central
- * How to publish Clojure libraries to your own Maven repository
-
-
-### [Writing Leiningen Plugins](https://github.com/technomancy/leiningen/blob/master/doc/PLUGINS.md)
-
-This guide covers:
-
- * What Leiningen plugins can do
- * How to install Leiningen plugins
- * How to develop plugins
- * How to distribute plugins
+This guide provides a partial overview of the more
+popular tools and libraries for web development.
 
 ### [Documentation Tools](/articles/ecosystem/generating_documentation/)
 
@@ -244,10 +239,85 @@ metadata.
 
 ## Tutorials and Cookbooks
 
+### [Getting Started](/articles/tutorials/getting_started/)
+
+This tutorial will get you up and running with the official
+Clojure CLI or Leiningen.
+
+### [Introduction to Clojure](/articles/tutorials/introduction/)
+
+This tutorial will introduce you to the Clojure language.
+
+### [Clojure Editors](/articles/tutorials/editors/)
+
+This tutorial covers the most popular editors used
+for Clojure development and points you to the relevant
+documentation for each editor.
+
 ### [Basic Web Development](/articles/tutorials/basic_web_development/)
 
 A brief tutorial/walkthrough of building a small web app using Ring,
 Compojure, Hiccup, and H2.
+
+### [Building Projects: `tools.build` and the Clojure CLI](/articles/cookbooks/cli_build_projects/)
+
+This cookbook shows you the power of the `tools.build`
+library, which is used with a `build.clj` file and the
+Clojure CLI to build, test, deploy, and more.
+
+### [Data Structures](/articles/cookbooks/data_structures/) (TBD)
+
+This cookbook covers:
+
+ * Vectors
+ * Maps
+ * Lists
+ * Sets
+ * Generic operations on sequences
+
+### [Strings](/articles/cookbooks/strings/)
+
+This cookbook covers:
+
+ * How to work with strings
+ * How to work with characters
+ * How to work with regular expressions
+ * How to work with context-free grammars
+ * How to format text
+
+### [Mathematics](/articles/cookbooks/math/)
+
+Includes coverage of facilities for doing math with Clojure.
+
+
+### [Date and Time](/articles/cookbooks/date_and_time/) (TBD)
+
+This guide covers:
+
+ * Working with JDK dates
+ * Working with Joda Time and `clj-time`
+ * Instant literals (Clojure 1.4+)
+
+### [Files and Directories](/articles/cookbooks/files_and_directories/)
+
+This cookbook covers:
+
+ * Reading and writing text and binary files
+ * Listing directory contents
+ * Creating files and directories
+ * Moving files and directories
+ * Removing files and directories
+ * Accessing file metadata
+ * Other operations on files and directories
+
+
+### [Middleware](/articles/cookbooks/middleware/) (incomplete)
+
+This guide covers:
+
+ * What middleware is and how it works
+ * Creating middleware for a client function
+ * Combining middleware to create a new client
 
 ### [Parsing XML in Clojure](/articles/cookbooks/parsing_xml_with_zippers/)
 
@@ -266,61 +336,7 @@ Includes introductions to:
  * Metaprogramming and the "Code as data" philosophy
 
 
-### [Strings](/articles/cookbooks/strings/)
 
-This cookbook covers:
-
- * How to work with strings
- * How to work with characters
- * How to work with regular expressions
- * How to work with context-free grammars
- * How to format text
-
-### [Mathematics](/articles/cookbooks/math/)
-
-Includes coverage of facilities for doing math with Clojure.
-
-
-### [Data Structures](/articles/cookbooks/data_structures/) (TBD)
-
-This cookbook covers:
-
- * Vectors
- * Maps
- * Lists
- * Sets
- * Generic operations on sequences
-
-### [Files and Directories](/articles/cookbooks/files_and_directories/)
-
-This cookbook covers:
-
- * Reading and writing text and binary files
- * Listing directory contents
- * Creating files and directories
- * Moving files and directories
- * Removing files and directories
- * Accessing file metadata
- * Other operations on files and directories
-
-
-### [Date and Time](/articles/cookbooks/date_and_time/) (TBD)
-
-This guide covers:
-
- * Working with JDK dates
- * Working with Joda Time and `clj-time`
- * Instant literals (Clojure 1.4+)
-
-
-
-### [Middleware](/articles/cookbooks/middleware/) (incomplete)
-
-This guide covers:
-
- * What middleware is and how it works
- * Creating middleware for a client function
- * Combining middleware to create a new client
 
 
 ## License

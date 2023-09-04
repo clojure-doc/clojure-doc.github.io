@@ -1,5 +1,5 @@
-{:title "Concurrency and Parallelism in Clojure"
- :sidebar-omit? true :page-index 102800
+{:title "Language: Concurrency and Parallelism"
+ :sidebar-omit? true :page-index 2700
  :layout :page}
 
 This guide covers:
