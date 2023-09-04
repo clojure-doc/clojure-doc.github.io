@@ -224,6 +224,46 @@ user=> (pop '(1 2 3))
 ## Sets
 
 ### Intro
+In addition to the distinctness of sets, they're fast to check membership, so if values are being collected for the purposes of checking whether they've been seen or not, a set is often a good choice.
 
+### Constructing sets
+While `keys` on a map returns a sequence, the Java interop call to `keySet` can be used to get a set of keys on the map. This set is technically an anonymous instance of Java's `AbstractSet`.
+```clojure
+user=> (.keySet {:a 1 :b 2})
+#{:a :b}
+```
+
+### Sets as predicates
+Because sets can be used as functions, they can be used as predicates with various higher-order functions.
+```clojure
+; are there any fives in the sequence?
+user=> (some #{5} [1 2 3 5 8 13])
+5
+
+; how many `a`s and `c`s are in the DNA sequence?
+user=> (count (filter #{\a \c} "agctgcgcatagcgt"))
+7
+
+;which word(s) can be typed using only the top row of a qwerty keyboard?
+user=> (let [top-row (set "qwertyuiop")
+             candidates ["poet" "computer" "typewriter" "desk"]]
+        (filter #(every? top-row %) candidates))
+("poet" "typewriter")
+```
+
+### Relations
+In addition to the more primitive set functions, the `clojure.set` namespace contains the fundamental relational algebra (the underpinnings of SQL) operations. Sets of maps can be treated as relations, providing the ability to do joins, projections, etc on in-memory data structures.
+```clojure
+user=> (require '[clojure.set :as set])
+user=> (let [owners #{{:name "Jane" :pet "Fido"}
+                      {:name "Tim" :pet "Scaly"}}
+             pets #{{:name "Fido" :species "dog"}
+                    {:name "Scaly" :species "snake"}}]
+        (-> (set/rename pets {:name :pet-name}) ; rename the :name key to disambiguate
+            (set/join owners {:pet-name :pet}) ; join with owners (on pet-name = pet)
+            (set/project [:name :species]))) ; project (select) only the owner's name and their pet's species
+#{{:name "Jane", :species "dog"} 
+  {:name "Tim", :species "snake"}}
+```
 
 ## Sequences
