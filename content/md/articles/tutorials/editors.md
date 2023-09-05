@@ -3,7 +3,7 @@
  :layout :page}
 
 The last
-["State of the Union" Clojure survey](https://clojure.org/news/2022/06/02/state-of-clojure-2022) indicated
+["State of the Union" Clojure survey](https://clojure.org/news/2023/06/30/state-of-clojure-2023) (Q20) indicated
 that Emacs is still the most popular editing environment, followed by IntelliJ/Cursive, VS Code, and Vim.
 
 If you are already using one of these editors, follow one of the guides for that
