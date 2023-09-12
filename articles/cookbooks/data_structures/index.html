@@ -2,15 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Clojure Guides: Data Structures (Help wanted)</title>
+    <title>Clojure Guides: Data Structures</title>
     
 
-<meta name="description" content="Help wantedPlease follow the instructions on how to contribute and start writing over here">
+<meta name="description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on Github.Intro">
 
-<meta property="og:description" content="Help wantedPlease follow the instructions on how to contribute and start writing over here">
+<meta property="og:description" content="This work is licensed under a Creative Commons
+Attribution 3.0 Unported License (including images &amp;
+stylesheets). The source is available on Github.Intro">
 
 <meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/data_structures/" />
-<meta property="og:title" content="Data Structures (Help wanted)" />
+<meta property="og:title" content="Data Structures" />
 <meta property="og:type" content="article" />
 
     <link rel="canonical" href="https://clojure-doc.org/articles/cookbooks/data_structures/">
@@ -55,12 +59,138 @@
                 
 <div id="custom-page">
     <div id="page-header">
-        <h2>Data Structures (Help wanted)</h2>
+        <h2>Data Structures</h2>
     </div>
-    
-    <h2 id="help-wanted">Help wanted</h2><p>Please follow the <a href="https://github.com/clojure-doc/clojure-doc.github.io/tree/source#how-to-contribute">instructions</a> on how to contribute and start writing over <a href="https://github.com/clojure-doc/clojure-doc.github.io/blob/source/content/md/articles/cookbooks/data_structures.md">here</a></p><p>This cookbook covers working with core Clojure data structures.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
+    <ul class="toc"><li><a href="#intro">Intro</a></li><li><a href="#vectors">Vectors</a></li><ul><li><a href="#intro-1">Intro</a></li><li><a href="#constructing-vectors">Constructing Vectors</a></li><li><a href="#accessing-elements">Accessing Elements</a></li><li><a href="#non-emptiness">(Non-)emptiness</a></li><li><a href="#linear-time-operations">Linear-time Operations</a></li><li><a href="#searching">Searching</a></li></ul><li><a href="#maps">Maps</a></li><ul><li><a href="#intro-2">Intro</a></li><li><a href="#building-maps">Building Maps</a></li><li><a href="#accessing-entries">Accessing Entries</a></li></ul><li><a href="#lists">Lists</a></li><ul><li><a href="#intro-3">Intro</a></li><li><a href="#accessing-elements-1">Accessing Elements</a></li></ul><li><a href="#sets">Sets</a></li><ul><li><a href="#intro-4">Intro</a></li><li><a href="#constructing-sets">Constructing sets</a></li><li><a href="#sets-as-predicates">Sets as predicates</a></li><li><a href="#relations">Relations</a></li></ul></ul>
+    <p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
-stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p>
+stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="intro">Intro</h2><p>This cookbook covers some common tasks with core Clojure data structures. It assumes that the reader is familiar with foundational read and write operations (get, conj, assoc, update, etc). For more coverage of getting started with Clojure data structures, some recommended resources are:</p><ul><li><a href="https://clojure.org/reference/data_structures#Collections">Clojure.org's reference on collections</a></li><li><a href="/articles/tutorials/introduction/#data-structures">Intro to Clojure: Data Structures</a></li><li><a href="/articles/tutorials/introduction/#functions-for-creating-data-structures">Intro to Clojure: Functions for Creating Data Structures</a> - also, the section right after this one, which covers manipulating them</li></ul><h2 id="vectors">Vectors</h2><h3 id="intro-1">Intro</h3><p>Vectors are probably the most commonly used data structure for sequential data that isn't code. The random access capability and the fact that vectors aren't treated as function calls make them often a better choice than lists.</p><h3 id="constructing-vectors">Constructing Vectors</h3><p><code>mapv</code> and <code>filterv</code> are eager versions of <code>map</code> and <code>filter</code> that return vectors</p><pre><code class="clojure">user=&gt; (mapv second [[1 1] [2 4] [3 9]])
+[1 4 9]
+
+user=&gt; (filterv even? (range 10))
+[0 2 4 6 8]
+</code></pre><h3 id="accessing-elements">Accessing Elements</h3><p>Vectors implement the stack protocol, meaning <code>peek</code> and <code>pop</code> return the last element and the vector without the last element, respectively.</p><pre><code class="clojure">user=&gt; (peek [7 8 9])
+9
+user=&gt; (pop [7 8 9])
+[7 8]
+</code></pre><h3 id="non-emptiness">(Non-)emptiness</h3><p>Sometimes it's desirable to treat an empty vector as a falsey value, especially in conditionals. The <code>not-empty</code> function will return its argument if it's not empty, otherwise it will return nil.</p><pre><code class="clojure">user=&gt; (defn notate-range 
+         "takes a vector of [start end] (both optional) and returns a range notation"
+         [coords]
+         (if-not (empty? coords)
+           (let [[start end] coords]
+             (str start ".." end))
+           "empty range"))
+#'user/notate-range
+user=&gt; (notate-range [1 5])
+"1..5"
+user=&gt; (notate-range [7])
+"7.."
+user=&gt; (notate-range [])
+"empty range"
+
+; we can also write this as
+user=&gt; (defn notate-range 
+         "takes a vector of [start end] (both optional) and returns a range notation"
+         [coords]
+         (if-let [[start end] (not-empty coords)]
+           (str start ".." end)
+           "empty range"))
+</code></pre><p>Here, <code>not-empty</code> is used to make the conditional false (the empty vector is truthy, and <code>not-empty</code> makes it <code>nil</code>).</p><h3 id="linear-time-operations">Linear-time Operations</h3><p>Operations that need to search through elements one-by-one or operate on a large number of elements are less efficient, but still valuable in some contexts.</p><p>The <code>replace</code> function has a special case for vectors that returns a vector. It takes a map where the keys are the values to replace and the values are the replacements.</p><pre><code class="clojure">; change :begin to :start and :finish to :end
+user=&gt; (replace {:begin :start, :finish :end} 
+                [:begin :middle :finish :begin :finish])
+[:start :middle :end :start :end]
+</code></pre><p>"Deleting" an item from anywhere but the last position is not a 'fast' operation, because conceptually all the indexes after the deleted item need to be decremented by one. We can use <code>into</code> to combine two sub-vectors, but the trade-off is that this operation adds the items from the second sub-vector one at a time, so this function is O(n) in the size of the second sub-vector.</p><pre><code class="clojure">user=&gt; (defn delete-at [v pos]
+         (into (subvec v 0 pos) (subvec v (inc pos))))
+#'user/delete-at
+user=&gt; (delete-at [:a :b :c] 1)
+[:a :c]
+</code></pre><p>Inserting an item at an arbitrary position has the same issue as deleting - it potentially changes a lot of indexes. An implementation is also similar to <code>delete-at</code>, with the same caveat about efficiency.</p><pre><code class="clojure">user=&gt; (defn insert-at [v pos value]
+         (into (conj (subvec v 0 pos) value) (subvec v pos)))
+#'user/insert-at
+user=&gt; (insert-at [:a :b :c] 2 "interloper!")
+[:a :b "interloper!" :c]
+</code></pre><h3 id="searching">Searching</h3><p>Checking for the existence of a <em>value</em> (as opposed to an index) requires examining the elements one-by-one. A point of confusion that sometimes arises is the <code>contains?</code> function, which searches an associative collection for the existence of a <em>key/index</em>, and is very seldom desirable for vectors.</p><pre><code class="clojure">; `contains?` looks for an index!!!
+user=&gt; (contains? [:a :b :c] :b)
+false
+user=&gt; (contains? [:a :b :c] 2)
+true ; because the indexes are 0, 1, and 2
+</code></pre><p>A commonly-used way to check for an occurrence of a certain value in a collection is the <code>some</code> function with a set as a predicate. <code>some</code> stops at the first truthy return, so there's no 'wasted' computation.</p><pre><code class="clojure">user=&gt; (some #{:b} [:a :b :c])
+:b
+</code></pre><p>Note that searching for <code>false</code> or <code>nil</code> in this way won't work. In those cases use the <code>nil?</code> or <code>false?</code> functions.</p><p>Java interop can be used to get the first or last index of a specific value.</p><pre><code class="clojure">user=&gt; (.indexOf [:a :b :c :b :a] :b)
+1
+user=&gt; (.lastIndexOf [:a :b :c :b :a] :b)
+3
+; indexOf returns -1 when the value isn't found
+user=&gt; (.indexOf [:a :b] :c)
+-1
+</code></pre><p><code>keep-indexed</code> can be used to find all the indexes of a value (or indexes that match some predicate). Note that this is actually a function that works on (and returns) a sequence.</p><pre><code class="clojure">user=&gt; (defn indexes-of [search-value coll]
+         (keep-indexed (fn [i v] (when (= search-value v) i)) coll))
+#'user/indexes-of
+user=&gt; (indexes-of 15 [5 10 15 30 15 5])
+(2 4)
+</code></pre><h2 id="maps">Maps</h2><h3 id="intro-2">Intro</h3><p>Maps can be hashed or sorted (array maps are also available, but are mostly used for maps with &lt; 10 entries). Sorted maps aren't as fast to lookup by key, but the sorting by key makes them useful for iteration in some circumstances.</p><h3 id="building-maps">Building Maps</h3><p><code>zipmap</code> associates corresponding entries from two seqs into a map. This is used here to assign people to teams.</p><pre><code class="clojure">; assign participants to teams
+user=&gt; (let [participants ["Mike" "Tina" "Alice" "Fred"]
+             team-nums    (cycle [1 2])]
+         (zipmap participants team-nums))
+{"Mike" 1, "Tina" 2, "Alice" 1, "Fred" 2}
+</code></pre><p><code>group-by</code> could be used to build the team rosters, but the result still has the team numbers in the roster.</p><pre><code class="clojure">user=&gt; (group-by val {"Mike" 1, "Tina" 2, "Alice" 1, "Fred" 2})
+{1 [["Mike" 1] ["Alice" 1]], 2 [["Tina" 2] ["Fred" 2]]}
+</code></pre><p><code>update-vals</code> (added in Clojure 1.11) could be tacked on to clean up the output</p><pre><code class="clojure">user=&gt; (-&gt; (group-by val {"Mike" 1, "Tina" 2, "Alice" 1, "Fred" 2})
+           (update-vals #(mapv first %)))
+{1 ["Mike" "Alice"], 2 ["Tina" "Fred"]}
+</code></pre><p><code>reduce-kv</code> allows more control over the values, meaning it's possible to go directly to "clean" output (and maybe even different data structures).</p><pre><code class="clojure">user=&gt; (reduce-kv
+        (fn [acc k v] (update acc v (fnil conj #{}) k))
+        {} {"Mike" 1, "Tina" 2, "Alice" 1, "Fred" 2})
+{1 #{"Alice" "Mike"}, 2 #{"Tina" "Fred"}}
+</code></pre><p><code>frequencies</code> takes a collection and returns a map of elements in that collection to how many times it appears. This is used here for a rudimentary word counter.</p><pre><code class="clojure">user=&gt; (-&gt; "the cat in the hat fell in the vat"
+           (str/split #" ")
+           frequencies)
+{"the" 3, "cat" 1, "in" 2, "hat" 1, "fell" 1, "vat" 1}
+</code></pre><p><code>clojure.set</code> has a <code>map-invert</code> function that will swap the keys and values. The "unique key" facet of maps means that duplicate values in the input map will get one of the keys.</p><pre><code class="clojure">user=&gt; (require '[clojure.set :as set])
+user=&gt; (let [squares {1 1, 2 4, 3 9, 4 16}
+             sqrts (set/map-invert squares)]
+        (sqrts 9))
+3
+</code></pre><h3 id="accessing-entries">Accessing Entries</h3><p>While <code>select-keys</code> can be used to create a submap, it is sometimes desirable to pull some keys into a sequence. In this example, <code>juxt</code> is used to make a vector of the <code>:x</code> and <code>:y</code> values of maps for passing to another function.</p><pre><code class="clojure">user=&gt; (defn manhattan-distance [[x1 y1] [x2 y2]]
+        (let [distance (comp abs -)]
+         (+ (distance x1 x2) (distance y1 y2))))
+#'user/manhattan-distance
+user=&gt; (let [point1 {:x 2 :y 0}
+             point2 {:x 0 :y 2}
+             xy-coords (juxt :x :y)]
+        (manhattan-distance (xy-coords point1)
+                            (xy-coords point2)))
+4 
+</code></pre><h2 id="lists">Lists</h2><h3 id="intro-3">Intro</h3><p>Lists are primarily used for code in Clojure. While there aren't a ton of functions aimed specifically at lists, lists do implement the sequence interface, so all sequence functions work on lists without any conversion.</p><h3 id="accessing-elements-1">Accessing Elements</h3><p>Like vectors, lists implement the stack protocol, but unlike vectors, the 'top' of the stack is the front of the list. So, 'first' on a list returns the same element as peek (the top of the stack), but on a vector 'first' returns the bottom of the stack (this can be useful for queueing in LIFO vs FIFO order, for example).</p><pre><code class="clojure">user=&gt; (peek '(1 2 3))
+1
+user=&gt; (pop '(1 2 3))
+(2 3)
+</code></pre><h2 id="sets">Sets</h2><h3 id="intro-4">Intro</h3><p>In addition to the distinctness of sets, they're fast to check membership, so if values are being collected for the purposes of checking whether they've been seen or not, a set is often a good choice.</p><h3 id="constructing-sets">Constructing sets</h3><p>While <code>keys</code> on a map returns a sequence, the Java interop call to <code>keySet</code> can be used to get a set of keys on the map. This set is technically an anonymous instance of Java's <code>AbstractSet</code>.</p><pre><code class="clojure">user=&gt; (.keySet {:a 1 :b 2})
+#{:a :b}
+</code></pre><h3 id="sets-as-predicates">Sets as predicates</h3><p>Because sets can be used as functions, they can be used as predicates with various higher-order functions.</p><pre><code class="clojure">; are there any fives in the sequence?
+user=&gt; (some #{5} [1 2 3 5 8 13])
+5
+
+; how many `a`s and `c`s are in the DNA sequence?
+user=&gt; (count (filter #{\a \c} "agctgcgcatagcgt"))
+7
+
+;which word(s) can be typed using only the top row of a qwerty keyboard?
+user=&gt; (let [top-row (set "qwertyuiop")
+             candidates ["poet" "computer" "typewriter" "desk"]]
+        (filter #(every? top-row %) candidates))
+("poet" "typewriter")
+</code></pre><h3 id="relations">Relations</h3><p>In addition to the more primitive set functions, the <code>clojure.set</code> namespace contains the fundamental relational algebra (the underpinnings of SQL) operations. Sets of maps can be treated as relations, providing the ability to do joins, projections, etc on in-memory data structures.</p><pre><code class="clojure">user=&gt; (require '[clojure.set :as set])
+user=&gt; (let [owners #{{:name "Jane" :pet "Fido"}
+                      {:name "Tim" :pet "Scaly"}}
+             pets #{{:name "Fido" :species "dog"}
+                    {:name "Scaly" :species "snake"}}]
+        (-&gt; (set/rename pets {:name :pet-name}) ; rename the :name key to disambiguate
+            (set/join owners {:pet-name :pet}) ; join with owners (on pet-name = pet)
+            (set/project [:name :species]))) ; project (select) only the owner's name and their pet's species
+#{{:name "Jane", :species "dog"} 
+  {:name "Tim", :species "snake"}}
+</code></pre>
 
     <div id="prev-next">
         
@@ -115,7 +245,7 @@ stylesheets). The source is available <a href="https://github.com/clojure-doc/cl
                     
                     <li><a href="/articles/cookbooks/cli_build_projects/">Building Projects: tools.build and the Clojure CLI</a></li>
                     
-                    <li><a href="/articles/cookbooks/data_structures/">Data Structures (Help wanted)</a></li>
+                    <li><a href="/articles/cookbooks/data_structures/">Data Structures</a></li>
                     
                     <li><a href="/articles/cookbooks/strings/">Strings</a></li>
                     
