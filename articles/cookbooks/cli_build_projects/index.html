@@ -63,7 +63,7 @@ for others to use or application .jar files to run on servers or in containers."
     <div id="page-header">
         <h2>Building Projects: tools.build and the Clojure CLI</h2>
     </div>
-    <ol class="toc"><li><a href="#toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</a></li><ol><li><a href="#executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</a></li><ol><li><a href="#-x-execute-function">-X eXecute function</a></li><li><a href="#-t-execute-tooling">-T execute Tooling</a></li></ol></ol><li><a href="#the-toolsbuild-library">The <code>tools.build</code> Library</a></li><li><a href="#running-tasks-based-on-aliases">Running Tasks based on Aliases</a></li><li><a href="#multi-version-testing">Multi-Version Testing</a></li><li><a href="#tips-for-building-jar-files">Tips for Building JAR Files</a></li><li><a href="#continuous-integration-pipelines">Continuous Integration Pipelines</a></li><li><a href="#automating-deployments">Automating deployments</a></li><li><a href="#using-a-build-repl">Using a "build REPL"</a></li><li><a href="#working-with-multiple-subprojects">Working with Multiple Subprojects</a></li></ol>
+    <ol class="toc"><li><a href="#toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</a></li><ol><li><a href="#executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</a></li><ol><li><a href="#-x-execute-function">-X eXecute function</a></li><li><a href="#-t-execute-tooling">-T execute Tooling</a></li></ol></ol><li><a href="#the-toolsbuild-library">The <code>tools.build</code> Library</a></li><li><a href="#running-tasks-based-on-aliases">Running Tasks based on Aliases</a></li><li><a href="#multi-version-testing">Multi-Version Testing</a></li><li><a href="#tips-for-building-jar-files">Tips for Building JAR Files</a></li><li><a href="#the-generated-pomxml-file">The Generated <code>pom.xml</code> File</a></li><li><a href="#continuous-integration-pipelines">Continuous Integration Pipelines</a></li><li><a href="#automating-deployments">Automating deployments</a></li><li><a href="#using-a-build-repl">Using a "build REPL"</a></li><li><a href="#working-with-multiple-subprojects">Working with Multiple Subprojects</a></li></ol>
     <h2 id="toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</h2><p><a href="https://github.com/clojure/tools.build"><code>tools.build</code></a>
 is a library for building artifacts in Clojure projects, which are typically
 library <code>.jar</code> files for deployment to repositories like <a href="https://clojars.org">Clojars</a>
@@ -340,7 +340,78 @@ file if they are defined at the top of the file.</p><p>You might end up with som
     (b/jar opts))
   ;; return original opts for chaining:
   opts)
-</code></pre><blockquote><p>Note: in the above <code>jar-opts</code> function, we do not allow the JAR-related options to be overridden by the <code>opts</code> passed in. If you want to allow that, you can use <code>merge</code> instead of <code>assoc</code> in the <code>jar-opts</code> function (with a literal hash map of the JAR-related options followed by <code>opts</code>). You may need to do extra work if you want <code>:lib</code>, <code>:version</code>, and/or <code>:target</code> to be overridden but still have <code>:jar-file</code>, <code>:class-dir</code>, and <code>:target-dir</code> be derived from those values.</p></blockquote><blockquote><p>Note: the basis is a huge hash map so we don't want to return it from our <code>jar</code> function (unless it was passed in via <code>opts</code>) in case we either want to use this from the "build REPL" (later) or from another function where we might want control over the basis used. If you decide to return the merged options from <code>jar</code>, you should probably use <code>dissoc</code> to remove the basis from the options returned (unless it was passed in via <code>opts</code>).</p></blockquote><h2 id="continuous-integration-pipelines">Continuous Integration Pipelines</h2><p>Now that we have testing and JAR-building covered, we can add a <code>ci</code> function
+</code></pre><blockquote><p>Note: in the above <code>jar-opts</code> function, we do not allow the JAR-related options to be overridden by the <code>opts</code> passed in. If you want to allow that, you can use <code>merge</code> instead of <code>assoc</code> in the <code>jar-opts</code> function (with a literal hash map of the JAR-related options followed by <code>opts</code>). You may need to do extra work if you want <code>:lib</code>, <code>:version</code>, and/or <code>:target</code> to be overridden but still have <code>:jar-file</code>, <code>:class-dir</code>, and <code>:target-dir</code> be derived from those values.</p></blockquote><blockquote><p>Note: the basis is a huge hash map so we don't want to return it from our <code>jar</code> function (unless it was passed in via <code>opts</code>) in case we either want to use this from the "build REPL" (later) or from another function where we might want control over the basis used. If you decide to return the merged options from <code>jar</code>, you should probably use <code>dissoc</code> to remove the basis from the options returned (unless it was passed in via <code>opts</code>).</p></blockquote><h2 id="the-generated-pomxml-file">The Generated <code>pom.xml</code> File</h2><p>By default, <code>b/write-pom</code> will generate a minimal <code>pom.xml</code> file that includes
+<code>&lt;dependencies&gt;</code> but not much else.</p><p><code>(b/write-pom {:basis (b/create-basis {}) :lib 'foo/bar :version "1.2.3" :target "target"})</code> will generate:</p><pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;groupId&gt;foo&lt;/groupId&gt;
+  &lt;artifactId&gt;bar&lt;/artifactId&gt;
+  &lt;version&gt;1.2.3&lt;/version&gt;
+  &lt;name&gt;bar&lt;/name&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure&lt;/artifactId&gt;
+      &lt;version&gt;1.11.1&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;clojars&lt;/id&gt;
+      &lt;url&gt;https://repo.clojars.org/&lt;/url&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+&lt;/project&gt;
+</code></pre><p>While you can pass <code>:scm</code> as an option, there are several other fields that
+you might well want in the generated <code>pom.xml</code> before you upload it to Clojars,
+especially in light of this upcoming change to
+<a href="https://github.com/clojars/clojars-web/wiki/Pushing#licenses">Clojars policy about license information in <code>pom.xml</code> files</a>.</p><p>Luckily, <code>b/write-pom</code> allows you to pass a <code>:src-pom</code> option so you can
+specify a "template" <code>pom.xml</code> file for it to add coordinates and dependencies
+to.</p><p>Tools like <a href="https://github.com/seancorfield/deps-new"><code>deps-new</code></a> and Leiningen
+generate projects that already contain a more complete <code>pom.xml</code> file, so you
+don't have to worry too much about this if you create projects using those tools.</p><p>Otherwise, you can create a <code>pom.xml</code> file that has the additional information
+you want, and then pass <code>:src-pom</code> to <code>b/write-pom</code> specifying the path to that
+"template" <code>pom.xml</code> file. To satisfy the Clojars policy, you'll need to add
+at least:</p><pre><code class="xml">  &lt;licenses&gt;
+    &lt;license&gt;
+      &lt;name&gt;Eclipse Public License&lt;/name&gt;
+      &lt;url&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/url&gt;
+    &lt;/license&gt;
+  &lt;/licenses&gt;
+</code></pre><p>Since quite a bit of tooling out there expects the top-level <code>pom.xml</code> file in
+a project to be the "complete" version, you will probably want to put your
+"template" <code>pom.xml</code> file in a subdirectory, such as <code>template</code>, and then
+specify the path to that file as <code>:src-pom</code>. See, for example, the "template"
+<a href="https://github.com/seancorfield/next-jdbc/blob/develop/template/pom.xml"><code>pom.xml</code> file for <code>next.jdbc</code></a>:</p><pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;name&gt;next.jdbc&lt;/name&gt;
+  &lt;description&gt;The next generation of clojure.java.jdbc: a new low-level Clojure wrapper for JDBC-based access to databases.&lt;/description&gt;
+  &lt;url&gt;https://github.com/seancorfield/next-jdbc&lt;/url&gt;
+  &lt;licenses&gt;
+    &lt;license&gt;
+      &lt;name&gt;Eclipse Public License&lt;/name&gt;
+      &lt;url&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/url&gt;
+    &lt;/license&gt;
+  &lt;/licenses&gt;
+  &lt;developers&gt;
+    &lt;developer&gt;
+      &lt;name&gt;Sean Corfield&lt;/name&gt;
+    &lt;/developer&gt;
+  &lt;/developers&gt;
+  &lt;scm&gt;
+    &lt;url&gt;https://github.com/seancorfield/next-jdbc&lt;/url&gt;
+    &lt;connection&gt;scm:git:git://github.com/seancorfield/next-jdbc.git&lt;/connection&gt;
+    &lt;developerConnection&gt;scm:git:ssh://git@github.com/seancorfield/next-jdbc.git&lt;/developerConnection&gt;
+  &lt;/scm&gt;
+&lt;/project&gt;
+</code></pre><p>The <code>jar-opts</code> function in <code>next.jdbc</code>'s <code>build.clj</code> file specifies the
+<a href="https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L45"><code>:src-pom</code> option</a>:</p><pre><code class="clojure">           :src-pom "template/pom.xml"
+</code></pre><p>For a fairly comprehensive "template" <code>pom.xml</code> file, look at the
+<a href="https://github.com/seancorfield/deps-new/blob/develop/resources/org/corfield/new/lib/root/pom.xml">source template <code>deps-new</code> uses</a>.
+The <code>{{..}}</code> placeholders are replaced by <code>deps-new</code> with the appropriate
+values when it creates a new project.</p><h2 id="continuous-integration-pipelines">Continuous Integration Pipelines</h2><p>Now that we have testing and JAR-building covered, we can add a <code>ci</code> function
 to our <code>build.clj</code> file to run our tests and build a JAR file:</p><pre><code class="clojure">(defn ci [opts]
   (-&gt; opts
       (test-multi)
