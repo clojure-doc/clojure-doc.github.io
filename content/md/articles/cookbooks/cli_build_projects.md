@@ -541,76 +541,66 @@ By default, `b/write-pom` will generate a minimal `pom.xml` file that includes
 </project>
 ```
 
-While you can pass `:scm` as an option, there are several other fields that
+While you can pass `:scm` as an option, as shown above, there are several other fields that
 you might well want in the generated `pom.xml` before you upload it to Clojars,
 especially in light of this upcoming change to
 [Clojars policy about license information in `pom.xml` files](https://github.com/clojars/clojars-web/wiki/Pushing#licenses).
 
-Luckily, `b/write-pom` allows you to pass a `:src-pom` option so you can
-specify a "template" `pom.xml` file for it to add coordinates and dependencies
-to.
+Luckily, `b/write-pom` allows you to provide additional information via the
+`:src-pom` option or, as of `tools.build` 0.9.6, the `:pom-data` option.
+The `:src-pom` option allows you to specify a "template" `pom.xml` file for
+`b/write-pom` to add coordinates and dependencies to.
+The newer `:pom-data` option allows you to specify those extra fields
+as Hiccup-style data in your `build.clj` file.
+
+> Note: if you use `:src-pom`, you need to be aware that quite a bit of tooling out there expects the top-level `pom.xml` file in a project to be the "complete" version, so you will either want to put your "template" `pom.xml` file in a subdirectory or name it something like `pom-template.xml` so it won't be considered as a top-level `pom.xml` file, and then specify the path to that file as `:src-pom` in your call to `b/write-pom`. If you use `:pom-data`, you don't have to worry about this.
 
 Tools like [`deps-new`](https://github.com/seancorfield/deps-new) and Leiningen
-generate projects that already contain a more complete `pom.xml` file, so you
+generate projects that produce a more complete `pom.xml` file, so you
 don't have to worry too much about this if you create projects using those tools.
 
-Otherwise, you can create a `pom.xml` file that has the additional information
-you want, and then pass `:src-pom` to `b/write-pom` specifying the path to that
-"template" `pom.xml` file. To satisfy the Clojars policy, you'll need to add
+Otherwise, you can provide additional `pom.xml` content to `:pom-data` as a vector of
+section information, in your `build.clj` file.
+
+To satisfy the Clojars policy, you'll need to add
 at least:
 
-```xml
-  <licenses>
-    <license>
-      <name>Eclipse Public License</name>
-      <url>http://www.eclipse.org/legal/epl-v10.html</url>
-    </license>
-  </licenses>
+```clojure
+(def pom-template
+  [[:licenses
+    [:license
+     [:name "Eclipse Public License"]
+     [:url "http://www.eclipse.org/legal/epl-v10.html"]]]])
+...
+  (b/write-pom ... :pom-data pom-template)
 ```
 
-Since quite a bit of tooling out there expects the top-level `pom.xml` file in
-a project to be the "complete" version, you will probably want to put your
-"template" `pom.xml` file in a subdirectory, such as `template`, and then
-specify the path to that file as `:src-pom`. See, for example, the "template"
-[`pom.xml` file for `next.jdbc`](https://github.com/seancorfield/next-jdbc/blob/develop/template/pom.xml):
+For a fully-fleshed out example, see the
+[`pom-template` function for `next.jdbc`](https://github.com/seancorfield/next-jdbc/blob/bea53cb15b4d826061e07dd317f6fd3727dcec3c/build.clj#L35-L60)
+in that project's `build.clj` file:
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <name>next.jdbc</name>
-  <description>The next generation of clojure.java.jdbc: a new low-level Clojure wrapper for JDBC-based access to databases.</description>
-  <url>https://github.com/seancorfield/next-jdbc</url>
-  <licenses>
-    <license>
-      <name>Eclipse Public License</name>
-      <url>http://www.eclipse.org/legal/epl-v10.html</url>
-    </license>
-  </licenses>
-  <developers>
-    <developer>
-      <name>Sean Corfield</name>
-    </developer>
-  </developers>
-  <scm>
-    <url>https://github.com/seancorfield/next-jdbc</url>
-    <connection>scm:git:git://github.com/seancorfield/next-jdbc.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/seancorfield/next-jdbc.git</developerConnection>
-  </scm>
-</project>
+```clojure
+(defn- pom-template [version]
+  [[:description "The next generation of clojure.java.jdbc: a new low-level Clojure wrapper for JDBC-based access to databases."]
+   [:url "https://github.com/seancorfield/next-jdbc"]
+   [:licenses
+    [:license
+     [:name "Eclipse Public License"]
+     [:url "http://www.eclipse.org/legal/epl-v10.html"]]]
+   [:developers
+    [:developer
+     [:name "Sean Corfield"]]]
+   [:scm
+    [:url "https://github.com/seancorfield/next-jdbc"]
+    [:connection "scm:git:https://github.com/seancorfield/next-jdbc.git"]
+    [:developerConnection "scm:git:ssh://git@github.com/seancorfield/next-jdbc.git"]
+    [:tag (str "v" version)]]])
 ```
 
 The `jar-opts` function in `next.jdbc`'s `build.clj` file specifies the
-[`:src-pom` option](https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L45):
+`:pom-data` as `(pom-template version)`.
 
-```clojure
-           :src-pom "template/pom.xml"
-```
-
-For a fairly comprehensive "template" `pom.xml` file, look at the
-[source template `deps-new` uses](https://github.com/seancorfield/deps-new/blob/develop/resources/org/corfield/new/lib/root/pom.xml).
-The `{{..}}` placeholders are replaced by `deps-new` with the appropriate
-values when it creates a new project.
+> Note: while [`b/write-pom`'s docstring](https://clojure.github.io/tools.build/clojure.tools.build.api.html#var-write-pom) says "The pom-data MUST NOT include: ... :scm", the caveat is to avoid specifying **both** the `:scm` option **and** also an `:scm` section in the `:pom-data` -- you can specify one or the other, but not both.
 
 ## Continuous Integration Pipelines
 
