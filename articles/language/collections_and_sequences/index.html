@@ -525,7 +525,42 @@ as the predicate returns <code>true</code> for each item:</p><pre><code class="k
 returns <code>false</code> for the item and when the first non-false item is found,
 it returns a lazy sequence from that item onwards:</p><pre><code class="klipse-clojure nohighlight">(drop-while #(&lt; % 5) (range 10))
 ;; ⇒ (5 6 7 8 9)
-</code></pre><h2 id="transients">Transients</h2><p>Clojure data structures are immutable, they do not change. Mutating them produces
+</code></pre><h2 id="transducers">Transducers</h2><p>Rich Hickey introduced the <a href="https://clojure.org/news/2014/08/06/transducers-are-coming">concept of transducers</a>
+in a mid-2014 blog post, and they arrived in Clojure 1.7. The official
+documentation has a good <a href="https://clojure.org/reference/transducers">reference page for transducers</a>.</p><p>The core idea is to separate the transformation function from the input
+and output sources, specifying just the transformation itself. This allows
+transformations to be composed and reused in a variety of contexts.</p><p>We might write the following code to transform a sequence of numbers:</p><pre><code class="klipse-clojure nohighlight">(-&gt;&gt; (range 10)
+     (map inc)
+     (filter even?)
+     (take 3)
+     (into []))
+</code></pre><p>At each step, the input is explicitly turned into a sequence and transformed
+into a new sequence. The longer the pipeline of transformations, the more
+intermediate sequences are created and later thrown away. In the above example,
+the final step forces the initial portions of those sequences to be realized.
+but up to that point, the transformations are all lazy because the functions
+themselves are lazy.</p><p>Many of the sequence and collection functions you've seen in earlier sections
+above have an arity that omits the sequence or collection argument, e.g.,
+<code>(map inc)</code> instead of <code>(map inc my-seq)</code>. When the sequence or collection
+argument is omitted, these calls return a <em>transducer</em> that can be composed
+and applied as part of a transformation.</p><p>Transducers allow us to separate the transformation from the input and output:</p><pre><code class="klipse-clojure nohighlight">(def xf (comp (map inc) (filter even?) (take 3)))
+(into [] xf (range 10))
+</code></pre><p>We can apply this transformation (<code>xf</code>) to any input source and produce
+any output -- and no intermediate sequences are created: the composed transformation
+is applied directly to the elements from the input to produce the output.</p><h3 id="lazy-or-eager">Lazy or Eager?</h3><p>Transducers may shrink the input (as above) or expand it. Transducers are not
+inherently lazy or eager since they are called, as needed, by the process
+that applies the transformation to the input to produce the output.</p><p>We've seen eager transformations in the earlier sections above, such as
+<code>(into [] my-seq)</code> which is implemented as <code>(reduce conj [] my-seq)</code>
+under the hood. In a similar way, <code>(into [] xf my-seq)</code> is equivalent to
+<code>(reduce (xf conj) [] my-seq)</code>. Since <code>(reduce (xf f) init my-seq)</code> would
+be a common construct when eagerly transforming sequences, Clojure provides
+<code>(transduce xf f init my-seq)</code> as a shorthand.</p><pre><code class="klipse-clojure nohighlight">(def xf (comp (map inc) (filter even?) (take 3)))
+(transduce xf + 0 (range 10))
+</code></pre><p>Whereas <code>(into [] xf (range 10))</code> produces a vector of three numbers,
+because it is <code>(transduce xf conj [] (range 10))</code>, we can reuse the transformation
+in <code>(transduce xf + 0 (range 10))</code> to produce a single number.</p><p>Clojure also provides <code>(sequence xf my-seq)</code> as a way to get a lazy sequence
+of applications of the transformation to the input.</p><p>(note how the transducer is applied to the
+reducing function <code>conj</code> to produce a new reducing function).</p><p>Additional reading:</p><ul><li><a href="https://practical.li/blog/posts/transducers-in-clojure-getting-started">Getting Started with Transducers</a> -- <a href="https://practical.li/">Practicalli</a></li><li><a href="https://clojure.org/reference/transducers">Transducers Reference</a> -- <a href="https://clojure.org/">clojure.org</a></li><li><a href="https://clojuredocs.org/clojure.core/transduce">Examples of <code>transduce</code></a> -- <a href="https://clojuredocs.org/">clojuredocs.org</a></li><li><a href="https://clojuredocs.org/clojure.core/sequence">Examples of <code>sequence</code></a> -- <a href="https://clojuredocs.org/">clojuredocs.org</a></li></ul><h2 id="transients">Transients</h2><p>Clojure data structures are immutable, they do not change. Mutating them produces
 a new data structure that internally has structural sharing with the original
 one. This makes a whole class of concurrency hazards go away but has some
 performance penalty and additional GC pressure.</p><p>For cases when raw performance for a piece of code is more important than safety,
