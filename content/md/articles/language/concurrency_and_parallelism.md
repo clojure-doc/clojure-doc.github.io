@@ -1,5 +1,5 @@
 {:title "Language: Concurrency and Parallelism"
- :sidebar-omit? true :page-index 2700
+ :page-index 2700
  :layout :page}
 
 This guide covers:
@@ -18,7 +18,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.5.
+This guide covers Clojure 1.11.
 
 
 ## Before You Read This Guide
@@ -30,10 +30,10 @@ design. Understanding them may take some time for folks without
 a concurrent programming background. Don't let this learning curve
 discourage you.
 
-If some parts are not clear, please ask for clarification [on the
-mailing
-list](https://groups.google.com/forum/?fromgroups#!forum/clojure) or
-[file an issue](https://github.com/clojure-doc/clojure-doc.github.io/issues) on GitHub.
+If some parts are not clear, please ask for clarification
+[in the `#clojure-doc` channel on Slack](https://clojurians.slack.com/archives/C02M6N5C137)
+([self-signup at clojurians.net](http://clojurians.net))
+or [file an issue](https://github.com/clojure-doc/clojure-doc.github.io/issues) on GitHub.
 We will work hard on making this guide easy to follow with edits and
 images to illustrate the concepts.
 
@@ -176,6 +176,8 @@ and which are modified in place.
 
 ![identity_value](/assets/images/language/concurrency_and_parallelism/identity_value.png)
 
+See also [Values and Change: Clojure’s approach to Identity and State](https://clojure.org/about/state) on clojure.org.
+
 Identities in Clojure can be of several types, known as *reference types*.
 
 
@@ -253,7 +255,7 @@ initial value:
 ```
 
 The line above makes the atom `currently-connected` an empty vector. To access an atom's value, use
-`clojure.core/deref` or the `@atom` reader form:
+`clojure.core/deref` or the `@` reader form:
 
 ``` clojure
 (def currently-connected (atom []))
@@ -263,7 +265,7 @@ The line above makes the atom `currently-connected` an empty vector. To access a
 (deref currently-connected)
 ;; ⇒ []
 currently-connected
-;; ⇒ #<Atom@614b6b5d: []>
+;; ⇒ #object[clojure.lang.Atom 0x7499eac7 {:status :ready, :val []}]
 ```
 
 As the returned values demonstrate, the atom itself is a reference. To
@@ -291,7 +293,7 @@ To mutate an atom, we can use `clojure.core/swap!`.
 (swap! currently-connected conj "chatty-joe")
 ;; ⇒ ["chatty-joe"]
 currently-connected
-;; ⇒ #<Atom@614b6b5d: ["chatty-joe"]>
+;; ⇒ #object[clojure.lang.Atom 0x7499eac7 {:status :ready, :val ["chatty-joe"]}]
 @currently-connected
 ;; ⇒ ["chatty-joe"]
 ```
@@ -353,7 +355,7 @@ can look like this:
 (def errors-counter (agent 0))
 ;; ⇒ #'user/errors-counter
 errors-counter
-;; ⇒ #<Agent@6a6287b2: 0>
+;; ⇒ #object[clojure.lang.Agent 0x45e6d1e0 {:status :ready, :val 0}]
 @errors-counter
 ;; ⇒ 0
 (deref errors-counter)
@@ -370,13 +372,13 @@ To mutate an agent, we use `clojure.core/send` and `clojure.core/send-off`:
 @errors-counter
 ;; ⇒ 0
 (send errors-counter inc)
-;; ⇒ #<Agent@6a6287b2: 0>
+;; ⇒ #object[clojure.lang.Agent 0x45e6d1e0 {:status :ready, :val 0}]
 @errors-counter
 ;; ⇒ 1
 
 ;; 10 is an additional parameter. The + function will be invoked as `(+ @errors-counter 10)`.
 (send errors-counter + 10)
-;; ⇒ #<Agent@6a6287b2: 1>
+;; ⇒ #object[clojure.lang.Agent 0x45e6d1e0 {:status :ready, :val 1}]
 @errors-counter
 ;; ⇒ 11
 ```
@@ -434,8 +436,8 @@ will fail. For example:
 @errors-counter
 ;; ⇒ 11
 (send errors-counter / 0)
-;; Evaluation aborted.
-;; ⇒ nil
+;; ⇒ #object[clojure.lang.Agent 0x45e6d1e0 {:status :ready, :val 11}]
+;; evaluation will produce an exception
 ```
 
 This puts the agent into the *failed* state. Failed agents will re-raise the exception that caused them
@@ -443,19 +445,27 @@ to fail every time their state changed is attempted:
 
 ``` clojure
 (send errors-counter / 0)
-;; ⇒ #<Agent@6a6287b2: 10>
+;; Execution error (ArithmeticException) at java.util.concurrent.ThreadPoolExecutor/runWorker (ThreadPoolExecutor.java:1144).
+;; Divide by zero
 (send errors-counter inc)
-;; Evaluation aborted.
+;; Execution error (ArithmeticException) at java.util.concurrent.ThreadPoolExecutor/runWorker (ThreadPoolExecutor.java:1144).
+;; Divide by zero
 ```
 
-To access the exception that occured during the agent's state mutation, use `clojure.core/agent-error`:
+To access the exception that occurred during the agent's state mutation, use `clojure.core/agent-error`:
 
 ``` clojure
 (send errors-counter / 0)
-;; Evaluation aborted.
-;; ⇒ nil
+;; Execution error (ArithmeticException) at java.util.concurrent.ThreadPoolExecutor/runWorker (ThreadPoolExecutor.java:1144).
+;; Divide by zero
 (agent-error errors-counter)
-;; ⇒ #<ArithmeticException java.lang.ArithmeticException: Divide by zero>
+;; #error {
+;;  :cause "Divide by zero"
+;;  :via
+;;  [{:type java.lang.ArithmeticException
+;;    :message "Divide by zero"
+;;    :at [clojure.lang.Numbers divide "Numbers.java" 190]}]
+;;  ...}
 ```
 
 It returns an exception. Agents can be restarted with `clojure.core/restart-agent` that takes an agent
@@ -465,7 +475,7 @@ and a new initial value:
 (restart-agent errors-counter 0)
 ;; ⇒ 0
 (send errors-counter + 10)
-;; ⇒ #<Agent@6a6287b2: 0>
+;; ⇒ #object[clojure.lang.Agent 0x45e6d1e0 {:status :ready, :val 0}]
 @errors-counter
 ;; ⇒ 10
 ```
@@ -477,18 +487,18 @@ idea, when the error mode is set to `:continue` you must also pass an error hand
 ``` clojure
 (def errors-counter (agent 0
                            :error-mode    :continue
-                           :error-handler (fn [failed-agent ^Exception exception]
-                                            (println (.getMessage exception)))))
+                           :error-handler (fn [failed-agent exception]
+                                            (println (ex-message exception)))))
 ;; ⇒ #'user/errors-counter
 (send errors-counter inc)
-;; ⇒ #<Agent@5620e147: 1>
+;; ⇒ #object[clojure.lang.Agent 0x25a94b55 {:status :ready, :val 0}]
 (send errors-counter inc)
-;; ⇒ #<Agent@5620e147: 2>
+;; ⇒ #object[clojure.lang.Agent 0x25a94b55 {:status :ready, :val 1}]
 (send errors-counter / 0)
-;; output: "Divide by zero"
-;; ⇒ #<Agent@5620e147: 2>
+;; output: Divide by zero
+;; => #object[clojure.lang.Agent 0x25a94b55 {:status :ready, :val 2}]
 (send errors-counter inc)
-;; ⇒ #<Agent@5620e147: 3>
+;; ⇒ #object[clojure.lang.Agent 0x25a94b55 {:status :ready, :val 2}]
 @errors-counter
 ;; ⇒ 3
 ```
@@ -870,14 +880,16 @@ as a cached value:
 (def d (delay (System/currentTimeMillis)))
 ;; ⇒ #'user/d
 d
-;; ⇒ #<Delay@21ed22af: :pending>
+;; ⇒ #object[clojure.lang.Delay 0x307e4c44 {:status :pending, :val nil}]
 ;; dereferencing causes the value to be realized, it happens only once
 @d
-;; ⇒ 1350997814621
+;; ⇒ 1696717714262
 @d
-;; ⇒ 1350997814621
+;; ⇒ 1696717714262
 @d
-;; ⇒ 1350997814621
+;; ⇒ 1696717714262
+d
+;; => #object[clojure.lang.Delay 0x307e4c44 {:status :ready, :val 1696717714262}]
 ```
 
 `clojure.core/realized?` can be used to check whether a delay instance has been realized
@@ -905,7 +917,7 @@ the current thread). To obtain the result of computation, dereference the future
 (def ft (future (+ 1 2 3 4 5 6)))
 ;; ⇒ #'user/ft
 ft
-;; ⇒ #<core$future_call$reify__6110@effa25e: 21>
+;; ⇒ #object[clojure.core$future_call$reify__8544 0x70029d2d {:status :ready, :val 21}]
 @ft
 ;; ⇒ 21
 ```
@@ -962,13 +974,13 @@ on a promise along with a value:
 (def p (promise))
 ;; ⇒ #'user/p
 p
-;; ⇒ #<core$promise$reify__6153@306a0a21: :pending>
+;; ⇒ #object[clojure.core$promise$reify__8591 0x2a2dc0a {:status :pending, :val nil}]
 (realized? p)
 ;; ⇒ false
 
 ;; delivering a promise makes it realized
 (deliver p {:result 42})
-;; ⇒ #<core$promise$reify__6153@306a0a21: {:result 42}>
+;; ⇒ #object[clojure.core$promise$reify__8591 0x2a2dc0a {:status :ready, :val {:result 42}}]
 (realized? p)
 ;; ⇒ true
 @p
@@ -1003,7 +1015,7 @@ the `clojure.core/locking` macro:
   (locking l
     (.add l 10))
   l)
-;; ⇒ #<ArrayList [10]>
+;; ⇒ [10]
 ```
 
 Note that for immutable Clojure data structures, explicit locking is effectively
@@ -1058,7 +1070,12 @@ Executors are most often instantiated using static methods of the `java.util.con
       ^Callable clbl        (cast Callable (fn []
                                              (reduce + (range 0 10000))))]
   (.submit pool clbl))
-;; ⇒ #<FutureTask java.util.concurrent.FutureTask@19ca276f>
+;; ⇒ #object[java.util.concurrent.FutureTask 0x77f4c040 "java.util.concurrent.FutureTask@77f4c040[Not completed, task = user$eval5944$fn__5945@4b8137c5]"]
+;; ...wait some time...
+*1
+;; => #object[java.util.concurrent.FutureTask 0x77f4c040 "java.util.concurrent.FutureTask@77f4c040[Completed normally]"]
+@*1
+49995000
 ```
 
 In the example above, we create a new fixed size thread pool with 16 threads

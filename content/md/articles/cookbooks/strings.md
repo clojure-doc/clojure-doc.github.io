@@ -110,7 +110,7 @@ bar")                             ;=> ["foo" "bar"]
 
 ;; Get byte array of given encoding.
 ;; (The output will likely have a different number than "3c3660".)
-(.getBytes "foo" "UTF-8") ;=> #<byte[] [B@3c3660>
+(.getBytes "foo" "UTF-8") ;=> #object["[B" 0x39666e42 "[B@39666e42"]
 
 ;; Parsing keywords
 (keyword "foo")    ;=> :foo

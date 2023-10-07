@@ -127,7 +127,8 @@ It is possible to use fully qualified names (e.g. `java.util.Date`) or short nam
 An example with constructor arguments:
 
 ``` clojure
-(java.net.URI. "http://clojure.org")  ; ⇒ #<URI http://clojure.org>
+(java.net.URI. "http://clojure.org")
+;;⇒ #object[java.net.URI 0x8bd076a "http://clojure.org"]
 ```
 
 ## How to Invoke Java Methods
@@ -185,16 +186,20 @@ can use the `doto` macro:
 (doto (java.util.Stack.)
   (.push 42)
   (.push 13)
-  (.push 7))  ; ⇒ #<Stack [42, 13, 7]>
+  (.push 7))  ; ⇒ [42 13 7]
+
+;; assume (import java.awt.Point)
 
 (let [pt (Point. 0 0)]
   (doto pt
-    (.move  10 0)))  ; ⇒ #<Point java.awt.Point[x=10, y=0]
+    (.move  10 0)))
+;;⇒ #object[java.awt.Point 0x1084ac45 "java.awt.Point[x=10,y=0]"]
 
 (let [pt (Point. 0 0)]
   (doto pt
     (.move  10 0)
-    (.translate  0 10)))  ; ⇒ #<Point java.awt.point[x=10,y=10]
+    (.translate  0 10)))
+;;⇒ #object[java.awt.Point 0x7bc6935c "java.awt.Point[x=10,y=10]"]
 ```
 
 Each method is called on the original object -- the first argument
@@ -265,7 +270,8 @@ to do this often.
 the same way as static fields, except on enum classes:
 
 ``` clojure
-java.util.concurrent.TimeUnit/MILLISECONDS  ; ⇒ #< MILLISECONDS>
+java.util.concurrent.TimeUnit/MILLISECONDS
+;;⇒ #object[java.util.concurrent.TimeUnit 0x4cc7d00d "MILLISECONDS"]
 ```
 
 
@@ -474,13 +480,13 @@ as regular Java objects:
 (require '[clojure.string :as str])
 (import java.io.File)
 
-;; a file filter implementation that keeps only .clj files
+;; a file filter implementation that keeps only .edn files
 (let [ff (reify java.io.FilenameFilter
            (accept [this dir name]
-             (str/ends-with? name ".clj")))
-    dir  (File. "/Users/antares/Development/ClojureWerkz/neocons.git/")]
+             (str/ends-with? name ".edn")))
+    dir  (File. "/home/sean/oss/clojure-doc.github.io/")]
   (into [] (.listFiles dir ff)))
-;; ⇒ [#<File /Users/antares/Development/ClojureWerkz/neocons.git/project.clj>]
+;; ⇒ [#object[java.io.File 0x1450131a "/home/sean/oss/clojure-doc.github.io/deps.edn"]]
 ```
 
 `reify` forms a closure: it will capture locals in its scope. This can be used to make implemented
@@ -489,15 +495,15 @@ methods delegate to Clojure functions. The same example, rewritten with delegati
 ``` clojure
 user> (import java.io.File)
 
-;; a file filter implementation that keeps only .clj files
+;; a file filter implementation that keeps only .edn files
 (let [f  (fn [_dir name]
-           (str/ends-with? name ".clj"))
+           (str/ends-with? name ".edn"))
       ff (reify java.io.FilenameFilter
            (accept [this dir name]
              (f dir name)))
-    dir  (File. "/Users/antares/Development/ClojureWerkz/neocons.git/")]
+    dir  (File. "/home/sean/oss/clojure-doc.github.io/")]
   (into [] (.listFiles dir ff)))
-;; ⇒ [#<File /Users/antares/Development/ClojureWerkz/neocons.git/project.clj>]
+;; ⇒ [#object[java.io.File 0x5d512ddb "/home/sean/oss/clojure-doc.github.io/deps.edn"]]
 ```
 
 We have used `clojure.string/ends-with?` so that no type hints
@@ -523,7 +529,7 @@ interfaces, has no explicitly defined constructors and overrides `#toString`:
 (proxy [Object] []
        (toString []
          "I am an instance of an anonymous class generated via proxy"))
-;; ⇒ #<Object$0 I am an instance of an anonymous class generated via proxy>
+;; ⇒ #object[user.proxy$java.lang.Object$ff19274a 0x66bf40e5 "I am an instance of an anonymous class generated via proxy"]
 ```
 
 The Clojure compiler will generate an anonymous class for this `proxy` and, at runtime, the cost of

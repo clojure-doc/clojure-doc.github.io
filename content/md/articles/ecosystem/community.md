@@ -16,7 +16,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Online Communities
 
-  * [Clojurians Slack](https://clojurians.slack.com) -- currently the most active online community, generously sponsored by Slack -- [self-signup](http://clojurians.net) -- [partial archive of channels](https://clojurians-log.clojureverse.org/) (via `@logbot` on Slack)
+  * [Clojurians Slack](https://clojurians.slack.com) -- currently the most active online community, generously sponsored by Slack -- [self-signup at clojurians.net](http://clojurians.net) -- [partial archive of channels](https://clojurians-log.clojureverse.org/) (via `@logbot` on Slack)
   * [Clojurians Zulip](https://clojurians.zulipchat.com/) -- free, open source community, includes an archive of most channels from the Clojurians Slack (via `@zulip-mirror-bot` on Slack)
   * [Clojure SubReddit](https://www.reddit.com/r/Clojure/) -- r/Clojure -- the right-hand sidebar has links to many Clojure resources
   * [ClojureVerse](https://clojureverse.org) -- online forum

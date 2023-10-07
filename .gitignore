@@ -4,5 +4,6 @@
 .lsp/.cache
 .nrepl-port
 .portal/vs-code.edn
+.rebel_readline_history
 /public/
 /target/
