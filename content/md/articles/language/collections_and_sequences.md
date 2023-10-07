@@ -1273,6 +1273,85 @@ it returns a lazy sequence from that item onwards:
 ;; ⇒ (5 6 7 8 9)
 ```
 
+## Transducers
+
+Rich Hickey introduced the [concept of transducers](https://clojure.org/news/2014/08/06/transducers-are-coming)
+in a mid-2014 blog post, and they arrived in Clojure 1.7. The official
+documentation has a good [reference page for transducers](https://clojure.org/reference/transducers).
+
+The core idea is to separate the transformation function from the input
+and output sources, specifying just the transformation itself. This allows
+transformations to be composed and reused in a variety of contexts.
+
+We might write the following code to transform a sequence of numbers:
+
+```klipse-clojure
+(->> (range 10)
+     (map inc)
+     (filter even?)
+     (take 3)
+     (into []))
+```
+
+At each step, the input is explicitly turned into a sequence and transformed
+into a new sequence. The longer the pipeline of transformations, the more
+intermediate sequences are created and later thrown away. In the above example,
+the final step forces the initial portions of those sequences to be realized.
+but up to that point, the transformations are all lazy because the functions
+themselves are lazy.
+
+Many of the sequence and collection functions you've seen in earlier sections
+above have an arity that omits the sequence or collection argument, e.g.,
+`(map inc)` instead of `(map inc my-seq)`. When the sequence or collection
+argument is omitted, these calls return a *transducer* that can be composed
+and applied as part of a transformation.
+
+Transducers allow us to separate the transformation from the input and output:
+
+```klipse-clojure
+(def xf (comp (map inc) (filter even?) (take 3)))
+(into [] xf (range 10))
+```
+
+We can apply this transformation (`xf`) to any input source and produce
+any output -- and no intermediate sequences are created: the composed transformation
+is applied directly to the elements from the input to produce the output.
+
+### Lazy or Eager?
+
+Transducers may shrink the input (as above) or expand it. Transducers are not
+inherently lazy or eager since they are called, as needed, by the process
+that applies the transformation to the input to produce the output.
+
+We've seen eager transformations in the earlier sections above, such as
+`(into [] my-seq)` which is implemented as `(reduce conj [] my-seq)`
+under the hood. In a similar way, `(into [] xf my-seq)` is equivalent to
+`(reduce (xf conj) [] my-seq)`. Since `(reduce (xf f) init my-seq)` would
+be a common construct when eagerly transforming sequences, Clojure provides
+`(transduce xf f init my-seq)` as a shorthand.
+
+```klipse-clojure
+(def xf (comp (map inc) (filter even?) (take 3)))
+(transduce xf + 0 (range 10))
+```
+
+Whereas `(into [] xf (range 10))` produces a vector of three numbers,
+because it is `(transduce xf conj [] (range 10))`, we can reuse the transformation
+in `(transduce xf + 0 (range 10))` to produce a single number.
+
+Clojure also provides `(sequence xf my-seq)` as a way to get a lazy sequence
+of applications of the transformation to the input.
+
+(note how the transducer is applied to the
+reducing function `conj` to produce a new reducing function).
+
+Additional reading:
+
+* [Getting Started with Transducers](https://practical.li/blog/posts/transducers-in-clojure-getting-started) -- [Practicalli](https://practical.li/)
+* [Transducers Reference](https://clojure.org/reference/transducers) -- [clojure.org](https://clojure.org/)
+* [Examples of `transduce`](https://clojuredocs.org/clojure.core/transduce) -- [clojuredocs.org](https://clojuredocs.org/)
+* [Examples of `sequence`](https://clojuredocs.org/clojure.core/sequence) -- [clojuredocs.org](https://clojuredocs.org/)
+
 ## Transients
 
 Clojure data structures are immutable, they do not change. Mutating them produces
