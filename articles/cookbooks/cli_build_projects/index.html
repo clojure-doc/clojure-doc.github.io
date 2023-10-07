@@ -363,55 +363,44 @@ file if they are defined at the top of the file.</p><p>You might end up with som
     &lt;/repository&gt;
   &lt;/repositories&gt;
 &lt;/project&gt;
-</code></pre><p>While you can pass <code>:scm</code> as an option, there are several other fields that
+</code></pre><p>While you can pass <code>:scm</code> as an option, as shown above, there are several other fields that
 you might well want in the generated <code>pom.xml</code> before you upload it to Clojars,
 especially in light of this upcoming change to
-<a href="https://github.com/clojars/clojars-web/wiki/Pushing#licenses">Clojars policy about license information in <code>pom.xml</code> files</a>.</p><p>Luckily, <code>b/write-pom</code> allows you to pass a <code>:src-pom</code> option so you can
-specify a "template" <code>pom.xml</code> file for it to add coordinates and dependencies
-to.</p><p>Tools like <a href="https://github.com/seancorfield/deps-new"><code>deps-new</code></a> and Leiningen
-generate projects that already contain a more complete <code>pom.xml</code> file, so you
-don't have to worry too much about this if you create projects using those tools.</p><p>Otherwise, you can create a <code>pom.xml</code> file that has the additional information
-you want, and then pass <code>:src-pom</code> to <code>b/write-pom</code> specifying the path to that
-"template" <code>pom.xml</code> file. To satisfy the Clojars policy, you'll need to add
-at least:</p><pre><code class="xml">  &lt;licenses&gt;
-    &lt;license&gt;
-      &lt;name&gt;Eclipse Public License&lt;/name&gt;
-      &lt;url&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/url&gt;
-    &lt;/license&gt;
-  &lt;/licenses&gt;
-</code></pre><p>Since quite a bit of tooling out there expects the top-level <code>pom.xml</code> file in
-a project to be the "complete" version, you will probably want to put your
-"template" <code>pom.xml</code> file in a subdirectory, such as <code>template</code>, and then
-specify the path to that file as <code>:src-pom</code>. See, for example, the "template"
-<a href="https://github.com/seancorfield/next-jdbc/blob/develop/template/pom.xml"><code>pom.xml</code> file for <code>next.jdbc</code></a>:</p><pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;name&gt;next.jdbc&lt;/name&gt;
-  &lt;description&gt;The next generation of clojure.java.jdbc: a new low-level Clojure wrapper for JDBC-based access to databases.&lt;/description&gt;
-  &lt;url&gt;https://github.com/seancorfield/next-jdbc&lt;/url&gt;
-  &lt;licenses&gt;
-    &lt;license&gt;
-      &lt;name&gt;Eclipse Public License&lt;/name&gt;
-      &lt;url&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/url&gt;
-    &lt;/license&gt;
-  &lt;/licenses&gt;
-  &lt;developers&gt;
-    &lt;developer&gt;
-      &lt;name&gt;Sean Corfield&lt;/name&gt;
-    &lt;/developer&gt;
-  &lt;/developers&gt;
-  &lt;scm&gt;
-    &lt;url&gt;https://github.com/seancorfield/next-jdbc&lt;/url&gt;
-    &lt;connection&gt;scm:git:git://github.com/seancorfield/next-jdbc.git&lt;/connection&gt;
-    &lt;developerConnection&gt;scm:git:ssh://git@github.com/seancorfield/next-jdbc.git&lt;/developerConnection&gt;
-  &lt;/scm&gt;
-&lt;/project&gt;
+<a href="https://github.com/clojars/clojars-web/wiki/Pushing#licenses">Clojars policy about license information in <code>pom.xml</code> files</a>.</p><p>Luckily, <code>b/write-pom</code> allows you to provide additional information via the
+<code>:src-pom</code> option or, as of <code>tools.build</code> 0.9.6, the <code>:pom-data</code> option.
+The <code>:src-pom</code> option allows you to specify a "template" <code>pom.xml</code> file for
+<code>b/write-pom</code> to add coordinates and dependencies to.
+The newer <code>:pom-data</code> option allows you to specify those extra fields
+as Hiccup-style data in your <code>build.clj</code> file.</p><blockquote><p>Note: if you use <code>:src-pom</code>, you need to be aware that quite a bit of tooling out there expects the top-level <code>pom.xml</code> file in a project to be the "complete" version, so you will either want to put your "template" <code>pom.xml</code> file in a subdirectory or name it something like <code>pom-template.xml</code> so it won't be considered as a top-level <code>pom.xml</code> file, and then specify the path to that file as <code>:src-pom</code> in your call to <code>b/write-pom</code>. If you use <code>:pom-data</code>, you don't have to worry about this.</p></blockquote><p>Tools like <a href="https://github.com/seancorfield/deps-new"><code>deps-new</code></a> and Leiningen
+generate projects that produce a more complete <code>pom.xml</code> file, so you
+don't have to worry too much about this if you create projects using those tools.</p><p>Otherwise, you can provide additional <code>pom.xml</code> content to <code>:pom-data</code> as a vector of
+section information, in your <code>build.clj</code> file.</p><p>To satisfy the Clojars policy, you'll need to add
+at least:</p><pre><code class="clojure">(def pom-template
+  [[:licenses
+    [:license
+     [:name "Eclipse Public License"]
+     [:url "http://www.eclipse.org/legal/epl-v10.html"]]]])
+...
+  (b/write-pom ... :pom-data pom-template)
+</code></pre><p>For a fully-fleshed out example, see the
+<a href="https://github.com/seancorfield/next-jdbc/blob/bea53cb15b4d826061e07dd317f6fd3727dcec3c/build.clj#L35-L60"><code>pom-template</code> function for <code>next.jdbc</code></a>
+in that project's <code>build.clj</code> file:</p><pre><code class="clojure">(defn- pom-template [version]
+  [[:description "The next generation of clojure.java.jdbc: a new low-level Clojure wrapper for JDBC-based access to databases."]
+   [:url "https://github.com/seancorfield/next-jdbc"]
+   [:licenses
+    [:license
+     [:name "Eclipse Public License"]
+     [:url "http://www.eclipse.org/legal/epl-v10.html"]]]
+   [:developers
+    [:developer
+     [:name "Sean Corfield"]]]
+   [:scm
+    [:url "https://github.com/seancorfield/next-jdbc"]
+    [:connection "scm:git:https://github.com/seancorfield/next-jdbc.git"]
+    [:developerConnection "scm:git:ssh://git@github.com/seancorfield/next-jdbc.git"]
+    [:tag (str "v" version)]]])
 </code></pre><p>The <code>jar-opts</code> function in <code>next.jdbc</code>'s <code>build.clj</code> file specifies the
-<a href="https://github.com/seancorfield/next-jdbc/blob/develop/build.clj#L45"><code>:src-pom</code> option</a>:</p><pre><code class="clojure">           :src-pom "template/pom.xml"
-</code></pre><p>For a fairly comprehensive "template" <code>pom.xml</code> file, look at the
-<a href="https://github.com/seancorfield/deps-new/blob/develop/resources/org/corfield/new/lib/root/pom.xml">source template <code>deps-new</code> uses</a>.
-The <code>{{..}}</code> placeholders are replaced by <code>deps-new</code> with the appropriate
-values when it creates a new project.</p><h2 id="continuous-integration-pipelines">Continuous Integration Pipelines</h2><p>Now that we have testing and JAR-building covered, we can add a <code>ci</code> function
+<code>:pom-data</code> as <code>(pom-template version)</code>.</p><blockquote><p>Note: while <a href="https://clojure.github.io/tools.build/clojure.tools.build.api.html#var-write-pom"><code>b/write-pom</code>'s docstring</a> says "The pom-data MUST NOT include: ... :scm", the caveat is to avoid specifying <strong>both</strong> the <code>:scm</code> option <strong>and</strong> also an <code>:scm</code> section in the <code>:pom-data</code> -- you can specify one or the other, but not both.</p></blockquote><h2 id="continuous-integration-pipelines">Continuous Integration Pipelines</h2><p>Now that we have testing and JAR-building covered, we can add a <code>ci</code> function
 to our <code>build.clj</code> file to run our tests and build a JAR file:</p><pre><code class="clojure">(defn ci [opts]
   (-&gt; opts
       (test-multi)
