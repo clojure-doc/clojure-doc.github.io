@@ -140,7 +140,7 @@ bar")                             ;=&gt; ["foo" "bar"]
 
 ;; Get byte array of given encoding.
 ;; (The output will likely have a different number than "3c3660".)
-(.getBytes "foo" "UTF-8") ;=&gt; #&lt;byte[] [B@3c3660&gt;
+(.getBytes "foo" "UTF-8") ;=&gt; #object["[B" 0x39666e42 "[B@39666e42"]
 
 ;; Parsing keywords
 (keyword "foo")    ;=&gt; :foo
@@ -362,6 +362,8 @@ in Common Lisp's Hyperspec.</p><pre><code class="clojure">;; The first param pri
                     <li><a href="/articles/language/interop/">Language: Java Interop</a></li>
                     
                     <li><a href="/articles/language/polymorphism/">Language: Polymorphism</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Language: Concurrency and Parallelism</a></li>
                     
                     <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
                     

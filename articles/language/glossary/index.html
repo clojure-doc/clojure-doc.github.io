@@ -70,7 +70,7 @@ args are passed).</p><h3 id="binding-form">binding-form</h3><p>Could mean one of
 might be a data structure used for
 <a href="#destructuring">destructuring</a>.</p></li><li><p>Clojure provides the <code>binding</code> macro, used for setting the
 thread-local value of a dynamic var. The whole expression (form)
-is sometimes referred to as the "binding <a href="#form">form</a>".</p></li></ol><h3 id="classpath">classpath</h3><p>The search path used by the JVM to locate classes which are not
+is sometimes referred to as the "binding <a href="#form">form</a>".</p></li></ol><p><a name="classpath"></a></p><h3 id="classpath">classpath</h3><p>The search path used by the JVM to locate classes which are not
 part of the Java standard class library. May include jar files.</p><h3 id="comparator">comparator</h3><p>A function that takes two args and compares them.  Returns -1, 0, or 1
 depending whether the first arg is less than, equal to or greater than
 the second.  The stock comparator that Clojure.core comes with is
@@ -91,7 +91,7 @@ This allows the code to be treated as data, and the data to be treated
 as code. This feature of Clojure, and other Lisps, allows for
 macros in the language, since they can operate on code as a data
 structure, and to return a transformation of that structure to
-be the representation of new code.</p><h3 id="idempotent">idempotent</h3><p>An operation that when given the same inputs will produce the same
+be the representation of new code.</p><p><a name="idempotent"></a></p><h3 id="idempotent">idempotent</h3><p>An operation that when given the same inputs will produce the same
 result when called one or more times. An idempotent function may
 produce a side effect, such a updating a ref or an atom, but will
 only produce the side effect once. An idempotent function is
@@ -119,7 +119,7 @@ list, but particular values in them are only computed the moment you
 ask for them --- not sooner.</p><p>This has the added benefit that you can easily create infinite
 sequences that don't consume infinite memory.</p><p>Many of the built-in Clojure functions return lazy sequences.</p><p>See also <a href="#realize">realize</a>.</p><h3 id="let-binding">let-binding</h3><p>AKA, "binding vector", or just "bindings": in a <code>let</code> (and expressions
 that work like let, for example, <code>defn</code>, <code>loop</code>, <code>loop</code>, &amp; <code>fn</code>), the
-vector that comes first where you specify lexical bindings.</p><p>See also <a href="#binding_form">binding form</a></p><h3 id="libspec">libspec</h3><p><em>todo</em></p><h3 id="macro">macro</h3><p>A special type of function which is transforms a S-Expression read in
+vector that comes first where you specify lexical bindings.</p><p>See also <a href="#binding_form">binding form</a></p><p><a name="libspec"></a></p><h3 id="libspec">libspec</h3><p><em>todo</em></p><h3 id="macro">macro</h3><p>A special type of function which is transforms a S-Expression read in
 and applies a transformation to the S-Expression resulting in a new
 form.  This process is called macro-expansion, and is done as part
 of the Clojure reader.</p><h3 id="map">map</h3><p>Either refers to the built in <code>map</code> function, or else means "a
@@ -167,9 +167,9 @@ S-Expressions are able to represent both data in Clojure, as well as
 the Clojure code itself, allowing Clojure to be a
 <a href="#homoiconicity">homoiconic</a> language.</p><h3 id="state">state</h3><p>The <a href="#value">value</a> that a given <a href="#identity">identity</a> may have at a
 given time.  When you change the state of an identity, you're changing
-to which value it refers. Clojure uses values to represent states.</p><h3 id="stm-software-transactional-memory">STM (Software Transactional Memory)</h3><p>Software Transactional Memory (STM) is a concurrency control method to
+to which value it refers. Clojure uses values to represent states.</p><p><a name="stm"></a></p><h3 id="stm-software-transactional-memory">STM (Software Transactional Memory)</h3><p>Software Transactional Memory (STM) is a concurrency control method to
 coordinate and control access to shared storage as an alternative to
-lock-based synchronization. Clojure's STM uses multiversion concurrency
+lock-based synchronization. Clojure's STM uses multi-version concurrency
 control (MVCC) as an alternative to lock-based transactions, as well as
 ensuring changes are made atomically, consistently, and in
 isolation. It does this by taking a snapshot of the ref, making the
@@ -187,7 +187,7 @@ refers to how they pass values to each subsequent argument in the
 macro, not concurrency.</p><h3 id="thrush">thrush</h3><p>A combinator. Not the same thing as the <a href="#threading-macros">thread-first
 macro</a>.  More info at
 <a href="http://blog.fogus.me/2010/09/28/thrush-in-clojure-redux/">http://blog.fogus.me/2010/09/28/thrush-in-clojure-redux/</a> if you're
-curious.</p><h3 id="transaction">transaction</h3><p><em>todo</em></p><h3 id="type-erasure">type erasure</h3><p>Java-related: Java generics allow you to specify a type for a
+curious.</p><p><a name="transaction"></a></p><h3 id="transaction">transaction</h3><p><em>todo</em></p><h3 id="type-erasure">type erasure</h3><p>Java-related: Java generics allow you to specify a type for a
 collection.  This way you don't have to cast every object you pull out
 of an ArrayList like in the old days. This is a courtesy of the java
 compiler. The java runtime doesn't know about generics --- the
@@ -242,6 +242,8 @@ See also <a href="#rest_args">rest args</a>.</p>
                     <li><a href="/articles/language/interop/">Language: Java Interop</a></li>
                     
                     <li><a href="/articles/language/polymorphism/">Language: Polymorphism</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Language: Concurrency and Parallelism</a></li>
                     
                     <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
                     

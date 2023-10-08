@@ -97,7 +97,8 @@ to see this:</p><pre><code class="clojure">(java.util.Date.)     ; ⇒ #inst "20
 </code></pre><p>It is possible to use fully qualified names (e.g. <code>java.util.Date</code>) or short names with imports:</p><pre><code class="clojure">(import java.util.Date)
 
 (Date.)  ; ⇒ #inst "2012-10-09T21:24:27.229-00:00"
-</code></pre><p>An example with constructor arguments:</p><pre><code class="clojure">(java.net.URI. "http://clojure.org")  ; ⇒ #&lt;URI http://clojure.org&gt;
+</code></pre><p>An example with constructor arguments:</p><pre><code class="clojure">(java.net.URI. "http://clojure.org")
+;;⇒ #object[java.net.URI 0x8bd076a "http://clojure.org"]
 </code></pre><h2 id="how-to-invoke-java-methods">How to Invoke Java Methods</h2><h3 id="instance-methods">Instance Methods</h3><p>Instance methods are invoked using the <code>.</code> special form:</p><pre><code class="clojure">(let [d (java.util.Date.)]
   (. d getTime))  ; ⇒ 1349819873183
 </code></pre><p>Just like with object instantiation, it is much more common to see an alternative version:</p><pre><code class="clojure">(let [d (java.util.Date.)]
@@ -112,16 +113,20 @@ to see this:</p><pre><code class="clojure">(java.util.Date.)     ; ⇒ #inst "20
 can use the <code>doto</code> macro:</p><pre><code class="clojure">(doto (java.util.Stack.)
   (.push 42)
   (.push 13)
-  (.push 7))  ; ⇒ #&lt;Stack [42, 13, 7]&gt;
+  (.push 7))  ; ⇒ [42 13 7]
+
+;; assume (import java.awt.Point)
 
 (let [pt (Point. 0 0)]
   (doto pt
-    (.move  10 0)))  ; ⇒ #&lt;Point java.awt.Point[x=10, y=0]
+    (.move  10 0)))
+;;⇒ #object[java.awt.Point 0x1084ac45 "java.awt.Point[x=10,y=0]"]
 
 (let [pt (Point. 0 0)]
   (doto pt
     (.move  10 0)
-    (.translate  0 10)))  ; ⇒ #&lt;Point java.awt.point[x=10,y=10]
+    (.translate  0 10)))
+;;⇒ #object[java.awt.Point 0x7bc6935c "java.awt.Point[x=10,y=10]"]
 </code></pre><p>Each method is called on the original object -- the first argument
 to <code>doto</code> -- and it returns that same object as the result.</p><h2 id="how-to-access-java-fields">How to Access Java Fields</h2><p>Public mutable fields are not common in Java libraries but sometimes you need to access them.
 It's done with the same dot special form:</p><pre><code class="clojure">(import java.awt.Point)
@@ -153,7 +158,8 @@ demonstrated earlier and a new value:</p><pre><code class="clojure">(import java
   (.-y pt))  ; ⇒ 100
 </code></pre><p>Fortunately, mutable public fields are rare to meet in the JVM ecosystem so you won't need
 to do this often.</p><h2 id="how-to-work-with-enums">How To Work With Enums</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html">Enums (enumeration) type</a> values are accessed
-the same way as static fields, except on enum classes:</p><pre><code class="clojure">java.util.concurrent.TimeUnit/MILLISECONDS  ; ⇒ #&lt; MILLISECONDS&gt;
+the same way as static fields, except on enum classes:</p><pre><code class="clojure">java.util.concurrent.TimeUnit/MILLISECONDS
+;;⇒ #object[java.util.concurrent.TimeUnit 0x4cc7d00d "MILLISECONDS"]
 </code></pre><h2 id="determining-classes-of-java-objects">Determining Classes of Java Objects</h2><p>To get class of a particular value, pass it to <code>clojure.core/class</code>:</p><pre><code class="clojure">(class 1)       ; ⇒ java.lang.Long
 (class 1.0)     ; ⇒ java.lang.Double
 (class "docs")  ; ⇒ java.lang.String
@@ -226,25 +232,25 @@ argument to <code>accept</code> -- the filename string -- will be bound to <code
 as regular Java objects:</p><pre><code class="clojure">(require '[clojure.string :as str])
 (import java.io.File)
 
-;; a file filter implementation that keeps only .clj files
+;; a file filter implementation that keeps only .edn files
 (let [ff (reify java.io.FilenameFilter
            (accept [this dir name]
-             (str/ends-with? name ".clj")))
-    dir  (File. "/Users/antares/Development/ClojureWerkz/neocons.git/")]
+             (str/ends-with? name ".edn")))
+    dir  (File. "/home/sean/oss/clojure-doc.github.io/")]
   (into [] (.listFiles dir ff)))
-;; ⇒ [#&lt;File /Users/antares/Development/ClojureWerkz/neocons.git/project.clj&gt;]
+;; ⇒ [#object[java.io.File 0x1450131a "/home/sean/oss/clojure-doc.github.io/deps.edn"]]
 </code></pre><p><code>reify</code> forms a closure: it will capture locals in its scope. This can be used to make implemented
 methods delegate to Clojure functions. The same example, rewritten with delegation:</p><pre><code class="clojure">user&gt; (import java.io.File)
 
-;; a file filter implementation that keeps only .clj files
+;; a file filter implementation that keeps only .edn files
 (let [f  (fn [_dir name]
-           (str/ends-with? name ".clj"))
+           (str/ends-with? name ".edn"))
       ff (reify java.io.FilenameFilter
            (accept [this dir name]
              (f dir name)))
-    dir  (File. "/Users/antares/Development/ClojureWerkz/neocons.git/")]
+    dir  (File. "/home/sean/oss/clojure-doc.github.io/")]
   (into [] (.listFiles dir ff)))
-;; ⇒ [#&lt;File /Users/antares/Development/ClojureWerkz/neocons.git/project.clj&gt;]
+;; ⇒ [#object[java.io.File 0x5d512ddb "/home/sean/oss/clojure-doc.github.io/deps.edn"]]
 </code></pre><p>We have used <code>clojure.string/ends-with?</code> so that no type hints
 are required: unlike in the "inline" implementation (above),
 the Clojure compiler would not be able to infer the types of
@@ -258,7 +264,7 @@ not necessary.</p><p>A very minimalistic example, we instantiate an anonymous cl
 interfaces, has no explicitly defined constructors and overrides <code>#toString</code>:</p><pre><code class="clojure">(proxy [Object] []
        (toString []
          "I am an instance of an anonymous class generated via proxy"))
-;; ⇒ #&lt;Object$0 I am an instance of an anonymous class generated via proxy&gt;
+;; ⇒ #object[user.proxy$java.lang.Object$ff19274a 0x66bf40e5 "I am an instance of an anonymous class generated via proxy"]
 </code></pre><p>The Clojure compiler will generate an anonymous class for this <code>proxy</code> and, at runtime, the cost of
 a <code>proxy</code> call is the cost of instantiating this class (the class itself is generated just once).</p><p>A slightly more complex example where the generated class also implements <code>java.lang.Runnable</code> (runnable objects
 are commonly used with threads and <code>java.util.concurrent</code> classes) which defines one method, <code>run</code>:</p><pre><code class="clojure">;; extends java.lang.Object, implements java.lang.Runnable
@@ -541,6 +547,8 @@ gsnewmark <a href="mailto:gsnewmark@meta.ua">gsnewmark@meta.ua</a></p>
                     <li><a href="/articles/language/interop/">Language: Java Interop</a></li>
                     
                     <li><a href="/articles/language/polymorphism/">Language: Polymorphism</a></li>
+                    
+                    <li><a href="/articles/language/concurrency_and_parallelism/">Language: Concurrency and Parallelism</a></li>
                     
                     <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
                     
