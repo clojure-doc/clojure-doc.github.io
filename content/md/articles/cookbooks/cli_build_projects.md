@@ -570,7 +570,7 @@ at least:
   [[:licenses
     [:license
      [:name "Eclipse Public License"]
-     [:url "http://www.eclipse.org/legal/epl-v10.html"]]]])
+     [:url "https://www.eclipse.org/legal/epl-v10.html"]]]])
 ...
   (b/write-pom ... :pom-data pom-template)
 ```
@@ -586,7 +586,7 @@ in that project's `build.clj` file:
    [:licenses
     [:license
      [:name "Eclipse Public License"]
-     [:url "http://www.eclipse.org/legal/epl-v10.html"]]]
+     [:url "https://www.eclipse.org/legal/epl-v10.html"]]]
    [:developers
     [:developer
      [:name "Sean Corfield"]]]

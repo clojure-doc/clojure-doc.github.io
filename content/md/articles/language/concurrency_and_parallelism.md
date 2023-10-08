@@ -393,7 +393,7 @@ the system out of kernel resources.
 #### Using Custom Executors With Agents
 
 Agents can be used (and abused) for arbitrary code execution in a thread pool. Because the default
-thread pool Clojure maintains will not be a good fit for all use cases, Clojure 1.5 introduced
+thread pool Clojure maintains will not be a good fit for all use cases, Clojure provides
 a function that lets you control what thread pool (executor) is used by `clojure.core/send`:
 `clojure.core/set-agent-send-executor!`.
 
@@ -409,7 +409,8 @@ The default thread pool size is `number of available CPU cores + 2`.
 `clojure.core/set-agent-send-off-executor!` is a similar function that controls what
 thread pool `clojure.core/send-off` will use.
 
-Finally, another new function in 1.5 is `clojure.core/send-via` which is like `` but lets you specify
+Finally, another useful function is `clojure.core/send-via` which is like
+`clojure.core/send` but lets you specify
 an executor to be used on a case-by-case basis:
 
 ``` clojure
@@ -503,8 +504,10 @@ idea, when the error mode is set to `:continue` you must also pass an error hand
 ;; ⇒ 3
 ```
 
-The handler function takes two arguments: an agent and the exception that occured.
+The handler function takes two arguments: an agent and the exception that occurred.
 
+You can also change the error mode and error handler programmatically, using
+`clojure.core/set-error-mode!` and `clojure.core/set-error-handler!`.
 
 
 #### Summary and Use Cases
@@ -515,8 +518,8 @@ not require strict consistency for reads:
  * Counters (e.g. message rates in event processing)
  * Collections (e.g. recently processed events)
 
-Agents can be used for offloading arbitrary computations to a thread pool, however,
-only starting with Clojure 1.5 they can provide the same flexiblity as JDK executors
+Agents can be used for offloading arbitrary computations to a thread pool,
+and they can provide the same flexibility as JDK executors
 (thread pools).
 
 
@@ -529,7 +532,7 @@ identities can be modified concurrently within a *[transaction](/articles/langua
  * No race conditions between involved refs
  * No possibility of deadlocks between involved refs
 
-Refs provide ACI of [ACID](http://en.wikipedia.org/wiki/ACID). Refs
+Refs provide ACI of [ACID](https://en.wikipedia.org/wiki/ACID). Refs
 are backed by Clojure's implementation of [*software transactional
 memory* (STM)](/articles/language/glossary/#stm).
 
@@ -605,10 +608,10 @@ applied in any order. Clojure's STM implementation acknowledges this
 fact and provides an alternative way to modify refs:
 `clojure.core/commute`. `commute` must only be used for operations
 that [commute in the mathematical
-sense](http://mathforum.org/dr.math/faq/faq.property.glossary.html#commutative):
+sense](https://en.wikipedia.org/wiki/Commutative_property):
 the order can be changed without affecting the result. For example,
 addition is commutative (1 + 10 produces the same result as 10 + 1)
-but substraction is not (1 &minus; 10 does not equal 10 &minus; 1).
+but subtraction is not (1 &minus; 10 does not equal 10 &minus; 1).
 
 `clojure.core/commute` has the same signature as `clojure.core/alter`:
 
@@ -644,9 +647,10 @@ Software transactional memory is a powerful but highly specialized tool. Because
 you must only use pure functions with STM. I/O operations cannot be undone by the runtime and very often are
 not [idempotent](/articles/language/glossary/#idempotent).
 
-Structuring your application code as *pure core* and *edge code* that interacts with the user or other
+Structuring your application code as a *pure core* with *edge code* that interacts with the user or other
 services (performing I/O operations and other side-effects) helps with this. In that case, the pure core
-can use STM without issues.
+can use STM without issues. This is often referred to as
+[*functional core, imperative shell*](https://www.bing.com/search?q=functional+core%2C+imperative+shell).
 
 For example, in a Web or network server, incoming requests are the edge code: they do I/O. The pure core
 is then called to modify server state, do any calculations necessary, return a result that is returned
@@ -698,7 +702,7 @@ transaction:
 Vars are the reference type you are already familiar with. You define them via the `def` special form:
 
 ``` clojure
-(def url "http://en.wikipedia.org/wiki/Margarita")
+(def url "https://en.wikipedia.org/wiki/Margarita")
 ```
 
 Functions defined via `defn` are also stored in vars. Vars can be dynamically scoped. They have
@@ -707,15 +711,15 @@ with `def`, you define a var that only has root binding, so its value will be th
 what thread you use it from:
 
 ``` clojure
-(def url "http://en.wikipedia.org/wiki/Margarita")
+(def url "https://en.wikipedia.org/wiki/Margarita")
 ;; ⇒ #'user/url
 (.start (Thread. (fn []
                    (println (format "url is %s" url)))))
-;; outputs "url is http://en.wikipedia.org/wiki/Margarita"
+;; outputs "url is https://en.wikipedia.org/wiki/Margarita"
 ;; ⇒ nil
 (.start (Thread. (fn []
                    (println (format "url is %s" url)))))
-;; outputs "url is http://en.wikipedia.org/wiki/Margarita"
+;; outputs "url is https://en.wikipedia.org/wiki/Margarita"
 ;; ⇒ nil
 ```
 
@@ -725,14 +729,14 @@ To temporarily change var value, we need to make the var dynamic by adding `:dyn
 metadata and then use `clojure.core/binding`:
 
 ``` clojure
-(def ^:dynamic *url* "http://en.wikipedia.org/wiki/Margarita")
+(def ^:dynamic *url* "https://en.wikipedia.org/wiki/Margarita")
 ;; ⇒ #'user/*url*
 (println (format "*url* is now %s" *url*))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Margarita"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Margarita"
 
-(binding [*url* "http://en.wikipedia.org/wiki/Cointreau"]
+(binding [*url* "https://en.wikipedia.org/wiki/Cointreau"]
   (println (format "*url* is now %s" *url*)))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Cointreau"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Cointreau"
 ;; ⇒ nil
 ```
 
@@ -746,28 +750,28 @@ in Java or Ruby, it is very similar and serves largely the same purpose). To dem
 the example to spin up 3 threads and alter the var's value from them:
 
 ``` clojure
-(def ^:dynamic *url* "http://en.wikipedia.org/wiki/Margarita")
+(def ^:dynamic *url* "https://en.wikipedia.org/wiki/Margarita")
 ;; ⇒ #'user/*url*
 (println (format "*url* is now %s" *url*))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Margarita"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Margarita"
 ;; ⇒ nil
 (.start (Thread. (fn []
-          (binding [*url* "http://en.wikipedia.org/wiki/Cointreau"]
+          (binding [*url* "https://en.wikipedia.org/wiki/Cointreau"]
             (println (format "*url* is now %s" *url*))))))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Cointreau"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Cointreau"
 ;; ⇒ nil
 (.start (Thread. (fn []
-                   (binding [*url* "http://en.wikipedia.org/wiki/Guignolet"]
+                   (binding [*url* "https://en.wikipedia.org/wiki/Guignolet"]
                      (println (format "*url* is now %s" *url*))))))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Guignolet"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Guignolet"
 ;; ⇒ nil
 (.start (Thread. (fn []
-                   (binding [*url* "http://en.wikipedia.org/wiki/Apéritif"]
+                   (binding [*url* "https://en.wikipedia.org/wiki/Apéritif"]
                      (println (format "*url* is now %s" *url*))))))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Apéritif"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Apéritif"
 ;; ⇒ nil
 (println (format "*url* is now %s" *url*))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Margarita"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Margarita"
 ;; ⇒ nil
 ```
 
@@ -783,24 +787,25 @@ which takes a var (not its value) and a function that takes the old var value an
 
 ``` clojure
 *url*
-;; ⇒ "http://en.wikipedia.org/wiki/Margarita"
+;; ⇒ "https://en.wikipedia.org/wiki/Margarita"
 (.start (Thread. (fn []
-                   (alter-var-root (var user/*url*) (fn [_] "http://en.wikipedia.org/wiki/Apéritif"))
+                   (alter-var-root (var user/*url*) (fn [_] "https://en.wikipedia.org/wiki/Apéritif"))
                    (println (format "*url* is now %s" *url*)))))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Apéritif"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Apéritif"
 ;; ⇒ nil
 *url*
-;; ⇒ "http://en.wikipedia.org/wiki/Apéritif"
+;; ⇒ "https://en.wikipedia.org/wiki/Apéritif"
 ```
 
 `clojure.core/var` is used to locate the var (`user/*url*` in our example executed in the REPL). Note that it
-finds the var itself (the reference, the "box"), not its value (what the var evalutes to).
+finds the var itself (the reference, the "box"), not its value (what the var evaluates to).
+You can also use the reader macro `#'` to get a var: `#'user/*url*` which is a little less typing.
 
 In the example above the function we use to alter var root ignores the current value and simply returns a
 predefined string:
 
 ``` clojure
-(fn [_] "http://en.wikipedia.org/wiki/Apéritif")
+(fn [_] "https://en.wikipedia.org/wiki/Apéritif")
 ```
 
 Such functions are common enough for `clojure.core` to provide a convenience higher-order function called
@@ -809,18 +814,20 @@ and returns that value. So, the function above would be more idiomatically writt
 
 ``` clojure
 *url*
-;; ⇒ "http://en.wikipedia.org/wiki/Margarita"
+;; ⇒ "https://en.wikipedia.org/wiki/Margarita"
 (.start (Thread. (fn []
-                   (alter-var-root (var user/*url*) (constantly "http://en.wikipedia.org/wiki/Apéritif"))
+                   (alter-var-root #'user/*url* (constantly "https://en.wikipedia.org/wiki/Apéritif"))
                    (println (format "*url* is now %s" *url*)))))
-;; outputs "*url* is now http://en.wikipedia.org/wiki/Apéritif"
+;; outputs "*url* is now https://en.wikipedia.org/wiki/Apéritif"
 ;; ⇒ nil
 *url*
-;; ⇒ "http://en.wikipedia.org/wiki/Apéritif"
+;; ⇒ "https://en.wikipedia.org/wiki/Apéritif"
 ```
 
-When is `alter-var-root` used in real world scenarios? Some Clojure data store and API clients stores active connection
-in a var, so initial connection requires root binding modification.
+When is `alter-var-root` used in real world scenarios? Mostly for working in
+the REPL where you want some system state in a global var to be easily accessible but its value
+would normally be computed locally inside a function (such as `-main` when
+an application starts up).
 
 #### Summary and Use Cases
 
@@ -851,8 +858,13 @@ guide.
 
 ### Dereferencing Support For Data Types Implemented In Java
 
+Clojure identifies data types that can be dereferenced by checking whether they implement
+the `clojure.lang.IDeref` interface. If that interface is not implemented, `deref`
+assumes the data type will implement `java.util.concurrent.Future` and calls
+`.get` on it.
+
 It is possible to make custom data types implemented in Java support dereferencing by
-making them implement the `clojure.lang.` interface:
+making them implement the `clojure.lang.IDeref` interface:
 
 ``` java
 package clojure.lang;
@@ -865,6 +877,18 @@ public interface IDeref{
 This can be done to make data types implemented in Java look and feel more like built-in
 Clojure data types, or make it possible to pass said types to a function that expects
 its arguments to be dereferenceable.
+
+### Dereferencing Support for Data Types Implemented in Clojure
+
+Clojure data types can be made dereferenceable by implementing the `clojure.lang.IDeref`,
+for example using `reify`:
+
+``` clojure
+(def d (reify clojure.lang.IDeref (deref [this] "I'm a value!")))
+;; => #'user/d
+@d
+;; => "I'm a value!"
+```
 
 
 ## Delays
@@ -1021,6 +1045,7 @@ the `clojure.core/locking` macro:
 Note that for immutable Clojure data structures, explicit locking is effectively
 not necessary.
 
+_This section will need revisiting when Virtual Threads become more common._
 
 ### Synchronization on Clojure Record Fields
 
@@ -1042,7 +1067,7 @@ they are developed and maintained by some of the experts in concurrency.
 `j.u.c.` is a mature library that has been heavily battle tested for
 almost a decade.
 
-While Clojure provides a whole toolbelt of concurrency features of its own,
+While Clojure provides a whole toolkit of concurrency features of its own,
 in certain cases the best solution is to use an existing `j.u.c.` class
 or even build a new abstraction on top of `j.u.c.` building blocks.
 
@@ -1169,7 +1194,7 @@ conditional atomic update operation (*compared-and-swap* aka *CAS*).
 Some of the more popular atomic types in the `j.u.c.atomic` package are [AtomicBoolean](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html),
 [AtomicLong](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html) and [AtomicReference](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicReference.html).
 
-Atomic references are pretty well covered in Clojure with atoms but ocassionally may be used by
+Atomic references are pretty well covered in Clojure with atoms but occasionally may be used by
 other libraries. An example to demonstrate how to use an atomic long for a thread-safe counter:
 
 ``` clojure
@@ -1189,12 +1214,12 @@ other libraries. An example to demonstrate how to use an atomic long for a threa
 ## Other Approaches to Concurrency
 
 There are also other approaches to concurrency that neither Clojure nor Java cover. The growing
-adoption of *message passing* concurrency (the [Actor model](http://en.wikipedia.org/wiki/Actor_model) and [CSP](http://en.wikipedia.org/wiki/Communicating_Sequential_Processes))
+adoption of *message passing* concurrency (the [Actor model](https://en.wikipedia.org/wiki/Actor_model) and [CSP](https://en.wikipedia.org/wiki/Communicating_Sequential_Processes))
 lead to the creation of several JVM-based frameworks for message passing. Some of the most popular ones
 include:
 
- * [Akka](http://akka.io)
- * [Jetlang](http://code.google.com/p/jetlang/)
+ * [Akka](https://akka.io)
+ * [Jetlang](https://github.com/jetlang/)
  * [LMAX Disruptor](https://lmax-exchange.github.io/disruptor/)
 
 Akka's Java API can be used from Clojure either directly or via a library called [Okku](https://github.com/gaverhae/okku).
@@ -1221,7 +1246,7 @@ can cover it well in just one guide.  To get a better understanding of
 the subject, one can refer to a few excellent books:
 
  * [Java Concurrency in Practice](https://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601) by Brian Goetz et al. is a true classic.
- * [Programming Concurrency on the JVM](http://pragprog.com/book/vspcon/programming-concurrency-on-the-jvm) demonstrates a range of concurrency features in several JVM languages.
+ * [Programming Concurrency on the JVM](https://pragprog.com/titles/vspcon/programming-concurrency-on-the-jvm/) demonstrates a range of concurrency features in several JVM languages.
 
 
 ## Wrapping Up
@@ -1247,7 +1272,7 @@ solution or approach to it. On the JVM, Clojure offers several
 concurrency-related features of its own but also provides easy access
 to the `java.util.concurrent` primitives and libraries such as
 [Akka](http://akka.io/) or
-[Jetlang](http://code.google.com/p/jetlang/).
+[Jetlang](https://github.com/jetlang/).
 
 
 ## Contributors

@@ -43,7 +43,7 @@ Now edit `project.clj` to contain the following:
   :description ""
   :url ""
   :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+            :url "https://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/data.zip "0.1.1"]])
 ```
@@ -55,7 +55,7 @@ We are including a dependency on
 Make a dir called `dev-resources` at the root of your project, and
 create a file named `example.nzb` inside of it. This will be the file
 we use to test our code (taken from
-[wikipedia](http://en.wikipedia.org/wiki/NZB)). `dev-resources` is by
+[wikipedia](https://en.wikipedia.org/wiki/NZB)). `dev-resources` is by
 convention the location to store file resources you use during
 development / testing.
 

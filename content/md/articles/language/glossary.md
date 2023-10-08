@@ -35,7 +35,7 @@ Could mean one of two things:
     thread-local value of a dynamic var. The whole expression (form)
     is sometimes referred to as the "binding [form](#form)".
 
-
+<a name="classpath"></a>
 ### classpath
 
 The search path used by the JVM to locate classes which are not
@@ -119,7 +119,7 @@ structure, and to return a transformation of that structure to
 be the representation of new code.
 
 
-
+<a name="idempotent"></a>
 ### idempotent
 
 An operation that when given the same inputs will produce the same
@@ -201,7 +201,7 @@ vector that comes first where you specify lexical bindings.
 See also [binding form](#binding_form)
 
 
-
+<a name="libspec"></a>
 ### libspec
 
 *todo*
@@ -369,12 +369,12 @@ given time.  When you change the state of an identity, you're changing
 to which value it refers. Clojure uses values to represent states.
 
 
-
+<a name="stm"></a>
 ### STM (Software Transactional Memory)
 
 Software Transactional Memory (STM) is a concurrency control method to
 coordinate and control access to shared storage as an alternative to
-lock-based synchronization. Clojure's STM uses multiversion concurrency
+lock-based synchronization. Clojure's STM uses multi-version concurrency
 control (MVCC) as an alternative to lock-based transactions, as well as
 ensuring changes are made atomically, consistently, and in
 isolation. It does this by taking a snapshot of the ref, making the
@@ -421,7 +421,7 @@ macro](#threading-macros).  More info at
 <http://blog.fogus.me/2010/09/28/thrush-in-clojure-redux/> if you're
 curious.
 
-
+<a name="transaction"></a>
 ### transaction
 
 *todo*
