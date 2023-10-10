@@ -50,7 +50,7 @@ here are some alternatives:
 
 * [http-kit](https://github.com/http-kit/http-kit) - simple, high-performance, Ring-compatible web server
 * [aleph](https://github.com/clj-commons/aleph) - asynchronous communication server, including a Ring-compatible web server
-* [sunng87](https://github.com/sunng87/ring-jetty9-adapter) - Ring adapter for Jetty 12 and 11
+* [sunng87 ring adapter](https://github.com/sunng87/ring-jetty9-adapter) - Ring adapter for Jetty 12 and 11
 
 All three of those alternatives also support WebSockets (Ring 1.10 does not).
 As of this writing, Ring 1.11 is in development and will have an adapter for Jetty 11,
@@ -83,7 +83,7 @@ generate HTML from those.
 
 Hiccup-style data structures are also used in several ClojureScript libraries.
 
-## Frameworks
+## Frameworks and Integrated Libraries
 
 Although Clojure eschews the idea of a "framework" in favor of composable
 libraries, there are a few "framework"-like options that are popular as
@@ -114,6 +114,8 @@ and many other options.
 
 From the same author as Luminus, [Kit](https://kit-clj.github.io/) is a
 lightweight, modular framework for scalable web development in Clojure.
+It builds on the lessons learned from Luminus and should be considered
+a modern alternative to it.
 
 Unlike Luminus, it uses the Clojure CLI and [clj-new](https://github.com/seancorfield/clj-new)
 to create and run new projects. In its most basic form, it uses Ring,
@@ -145,8 +147,14 @@ Another option for backend services is [Pedestal](https://pedestal.io/),
 a sturdy and reliable base for services and APIs. It provides its own
 routing and interceptor-based approach to web development, but is based
 on Ring under the hood and uses Jetty 9 (currently an older 9.4.18,
-which is not the latest 9.4.x release).
+which is not the latest 9.4.x release). This was originally part of a
+full-stack project created by Relevance back in 2013 but can be used with various
+frontend options now.
 
+### Other Options
+
+* [electric](https://github.com/hyperfiddle/electric) - a reactive Clojure dialect for web development that uses a compiler to infer the frontend/backend boundary
+* [ripley](https://github.com/tatut/ripley) - server rendered UIs over WebSockets.
 
 ## Frontend Development
 
@@ -157,7 +165,7 @@ various wrappers for React, and some other options.
 > Note: as a contributor to clojure-doc.org, I don't have enough experience to make recommendations about ClojureScript so I'm mostly just listing some options here -- Sean Corfield, 2023-10-09.
 
 You will want to start with the [ClojureScript Quick Start](https://clojurescript.org/guides/quick-start)
-and then probably look at [shadow-cljs](https://shadow-cljs.org/) as a build tool.
+and then probably look at [shadow-cljs](https://github.com/thheller/shadow-cljs) as a build tool.
 
 The creator of `shadow-cljs` has written a number of good
 [articles about various approaches to using ClojureScript](https://code.thheller.com/)
@@ -168,7 +176,9 @@ If you want to use React, there are several options:
 
 * [reagent](https://reagent-project.github.io/) - a minimalistic ClojureScript interface to React
 * [re-frame](http://day8.github.io/re-frame/) - a functional reactive framework built on top of Reagent
+* [fulcro](https://fulcro.fulcrologic.com/) - a library for development of single-page full-stack web applications in clj/cljs
 * [helix](https://github.com/lilactown/helix) - a simple, easy to use library for React development in ClojureScript
+* [sitefox](https://github.com/chr15m/sitefox) - full-stack ClojureScript development on node.js
 * [UIx](https://pitch-io.github.io/uix/docs/) - an idiomatic interface into modern React
 
 An alternative build tool for ClojureScript is [figwheel-main](https://figwheel.org/),
