@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Clojure Guides: Web Development (Overview)</title>
+    <title>Clojure Guides: Ecosystem: Web Development</title>
     
 
 <meta name="description" content="This guide covers:">
@@ -10,7 +10,7 @@
 <meta property="og:description" content="This guide covers:">
 
 <meta property="og:url" content="https://clojure-doc.org/articles/ecosystem/web_development/" />
-<meta property="og:title" content="Web Development (Overview)" />
+<meta property="og:title" content="Ecosystem: Web Development" />
 <meta property="og:type" content="article" />
 
     <link rel="canonical" href="https://clojure-doc.org/articles/ecosystem/web_development/">
@@ -55,49 +55,83 @@
                 
 <div id="custom-page">
     <div id="page-header">
-        <h2>Web Development (Overview)</h2>
+        <h2>Ecosystem: Web Development</h2>
     </div>
     
     <p>This guide covers:</p><ul><li>popular tools and libraries for web development</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.4.</p><h2 id="some-options">Some Options</h2><p>Below are some of the various options available for web development
-with Clojure, listed roughly by size.</p><h3 id="ring-and-compojure">Ring and Compojure</h3><p>Perhaps the simplest and most minimal setup is to use only Ring and
+Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="overview">Overview</h2><p>The web development space for Clojure is large and still evolving.
+Your options start with basic server-side web applications, generating
+HTML from either Clojure data structures or from more traditional
+template files, and can go all the way to full-stack web "frameworks"
+where you build a "single page application" (SPA) in ClojureScript for
+the frontend and a Clojure-powered API for the backend.</p><p>This guide doesn't clam to be comprehensive, but it does try to
+cover the most popular and well-maintained options, across that spectrum.</p><h2 id="fundamentals">Fundamentals</h2><p>If you're building any backend component for a web application, you're
+going to need a web server and some sort of routing mechanism (mapping
+HTTP requests and URLs to Clojure functions that handle them).</p><h3 id="ring-and-compojure">Ring and Compojure</h3><p>Perhaps the simplest and most minimal setup is to use only Ring and
 Compojure. To get started, see the <a href="/articles/tutorials/basic_web_development/">basic web development
-tutorial</a>.</p><h3 id="lib-noir">lib-noir</h3><p>In addition to Ring and Compojure, you might also make use of
-<a href="https://github.com/noir-clojure/lib-noir">lib-noir</a>.</p><h3 id="luminus">Luminus</h3><p><a href="http://www.luminusweb.net/">Luminus</a> is <a href="https://github.com/yogthos/luminus-template">a lein
+tutorial</a>.</p><p>In addition to the long-established <a href="https://github.com/ring-clojure/ring">Ring server library</a>,
+which has an adapter for Jetty 9.4.x as the underlying web server,
+here are some alternatives:</p><ul><li><a href="https://github.com/http-kit/http-kit">http-kit</a> - simple, high-performance, Ring-compatible web server</li><li><a href="https://github.com/clj-commons/aleph">aleph</a> - asynchronous communication server, including a Ring-compatible web server</li><li><a href="https://github.com/sunng87/ring-jetty9-adapter">sunng87</a> - Ring adapter for Jetty 12 and 11</li></ul><p>All three of those alternatives also support WebSockets (Ring 1.10 does not).
+As of this writing, Ring 1.11 is in development and will have an adapter for Jetty 11,
+as well as WebSocket support.</p><p>For routing, while <a href="https://github.com/weavejester/compojure">Compojure</a> is the most
+well-established and maybe most popular option, it is based on macros and
+some people prefer something more data-oriented, such as
+<a href="https://github.com/metosin/reitit">reitit</a>.</p><h3 id="html-templating">HTML Templating</h3><p>If you are generating HTML pages on the server, you will want a library
+to simplify that task.</p><p>The two most popular options are probably:</p><ul><li><a href="https://github.com/weavejester/hiccup">hiccup</a> - generate HTML from Clojure data structures</li><li><a href="https://github.com/yogthos/Selmer">selmer</a> - Django-inspired templating library</li></ul><p>If you are going to collaborate with frontend developers who are not
+familiar with Clojure, Selmer can be an excellent choice since the templates
+are written as HTML with a range of embedded variables, loops, and conditionals
+that will be familiar to anyone who has used a templating library in another
+language.</p><p>If you are working entirely with Clojure and ClojureScript developers, you
+may prefer to work mainly with Clojure data structures, and use Hiccup to
+generate HTML from those.</p><p>Hiccup-style data structures are also used in several ClojureScript libraries.</p><h2 id="frameworks">Frameworks</h2><p>Although Clojure eschews the idea of a "framework" in favor of composable
+libraries, there are a few "framework"-like options that are popular as
+"batteries-included" choices for web development.</p><h3 id="luminus">Luminus</h3><p>Probably the most well-established choice in this category is
+<a href="http://www.luminusweb.net/">Luminus</a>, which is driven by <a href="https://github.com/yogthos/luminus-template">a Leiningen
 template</a> for creating
-batteries-included web applications. It makes use of Ring, Compojure,
-lib-noir, and optionally (as described in its documentation) other
-libraries.</p><h2 id="templating-libraries">Templating Libraries</h2><p>Clojure has many options for building HTML.</p><h3 id="hiccup">Hiccup</h3><p><a href="https://github.com/weavejester/hiccup">Hiccup</a> represents HTML as
-Clojure data structures, allowing you to create and manipulate your
-HTML easily.</p><p><a href="https://github.com/davidsantiago/tinsel">Tinsel</a> is a library that
-extends Hiccup with selectors and transformers, so that you can write
-a template separate from the insertion of your data into the template.</p><h3 id="mustache">Mustache</h3><p><a href="https://github.com/fhd/clostache">Clostache</a> implements the
-<a href="https://mustache.github.io/">Mustache</a> templating language for
-Clojure.</p><p><a href="https://github.com/davidsantiago/stencil">Stencil</a> is another
-implementation of Mustache.</p><h3 id="fleet">Fleet</h3><p><a href="https://github.com/Flamefork/fleet">Fleet</a> embeds Clojure inside HTML
-templates, much like Java's JSPs, or Ruby's ERb.</p><h3 id="selmer">Selmer</h3><p><a href="https://github.com/yogthos/Selmer">Selmer</a> is modeled after the
-<a href="https://www.djangoproject.com/">Django templating system</a> with a primary goal of performance.</p><h3 id="enlive-and-laser">Enlive and Laser</h3><p><a href="https://github.com/cgrand/enlive">Enlive</a> and
-<a href="https://github.com/Raynes/laser">Laser</a> are similar libraries. They
-both manipulate plain HTML, and can be used for screen scraping as
-well as templating. They work with HTML templates with no special
-embedded tags or code. They use selector functions to find pieces of
-HTML and transformation function to change the HTML into the way you
-want.</p><p>See the
-<a href="https://github.com/Raynes/laser/blob/master/docs/guide.md">Laser guide</a>
-to see if this style of templating works for you. It is powerful, but
-different from most other languages' templating libraries.</p><h2 id="see-also">See Also</h2><ul><li><p><a href="https://www.clojure-toolbox.com/">The Clojure Toolbox</a> has categorized lists of libraries including many that are useful for web development.</p></li><li><p><a href="http://brehaut.net/blog/2012/clojure_web_and_the_crud_stack">The Clojure Web Stack and the CRUD Stack</a> -- why web frameworks are not common in Clojure.</p></li><li><p><a href="http://brehaut.net/blog/2011/ring_introduction">A Brief Overview of the Clojure Web Stack</a> -- although some libraries mentioned are outdated, this (old) article still provides a good overview of Ring and the general architecture of web applications and APIs in Clojure.</p></li></ul><h2 id="contributors">Contributors</h2><ul><li>John Gabriele</li><li>Clinton Dreisbach</li></ul>
+batteries-included web applications. In its most basic form, it uses Ring,
+<a href="https://github.com/metosin/reitit">reitit</a>,
+<a href="https://github.com/tolitius/mount">Mount</a>, and the JBoss Undertow web server.</p><p>However, it offers options to create web application projects that use
+a wide variety of different libraries:</p><ul><li>aleph, http-kit, or jetty for web servers</li><li>h2, mysql, postgres, or sqlite for traditional databases</li><li>datomic or xtdb for temporal databases with a datalog query language</li><li>mongodb for a document database</li><li>REST or GraphQL for APIs, with optional Swagger-UI support</li><li>reagent, re-frame, shadow-cljs, etc for frontend development</li></ul><p>and many other options.</p><h3 id="kit">Kit</h3><p>From the same author as Luminus, <a href="https://kit-clj.github.io/">Kit</a> is a
+lightweight, modular framework for scalable web development in Clojure.</p><p>Unlike Luminus, it uses the Clojure CLI and <a href="https://github.com/seancorfield/clj-new">clj-new</a>
+to create and run new projects. In its most basic form, it uses Ring,
+<a href="https://github.com/metosin/reitit">reitit</a>,
+<a href="https://github.com/weavejester/integrant">integrant</a>,
+<a href="https://https://github.com/juxt/aero">aero</a> (for handling configuration),
+and the JBoss Undertow web server.</p><p>Like Luminus, you can add a wide variety of different libraries to your
+web application projects -- however, Kit is more modular than Luminus
+and lets you add new libraries to your project more easily, after you
+have created it, instead of having to choose all the libraries up front.</p><h3 id="biff">Biff</h3><p><a href="https://biffweb.com/">Biff</a> is a batteries-included web framework for Clojure
+that is fairly opinionated about the libraries it uses. It is based on Ring
+(but using the <a href="https://github.com/sunng87/ring-jetty9-adapter">sunng87</a> adapter for the Jetty 11 web server),
+<a href="https://github.com/metosin/reitit">reitit</a>,
+<a href="https://www.xtdb.com/">xtdb</a> for the database,
+with <a href="https://github.com/metosin/malli">malli</a> to provide schema definition and validation,
+and produces HTML that uses
+<a href="https://htmx.org/">htmx</a> to provide an interactive experience without
+the complexity of a full-blown SPA.</p><h3 id="pedestal">Pedestal</h3><p>Another option for backend services is <a href="https://pedestal.io/">Pedestal</a>,
+a sturdy and reliable base for services and APIs. It provides its own
+routing and interceptor-based approach to web development, but is based
+on Ring under the hood and uses Jetty 9 (currently an older 9.4.18,
+which is not the latest 9.4.x release).</p><h2 id="frontend-development">Frontend Development</h2><p>If you plan to use ClojureScript for the frontend of your web application,
+you again have a range of choices from "plain" ClojureScript up to
+various wrappers for React, and some other options.</p><blockquote><p>Note: as a contributor to clojure-doc.org, I don't have enough experience to make recommendations about ClojureScript so I'm mostly just listing some options here -- Sean Corfield, 2023-10-09.</p></blockquote><p>You will want to start with the <a href="https://clojurescript.org/guides/quick-start">ClojureScript Quick Start</a>
+and then probably look at <a href="https://shadow-cljs.org/">shadow-cljs</a> as a build tool.</p><p>The creator of <code>shadow-cljs</code> has written a number of good
+<a href="https://code.thheller.com/">articles about various approaches to using ClojureScript</a>
+for frontend development, that show how to use "plain" ClojureScript without
+reaching for wrappers around JavaScript frameworks.</p><p>If you want to use React, there are several options:</p><ul><li><a href="https://reagent-project.github.io/">reagent</a> - a minimalistic ClojureScript interface to React</li><li><a href="http://day8.github.io/re-frame/">re-frame</a> - a functional reactive framework built on top of Reagent</li><li><a href="https://github.com/lilactown/helix">helix</a> - a simple, easy to use library for React development in ClojureScript</li><li><a href="https://pitch-io.github.io/uix/docs/">UIx</a> - an idiomatic interface into modern React</li></ul><p>An alternative build tool for ClojureScript is <a href="https://figwheel.org/">figwheel-main</a>,
+but this seems to be less popular than <code>shadow-cljs</code> these days.</p><h2 id="see-also">See Also</h2><ul><li><p><a href="https://www.clojure-toolbox.com/">The Clojure Toolbox</a> has categorized lists of libraries including many that are useful for web development.</p></li><li><p><a href="http://brehaut.net/blog/2012/clojure_web_and_the_crud_stack">The Clojure Web Stack and the CRUD Stack</a> -- why web frameworks are not common in Clojure.</p></li><li><p><a href="http://brehaut.net/blog/2011/ring_introduction">A Brief Overview of the Clojure Web Stack</a> -- although some libraries mentioned are outdated, this (old) article still provides a good overview of Ring and the general architecture of web applications and APIs in Clojure.</p></li></ul><h2 id="contributors">Contributors</h2><ul><li>John Gabriele, Clinton Dreisbach (original authors)</li><li>Sean Corfield (2023 rewrite)</li></ul>
 
     <div id="prev-next">
         
-        <a href="/articles/ecosystem/libraries_authoring/">&laquo; Library Development and Distribution</a>
+        <a href="/articles/ecosystem/libraries_authoring/">&laquo; Ecosystem: Library Development and Distribution</a>
         
         
         ||
         
         
-        <a href="/articles/ecosystem/generating_documentation/">Generating Documentation &raquo;</a>
+        <a href="/articles/ecosystem/generating_documentation/">Ecosystem: Generating Documentation &raquo;</a>
         
     </div>
 </div>
@@ -120,9 +154,9 @@ different from most other languages' templating libraries.</p><h2 id="see-also">
                     
                     <li><a href="/articles/tutorials/editors/">Clojure Editors</a></li>
                     
-                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
-                    
                     <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
+                    <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
                     
                     <li><a href="/articles/language/functions/">Language: Functions</a></li>
                     
@@ -144,11 +178,11 @@ different from most other languages' templating libraries.</p><h2 id="see-also">
                     
                     <li><a href="/articles/language/glossary/">Language: Glossary</a></li>
                     
-                    <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
+                    <li><a href="/articles/ecosystem/libraries_authoring/">Ecosystem: Library Development and Distribution</a></li>
                     
-                    <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    <li><a href="/articles/ecosystem/web_development/">Ecosystem: Web Development</a></li>
                     
-                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
+                    <li><a href="/articles/ecosystem/generating_documentation/">Ecosystem: Generating Documentation</a></li>
                     
                     <li><a href="/articles/cookbooks/cli_build_projects/">Building Projects: tools.build and the Clojure CLI</a></li>
                     
