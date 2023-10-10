@@ -73,7 +73,7 @@ HTTP requests and URLs to Clojure functions that handle them).</p><h3 id="ring-a
 Compojure. To get started, see the <a href="/articles/tutorials/basic_web_development/">basic web development
 tutorial</a>.</p><p>In addition to the long-established <a href="https://github.com/ring-clojure/ring">Ring server library</a>,
 which has an adapter for Jetty 9.4.x as the underlying web server,
-here are some alternatives:</p><ul><li><a href="https://github.com/http-kit/http-kit">http-kit</a> - simple, high-performance, Ring-compatible web server</li><li><a href="https://github.com/clj-commons/aleph">aleph</a> - asynchronous communication server, including a Ring-compatible web server</li><li><a href="https://github.com/sunng87/ring-jetty9-adapter">sunng87</a> - Ring adapter for Jetty 12 and 11</li></ul><p>All three of those alternatives also support WebSockets (Ring 1.10 does not).
+here are some alternatives:</p><ul><li><a href="https://github.com/http-kit/http-kit">http-kit</a> - simple, high-performance, Ring-compatible web server</li><li><a href="https://github.com/clj-commons/aleph">aleph</a> - asynchronous communication server, including a Ring-compatible web server</li><li><a href="https://github.com/sunng87/ring-jetty9-adapter">sunng87 ring adapter</a> - Ring adapter for Jetty 12 and 11</li></ul><p>All three of those alternatives also support WebSockets (Ring 1.10 does not).
 As of this writing, Ring 1.11 is in development and will have an adapter for Jetty 11,
 as well as WebSocket support.</p><p>For routing, while <a href="https://github.com/weavejester/compojure">Compojure</a> is the most
 well-established and maybe most popular option, it is based on macros and
@@ -85,7 +85,7 @@ are written as HTML with a range of embedded variables, loops, and conditionals
 that will be familiar to anyone who has used a templating library in another
 language.</p><p>If you are working entirely with Clojure and ClojureScript developers, you
 may prefer to work mainly with Clojure data structures, and use Hiccup to
-generate HTML from those.</p><p>Hiccup-style data structures are also used in several ClojureScript libraries.</p><h2 id="frameworks">Frameworks</h2><p>Although Clojure eschews the idea of a "framework" in favor of composable
+generate HTML from those.</p><p>Hiccup-style data structures are also used in several ClojureScript libraries.</p><h2 id="frameworks-and-integrated-libraries">Frameworks and Integrated Libraries</h2><p>Although Clojure eschews the idea of a "framework" in favor of composable
 libraries, there are a few "framework"-like options that are popular as
 "batteries-included" choices for web development.</p><h3 id="luminus">Luminus</h3><p>Probably the most well-established choice in this category is
 <a href="http://www.luminusweb.net/">Luminus</a>, which is driven by <a href="https://github.com/yogthos/luminus-template">a Leiningen
@@ -94,7 +94,9 @@ batteries-included web applications. In its most basic form, it uses Ring,
 <a href="https://github.com/metosin/reitit">reitit</a>,
 <a href="https://github.com/tolitius/mount">Mount</a>, and the JBoss Undertow web server.</p><p>However, it offers options to create web application projects that use
 a wide variety of different libraries:</p><ul><li>aleph, http-kit, or jetty for web servers</li><li>h2, mysql, postgres, or sqlite for traditional databases</li><li>datomic or xtdb for temporal databases with a datalog query language</li><li>mongodb for a document database</li><li>REST or GraphQL for APIs, with optional Swagger-UI support</li><li>reagent, re-frame, shadow-cljs, etc for frontend development</li></ul><p>and many other options.</p><h3 id="kit">Kit</h3><p>From the same author as Luminus, <a href="https://kit-clj.github.io/">Kit</a> is a
-lightweight, modular framework for scalable web development in Clojure.</p><p>Unlike Luminus, it uses the Clojure CLI and <a href="https://github.com/seancorfield/clj-new">clj-new</a>
+lightweight, modular framework for scalable web development in Clojure.
+It builds on the lessons learned from Luminus and should be considered
+a modern alternative to it.</p><p>Unlike Luminus, it uses the Clojure CLI and <a href="https://github.com/seancorfield/clj-new">clj-new</a>
 to create and run new projects. In its most basic form, it uses Ring,
 <a href="https://github.com/metosin/reitit">reitit</a>,
 <a href="https://github.com/weavejester/integrant">integrant</a>,
@@ -114,13 +116,15 @@ the complexity of a full-blown SPA.</p><h3 id="pedestal">Pedestal</h3><p>Another
 a sturdy and reliable base for services and APIs. It provides its own
 routing and interceptor-based approach to web development, but is based
 on Ring under the hood and uses Jetty 9 (currently an older 9.4.18,
-which is not the latest 9.4.x release).</p><h2 id="frontend-development">Frontend Development</h2><p>If you plan to use ClojureScript for the frontend of your web application,
+which is not the latest 9.4.x release). This was originally part of a
+full-stack project created by Relevance back in 2013 but can be used with various
+frontend options now.</p><h3 id="other-options">Other Options</h3><ul><li><a href="https://github.com/hyperfiddle/electric">electric</a> - a reactive Clojure dialect for web development that uses a compiler to infer the frontend/backend boundary</li><li><a href="https://github.com/tatut/ripley">ripley</a> - server rendered UIs over WebSockets.</li></ul><h2 id="frontend-development">Frontend Development</h2><p>If you plan to use ClojureScript for the frontend of your web application,
 you again have a range of choices from "plain" ClojureScript up to
 various wrappers for React, and some other options.</p><blockquote><p>Note: as a contributor to clojure-doc.org, I don't have enough experience to make recommendations about ClojureScript so I'm mostly just listing some options here -- Sean Corfield, 2023-10-09.</p></blockquote><p>You will want to start with the <a href="https://clojurescript.org/guides/quick-start">ClojureScript Quick Start</a>
-and then probably look at <a href="https://shadow-cljs.org/">shadow-cljs</a> as a build tool.</p><p>The creator of <code>shadow-cljs</code> has written a number of good
+and then probably look at <a href="https://github.com/thheller/shadow-cljs">shadow-cljs</a> as a build tool.</p><p>The creator of <code>shadow-cljs</code> has written a number of good
 <a href="https://code.thheller.com/">articles about various approaches to using ClojureScript</a>
 for frontend development, that show how to use "plain" ClojureScript without
-reaching for wrappers around JavaScript frameworks.</p><p>If you want to use React, there are several options:</p><ul><li><a href="https://reagent-project.github.io/">reagent</a> - a minimalistic ClojureScript interface to React</li><li><a href="http://day8.github.io/re-frame/">re-frame</a> - a functional reactive framework built on top of Reagent</li><li><a href="https://github.com/lilactown/helix">helix</a> - a simple, easy to use library for React development in ClojureScript</li><li><a href="https://pitch-io.github.io/uix/docs/">UIx</a> - an idiomatic interface into modern React</li></ul><p>An alternative build tool for ClojureScript is <a href="https://figwheel.org/">figwheel-main</a>,
+reaching for wrappers around JavaScript frameworks.</p><p>If you want to use React, there are several options:</p><ul><li><a href="https://reagent-project.github.io/">reagent</a> - a minimalistic ClojureScript interface to React</li><li><a href="http://day8.github.io/re-frame/">re-frame</a> - a functional reactive framework built on top of Reagent</li><li><a href="https://fulcro.fulcrologic.com/">fulcro</a> - a library for development of single-page full-stack web applications in clj/cljs</li><li><a href="https://github.com/lilactown/helix">helix</a> - a simple, easy to use library for React development in ClojureScript</li><li><a href="https://github.com/chr15m/sitefox">sitefox</a> - full-stack ClojureScript development on node.js</li><li><a href="https://pitch-io.github.io/uix/docs/">UIx</a> - an idiomatic interface into modern React</li></ul><p>An alternative build tool for ClojureScript is <a href="https://figwheel.org/">figwheel-main</a>,
 but this seems to be less popular than <code>shadow-cljs</code> these days.</p><h2 id="see-also">See Also</h2><ul><li><p><a href="https://www.clojure-toolbox.com/">The Clojure Toolbox</a> has categorized lists of libraries including many that are useful for web development.</p></li><li><p><a href="http://brehaut.net/blog/2012/clojure_web_and_the_crud_stack">The Clojure Web Stack and the CRUD Stack</a> -- why web frameworks are not common in Clojure.</p></li><li><p><a href="http://brehaut.net/blog/2011/ring_introduction">A Brief Overview of the Clojure Web Stack</a> -- although some libraries mentioned are outdated, this (old) article still provides a good overview of Ring and the general architecture of web applications and APIs in Clojure.</p></li></ul><h2 id="contributors">Contributors</h2><ul><li>John Gabriele, Clinton Dreisbach (original authors)</li><li>Sean Corfield (2023 rewrite)</li></ul>
 
     <div id="prev-next">
