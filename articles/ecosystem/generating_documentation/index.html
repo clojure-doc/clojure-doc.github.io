@@ -70,20 +70,31 @@ Github.">
 documentation.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.4.</p><h2 id="overview">Overview</h2><p>Projects commonly (hopefully?) have at least two types of
+Github</a>.</p><h2 id="overview">Overview</h2><p>Projects commonly (hopefully?) have at least two types of
 documentation:</p><ul><li>standalone
-<a href="http://en.wikipedia.org/wiki/Markdown">markdown</a>-formatted docs
-in the project's doc directory</li><li>docstrings</li></ul><p>There are a number of tools for generating handsome API docs from
-docstrings and other project metadata.</p><h2 id="codox">Codox</h2><p>If you'd like to generate nice-looking html API docs for your library,
-use <a href="https://github.com/weavejester/codox">codox</a>. Usage instructions
-are in the codox readme. Running codox (it's a lein plug-in and is run
-via <code>lein codox</code> in your project) will create a "doc" subdirectory
-containing the resulting html.</p><h2 id="marginalia">Marginalia</h2><p>If you'd like to render API docs side-by-side with the source code
-it's documenting, use <a href="https://github.com/gdeer81/lein-marginalia">the marginalia lein
-plug-in</a>. Usage instructions
-are in the readme.</p><h2 id="cadastre">Cadastre</h2><p>If you'd like to generate copious raw data from a project (which
-includes docstrings as well as other metadata), have a look at
-<a href="https://github.com/dakrone/cadastre">cadastre</a>.</p>
+<a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a>-formatted docs
+in the project's doc directory</li><li>docstrings in the project's source code (in both <code>ns</code> and <code>defn</code>)</li></ul><p>There are a number of tools for generating handsome API docs from
+docstrings and other project metadata.</p><h2 id="cljdocorg">cljdoc.org</h2><p>Probably the most popular solution for generating <em>and hosting</em> API
+documentation for libraries in <a href="https://cljdoc.org/">cljdoc.org</a>. It
+can build documentation for any library released to <a href="https://clojars.org/">Clojars</a>,
+and lets you combine arbitrary articles alongside API docs generated
+from your source code. It also provides <em>versioned</em> documentation, so
+that every published version of your library can have its own set of
+documentation!</p><p>As a library author considering using <code>cljdoc.org</code>, you will want to
+read <a href="https://github.com/cljdoc/cljdoc/blob/master/doc/userguide/for-library-authors.adoc">their user guide for library authors</a>.</p><p>If you are building your library JAR file with the Clojure CLI and
+<code>tools.build</code>, you will want to read our
+<a href="/articles/cookbooks/cli_build_projects/"><code>tools.build</code> cookbook</a> --
+in particular <strong>The Generated <code>pom.xml</code> File</strong> section, to ensure your
+JAR file's <code>pom.xml</code> file contains both <code>&lt;licenses&gt;</code> (required for
+publishing to Clojars) and <code>&lt;scm&gt;</code> (required for <code>cljdoc.org</code> to find
+your source code and build the documentation).</p><h2 id="codox">Codox</h2><p>If you'd like to generate nice-looking HTML API docs for your library,
+directly into your project's <code>doc</code> directory, you may want to
+use <a href="https://github.com/weavejester/codox">Codox</a>. Usage instructions
+are in the Codox README. Running Codox (either via the Clojure CLI
+or as a Leiningen plug-in) will create a <code>doc</code> subdirectory
+containing the resulting HTML.</p><h2 id="marginalia">Marginalia</h2><p>If you'd like to render API docs side-by-side with the source code
+it's documenting, you may want to use <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.
+Usage instructions are in the readme.</p><p>It also has a <a href="https://github.com/gdeer81/lein-marginalia">Leiningen plugin</a>.</p>
 
     <div id="prev-next">
         
@@ -118,6 +129,8 @@ includes docstrings as well as other metadata), have a look at
                     
                     <li><a href="/articles/tutorials/basic_web_development/">Basic Web Development</a></li>
                     
+                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
+                    
                     <li><a href="/articles/language/functions/">Language: Functions</a></li>
                     
                     <li><a href="/articles/language/core_overview/">Language: clojure.core</a></li>
@@ -136,11 +149,11 @@ includes docstrings as well as other metadata), have a look at
                     
                     <li><a href="/articles/language/laziness/">Language: Laziness</a></li>
                     
-                    <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
-                    
                     <li><a href="/articles/ecosystem/libraries_authoring/">Library Development and Distribution</a></li>
                     
                     <li><a href="/articles/ecosystem/web_development/">Web Development (Overview)</a></li>
+                    
+                    <li><a href="/articles/ecosystem/generating_documentation/">Generating Documentation</a></li>
                     
                     <li><a href="/articles/cookbooks/cli_build_projects/">Building Projects: tools.build and the Clojure CLI</a></li>
                     
