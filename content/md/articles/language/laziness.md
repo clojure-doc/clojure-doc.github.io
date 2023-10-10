@@ -1,5 +1,5 @@
 {:title "Language: Laziness"
- :sidebar-omit? true :page-index 2900
+ :page-index 2900
  :klipse true
  :layout :page}
 
@@ -20,7 +20,7 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.5.
+This guide covers Clojure 1.11.
 
 
 
@@ -29,10 +29,10 @@ This guide covers Clojure 1.5.
 Clojure is not a [lazy language](http://en.wikipedia.org/wiki/Lazy_evaluation).
 
 However, Clojure supports *lazily evaluated sequences*. This means that sequence elements are not
-available ahead of time and produced as the result of a computation. The computation
+available ahead of time and are produced as the result of a computation. The computation
 is performed as needed. Evaluation of lazy sequences is known as *realization*.
 
-Lazy sequences can be infinite (e.g. the sequence of Fibonacci numbers, a sequence of
+Lazy sequences can be infinite (e.g., the sequence of Fibonacci numbers, a sequence of
 dates with a particular interval between them, and so on). If a lazy sequence is finite,
 when its computation is completed, it becomes *fully realized*.
 
@@ -53,8 +53,8 @@ Lazy sequences have two main benefits:
 Lazy sequences are produced by functions. Such functions either use the `clojure.core/lazy-seq` macro
 or other functions that produce lazy sequences.
 
-`clojure.core/lazy-seq` accepts one or more forms that produce a sequence of `nil` (when the sequence
-is fully realized) and returns a seqable data structure that invokes the body the first time
+`clojure.core/lazy-seq` accepts one or more forms that produce a sequence, or `nil` when the sequence
+is fully realized, and returns a seqable data structure that evaluates the body the first time
 the value is needed and then caches the result.
 
 For example, the following function produces a lazy sequence of random UUIDs strings:
@@ -67,16 +67,7 @@ For example, the following function produces a lazy sequence of random UUIDs str
          (uuid-seq))))
 ```
 
-> Note: the `random-uuid` function is available in ClojureScript and was introduced into Clojure
-in version 1.11 Alpha 3. Prior to that, you needed to use Java interop:
-
-```clojure
-(defn uuid-seq
-  []
-  (lazy-seq
-   (cons (str (java.util.UUID/randomUUID))
-         (uuid-seq))))
-```
+> Note: the `random-uuid` function was added to Clojure in version 1.11 but was previously available in ClojureScript.
 
 Another example:
 
@@ -171,11 +162,11 @@ For example:
 ```
 
 ```klipse-clojure
-(take 3 (iterate (partial + 1) 1))
+(take 3 (iterate inc 1))
 ```
 
 ```klipse-clojure
-(take 5 (iterate (partial + 1) 1))
+(take 5 (iterate inc 1))
 ```
 
 
@@ -186,20 +177,55 @@ There are two fundamental strategies for implementing lazy sequences:
  * Realize elements one-by-one
  * Realize elements in groups (chunks, batches)
 
-In Clojure 1.1+, lazy sequences are *chunked* (realized in chunks).
+In Clojure, most lazy sequences are *chunked* (realized in chunks).
 
 For example, in the following code
 
 ```klipse-clojure
-(take 10 (range 1 1000000000000))
+(take 10 (map inc (range)))
 ```
 
 one-by-one realization would realize one element 10 times. With chunked sequences,
 elements are realized ahead of time in chunks (32 elements at a time).
 
-This reduces the number of realizations and, for many common workloads, improves
+You can see this in action:
+
+```klipse-clojure
+(take 10 (map #(do (println %) (inc %)) (range 100)))
+```
+
+What you'll see here is that even tho' the result is a sequence of 10 elements,
+32 elements are printed.
+This is because realizing
+the first element causes the whole of the first chunk to be realized.
+
+This typically reduces the number of realizations and, for many common workloads, improves
 efficiency of lazy sequences.
 
+Clojure on the JVM has optimized some functions, such as `range`, to produce
+individual elements efficiently without chunking:
+
+```clojure
+user=> (take 10 (map #(do (println %) (inc %)) (range)))
+(0
+1
+1 2
+2 3
+3 4
+4 5
+5 6
+6 7
+7 8
+8 9
+9 10)
+user=>
+```
+
+What you'll see here is that only 10 elements are printed, not 32, and
+they are printed one-by-one, as each element of the sequence is realized.
+
+If you used `(range 100)` instead of `(range)` in the above example, you'd see
+32 elements printed, as before.
 
 ## Contributors
 
