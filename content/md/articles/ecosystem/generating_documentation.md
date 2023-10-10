@@ -1,4 +1,4 @@
-{:title "Generating Documentation"
+{:title "Ecosystem: Generating Documentation"
  :layout :page :page-index 3800}
 
 This guide notes some commonly-used tools for generating project

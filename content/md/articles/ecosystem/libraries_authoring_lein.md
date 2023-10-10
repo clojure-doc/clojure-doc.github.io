@@ -1,4 +1,4 @@
-{:title "Library Development and Distribution with Leiningen"
+{:title "Ecosystem: Library Development and Distribution with Leiningen"
  :layout :page :sidebar-omit? true}
 
 This short guide covers how to create your own typical pure Clojure

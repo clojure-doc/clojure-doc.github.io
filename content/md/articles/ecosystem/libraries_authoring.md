@@ -1,4 +1,4 @@
-{:title "Library Development and Distribution"
+{:title "Ecosystem: Library Development and Distribution"
  :layout :page :toc true :page-index 3200}
 
 This guide covers how to create your own typical pure Clojure

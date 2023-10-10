@@ -1,5 +1,5 @@
 {:title "Clojure Community"
- :layout :page :page-index 1900}
+ :layout :page :page-index 1350}
 
 This guide covers:
 
