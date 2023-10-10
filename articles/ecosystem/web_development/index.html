@@ -104,14 +104,14 @@ to create and run new projects. In its most basic form, it uses Ring,
 and the JBoss Undertow web server.</p><p>Like Luminus, you can add a wide variety of different libraries to your
 web application projects -- however, Kit is more modular than Luminus
 and lets you add new libraries to your project more easily, after you
-have created it, instead of having to choose all the libraries up front.</p><h3 id="biff">Biff</h3><p><a href="https://biffweb.com/">Biff</a> is a batteries-included web framework for Clojure
+have created it, instead of having to choose all the libraries up front.</p><p>You can use <a href="https://htmx.org/">HTMX</a> with Kit via the <a href="https://whamtet.github.io/ctmx/">ctmx module</a>.</p><h3 id="biff">Biff</h3><p><a href="https://biffweb.com/">Biff</a> is a batteries-included web framework for Clojure
 that is fairly opinionated about the libraries it uses. It is based on Ring
 (but using the <a href="https://github.com/sunng87/ring-jetty9-adapter">sunng87</a> adapter for the Jetty 11 web server),
 <a href="https://github.com/metosin/reitit">reitit</a>,
 <a href="https://www.xtdb.com/">xtdb</a> for the database,
 with <a href="https://github.com/metosin/malli">malli</a> to provide schema definition and validation,
 and produces HTML that uses
-<a href="https://htmx.org/">htmx</a> to provide an interactive experience without
+<a href="https://htmx.org/">HTMX</a> to provide an interactive experience without
 the complexity of a full-blown SPA.</p><h3 id="pedestal">Pedestal</h3><p>Another option for backend services is <a href="https://pedestal.io/">Pedestal</a>,
 a sturdy and reliable base for services and APIs. It provides its own
 routing and interceptor-based approach to web development, but is based
