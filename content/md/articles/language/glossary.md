@@ -1,5 +1,5 @@
 {:title "Language: Glossary"
- :sidebar-omit? true :page-index 2950
+ :page-index 2950
  :layout :page}
 
 A glossary of terminology specific to Clojure. Terms
