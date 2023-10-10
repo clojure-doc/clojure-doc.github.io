@@ -129,6 +129,8 @@ web application projects -- however, Kit is more modular than Luminus
 and lets you add new libraries to your project more easily, after you
 have created it, instead of having to choose all the libraries up front.
 
+You can use [HTMX](https://htmx.org/) with Kit via the [ctmx module](https://whamtet.github.io/ctmx/).
+
 ### Biff
 
 [Biff](https://biffweb.com/) is a batteries-included web framework for Clojure
@@ -138,7 +140,7 @@ that is fairly opinionated about the libraries it uses. It is based on Ring
 [xtdb](https://www.xtdb.com/) for the database,
 with [malli](https://github.com/metosin/malli) to provide schema definition and validation,
 and produces HTML that uses
-[htmx](https://htmx.org/) to provide an interactive experience without
+[HTMX](https://htmx.org/) to provide an interactive experience without
 the complexity of a full-blown SPA.
 
 ### Pedestal
