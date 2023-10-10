@@ -61,26 +61,20 @@
     <p>This guide covers:</p><ul><li>What are lazy sequences</li><li>Pitfalls with lazy sequences</li><li>How to create functions that produce lazy sequences</li><li>How to force evaluation</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.5.</p><h2 id="overview">Overview</h2><p>Clojure is not a <a href="http://en.wikipedia.org/wiki/Lazy_evaluation">lazy language</a>.</p><p>However, Clojure supports <em>lazily evaluated sequences</em>. This means that sequence elements are not
-available ahead of time and produced as the result of a computation. The computation
-is performed as needed. Evaluation of lazy sequences is known as <em>realization</em>.</p><p>Lazy sequences can be infinite (e.g. the sequence of Fibonacci numbers, a sequence of
+Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="overview">Overview</h2><p>Clojure is not a <a href="http://en.wikipedia.org/wiki/Lazy_evaluation">lazy language</a>.</p><p>However, Clojure supports <em>lazily evaluated sequences</em>. This means that sequence elements are not
+available ahead of time and are produced as the result of a computation. The computation
+is performed as needed. Evaluation of lazy sequences is known as <em>realization</em>.</p><p>Lazy sequences can be infinite (e.g., the sequence of Fibonacci numbers, a sequence of
 dates with a particular interval between them, and so on). If a lazy sequence is finite,
 when its computation is completed, it becomes <em>fully realized</em>.</p><p>When it is necessary to fully realize a lazy sequence, Clojure provides a way to
 <em>force evaluation</em> (force realization).</p><h2 id="benefits-of-lazy-sequences">Benefits of Lazy Sequences</h2><p>Lazy sequences have two main benefits:</p><ul><li>They can be infinite</li><li>Full realization of interim results can be avoided</li></ul><h2 id="producing-lazy-sequences">Producing Lazy Sequences</h2><p>Lazy sequences are produced by functions. Such functions either use the <code>clojure.core/lazy-seq</code> macro
-or other functions that produce lazy sequences.</p><p><code>clojure.core/lazy-seq</code> accepts one or more forms that produce a sequence of <code>nil</code> (when the sequence
-is fully realized) and returns a seqable data structure that invokes the body the first time
+or other functions that produce lazy sequences.</p><p><code>clojure.core/lazy-seq</code> accepts one or more forms that produce a sequence, or <code>nil</code> when the sequence
+is fully realized, and returns a seqable data structure that evaluates the body the first time
 the value is needed and then caches the result.</p><p>For example, the following function produces a lazy sequence of random UUIDs strings:</p><pre><code class="klipse-clojure nohighlight">(defn uuid-seq
   []
   (lazy-seq
    (cons (str (random-uuid))
          (uuid-seq))))
-</code></pre><blockquote><p>Note: the <code>random-uuid</code> function is available in ClojureScript and was introduced into Clojure
-in version 1.11 Alpha 3. Prior to that, you needed to use Java interop:</p></blockquote><pre><code class="clojure">(defn uuid-seq
-  []
-  (lazy-seq
-   (cons (str (java.util.UUID/randomUUID))
-         (uuid-seq))))
-</code></pre><p>Another example:</p><pre><code class="klipse-clojure nohighlight">(defn fib-seq
+</code></pre><blockquote><p>Note: the <code>random-uuid</code> function was added to Clojure in version 1.11 but was previously available in ClojureScript.</p></blockquote><p>Another example:</p><pre><code class="klipse-clojure nohighlight">(defn fib-seq
   "Returns a lazy sequence of Fibonacci numbers"
   ([]
      (fib-seq 0 1))
@@ -105,12 +99,32 @@ sequences:</p><ul><li><code>repeat</code></li><li><code>iterate</code></li><li><
 </code></pre><pre><code class="klipse-clojure nohighlight">(take 5 (repeat "ha"))
 </code></pre><pre><code class="klipse-clojure nohighlight">(take 3 (cycle [1 2 3 4 5]))
 </code></pre><pre><code class="klipse-clojure nohighlight">(take 10 (cycle [1 2 3 4 5]))
-</code></pre><pre><code class="klipse-clojure nohighlight">(take 3 (iterate (partial + 1) 1))
-</code></pre><pre><code class="klipse-clojure nohighlight">(take 5 (iterate (partial + 1) 1))
-</code></pre><h2 id="lazy-sequences-chunking">Lazy Sequences Chunking</h2><p>There are two fundamental strategies for implementing lazy sequences:</p><ul><li>Realize elements one-by-one</li><li>Realize elements in groups (chunks, batches)</li></ul><p>In Clojure 1.1+, lazy sequences are <em>chunked</em> (realized in chunks).</p><p>For example, in the following code</p><pre><code class="klipse-clojure nohighlight">(take 10 (range 1 1000000000000))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 3 (iterate inc 1))
+</code></pre><pre><code class="klipse-clojure nohighlight">(take 5 (iterate inc 1))
+</code></pre><h2 id="lazy-sequences-chunking">Lazy Sequences Chunking</h2><p>There are two fundamental strategies for implementing lazy sequences:</p><ul><li>Realize elements one-by-one</li><li>Realize elements in groups (chunks, batches)</li></ul><p>In Clojure, most lazy sequences are <em>chunked</em> (realized in chunks).</p><p>For example, in the following code</p><pre><code class="klipse-clojure nohighlight">(take 10 (map inc (range)))
 </code></pre><p>one-by-one realization would realize one element 10 times. With chunked sequences,
-elements are realized ahead of time in chunks (32 elements at a time).</p><p>This reduces the number of realizations and, for many common workloads, improves
-efficiency of lazy sequences.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a>, 2013 (original author)</p>
+elements are realized ahead of time in chunks (32 elements at a time).</p><p>You can see this in action:</p><pre><code class="klipse-clojure nohighlight">(take 10 (map #(do (println %) (inc %)) (range 100)))
+</code></pre><p>What you'll see here is that even tho' the result is a sequence of 10 elements,
+32 elements are printed.
+This is because realizing
+the first element causes the whole of the first chunk to be realized.</p><p>This typically reduces the number of realizations and, for many common workloads, improves
+efficiency of lazy sequences.</p><p>Clojure on the JVM has optimized some functions, such as <code>range</code>, to produce
+individual elements efficiently without chunking:</p><pre><code class="clojure">user=&gt; (take 10 (map #(do (println %) (inc %)) (range)))
+(0
+1
+1 2
+2 3
+3 4
+4 5
+5 6
+6 7
+7 8
+8 9
+9 10)
+user=&gt;
+</code></pre><p>What you'll see here is that only 10 elements are printed, not 32, and
+they are printed one-by-one, as each element of the sequence is realized.</p><p>If you used <code>(range 100)</code> instead of <code>(range)</code> in the above example, you'd see
+32 elements printed, as before.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a>, 2013 (original author)</p>
 
     <div id="prev-next">
         
@@ -160,6 +174,8 @@ efficiency of lazy sequences.</p><h2 id="contributors">Contributors</h2><p>Micha
                     <li><a href="/articles/language/concurrency_and_parallelism/">Language: Concurrency and Parallelism</a></li>
                     
                     <li><a href="/articles/language/macros/">Language: Macros</a></li>
+                    
+                    <li><a href="/articles/language/laziness/">Language: Laziness</a></li>
                     
                     <li><a href="/articles/ecosystem/community/">Clojure Community</a></li>
                     
