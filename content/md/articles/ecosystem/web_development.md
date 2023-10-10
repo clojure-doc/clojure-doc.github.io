@@ -166,23 +166,27 @@ various wrappers for React, and some other options.
 
 You will want to start with the [ClojureScript Quick Start](https://clojurescript.org/guides/quick-start)
 and then probably look at [shadow-cljs](https://github.com/thheller/shadow-cljs) as a build tool.
+An alternative build tool for ClojureScript is [figwheel-main](https://figwheel.org/),
+but this seems to be less popular than `shadow-cljs` these days.
 
 The creator of `shadow-cljs` has written a number of good
 [articles about various approaches to using ClojureScript](https://code.thheller.com/)
 for frontend development, that show how to use "plain" ClojureScript without
 reaching for wrappers around JavaScript frameworks.
+Several frontend / full-stack options for ClojureScript wrap React.js in various ways
+but, as those articles show, building on top of React is not the only option!
 
-If you want to use React, there are several options:
+### UI-Focused Options
 
 * [reagent](https://reagent-project.github.io/) - a minimalistic ClojureScript interface to React
 * [re-frame](http://day8.github.io/re-frame/) - a functional reactive framework built on top of Reagent
-* [fulcro](https://fulcro.fulcrologic.com/) - a library for development of single-page full-stack web applications in clj/cljs
 * [helix](https://github.com/lilactown/helix) - a simple, easy to use library for React development in ClojureScript
-* [sitefox](https://github.com/chr15m/sitefox) - full-stack ClojureScript development on node.js
 * [UIx](https://pitch-io.github.io/uix/docs/) - an idiomatic interface into modern React
 
-An alternative build tool for ClojureScript is [figwheel-main](https://figwheel.org/),
-but this seems to be less popular than `shadow-cljs` these days.
+### Full-Stack Options
+
+* [fulcro](https://fulcro.fulcrologic.com/) - a library for development of single-page full-stack web applications in clj/cljs
+* [sitefox](https://github.com/chr15m/sitefox) - full-stack ClojureScript development on node.js
 
 ## See Also
 
