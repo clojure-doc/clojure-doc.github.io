@@ -265,3 +265,74 @@ user=> (let [owners #{{:name "Jane" :pet "Fido"}
 #{{:name "Jane", :species "dog"} 
   {:name "Tim", :species "snake"}}
 ```
+
+## Sequences
+
+### Intro
+Lots of `clojure.core` functions operate on sequences. In general, a function that operates on sequences will return a sequence, even when the `coll` (a common name for a collection argument) is something like a vector or map.
+
+### Exercise: search for `clojure.core` functions with a `coll` argument
+While not perfectly accurate or comprehensive, a possible starting point for exploring sequence functions is to search for functions in the `clojure.core` namespace that have an argument named `coll`.
+
+```clojure
+; since the arglist is nested, helper function to check for a `coll` arg
+user=> (defn has-coll-arg? 
+  "Arglists are stored as a list of arg vectors, e.g. ([x] [x y]).
+  Returns the first `coll` in an arg vector, else nil."
+  [arglist]
+  (some ; some over the arg-vecs 
+    (fn [arg-vec] (some ; some over the members of each arg-vec 
+                    #{'coll} arg-vec)) arglist))
+user=> (->> (ns-publics (the-ns 'clojure.core))
+        vals
+        (map meta)
+        (filter (comp has-coll-arg? :arglists))
+        (map :name)
+        sort)
+(->Eduction
+ assoc!
+ associative?
+ ...)
+```
+
+This example, in addition to illustrating some of the runtime introspection capabilities of Clojure, illustrates a few sequence functions. `some` is used on both lists and vectors (and uses the 'set as predicate' idiom from above to search through the vectors). Depending on exactly which version of Clojure is in use, this code returns a sequence of around 80 functions.
+
+### Exercise: Convoluted Encoding
+Here's a contrived encoding algorithm to demonstrate a few sequence functions. The decoding has the following rules:
+- the encoded string will be a sequence/string of numbers
+- for every three digits, multiply the first two and add the third until a strictly descending three digits is reached (or until all digits are exhausted)
+- each resulting number corresponds to its ordinal position in the alphabet (e.g. 1 = a, 2 = b, etc)
+
+So, for example, "45011429135594375" becomes...
+- 450 - 4 * 5 + 0 = 20 = t
+- 114 - 1 * 1 + 4 = 4 = e
+- 291 - 2 * 9 + 1 = 19 = s
+- 355 - 3 * 5 + 5 = 20 = t
+- 943 - these digits are strictly descending, so from it onwards is thrown out, and the decoded text is 'test'
+
+```clojure
+; digit char -> int, e.g. \9 -> 9
+user=> (defn int-char->int [c] (- (int c) (int \0)))
+
+; {1 \a, 2 \b, ... 26 \z}
+user=> (def number->letter
+        (let [numbers (range 1 27)
+              letters (map char (iterate inc (int \a)))]
+         (zipmap numbers letters)))
+
+user=> (defn decode [s]
+        (->> s
+         (map int-char->int) ; string of digits -> seq of ints
+         (partition 3) ; split into triples
+         (take-while (complement #(apply > %))) ; stop if there's a descending triple
+         (map (fn [[a b c]] (+ c (* a b)))) ; do the decoding math
+         (map number->letter) ; get the character for each number
+         (apply str))) ; put the chars into a string
+
+user=> (decode "45011429135594375")
+"test"
+```
+An exercise for the reader is to use `for` to generate the 3 digit sequences that 'compute' to `(<= 1 n 26)` and aren't in descending order, as part of the encoding procedure.
+
+## Contributors
+- [@bobisgeek](https://github.com/bobisageek) - original author
