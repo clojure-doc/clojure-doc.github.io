@@ -508,6 +508,11 @@ You might end up with something like:
 
 > Note: the basis is a huge hash map so we don't want to return it from our `jar` function (unless it was passed in via `opts`) in case we either want to use this from the "build REPL" (later) or from another function where we might want control over the basis used. If you decide to return the merged options from `jar`, you should probably use `dissoc` to remove the basis from the options returned (unless it was passed in via `opts`).
 
+If you are building an uberjar (instead of a library JAR), and your application relies on log4j2,
+you may need to add [build-uber-log4j2-handler](https://github.com/seancorfield/build-uber-log4j2-handler)
+as and `:conflict-handlers` in your `b/uber` call. See the README in that
+projects for details.
+
 ## The Generated `pom.xml` File
 
 By default, `b/write-pom` will generate a minimal `pom.xml` file that includes
