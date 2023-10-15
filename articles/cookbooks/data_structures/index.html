@@ -61,7 +61,7 @@ stylesheets). The source is available on Github.Intro">
     <div id="page-header">
         <h2>Data Structures</h2>
     </div>
-    <ul class="toc"><li><a href="#intro">Intro</a></li><li><a href="#vectors">Vectors</a></li><ul><li><a href="#intro-1">Intro</a></li><li><a href="#constructing-vectors">Constructing Vectors</a></li><li><a href="#accessing-elements">Accessing Elements</a></li><li><a href="#non-emptiness">(Non-)emptiness</a></li><li><a href="#linear-time-operations">Linear-time Operations</a></li><li><a href="#searching">Searching</a></li></ul><li><a href="#maps">Maps</a></li><ul><li><a href="#intro-2">Intro</a></li><li><a href="#building-maps">Building Maps</a></li><li><a href="#accessing-entries">Accessing Entries</a></li></ul><li><a href="#lists">Lists</a></li><ul><li><a href="#intro-3">Intro</a></li><li><a href="#accessing-elements-1">Accessing Elements</a></li></ul><li><a href="#sets">Sets</a></li><ul><li><a href="#intro-4">Intro</a></li><li><a href="#constructing-sets">Constructing sets</a></li><li><a href="#sets-as-predicates">Sets as predicates</a></li><li><a href="#relations">Relations</a></li></ul></ul>
+    <ul class="toc"><li><a href="#intro">Intro</a></li><li><a href="#vectors">Vectors</a></li><ul><li><a href="#intro-1">Intro</a></li><li><a href="#constructing-vectors">Constructing Vectors</a></li><li><a href="#accessing-elements">Accessing Elements</a></li><li><a href="#non-emptiness">(Non-)emptiness</a></li><li><a href="#linear-time-operations">Linear-time Operations</a></li><li><a href="#searching">Searching</a></li></ul><li><a href="#maps">Maps</a></li><ul><li><a href="#intro-2">Intro</a></li><li><a href="#building-maps">Building Maps</a></li><li><a href="#accessing-entries">Accessing Entries</a></li></ul><li><a href="#lists">Lists</a></li><ul><li><a href="#intro-3">Intro</a></li><li><a href="#accessing-elements-1">Accessing Elements</a></li></ul><li><a href="#sets">Sets</a></li><ul><li><a href="#intro-4">Intro</a></li><li><a href="#constructing-sets">Constructing sets</a></li><li><a href="#sets-as-predicates">Sets as predicates</a></li><li><a href="#relations">Relations</a></li></ul><li><a href="#sequences">Sequences</a></li><ul><li><a href="#intro-5">Intro</a></li><li><a href="#exercise-search-for-clojurecore-functions-with-a-coll-argument">Exercise: search for <code>clojure.core</code> functions with a <code>coll</code> argument</a></li><li><a href="#exercise-convoluted-encoding">Exercise: Convoluted Encoding</a></li></ul><li><a href="#contributors">Contributors</a></li></ul>
     <p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="intro">Intro</h2><p>This cookbook covers some common tasks with core Clojure data structures. It assumes that the reader is familiar with foundational read and write operations (get, conj, assoc, update, etc). For more coverage of getting started with Clojure data structures, some recommended resources are:</p><ul><li><a href="https://clojure.org/reference/data_structures#Collections">Clojure.org's reference on collections</a></li><li><a href="/articles/tutorials/introduction/#data-structures">Intro to Clojure: Data Structures</a></li><li><a href="/articles/tutorials/introduction/#functions-for-creating-data-structures">Intro to Clojure: Functions for Creating Data Structures</a> - also, the section right after this one, which covers manipulating them</li></ul><h2 id="vectors">Vectors</h2><h3 id="intro-1">Intro</h3><p>Vectors are probably the most commonly used data structure for sequential data that isn't code. The random access capability and the fact that vectors aren't treated as function calls make them often a better choice than lists.</p><h3 id="constructing-vectors">Constructing Vectors</h3><p><code>mapv</code> and <code>filterv</code> are eager versions of <code>map</code> and <code>filter</code> that return vectors</p><pre><code class="clojure">user=&gt; (mapv second [[1 1] [2 4] [3 9]])
@@ -190,7 +190,45 @@ user=&gt; (let [owners #{{:name "Jane" :pet "Fido"}
             (set/project [:name :species]))) ; project (select) only the owner's name and their pet's species
 #{{:name "Jane", :species "dog"} 
   {:name "Tim", :species "snake"}}
-</code></pre>
+</code></pre><h2 id="sequences">Sequences</h2><h3 id="intro-5">Intro</h3><p>Lots of <code>clojure.core</code> functions operate on sequences. In general, a function that operates on sequences will return a sequence, even when the <code>coll</code> (a common name for a collection argument) is something like a vector or map.</p><h3 id="exercise-search-for-clojurecore-functions-with-a-coll-argument">Exercise: search for <code>clojure.core</code> functions with a <code>coll</code> argument</h3><p>While not perfectly accurate or comprehensive, a possible starting point for exploring sequence functions is to search for functions in the <code>clojure.core</code> namespace that have an argument named <code>coll</code>.</p><pre><code class="clojure">; since the arglist is nested, helper function to check for a `coll` arg
+user=&gt; (defn has-coll-arg? 
+  "Arglists are stored as a list of arg vectors, e.g. ([x] [x y]).
+  Returns the first `coll` in an arg vector, else nil."
+  [arglist]
+  (some ; some over the arg-vecs 
+    (fn [arg-vec] (some ; some over the members of each arg-vec 
+                    #{'coll} arg-vec)) arglist))
+user=&gt; (-&gt;&gt; (ns-publics (the-ns 'clojure.core))
+        vals
+        (map meta)
+        (filter (comp has-coll-arg? :arglists))
+        (map :name)
+        sort)
+(-&gt;Eduction
+ assoc!
+ associative?
+ ...)
+</code></pre><p>This example, in addition to illustrating some of the runtime introspection capabilities of Clojure, illustrates a few sequence functions. <code>some</code> is used on both lists and vectors (and uses the 'set as predicate' idiom from above to search through the vectors). Depending on exactly which version of Clojure is in use, this code returns a sequence of around 80 functions.</p><h3 id="exercise-convoluted-encoding">Exercise: Convoluted Encoding</h3><p>Here's a contrived encoding algorithm to demonstrate a few sequence functions. The decoding has the following rules:</p><ul><li>the encoded string will be a sequence/string of numbers</li><li>for every three digits, multiply the first two and add the third until a strictly descending three digits is reached (or until all digits are exhausted)</li><li>each resulting number corresponds to its ordinal position in the alphabet (e.g. 1 = a, 2 = b, etc)</li></ul><p>So, for example, "45011429135594375" becomes...</p><ul><li>450 - 4 * 5 + 0 = 20 = t</li><li>114 - 1 * 1 + 4 = 4 = e</li><li>291 - 2 * 9 + 1 = 19 = s</li><li>355 - 3 * 5 + 5 = 20 = t</li><li>943 - these digits are strictly descending, so from it onwards is thrown out, and the decoded text is 'test'</li></ul><pre><code class="clojure">; digit char -&gt; int, e.g. \9 -&gt; 9
+user=&gt; (defn int-char-&gt;int [c] (- (int c) (int \0)))
+
+; {1 \a, 2 \b, ... 26 \z}
+user=&gt; (def number-&gt;letter
+        (let [numbers (range 1 27)
+              letters (map char (iterate inc (int \a)))]
+         (zipmap numbers letters)))
+
+user=&gt; (defn decode [s]
+        (-&gt;&gt; s
+         (map int-char-&gt;int) ; string of digits -&gt; seq of ints
+         (partition 3) ; split into triples
+         (take-while (complement #(apply &gt; %))) ; stop if there's a descending triple
+         (map (fn [[a b c]] (+ c (* a b)))) ; do the decoding math
+         (map number-&gt;letter) ; get the character for each number
+         (apply str))) ; put the chars into a string
+
+user=&gt; (decode "45011429135594375")
+"test"
+</code></pre><p>An exercise for the reader is to use <code>for</code> to generate the 3 digit sequences that 'compute' to <code>(&lt;= 1 n 26)</code> and aren't in descending order, as part of the encoding procedure.</p><h2 id="contributors">Contributors</h2><ul><li><a href="https://github.com/bobisageek">@bobisgeek</a> - original author</li></ul>
 
     <div id="prev-next">
         
