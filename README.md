@@ -38,7 +38,7 @@ CDS strives to cover all aspects of Clojure: from tutorials and language guides 
 libraries are developed and published, topics operations engineers will be interested in, JVM ecosystem tools
 and so on.
 
-CDS also strives to avoid duplicating content from the [official Clojure site](clojure.org) but will link extensively to that, in order to make that content easier to find and navigate.
+CDS also strives to avoid duplicating content from the [official Clojure site](https://clojure.org) but will link extensively to that, in order to make that content easier to find and navigate.
 
 Adopting a language always takes more than just reading a book or a few tutorials about language features. Understanding
 design goals, the ecosystem and operations is just as important. CDS will try to address this.
