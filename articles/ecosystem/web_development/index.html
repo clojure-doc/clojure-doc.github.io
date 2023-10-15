@@ -67,7 +67,10 @@ HTML from either Clojure data structures or from more traditional
 template files, and can go all the way to full-stack web "frameworks"
 where you build a "single page application" (SPA) in ClojureScript for
 the frontend and a Clojure-powered API for the backend.</p><p>This guide doesn't clam to be comprehensive, but it does try to
-cover the most popular and well-maintained options, across that spectrum.</p><h2 id="fundamentals">Fundamentals</h2><p>If you're building any backend component for a web application, you're
+cover the most popular and well-maintained options, across that spectrum.</p><h2 id="static-sites">Static Sites</h2><p>Before we get into web <em>applications</em>, it's worth mentioning that there
+are several Clojure-based solutions for generating static sites.</p><ul><li><a href="http://cryogenweb.org/">cryogen</a> - simple static site generator written in Clojure</li><li><a href="https://github.com/magnars/stasis">stasis</a> - some Clojure functions for creating static websites</li></ul><p>The README for the latter lists several other options.</p><p>You can also add ClojureScript interactivity to a static site using
+<a href="https://babashka.org/scittle/">scittle</a> which exposes the
+<a href="https://github.com/babashka/sci">Small Clojure Interpreter</a> to the browser.</p><blockquote><p>Note: this can even support Reagent and re-frame, which are ClojureScript wrappers around React, but without the complexity of a full-blown SPA. See <a href="#ui-focused-options">UI-Focused options</a> in the <strong>Frontend Development</strong> section below.</p></blockquote><h2 id="fundamentals">Fundamentals</h2><p>If you're building any backend component for a web application, you're
 going to need a web server and some sort of routing mechanism (mapping
 HTTP requests and URLs to Clojure functions that handle them).</p><h3 id="ring-and-compojure">Ring and Compojure</h3><p>Perhaps the simplest and most minimal setup is to use only Ring and
 Compojure. To get started, see the <a href="/articles/tutorials/basic_web_development/">basic web development
@@ -108,11 +111,17 @@ have created it, instead of having to choose all the libraries up front.</p><p>Y
 that is fairly opinionated about the libraries it uses. It is based on Ring
 (but using the <a href="https://github.com/sunng87/ring-jetty9-adapter">sunng87</a> adapter for the Jetty 11 web server),
 <a href="https://github.com/metosin/reitit">reitit</a>,
-<a href="https://www.xtdb.com/">xtdb</a> for the database,
+<a href="https://www.xtdb.com/">XTDB</a> for the database,
 with <a href="https://github.com/metosin/malli">malli</a> to provide schema definition and validation,
 and produces HTML that uses
 <a href="https://htmx.org/">HTMX</a> to provide an interactive experience without
-the complexity of a full-blown SPA.</p><h3 id="pedestal">Pedestal</h3><p>Another option for backend services is <a href="https://pedestal.io/">Pedestal</a>,
+the complexity of a full-blown SPA.</p><h3 id="juxt-site">JUXT Site</h3><p><a href="https://github.com/juxt-site/site">Site</a> is a platform for building stateful API services.
+It is based on <a href="https://www.xtdb.com/">XTDB</a> for the database, supports
+<a href="https://swagger.io/specification/">OpenAPI</a> and <a href="https://openid.net/">OpenID</a>,
+and provides flexible access control.</p><p>The linked version of Site is 2.0 and has a note that it is
+"not yet ready for evaluation outside of JUXT" but it is an evolution
+of <a href="https://github.com/juxt/site">Site 1.0</a> which is also based on XTDB and
+supports OpenAPI.</p><h3 id="pedestal">Pedestal</h3><p>Another option for backend services is <a href="https://pedestal.io/">Pedestal</a>,
 a sturdy and reliable base for services and APIs. It provides its own
 routing and interceptor-based approach to web development, but is based
 on Ring under the hood and uses Jetty 9 (currently an older 9.4.18,
@@ -128,7 +137,14 @@ but this seems to be less popular than <code>shadow-cljs</code> these days.</p><
 for frontend development, that show how to use "plain" ClojureScript without
 reaching for wrappers around JavaScript frameworks.
 Several frontend / full-stack options for ClojureScript wrap React.js in various ways
-but, as those articles show, building on top of React is not the only option!</p><h3 id="ui-focused-options">UI-Focused Options</h3><ul><li><a href="https://reagent-project.github.io/">reagent</a> - a minimalistic ClojureScript interface to React</li><li><a href="http://day8.github.io/re-frame/">re-frame</a> - a functional reactive framework built on top of Reagent</li><li><a href="https://github.com/lilactown/helix">helix</a> - a simple, easy to use library for React development in ClojureScript</li><li><a href="https://pitch-io.github.io/uix/docs/">UIx</a> - an idiomatic interface into modern React</li></ul><h3 id="full-stack-options">Full-Stack Options</h3><ul><li><a href="https://fulcro.fulcrologic.com/">fulcro</a> - a library for development of single-page full-stack web applications in clj/cljs</li><li><a href="https://github.com/chr15m/sitefox">sitefox</a> - full-stack ClojureScript development on node.js</li></ul><h2 id="see-also">See Also</h2><ul><li><p><a href="https://www.clojure-toolbox.com/">The Clojure Toolbox</a> has categorized lists of libraries including many that are useful for web development.</p></li><li><p><a href="http://brehaut.net/blog/2012/clojure_web_and_the_crud_stack">The Clojure Web Stack and the CRUD Stack</a> -- why web frameworks are not common in Clojure.</p></li><li><p><a href="http://brehaut.net/blog/2011/ring_introduction">A Brief Overview of the Clojure Web Stack</a> -- although some libraries mentioned are outdated, this (old) article still provides a good overview of Ring and the general architecture of web applications and APIs in Clojure.</p></li></ul><h2 id="contributors">Contributors</h2><ul><li>John Gabriele, Clinton Dreisbach (original authors)</li><li>Sean Corfield (2023 rewrite)</li></ul>
+but, as those articles show, building on top of React is not the only option!</p><h3 id="ui-focused-options">UI-Focused Options</h3><ul><li><a href="https://reagent-project.github.io/">reagent</a> - a minimalistic ClojureScript interface to React</li><li><a href="http://day8.github.io/re-frame/">re-frame</a> - a functional reactive framework built on top of Reagent</li><li><a href="https://github.com/lilactown/helix">helix</a> - a simple, easy to use library for React development in ClojureScript</li><li><a href="https://pitch-io.github.io/uix/docs/">UIx</a> - an idiomatic interface into modern React</li></ul><p>While those are all based on or wrappers around React, there are other options:</p><ul><li><a href="https://hoplon.io/">hoplon</a> - a ClojureScript library that unify some of the web platform's idiosyncrasies and present a fun way to design and build single-page web applications; hoplon builds on <a href="https://github.com/hoplon/javelin">hoplon</a> which provides spreadsheet-like dataflow programming in ClojureScript</li></ul><h3 id="full-stack-options">Full-Stack Options</h3><ul><li><a href="https://fulcro.fulcrologic.com/">fulcro</a> - a library for development of single-page full-stack web applications in clj/cljs</li><li><a href="https://github.com/chr15m/sitefox">sitefox</a> - full-stack ClojureScript development on node.js</li></ul><h3 id="producing-javascript">Producing JavaScript</h3><p>Although ClojureScript (and thus all of the above <strong>Frontend Development</strong> options)
+produce JavaScript under the hood, there are times when you have an existing
+ecosystem based on HTML, CSS, and JavaScript and you want to add some ClojureScript
+to that. In that case, you can either use <code>scittle</code>, mentioned above or
+one of these ClojureScript to JavaScript compilers:</p><ul><li><a href="https://github.com/squint-cljs/cherry">cherry</a> - experimental ClojureScript to ES6 module compiler</li><li><a href="https://github.com/squint-cljs/squint">squint</a> - experimental ClojureScript syntax to JavaScript compiler</li></ul><p>The former maintains ClojureScript <em>semantics</em> and syntax while the latter
+maintains only the syntax, compiling to JavaScript semantics. These projects
+can both be useful for adding ClojureScript components and modules
+to an existing JavaScript project.</p><h2 id="see-also">See Also</h2><ul><li><p><a href="https://www.clojure-toolbox.com/">The Clojure Toolbox</a> has categorized lists of libraries including many that are useful for web development.</p></li><li><p><a href="http://brehaut.net/blog/2012/clojure_web_and_the_crud_stack">The Clojure Web Stack and the CRUD Stack</a> -- why web frameworks are not common in Clojure.</p></li><li><p><a href="http://brehaut.net/blog/2011/ring_introduction">A Brief Overview of the Clojure Web Stack</a> -- although some libraries mentioned are outdated, this (old) article still provides a good overview of Ring and the general architecture of web applications and APIs in Clojure.</p></li></ul><h2 id="contributors">Contributors</h2><ul><li>John Gabriele, Clinton Dreisbach (original authors)</li><li>Sean Corfield (2023 rewrite)</li></ul>
 
     <div id="prev-next">
         

@@ -5,7 +5,7 @@
 https://clojure-doc.org/archives/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -13,7 +13,7 @@ https://clojure-doc.org/archives/index.html
 https://clojure-doc.org/tags/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -21,7 +21,7 @@ https://clojure-doc.org/tags/index.html
 https://clojure-doc.org/404.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -29,7 +29,7 @@ https://clojure-doc.org/404.html
 https://clojure-doc.org/articles/language/namespaces/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -37,7 +37,7 @@ https://clojure-doc.org/articles/language/namespaces/index.html
 https://clojure-doc.org/articles/language/laziness/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -45,7 +45,7 @@ https://clojure-doc.org/articles/language/laziness/index.html
 https://clojure-doc.org/articles/language/concurrency_and_parallelism/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -53,7 +53,7 @@ https://clojure-doc.org/articles/language/concurrency_and_parallelism/index.html
 https://clojure-doc.org/articles/language/polymorphism/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -61,7 +61,7 @@ https://clojure-doc.org/articles/language/polymorphism/index.html
 https://clojure-doc.org/articles/language/interop/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -69,7 +69,7 @@ https://clojure-doc.org/articles/language/interop/index.html
 https://clojure-doc.org/articles/language/macros/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -77,7 +77,7 @@ https://clojure-doc.org/articles/language/macros/index.html
 https://clojure-doc.org/articles/language/collections_and_sequences/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -85,7 +85,7 @@ https://clojure-doc.org/articles/language/collections_and_sequences/index.html
 https://clojure-doc.org/articles/language/core_overview/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -93,7 +93,7 @@ https://clojure-doc.org/articles/language/core_overview/index.html
 https://clojure-doc.org/articles/language/functions/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -101,7 +101,7 @@ https://clojure-doc.org/articles/language/functions/index.html
 https://clojure-doc.org/articles/language/glossary/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -109,7 +109,7 @@ https://clojure-doc.org/articles/language/glossary/index.html
 https://clojure-doc.org/articles/content/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -117,7 +117,7 @@ https://clojure-doc.org/articles/content/index.html
 https://clojure-doc.org/articles/ecosystem/java_jdbc/using_ddl/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -125,7 +125,7 @@ https://clojure-doc.org/articles/ecosystem/java_jdbc/using_ddl/index.html
 https://clojure-doc.org/articles/ecosystem/java_jdbc/reusing_connections/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -133,7 +133,7 @@ https://clojure-doc.org/articles/ecosystem/java_jdbc/reusing_connections/index.h
 https://clojure-doc.org/articles/ecosystem/java_jdbc/home/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -141,7 +141,7 @@ https://clojure-doc.org/articles/ecosystem/java_jdbc/home/index.html
 https://clojure-doc.org/articles/ecosystem/java_jdbc/using_sql/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -149,7 +149,7 @@ https://clojure-doc.org/articles/ecosystem/java_jdbc/using_sql/index.html
 https://clojure-doc.org/articles/ecosystem/libraries_authoring/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -157,7 +157,7 @@ https://clojure-doc.org/articles/ecosystem/libraries_authoring/index.html
 https://clojure-doc.org/articles/ecosystem/libraries_authoring_lein/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -165,7 +165,7 @@ https://clojure-doc.org/articles/ecosystem/libraries_authoring_lein/index.html
 https://clojure-doc.org/articles/ecosystem/community/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -173,7 +173,7 @@ https://clojure-doc.org/articles/ecosystem/community/index.html
 https://clojure-doc.org/articles/ecosystem/generating_documentation/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -181,7 +181,7 @@ https://clojure-doc.org/articles/ecosystem/generating_documentation/index.html
 https://clojure-doc.org/articles/ecosystem/web_development/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -189,7 +189,7 @@ https://clojure-doc.org/articles/ecosystem/web_development/index.html
 https://clojure-doc.org/articles/tutorials/editors/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -197,7 +197,7 @@ https://clojure-doc.org/articles/tutorials/editors/index.html
 https://clojure-doc.org/articles/tutorials/introduction/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -205,7 +205,7 @@ https://clojure-doc.org/articles/tutorials/introduction/index.html
 https://clojure-doc.org/articles/tutorials/getting_started_cli/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -213,7 +213,7 @@ https://clojure-doc.org/articles/tutorials/getting_started_cli/index.html
 https://clojure-doc.org/articles/tutorials/getting_started/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -221,7 +221,7 @@ https://clojure-doc.org/articles/tutorials/getting_started/index.html
 https://clojure-doc.org/articles/tutorials/getting_started_lein/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -229,7 +229,7 @@ https://clojure-doc.org/articles/tutorials/getting_started_lein/index.html
 https://clojure-doc.org/articles/tutorials/basic_web_development/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -237,7 +237,7 @@ https://clojure-doc.org/articles/tutorials/basic_web_development/index.html
 https://clojure-doc.org/articles/about/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -245,7 +245,7 @@ https://clojure-doc.org/articles/about/index.html
 https://clojure-doc.org/articles/cookbooks/cli_build_projects/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -253,7 +253,7 @@ https://clojure-doc.org/articles/cookbooks/cli_build_projects/index.html
 https://clojure-doc.org/articles/cookbooks/strings/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -261,7 +261,7 @@ https://clojure-doc.org/articles/cookbooks/strings/index.html
 https://clojure-doc.org/articles/cookbooks/middleware/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -269,7 +269,7 @@ https://clojure-doc.org/articles/cookbooks/middleware/index.html
 https://clojure-doc.org/articles/cookbooks/math/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -277,7 +277,7 @@ https://clojure-doc.org/articles/cookbooks/math/index.html
 https://clojure-doc.org/articles/cookbooks/growing_a_dsl_with_clojure/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -285,7 +285,7 @@ https://clojure-doc.org/articles/cookbooks/growing_a_dsl_with_clojure/index.html
 https://clojure-doc.org/articles/cookbooks/data_structures/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -293,7 +293,7 @@ https://clojure-doc.org/articles/cookbooks/data_structures/index.html
 https://clojure-doc.org/articles/cookbooks/parsing_xml_with_zippers/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -301,7 +301,7 @@ https://clojure-doc.org/articles/cookbooks/parsing_xml_with_zippers/index.html
 https://clojure-doc.org/articles/cookbooks/files_and_directories/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -309,7 +309,7 @@ https://clojure-doc.org/articles/cookbooks/files_and_directories/index.html
 https://clojure-doc.org/articles/cookbooks/date_and_time/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 <url>
@@ -317,7 +317,7 @@ https://clojure-doc.org/articles/cookbooks/date_and_time/index.html
 https://clojure-doc.org/index.html
 </loc>
 <lastmod>
-2023-10-10
+2023-10-14
 </lastmod>
 </url>
 </urlset>
