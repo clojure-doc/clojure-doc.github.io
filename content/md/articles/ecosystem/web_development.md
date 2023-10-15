@@ -136,7 +136,7 @@ Unlike Luminus, it uses the Clojure CLI and [clj-new](https://github.com/seancor
 to create and run new projects. In its most basic form, it uses Ring,
 [reitit](https://github.com/metosin/reitit),
 [integrant](https://github.com/weavejester/integrant),
-[aero](https://https://github.com/juxt/aero) (for handling configuration),
+[aero](https://github.com/juxt/aero) (for handling configuration),
 and the JBoss Undertow web server.
 
 Like Luminus, you can add a wide variety of different libraries to your
