@@ -1,5 +1,4 @@
 {:title "Ecosystem: Web Development"
- :omit-sidebar? true
  :layout :page :page-index 3400}
 
 This guide covers:
@@ -31,6 +30,22 @@ the frontend and a Clojure-powered API for the backend.
 
 This guide doesn't clam to be comprehensive, but it does try to
 cover the most popular and well-maintained options, across that spectrum.
+
+## Static Sites
+
+Before we get into web _applications_, it's worth mentioning that there
+are several Clojure-based solutions for generating static sites.
+
+* [cryogen](http://cryogenweb.org/) - simple static site generator written in Clojure
+* [stasis](https://github.com/magnars/stasis) - some Clojure functions for creating static websites
+
+The README for the latter lists several other options.
+
+You can also add ClojureScript interactivity to a static site using
+[scittle](https://babashka.org/scittle/) which exposes the
+[Small Clojure Interpreter](https://github.com/babashka/sci) to the browser.
+
+> Note: this can even support Reagent and re-frame, which are ClojureScript wrappers around React, but without the complexity of a full-blown SPA. See [UI-Focused options](#ui-focused-options) in the **Frontend Development** section below.
 
 ## Fundamentals
 
@@ -137,11 +152,23 @@ You can use [HTMX](https://htmx.org/) with Kit via the [ctmx module](https://wha
 that is fairly opinionated about the libraries it uses. It is based on Ring
 (but using the [sunng87](https://github.com/sunng87/ring-jetty9-adapter) adapter for the Jetty 11 web server),
 [reitit](https://github.com/metosin/reitit),
-[xtdb](https://www.xtdb.com/) for the database,
+[XTDB](https://www.xtdb.com/) for the database,
 with [malli](https://github.com/metosin/malli) to provide schema definition and validation,
 and produces HTML that uses
 [HTMX](https://htmx.org/) to provide an interactive experience without
 the complexity of a full-blown SPA.
+
+### JUXT Site
+
+[Site](https://github.com/juxt-site/site) is a platform for building stateful API services.
+It is based on [XTDB](https://www.xtdb.com/) for the database, supports
+[OpenAPI](https://swagger.io/specification/) and [OpenID](https://openid.net/),
+and provides flexible access control.
+
+The linked version of Site is 2.0 and has a note that it is
+"not yet ready for evaluation outside of JUXT" but it is an evolution
+of [Site 1.0](https://github.com/juxt/site) which is also based on XTDB and
+supports OpenAPI.
 
 ### Pedestal
 
@@ -185,10 +212,30 @@ but, as those articles show, building on top of React is not the only option!
 * [helix](https://github.com/lilactown/helix) - a simple, easy to use library for React development in ClojureScript
 * [UIx](https://pitch-io.github.io/uix/docs/) - an idiomatic interface into modern React
 
+While those are all based on or wrappers around React, there are other options:
+
+* [hoplon](https://hoplon.io/) - a ClojureScript library that unify some of the web platform's idiosyncrasies and present a fun way to design and build single-page web applications; hoplon builds on [hoplon](https://github.com/hoplon/javelin) which provides spreadsheet-like dataflow programming in ClojureScript
+
 ### Full-Stack Options
 
 * [fulcro](https://fulcro.fulcrologic.com/) - a library for development of single-page full-stack web applications in clj/cljs
 * [sitefox](https://github.com/chr15m/sitefox) - full-stack ClojureScript development on node.js
+
+### Producing JavaScript
+
+Although ClojureScript (and thus all of the above **Frontend Development** options)
+produce JavaScript under the hood, there are times when you have an existing
+ecosystem based on HTML, CSS, and JavaScript and you want to add some ClojureScript
+to that. In that case, you can either use `scittle`, mentioned above or
+one of these ClojureScript to JavaScript compilers:
+
+* [cherry](https://github.com/squint-cljs/cherry) - experimental ClojureScript to ES6 module compiler
+* [squint](https://github.com/squint-cljs/squint) - experimental ClojureScript syntax to JavaScript compiler
+
+The former maintains ClojureScript _semantics_ and syntax while the latter
+maintains only the syntax, compiling to JavaScript semantics. These projects
+can both be useful for adding ClojureScript components and modules
+to an existing JavaScript project.
 
 ## See Also
 
