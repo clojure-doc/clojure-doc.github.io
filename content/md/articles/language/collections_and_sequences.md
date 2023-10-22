@@ -1405,7 +1405,7 @@ shortest way we know to blowing the performance.
 It is possible to develop custom collection types in Clojure or Java and have
 `clojure.core` functions work on them just like they do on builtin types.
 
-TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)
+[How to Contribute](/articles/about/#how-to-contribute)
 
 
 ## Wrapping Up

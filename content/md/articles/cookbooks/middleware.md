@@ -15,9 +15,11 @@ Middleware in Clojure is a common design pattern for threading a
 well as threading the *response* through the same series of functions.
 
 Middleware is used in many Clojure projects such as
-[Ring](https://github.com/mmcgrana/ring),
-[clj-http](https://github.com/dakrone/clj-http) and
-[something else here](TODO).
+[Ring](https://github.com/ring-clojure/ring),
+[Compojure](https://github.com/weavejester/compojure/wiki/Middleware),
+[reitit](https://cljdoc.org/d/metosin/reitit/CURRENT/doc/ring/middleware-registry)
+[clj-http](https://github.com/dakrone/clj-http), and
+[Kit](https://kit-clj.github.io/docs/middleware.html).
 
 ## The `client` function
 

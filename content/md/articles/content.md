@@ -265,7 +265,7 @@ This cookbook shows you the power of the `tools.build`
 library, which is used with a `build.clj` file and the
 Clojure CLI to build, test, deploy, and more.
 
-### [Data Structures](/articles/cookbooks/data_structures/) (TBD)
+### [Data Structures](/articles/cookbooks/data_structures/)
 
 This cookbook covers:
 
