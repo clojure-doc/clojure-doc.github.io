@@ -70,9 +70,10 @@ stylesheets). The source is available <a href="https://github.com/clojure-doc/cl
 Github</a>.</p><h2 id="what-is-middleware">What is Middleware?</h2><p>Middleware in Clojure is a common design pattern for threading a
 <em>request</em> through a series of functions designed to operate on it as
 well as threading the <em>response</em> through the same series of functions.</p><p>Middleware is used in many Clojure projects such as
-<a href="https://github.com/mmcgrana/ring">Ring</a>,
-<a href="https://github.com/dakrone/clj-http">clj-http</a> and
-<a href="TODO">something else here</a>.</p><h2 id="the-client-function">The <code>client</code> function</h2><p>The base of all middleware in Clojure is the <code>client</code> function, which
+<a href="https://github.com/ring-clojure/ring">Ring</a>,
+<a href="https://github.com/weavejester/compojure/wiki/Middleware">Compojure</a>,
+<a href="https://cljdoc.org/d/metosin/reitit/CURRENT/doc/ring/middleware-registry">reitit</a><a href="https://github.com/dakrone/clj-http">clj-http</a>, and
+<a href="https://kit-clj.github.io/docs/middleware.html">Kit</a>.</p><h2 id="the-client-function">The <code>client</code> function</h2><p>The base of all middleware in Clojure is the <code>client</code> function, which
 takes a request object (usually a Clojure map) and returns a response
 object (also usually a Clojure map).</p><p>For example, let's use a <code>client</code> function that pulls some keys out of
 a map request and does an HTTP GET on a site:</p><pre><code class="clojure">(ns middleware.example

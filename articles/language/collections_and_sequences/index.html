@@ -584,7 +584,7 @@ is not safe if transient data structures are shared between threads.</p><p>To cr
 </code></pre><p>In conclusion: use transients only as an optimization technique and only
 after profiling and identifying hot spots in your code. Guessing is the
 shortest way we know to blowing the performance.</p><h2 id="custom-collections-and-sequences">Custom Collections and Sequences</h2><p>It is possible to develop custom collection types in Clojure or Java and have
-<code>clojure.core</code> functions work on them just like they do on builtin types.</p><p>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p><h2 id="wrapping-up">Wrapping Up</h2><p>When working with Clojure, it is common to operate and transform collections and sequences.
+<code>clojure.core</code> functions work on them just like they do on builtin types.</p><p><a href="/articles/about/#how-to-contribute">How to Contribute</a></p><h2 id="wrapping-up">Wrapping Up</h2><p>When working with Clojure, it is common to operate and transform collections and sequences.
 Clojure's core library unify operations on collections and sequences where possible.
 This extends to Java collections, arrays and iterable objects for seamless interoperability.</p><p>Most of the time, whenever you need a function that transforms sequences, chances are, there is
 one already that does that in <code>clojure.core</code> or you can compose more than one <code>clojure.core</code> function
