@@ -214,7 +214,7 @@ but, as those articles show, building on top of React is not the only option!
 
 While those are all based on or wrappers around React, there are other options:
 
-* [hoplon](https://hoplon.io/) - a ClojureScript library that unify some of the web platform's idiosyncrasies and present a fun way to design and build single-page web applications; hoplon builds on [hoplon](https://github.com/hoplon/javelin) which provides spreadsheet-like dataflow programming in ClojureScript
+* [hoplon](https://hoplon.io/) - a ClojureScript library that unify some of the web platform's idiosyncrasies and present a fun way to design and build single-page web applications; hoplon builds on [javelin](https://github.com/hoplon/javelin) which provides spreadsheet-like dataflow programming in ClojureScript
 
 ### Full-Stack Options
 
