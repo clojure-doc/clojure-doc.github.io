@@ -196,48 +196,50 @@ Using the import and the class name to create an instance of `LocalDate`:
 ;; => #object[java.time.LocalDate 0x439c6250 "2023-11-13"]
 
 ;; What's the date a year before?
-;; TODO (.minus (LocalDate/parse "2023-11-03") (java.time.Period/ofYears 1))
+(.minus (LocalDate/parse "2023-11-03") (java.time.Period/ofYears 1))
 ;; => #object[java.time.LocalDate 0x37380cf2 "2022-11-03"]
 
 ;; Difference in days between a date and a year before
 ;; TODO
 ;; => 366
+
+;; Return a duration between two dates.
 (java.time.Period/between (LocalDate/parse "2023-11-03")
                           (.plusYears (LocalDate/parse "2023-11-03")
                                       1))
 
-
 ;; What day of the week was it?
-;; TODO (jt/day-of-week (jt/minus (jt/local-date) (jt/years 1)))
-;; => #object[java.time.DayOfWeek 0x10fb6e5f "THURSDAY"]
+(.getDayOfWeek (LocalDate/parse "2023-11-03"))
+;; => #object[java.time.DayOfWeek 0x7823658a "FRIDAY"]
 
 ;; How to format the output in a specific way?
-;; TODO (jt/format :iso-date (jt/local-date "2023-11-01"))
-;; => "2023-11-01"
-
-;; TODO (jt/format "yyyy/MM/dd" (jt/local-date "2023-11-01"))
+(.format (LocalDate/parse "2023-11-01")
+         (java.time.format.DateTimeFormatter/ofPattern "yyyy/MM/dd"))
 ;; => "2023/11/01"
 
 ;; To parse the date we just formatted
-;; TODO (jt/local-date "yyyy/MM/dd" "2023/11/01")
+(LocalDate/parse "2023/11/01"
+                 (java.time.format.DateTimeFormatter/ofPattern "yyyy/MM/dd"))
+;; => #object[java.time.LocalDate 0xa349bd0 "2023-11-01"]
 
 ;; This opens up the door to creating your own parsers.
 ;; TODO
-;; (defn ydm
-;;   "A parses similar to ydm() from the R package lubridate."
-;;   [s]
-;;   (jt/local-date "yyyyddMM" s))
+(defn ydm
+  "A parses similar to ydm() from the R package lubridate."
+  [s]
+  (LocalDate/parse s
+                   (java.time.format.DateTimeFormatter/ofPattern "yyyy/MM/dd")))
 ;; => #'user/ydm
 
-;; TODO (ydm "20170108")
-;; => #object[java.time.LocalDate 0x4851aa55 "2017-08-01"]
+(ydm "2023/01/02")
+;; => #object[java.time.LocalDate 0x3733f91d "2023-01-02"]
 ```
 
 ## `cljc.java-time`
 
 ### TBD
 
-# Example for a TODO application
+# Example for a TODO application (TBD)
 
 To illustrate a use case we'll build a basic TODO application that does the following:-
 - Inform us if any tasks are due today.
