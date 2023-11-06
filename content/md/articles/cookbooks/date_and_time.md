@@ -223,16 +223,15 @@ Using the import and the class name to create an instance of `LocalDate`:
 ;; => #object[java.time.LocalDate 0xa349bd0 "2023-11-01"]
 
 ;; This opens up the door to creating your own parsers.
-;; TODO
 (defn ydm
   "A parses similar to ydm() from the R package lubridate."
   [s]
   (LocalDate/parse s
-                   (java.time.format.DateTimeFormatter/ofPattern "yyyy/MM/dd")))
+                   (java.time.format.DateTimeFormatter/ofPattern "yyyyddMM")))
 ;; => #'user/ydm
 
-(ydm "2023/01/02")
-;; => #object[java.time.LocalDate 0x3733f91d "2023-01-02"]
+(ydm "20170108")
+;; => #object[java.time.LocalDate 0x3135d642 "2017-08-01"]
 ```
 
 ## `cljc.java-time`
