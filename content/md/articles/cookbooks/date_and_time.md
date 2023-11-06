@@ -197,10 +197,10 @@ Using the import and the class name to create an instance of `LocalDate`:
 ;; => #object[java.time.LocalDate 0x37380cf2 "2022-11-03"]
 
 ;; Difference in days between a date and a year before
-(.until (LocalDate/parse "2023-11-03")
-        (.plusYears (LocalDate/parse "2023-11-03")
-                    1)
-        (java.time.temporal.ChronoUnit/DAYS))
+(.between (java.time.temporal.ChronoUnit/DAYS)
+          (LocalDate/parse "2023-11-03")
+          (.plusYears (LocalDate/parse "2023-11-03")
+                      1))
 ;; => 366
 
 ;; What day of the week was it?
