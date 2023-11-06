@@ -109,7 +109,7 @@ of the `java.time.LocalDate`, `java.time.LocalTime` and
 (jt/minus (jt/local-date "2023-11-03") (jt/years 1))
 ;; => #object[java.time.LocalDate 0x6e927fd0 "2022-11-03"]
 
-;; Difference in days between a date and a year before
+;; Difference in days between a date and a year after
 (jt/time-between :days
                  (jt/local-date "2023-11-03")
                  (jt/plus (jt/local-date "2023-11-03")
@@ -196,7 +196,7 @@ Using the import and the class name to create an instance of `LocalDate`:
 (.minus (LocalDate/parse "2023-11-03") (java.time.Period/ofYears 1))
 ;; => #object[java.time.LocalDate 0x37380cf2 "2022-11-03"]
 
-;; Difference in days between a date and a year before
+;; Difference in days between a date and a year after
 (.between (java.time.temporal.ChronoUnit/DAYS)
           (LocalDate/parse "2023-11-03")
           (.plusYears (LocalDate/parse "2023-11-03")
