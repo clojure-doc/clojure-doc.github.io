@@ -47,9 +47,6 @@ TBD
 * [tick](https://github.com/juxt/tick)
   > A Clojure(Script) & babashka library for dealing with time. Intended as a replacement for clj-time.
 
-> **TODO** Should we recommend a lib?  *N* is the **recommended** library to use
-
-
 # Preliminaries
 
 The examples below assume the following `deps.edn`
