@@ -5,7 +5,7 @@ This cookbook covers working with Java's `java.time` package in two ways, the
 first with interop and the second uses a library that wraps `java.time` called
 `clojure.java-time`.
 
-This guide covers Clojure 1.11.1 and Java 8.
+This guide covers Clojure 1.11.1 and Java 8 or later.
 
 # Introduction
 
