@@ -294,9 +294,9 @@ Includes coverage of facilities for doing math with Clojure.
 
 This guide covers:
 
- * Working with JDK dates
  * Working with `clojure.java-time`
- * Instant literals (Clojure 1.4+)
+ * Working with `java-time` via interop
+ * Working with `cljc.java-time`
 
 ### [Files and Directories](/articles/cookbooks/files_and_directories/)
 
