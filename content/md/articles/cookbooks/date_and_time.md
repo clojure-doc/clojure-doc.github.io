@@ -1,9 +1,8 @@
 {:title "Date and Time"
  :layout :page :page-index 4300}
 
-This cookbook covers working with Java's `java.time` package in two ways, the
-first with interop and the second uses a library that wraps `java.time` called
-`clojure.java-time`.
+This cookbook covers working with Java's `java.time` package in two styles, the
+first with interop and the second using libraries.
 
 This guide covers Clojure 1.11.1 and Java 8 or later.
 
@@ -20,10 +19,10 @@ background the interop section might be of interest.
 This cookbook will be useful if you got your Clojure environment setup, know
 some of the basics and are looking to work with time and dates in Clojure.
 
-This guide aims to cover date and time in the JVM and JS domains.
+This guide aims to cover date and time in the JVM and JS domains.  The guide
+currently covers only JVM.
 
-What's the scope of this cookbook?
-What will I cover and what will I not cover?
+The scope of this cookbook covers basic operations using the two styles.
 
 This cookbook will cover working with `java.time` as `java.util.Date` is legacy[^1].
 
