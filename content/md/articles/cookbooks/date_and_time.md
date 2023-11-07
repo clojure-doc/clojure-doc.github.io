@@ -53,7 +53,8 @@ The examples below assume the following `deps.edn`
 ``` clojure
 {:paths ["src"]
  :deps {org.clojure/clojure {:mvn/version "1.11.1"}
-        clojure.java-time/clojure.java-time {:mvn/version "1.3.0"}}}
+        clojure.java-time/clojure.java-time {:mvn/version "1.3.0"}
+        com.widdindustries/cljc.java-time {:mvn/version "0.1.21"}}}
 ```
 
 Your `ns` form should contain:
@@ -230,8 +231,85 @@ Using the import and the class name to create an instance of `LocalDate`:
 ```
 
 ## `cljc.java-time`
+According to the [How it
+works](https://github.com/henryw374/cljc.java-time#how-it-works) section of
+`cljc.java-time` each class in `java.time` has a corresponding Clojure
+namespace.  This means that we need to require each class as a namespace.
 
-### TBD
+``` clojure
+(require '[cljc.java-time local-date local-time local-date-time period temporal])
+(require '[cljc.java-time.temporal.chrono-unit])
+(require '[cljc.java-time.format.date-time-formatter])
+
+;; What's the current day?
+(cljc.java-time.local-date/now)
+;; => #object[java.time.LocalDate 0x7f314585 "2023-11-06"]
+;; You may see a different result.
+
+;; What's the current time?
+(cljc.java-time.local-time/now)
+;; => #object[java.time.LocalTime 0x101358e2 "21:39:08.521579413"]
+;; You may see a different result.
+
+;; What's the date and time of today?
+(cljc.java-time.local-date-time/now)
+;; => #object[java.time.LocalDateTime 0x56ba51c9 "2023-11-06T21:40:52.985876111"]
+;; You may see a different result.
+
+;; Does date1 come before date2?
+(let [date1 (cljc.java-time.local-date/parse "2023-01-01")
+      date2 (cljc.java-time.local-date/parse "2023-10-01")]
+  (cljc.java-time.local-date/is-before date1 date2))
+;; => true
+
+;; Add N days to a date
+(cljc.java-time.local-date/plus (cljc.java-time.local-date/parse "2023-11-03")
+                                (cljc.java-time.period/of-days 10))
+;; => #object[java.time.LocalDate 0x7c03648a "2023-11-13"]
+;; Or
+(cljc.java-time.local-date/plus-days (cljc.java-time.local-date/parse "2023-11-03")
+                                     10)
+;; => #object[java.time.LocalDate 0x6ef62d95 "2023-11-13"]
+
+;; What's the date a year before?
+(cljc.java-time.local-date/minus (cljc.java-time.local-date/parse "2023-11-03")
+                                 (cljc.java-time.period/of-years 1))
+;; => #object[java.time.LocalDate 0x24023790 "2022-11-03"]
+
+;; Difference in days between a date and a year after
+(cljc.java-time.temporal.chrono-unit/between cljc.java-time.temporal.chrono-unit/days
+                                             (cljc.java-time.local-date/parse "2023-11-03")
+                                             (cljc.java-time.local-date/plus-years
+                                               (cljc.java-time.local-date/parse "2023-11-03")
+                                               1))
+;; => 366
+
+;; What day of the week was it?
+(cljc.java-time.local-date/get-day-of-week (cljc.java-time.local-date/parse "2023-11-03"))
+;; => #object[java.time.DayOfWeek 0x38e22a90 "FRIDAY"]
+
+;; How to format the output in a specific way?
+(cljc.java-time.local-date/format (cljc.java-time.local-date/parse "2023-11-01")
+                                  (cljc.java-time.format.date-time-formatter/of-pattern "yyyy/MM/dd"))
+;; => "2023/11/01"
+
+;; To parse the date we just formatted
+(cljc.java-time.local-date/parse "2023/11/01"
+                                 (cljc.java-time.format.date-time-formatter/of-pattern "yyyy/MM/dd"))
+;; => #object[java.time.LocalDate 0x62756039 "2023-11-01"]
+
+;; This opens up the door to creating your own parsers.
+(defn ydm
+  "A parses similar to ydm() from the R package lubridate."
+  [s]
+  (cljc.java-time.local-date/parse s
+                                   (cljc.java-time.format.date-time-formatter/of-pattern "yyyyddMM")))
+;; => #'user/ydm
+
+(ydm "20170108")
+;; #object[java.time.LocalDate 0x194dcb8 "2017-08-01"]
+```
+
 
 # Example for a TODO application (TBD)
 
