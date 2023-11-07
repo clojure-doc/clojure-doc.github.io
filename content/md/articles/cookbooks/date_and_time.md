@@ -7,6 +7,11 @@ first with interop and the second uses a library that wraps `java.time` called
 
 This guide covers Clojure 1.11.1 and Java 8 or later.
 
+This work is licensed under a <a rel="license"
+href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution
+3.0 Unported License</a> (including images & stylesheets). The source is
+available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
+
 # Introduction
 
 This cookbook does not assume a background in Java, if you have such a
@@ -309,34 +314,6 @@ namespace.  This means that we need to require each class as a namespace.
 (ydm "20170108")
 ;; #object[java.time.LocalDate 0x194dcb8 "2017-08-01"]
 ```
-
-
-# Example for a TODO application (TBD)
-
-To illustrate a use case we'll build a basic TODO application that does the following:-
-- Inform us if any tasks are due today.
-- Inform us if any tasks are past their due date.
-- Inform us of our upcoming schedule.
-- The ability to add a task
-- The ability to filter tasks by date and time
-- ...
-
-We'll store our task entries in a map with the following keys
-``` clojure
-[:task-name
- :task-status
- :task-date-added
- :task-date-done
- :task-date-cancelled]
-```
-
-TBD
-
-
-This work is licensed under a <a rel="license"
-href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
-Attribution 3.0 Unported License</a> (including images &
-stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 # See also
 
