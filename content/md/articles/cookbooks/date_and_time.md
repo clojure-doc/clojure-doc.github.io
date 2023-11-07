@@ -61,16 +61,6 @@ The examples below assume the following `deps.edn`
         com.widdindustries/cljc.java-time {:mvn/version "0.1.21"}}}
 ```
 
-Your `ns` form should contain:
-``` clojure
-(:require [java-time.api :as jt])
-```
-
-Or in the REPL
-``` clojure
-(require '[java-time.api :as jt])
-```
-
 # Recipes
 
 ## `clojure.java-time`
@@ -83,6 +73,7 @@ of the `java.time.LocalDate`, `java.time.LocalTime` and
 
 
 ``` clojure
+(require '[java-time.api :as jt])
 ;; What's the current day?
 (jt/local-date)
 ;; => #object[java.time.LocalDate 0x28cb30b8 "2023-11-01"]
