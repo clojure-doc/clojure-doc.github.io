@@ -342,8 +342,5 @@ stylesheets). The source is available [on Github](https://github.com/clojure-doc
 
 - [Overview of Date and Time in Java](https://docs.oracle.com/javase/tutorial/datetime/iso/overview.html)
 
-<!-- Local Variables: -->
-<!-- jinx-local-words: "interop" -->
-<!-- End: -->
 
-[^1]: [Legacy Date-Time Code (docs.oracle.com)](https://docs.oracle.com/javase/tutorial/datetime/iso/legacy.html)
+[^1]: [Legacy Date-Time Code (docs.oracle.com)](https://docs.oracle.com/javase/tutorial/datetime/iso/legacy.html).
