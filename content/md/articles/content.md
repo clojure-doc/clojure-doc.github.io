@@ -290,13 +290,13 @@ This cookbook covers:
 Includes coverage of facilities for doing math with Clojure.
 
 
-### [Date and Time](/articles/cookbooks/date_and_time/) (TBD)
+### [Date and Time](/articles/cookbooks/date_and_time/)
 
 This guide covers:
 
- * Working with JDK dates
- * Working with Joda Time and `clj-time`
- * Instant literals (Clojure 1.4+)
+ * Working with `clojure.java-time`
+ * Working with `java-time` via interop
+ * Working with `cljc.java-time`
 
 ### [Files and Directories](/articles/cookbooks/files_and_directories/)
 
