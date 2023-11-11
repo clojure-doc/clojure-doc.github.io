@@ -2,15 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Clojure Guides: Date and Time (Help wanted)</title>
+    <title>Clojure Guides: Date and Time</title>
     
 
-<meta name="description" content="Help wantedPlease follow the instructions on how to contribute and start writing over here">
+<meta name="description" content="This cookbook covers working with Java&#39;s java.time package in two styles, the
+first with interop and the second using libraries.This guide covers Clojure 1.11.1 and Java 8 or later.">
 
-<meta property="og:description" content="Help wantedPlease follow the instructions on how to contribute and start writing over here">
+<meta property="og:description" content="This cookbook covers working with Java&#39;s java.time package in two styles, the
+first with interop and the second using libraries.This guide covers Clojure 1.11.1 and Java 8 or later.">
 
 <meta property="og:url" content="https://clojure-doc.org/articles/cookbooks/date_and_time/" />
-<meta property="og:title" content="Date and Time (Help wanted)" />
+<meta property="og:title" content="Date and Time" />
 <meta property="og:type" content="article" />
 
     <link rel="canonical" href="https://clojure-doc.org/articles/cookbooks/date_and_time/">
@@ -55,12 +57,234 @@
                 
 <div id="custom-page">
     <div id="page-header">
-        <h2>Date and Time (Help wanted)</h2>
+        <h2>Date and Time</h2>
     </div>
     
-    <h2 id="help-wanted">Help wanted</h2><p>Please follow the <a href="https://github.com/clojure-doc/clojure-doc.github.io/tree/source#how-to-contribute">instructions</a> on how to contribute and start writing over <a href="https://github.com/clojure-doc/clojure-doc.github.io/blob/source/content/md/articles/cookbooks/date_and_time.md">here</a></p><p>This cookbook covers working with date and time values in Clojure.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
-Attribution 3.0 Unported License</a> (including images &amp;
-stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p>
+    <p>This cookbook covers working with Java's <code>java.time</code> package in two styles, the
+first with interop and the second using libraries.</p><p>This guide covers Clojure 1.11.1 and Java 8 or later.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution
+3.0 Unported License</a> (including images &amp; stylesheets). The source is
+available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h1 id="introduction">Introduction</h1><p>This cookbook does not assume a background in Java, if you have such a
+background the interop section might be of interest.</p><p>This cookbook will be useful if you got your Clojure environment setup, know
+some of the basics and are looking to work with time and dates in Clojure.</p><p>This guide aims to cover date and time in the JVM and JS domains.  The guide
+currently covers only JVM.</p><p>The scope of this cookbook covers basic operations using the two styles.</p><p>This cookbook will cover working with <code>java.time</code> as <code>java.util.Date</code> is legacy<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>.</p><h2 id="overview">Overview</h2><p>The representation of date and time is dependent upon the host, for example in the JVM</p><ul><li>Dates are a <code>java.util.LocalDate</code> object.</li><li>Time is a a <code>java.util.LocalTime</code> object.</li><li>Clojure can represent these objects as a <code>java.util.LocalDate</code>, <code>java.util.LocalTime</code>
+and <code>java.util.LocalDateTime</code> respectively.</li><li>The <code>#inst</code> is a <a href="https://clojure.org/guides/weird_characters#tagged_literals">tagged
+literal</a> is used
+to represent a <code>java.util.Date</code> object.</li></ul><p>While in JavaScript:
+TBD</p><h2 id="libraries">Libraries</h2><ul><li><a href="https://github.com/dm3/clojure.java-time">clojure.java-time</a><blockquote><p>A Clojure wrapper for Java 8 Date-Time API.</p></blockquote></li><li><a href="https://github.com/henryw374/cljc.java-time">cljc.java-time</a><blockquote><p>A Clojure(Script) library which mirrors the java.time api through kebab-case-named vars.</p></blockquote></li><li><a href="https://github.com/juxt/tick">tick</a><blockquote><p>A Clojure(Script) &amp; babashka library for dealing with time. Intended as a replacement for clj-time.</p></blockquote></li></ul><h1 id="preliminaries">Preliminaries</h1><p>The examples below assume the following <code>deps.edn</code></p><pre><code class="clojure">{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        clojure.java-time/clojure.java-time {:mvn/version "1.3.0"}
+        com.widdindustries/cljc.java-time {:mvn/version "0.1.21"}}}
+</code></pre><h1 id="recipes">Recipes</h1><h2 id="clojurejava-time"><code>clojure.java-time</code></h2><h3 id="basics">Basics</h3><p>For the people coming from a non-Java background, we are creating an <em>instance</em>
+of the <code>java.time.LocalDate</code>, <code>java.time.LocalTime</code> and
+<code>java.time.LocalDateTime</code> classes respectively, that's what the <code>#object</code> is for.</p><pre><code class="clojure">(require '[java-time.api :as jt])
+;; What's the current day?
+(jt/local-date)
+;; =&gt; #object[java.time.LocalDate 0x28cb30b8 "2023-11-01"]
+;; You may see a different result.
+
+;; What's the current time?
+(jt/local-time)
+;; =&gt; #object[java.time.LocalTime 0x7f536ee5 "23:53:32.896427602"]
+;; You may see a different result.
+
+;; What's the date and time of today?
+(jt/local-date-time)
+;; =&gt; #object[java.time.LocalDateTime 0x3ac70fac "2023-11-01T23:54:14.020607313"]
+;; You may see a different result.
+
+;; Does date1 come before date2?
+(let [date1 (jt/local-date "2023-01-01")
+      date2 (jt/local-date "2023-10-01")]
+  (jt/before? date1
+              date2))
+;; =&gt; true
+
+;; Add N days to a date
+(jt/plus (jt/local-date "2023-11-01")
+         (jt/days 10))
+;; =&gt; #object[java.time.LocalDate 0x165637c5 "2023-11-13"]
+
+;; What's the date a year before?
+(jt/minus (jt/local-date "2023-11-03") (jt/years 1))
+;; =&gt; #object[java.time.LocalDate 0x6e927fd0 "2022-11-03"]
+
+;; Difference in days between a date and a year after
+(jt/time-between :days
+                 (jt/local-date "2023-11-03")
+                 (jt/plus (jt/local-date "2023-11-03")
+                          (jt/years 1)))
+;; =&gt; 366
+
+;; What day of the week was it?
+(jt/day-of-week (jt/minus (jt/local-date) (jt/years 1)))
+;; =&gt; #object[java.time.DayOfWeek 0x10fb6e5f "THURSDAY"]
+
+;; How to format the output in a specific way?
+(jt/format :iso-date (jt/local-date "2023-11-01"))
+;; =&gt; "2023-11-01"
+
+(jt/format "yyyy/MM/dd" (jt/local-date "2023-11-01"))
+;; =&gt; "2023/11/01"
+
+;; To parse the date we just formatted
+(jt/local-date "yyyy/MM/dd" "2023/11/01")
+
+;; This opens up the door to creating your own parsers.
+(defn ydm
+  "A parses similar to ydm() from the R package lubridate."
+  [s]
+  (jt/local-date "yyyyddMM" s))
+;; =&gt; #'user/ydm
+
+(ydm "20170108")
+;; =&gt; #object[java.time.LocalDate 0x4851aa55 "2017-08-01"]
+</code></pre><p>For more formatting patterns check out the
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
+class, the table <strong>Predefined Formatters</strong> is where the <code>:iso-date</code> came from
+although note it is written as <code>ISO_DATE</code> in the <strong>Formatted</strong> column.</p><p>More basic recipes can be read in the
+<a href="https://dm3.github.io/clojure.java-time/README.html">README</a> for
+<code>clojure.java-time</code>.</p><h2 id="date-and-time-via-interop">Date and Time via interop</h2><p>You can use interop by either using the full package name and the class or by
+importing the class.</p><p>Using the package and class name to create an instance of <code>LocalDate</code>:</p><pre><code class="clojure">(java.time.LocalDate/now) ; =&gt; #object[java.time.LocalDate 0x4d98485b "2023-11-01"]
+</code></pre><p>Using the import and the class name to create an instance of <code>LocalDate</code>:</p><pre><code class="clojure">(import (java.time LocalDate LocalTime LocalDateTime))
+
+;; What's the current day?
+(LocalDate/now)
+;; =&gt; #object[java.time.LocalDate 0x28cb30b8 "2023-11-01"]
+;; You may see a different result.
+
+;; What's the current time?
+(LocalTime/now)
+;; =&gt; #object[java.time.LocalTime 0x4dc69d04 "12:53:09.791974265"]
+;; You may see a different result.
+
+;; What's the date and time of today?
+(LocalDateTime/now)
+;; =&gt; #object[java.time.LocalDateTime 0x6d7119a7 "2023-11-03T12:53:36.765946815"]
+;; You may see a different result.
+
+;; Does date1 come before date2?
+(let [date1 (LocalDate/parse "2023-01-01")
+      date2 (LocalDate/parse "2023-10-01")]
+  (.isBefore date1 date2))
+;; =&gt; true
+
+;; Add N days to a date
+(.plus (LocalDate/now) (java.time.Period/ofDays 10))
+;; =&gt; #object[java.time.LocalDate 0x507f3b0d "2023-11-13"]
+;; Or
+(.plusDays (LocalDate/now) 10)
+;; =&gt; #object[java.time.LocalDate 0x439c6250 "2023-11-13"]
+
+;; What's the date a year before?
+(.minus (LocalDate/parse "2023-11-03") (java.time.Period/ofYears 1))
+;; =&gt; #object[java.time.LocalDate 0x37380cf2 "2022-11-03"]
+
+;; Difference in days between a date and a year after
+(.between (java.time.temporal.ChronoUnit/DAYS)
+          (LocalDate/parse "2023-11-03")
+          (.plusYears (LocalDate/parse "2023-11-03")
+                      1))
+;; =&gt; 366
+
+;; What day of the week was it?
+(.getDayOfWeek (LocalDate/parse "2023-11-03"))
+;; =&gt; #object[java.time.DayOfWeek 0x7823658a "FRIDAY"]
+
+;; How to format the output in a specific way?
+(.format (LocalDate/parse "2023-11-01")
+         (java.time.format.DateTimeFormatter/ofPattern "yyyy/MM/dd"))
+;; =&gt; "2023/11/01"
+
+;; To parse the date we just formatted
+(LocalDate/parse "2023/11/01"
+                 (java.time.format.DateTimeFormatter/ofPattern "yyyy/MM/dd"))
+;; =&gt; #object[java.time.LocalDate 0xa349bd0 "2023-11-01"]
+
+;; This opens up the door to creating your own parsers.
+(defn ydm
+  "A parses similar to ydm() from the R package lubridate."
+  [s]
+  (LocalDate/parse s
+                   (java.time.format.DateTimeFormatter/ofPattern "yyyyddMM")))
+;; =&gt; #'user/ydm
+
+(ydm "20170108")
+;; =&gt; #object[java.time.LocalDate 0x3135d642 "2017-08-01"]
+</code></pre><h2 id="cljcjava-time"><code>cljc.java-time</code></h2><p>According to the <a href="https://github.com/henryw374/cljc.java-time#how-it-works">How it
+works</a> section of
+<code>cljc.java-time</code> each class in <code>java.time</code> has a corresponding Clojure
+namespace.  This means that we need to require each class as a namespace.</p><pre><code class="clojure">(require '[cljc.java-time local-date local-time local-date-time period temporal])
+(require '[cljc.java-time.temporal.chrono-unit])
+(require '[cljc.java-time.format.date-time-formatter])
+
+;; What's the current day?
+(cljc.java-time.local-date/now)
+;; =&gt; #object[java.time.LocalDate 0x7f314585 "2023-11-06"]
+;; You may see a different result.
+
+;; What's the current time?
+(cljc.java-time.local-time/now)
+;; =&gt; #object[java.time.LocalTime 0x101358e2 "21:39:08.521579413"]
+;; You may see a different result.
+
+;; What's the date and time of today?
+(cljc.java-time.local-date-time/now)
+;; =&gt; #object[java.time.LocalDateTime 0x56ba51c9 "2023-11-06T21:40:52.985876111"]
+;; You may see a different result.
+
+;; Does date1 come before date2?
+(let [date1 (cljc.java-time.local-date/parse "2023-01-01")
+      date2 (cljc.java-time.local-date/parse "2023-10-01")]
+  (cljc.java-time.local-date/is-before date1 date2))
+;; =&gt; true
+
+;; Add N days to a date
+(cljc.java-time.local-date/plus (cljc.java-time.local-date/parse "2023-11-03")
+                                (cljc.java-time.period/of-days 10))
+;; =&gt; #object[java.time.LocalDate 0x7c03648a "2023-11-13"]
+;; Or
+(cljc.java-time.local-date/plus-days (cljc.java-time.local-date/parse "2023-11-03")
+                                     10)
+;; =&gt; #object[java.time.LocalDate 0x6ef62d95 "2023-11-13"]
+
+;; What's the date a year before?
+(cljc.java-time.local-date/minus (cljc.java-time.local-date/parse "2023-11-03")
+                                 (cljc.java-time.period/of-years 1))
+;; =&gt; #object[java.time.LocalDate 0x24023790 "2022-11-03"]
+
+;; Difference in days between a date and a year after
+(cljc.java-time.temporal.chrono-unit/between cljc.java-time.temporal.chrono-unit/days
+                                             (cljc.java-time.local-date/parse "2023-11-03")
+                                             (cljc.java-time.local-date/plus-years
+                                               (cljc.java-time.local-date/parse "2023-11-03")
+                                               1))
+;; =&gt; 366
+
+;; What day of the week was it?
+(cljc.java-time.local-date/get-day-of-week (cljc.java-time.local-date/parse "2023-11-03"))
+;; =&gt; #object[java.time.DayOfWeek 0x38e22a90 "FRIDAY"]
+
+;; How to format the output in a specific way?
+(cljc.java-time.local-date/format (cljc.java-time.local-date/parse "2023-11-01")
+                                  (cljc.java-time.format.date-time-formatter/of-pattern "yyyy/MM/dd"))
+;; =&gt; "2023/11/01"
+
+;; To parse the date we just formatted
+(cljc.java-time.local-date/parse "2023/11/01"
+                                 (cljc.java-time.format.date-time-formatter/of-pattern "yyyy/MM/dd"))
+;; =&gt; #object[java.time.LocalDate 0x62756039 "2023-11-01"]
+
+;; This opens up the door to creating your own parsers.
+(defn ydm
+  "A parses similar to ydm() from the R package lubridate."
+  [s]
+  (cljc.java-time.local-date/parse s
+                                   (cljc.java-time.format.date-time-formatter/of-pattern "yyyyddMM")))
+;; =&gt; #'user/ydm
+
+(ydm "20170108")
+;; #object[java.time.LocalDate 0x194dcb8 "2017-08-01"]
+</code></pre><h1 id="examples">Examples</h1><h2 id="tbd">TBD</h2><h1 id="see-also">See also</h1><ul><li><a href="https://docs.oracle.com/javase/tutorial/datetime/iso/overview.html">Overview of Date and Time in Java</a></li></ul><div class="footnotes"><hr /><ol><li id="fn-1"><p><a href="https://docs.oracle.com/javase/tutorial/datetime/iso/legacy.html">Legacy Date-Time Code (docs.oracle.com)</a>.</p><a href="#fnref-1" class="footnote-backref">↩</a></li></ol></div>
 
     <div id="prev-next">
         
@@ -131,7 +355,7 @@ stylesheets). The source is available <a href="https://github.com/clojure-doc/cl
                     
                     <li><a href="/articles/cookbooks/math/">Mathematics with Clojure</a></li>
                     
-                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time (Help wanted)</a></li>
+                    <li><a href="/articles/cookbooks/date_and_time/">Date and Time</a></li>
                     
                     <li><a href="/articles/cookbooks/files_and_directories/">Working with Files and Directories in Clojure</a></li>
                     
