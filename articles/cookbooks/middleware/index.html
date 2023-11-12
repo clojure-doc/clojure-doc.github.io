@@ -104,19 +104,27 @@ existing client function:</p><pre><code class="clojure">(def new-client (wrap-no
 yet, so let's add another middleware wrapper that does something more
 exiting.</p><p>Let's add a middleware function that automatically changes all "HTTP"
 requests into "HTTPS" requests. Again, we need a function that returns
-another function, so we can end up with a new method to call:</p><pre><code class="clojure">(defn wrap-https
+another function, so we can end up with a new method to call:</p><pre><code class="clojure">;; assume (require '[clojure.string :as str])
+(defn wrap-https
   [client-fn]
   (fn [request]
     (let [site (:site request)
-          new-site (.replaceAll site "http:" "https:")
+          new-site (str/replace site "http:" "https:")
           new-request (assoc request :site new-site)]
       (client-fn new-request))))
+</code></pre><p>This could be written more concisely using <code>-&gt;</code> and <code>update</code>, if you prefer:</p><pre><code class="clojure">;; assume (require '[clojure.string :as str])
+(defn wrap-https
+  [client-fn]
+  (fn [request]
+    (-&gt; request
+        (update :site #(str/replace % "http:" "https:"))
+        (client-fn))))
 </code></pre><p>The <code>wrap-https</code> middleware can be tested again by creating a new
 client function:</p><pre><code class="clojure">(def https-client (wrap-https client))
 
 ;; Notice the :trace-redirects key shows that HTTPS was used instead
 ;; of HTTP
-(https-client {:site "https://www.google.com" :options {}})
+(https-client {:site "http://www.google.com" :options {}})
 ;; ⇒ {:trace-redirects ["https://www.google.com"],
 ;;    :status 200,
 ;;    :headers {...},
@@ -138,13 +146,13 @@ response map:</p><pre><code class="clojure">(defn wrap-add-date
       (assoc response :date (java.util.Date.)))))
 </code></pre><p>And again, we can test it without using any other functions using
 <code>identity</code> as the client function:</p><pre><code class="clojure">((wrap-add-date identity) {})
-;; ⇒ {:date #inst "2012-11-09T12:41:05.171-00:00"}
+;; ⇒ {:date #inst "2023-11-12T19:16:52.081-00:00"}
 </code></pre><p>Middleware is useful on its own, but where it becomes truly more
 useful is in combining middleware together. Here's what a new client
 function looks like combining all the middleware:</p><pre><code class="clojure">(def my-client (wrap-add-date (wrap-https (wrap-no-op client))))
 
-(my-client {:site "https://www.google.com"})
-;; ⇒ {:date #inst "2012-11-09T12:43:39.451-00:00",
+(my-client {:site "http://www.google.com"})
+;; ⇒ {:date #inst "2023-11-12T19:17:19.616-00:00",
 ;;    :cookies {...},
 ;;    :trace-redirects ["https://www.google.com/"],
 ;;    :request-time 1634,
@@ -152,8 +160,8 @@ function looks like combining all the middleware:</p><pre><code class="clojure">
 ;;    :headers {...},
 ;;    :body "..."}
 </code></pre><p>(The response map has been edited to take less space where you see
-'...')</p><p>Here we can see that the <code>wrap-https</code> middleware has successfully
-turned the request for https://www.google.com into one for
+<code>...</code>)</p><p>Here we can see that the <code>wrap-https</code> middleware has successfully
+turned the request for http://www.google.com into one for
 https://www.google.com, additionally the <code>wrap-add-date</code> middleware
 has added the :date key with the date the request happened. (the
 <code>wrap-no-op</code> middleware did execute, but since it didn't do anything,
@@ -165,8 +173,8 @@ cleaner and clearer way by using Clojure's threading macro, <code>-&gt;</code>. 
       wrap-https
       wrap-add-date))
 
-(my-client {:site "https://www.google.com"})
-;; ⇒ {:date #inst "2012-11-09T12:47:32.130-00:00",
+(my-client {:site "http://www.google.com"})
+;; ⇒ {:date #inst "2023-11-12T19:19:10.389-00:00",
 ;;    :cookies {...},
 ;;    :trace-redirects ["https://www.google.com/"],
 ;;    :request-time 1630,
@@ -176,10 +184,19 @@ cleaner and clearer way by using Clojure's threading macro, <code>-&gt;</code>. 
 </code></pre><p>Something else to keep in mind is that middleware expressed in this
 way will be executed <em>from the bottom up</em>, so in this case,
 <code>wrap-add-date</code> will call <code>wrap-https</code>, which in turn calls
-<code>wrap-no-op</code>, which finally calls the <code>client</code> function.</p><p>For an example of combining a large amount of middleware, see
-<a href="https://github.com/dakrone/clj-http/blob/5534950b5ed48e3bc7285f0e956444ea832399da/src/clj_http/client.clj#L542-567">clj-http's
-client.clj</a>
-file</p>
+<code>wrap-no-op</code>, which finally calls the <code>client</code> function.</p><p>If you have a lot of middleware to combine, it can be easier to use <code>reduce</code>
+and a vector of middleware functions. See how <code>clj-http</code> does this
+for its default stack of middleware:</p><pre><code class="clojure">(defn wrap-request
+  "Returns a batteries-included HTTP request function corresponding to the given
+  core client. See default-middleware for the middleware wrappers that are used
+  by default"
+  [request]
+  (reduce (fn wrap-request* [request middleware]
+            (middleware request))
+          request
+          default-middleware))
+</code></pre><p>See <a href="https://github.com/dakrone/clj-http/blob/d92be158230e8094436f415324d96f2bd7cf95f7/src/clj_http/client.clj#L1125-L1166"><code>clj-http</code>'s <code>client.clj</code></a>
+for the full source.</p>
 
     <div id="prev-next">
         

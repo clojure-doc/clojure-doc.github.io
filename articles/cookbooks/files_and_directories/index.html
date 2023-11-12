@@ -80,10 +80,12 @@ Github</a>.</p><h2 id="preliminaries">Preliminaries</h2><p>Note that for the exa
 </code></pre><p>Note, you can pass urls to <code>slurp</code> as well. See also <a href="https://clojuredocs.org/clojure.core/slurp">slurp at
 Clojuredocs</a>.</p><h3 id="read-a-file-one-line-at-a-time">Read a file one line at a time</h3><p>Suppose you'd like to call <code>my-func</code> on every line in a file,
 and return the resulting sequence:</p><pre><code class="clojure">(with-open [rdr (io/reader "foo.txt")]
-  (doall (map my-func (line-seq rdr))))
-</code></pre><p>The <code>doall</code> is needed because the <code>map</code> call is lazy. The lines that
+  (mapv my-func (line-seq rdr)))
+</code></pre><p>Note: <code>mapv</code> is eager and returns a vector. If you use <code>map</code> here, the reader
+will be closed before the whole sequence is realized so you would need to
+wrap the call to <code>map</code> in a call to <code>doall</code> anyway. The lines that
 <code>line-seq</code> gives you have no trailing newlines (and empty lines in the
-file will yield empty strings ("")).</p><h3 id="write-a-long-string-out-to-a-new-file">Write a long string out to a new file</h3><pre><code class="clojure">(spit "foo.txt"
+file will yield empty strings (<code>""</code>)).</p><h3 id="write-a-long-string-out-to-a-new-file">Write a long string out to a new file</h3><pre><code class="clojure">(spit "foo.txt"
       "A long
 multi-line string.
 Bye.")
@@ -94,14 +96,14 @@ line:</p><pre><code class="clojure">(with-open [wrtr (io/writer "foo.txt")]
     (.write wrtr (str i "\n"))))
 </code></pre><h3 id="check-if-a-file-exists">Check if a file exists</h3><pre><code class="clojure">(.exists (io/file "filename.txt"))
 </code></pre><p>Is it a directory? :</p><pre><code class="clojure">(.isDirectory (io/file "path/to/something"))
-</code></pre><p>An io/file is a java.io.File object (a file or a directory). You can
+</code></pre><p>An <code>io/file</code> is a <code>java.io.File</code> object (a file or a directory). You can
 call a number of functions on it, including:</p><pre><code>exists        Does the file exist?
 isDirectory   Is the File object a directory?
 getName       The basename of the file.
 getParent     The dirname of the file.
 getPath       Filename with directory.
 mkdir         Create this directory on disk.
-</code></pre><p>To read about more available methods, see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/File.html">the java.io.File
+</code></pre><p>To read about more available methods, see <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html">the <code>java.io.File</code>
 docs</a>.</p><h3 id="get-a-list-of-the-files-and-dirs-in-a-given-directory">Get a list of the files and dirs in a given directory</h3><p>As <code>File</code> objects:</p><pre><code class="clojure">(.listFiles (io/file "path/to/some-dir"))
 </code></pre><p>Same, but just the <em>names</em> (strings), not File objects:</p><pre><code class="clojure">(.list (io/file "path/to/some-dir"))
 </code></pre><p>The results of those calls are seqable.</p><h2 id="see-also">See also</h2><ul><li><a href="https://github.com/clj-commons/fs">https://github.com/clj-commons/fs</a></li><li>the I/O section of the <a href="https://clojure.org/api/cheatsheet">cheatsheet</a></li></ul>

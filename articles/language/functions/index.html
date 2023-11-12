@@ -270,7 +270,7 @@ cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="kli
 (if (countries :in)
   (comment Implement positive case)
   (comment Implement negative case))
-</code></pre><p>because everything but <code>false</code> and <code>nil</code> evaluates to <code>true</code> in Clojure.</p><h2 id="clojure-functions-as-comparators">Clojure Functions As Comparators</h2><p>Clojure functions implement the <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html">java.util.Comparator</a>
+</code></pre><p>because everything but <code>false</code> and <code>nil</code> evaluates to <code>true</code> in Clojure.</p><h2 id="clojure-functions-as-comparators">Clojure Functions As Comparators</h2><p>Clojure functions implement the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html">java.util.Comparator</a>
 interface and can be used as comparators.</p><h2 id="wrapping-up">Wrapping Up</h2><p>Functions are at the heart of Clojure. They are defined using the <code>defn</code> macro, can have multiple arities,
 be variadic and support parameter destructuring. Function arguments and return value can optionally be
 type hinted.</p><p>Functions are first class values and can be passed to other functions (called Higher Order Functions or HOFs).
