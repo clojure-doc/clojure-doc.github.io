@@ -73,20 +73,41 @@ built-in functions, contrib libraries, and parts of the JDK via
 interoperability.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="preliminaries">Preliminaries</h2><p>Some examples herein make use of the
-<a href="https://github.com/clojure/math.numeric-tower">math.numeric-tower</a>
-and
-<a href="https://github.com/clojure/math.combinatorics">math.combinatorics</a>
-contrib libraries. It's assumed that either you have the following in
-your source code's <code>ns</code> macro:</p><pre><code class="clojure">(:require [clojure.math.numeric-tower :as math]
-          [clojure.math.combinatorics :as combo])
-</code></pre><p>or else in the repl you've loaded them like so:</p><pre><code class="clojure">(require '[clojure.math.numeric-tower :as math])
-(require '[clojure.math.combinatorics :as combo])
-</code></pre><h2 id="recipes">Recipes</h2><h3 id="simple-math">Simple Math</h3><pre><code class="clojure">(+ 3 4)    ;=&gt; 7
+Github</a>.</p><h2 id="preliminaries">Preliminaries</h2><p>This cookbook covers Clojure 1.11 (or later) and the
+<a href="https://clojure.github.io/clojure/clojure.math-api.html"><code>clojure.math</code> namespace introduced in that release</a>.</p><p>It's assumed that either you have the following in
+your source code's <code>ns</code> macro:</p><pre><code class="clojure">(:require [clojure.math :as math])
+</code></pre><p>or else in the repl you've loaded it like so:</p><pre><code class="clojure">(require '[clojure.math :as math])
+</code></pre><h2 id="recipes">Recipes</h2><h3 id="boxed-and-unboxed-math">Boxed and Unboxed Math</h3><p><em>This section is adapted from <a href="https://insideclojure.org/2014/12/15/warn-on-boxed/">Alex Miller's "Inside Clojure" blog post on boxed math warnings</a>.</em></p><p>By default, Clojure treats numbers as either <code>java.lang.Long</code> or
+<code>java.lang.Double</code> -- known as "boxed numbers" -- rather than the underlying
+primitives <code>long</code> and <code>double</code>. Values are passed around as <code>java.lang.Object</code>.
+In performance-sensitive code, you may want to use the primitive types
+directly and Clojure supports type hints for this purpose.</p><pre><code class="clojure">(defn sum-squares [a b]
+  (+ (* a a) (* b b)))
+</code></pre><p>In this function, both <code>a</code> and <code>b</code> are <code>java.lang.Object</code> and when you call
+<code>(sum-squares 3 4)</code> both <code>3</code> and <code>4</code> are boxed (as <code>java.lang.Long</code>) and
+the math is compiled into a sequence of calls to methods in <code>clojure.lang.Numbers</code>
+that accept <code>java.lang.Object</code> arguments.</p><p>We can improve efficiency by using type hints for both the arguments and the
+return type:</p><pre><code class="clojure">(defn sum-squares ^long [^long a ^long b]
+  (+ (* a a) (* b b)))
+</code></pre><p>This lets Clojure produce a more efficient version of the function that
+accepts primitive arguments and produces a primitive result.</p><p>A useful Var in this context is <code>*unchecked-math*</code> which controls whether
+the compiler will generate checked or unchecked math operations. It can
+also warn you about boxed math operations.</p><pre><code class="clojure">user=&gt; (set! *unchecked-math* :warn-on-boxed)
+:warn-on-boxed
+user=&gt; (def x 3)
+#'user/x
+user=&gt; (def y 4)
+#'user/y
+user=&gt; (* x y)
+Boxed math warning, NO_SOURCE_PATH:1:1 - call: public static java.lang.Number clojure.lang.Numbers.unchecked_multiply(java.lang.Object,java.lang.Object).
+12
+</code></pre><p>You can also set <code>*unchecked-math*</code> to <code>true</code>, which will cause the compiler
+to generate primitive math operations, if it can, without checking for overflow.</p><h3 id="simple-math">Simple Math</h3><p><code>clojure.core</code> provides a number of basic math operations as functions:</p><pre><code class="clojure">(+ 3 4)    ;=&gt; 7
 (- 3 4)    ;=&gt; -1
 (* 3 4)    ;=&gt; 12
 (/ 3 4)    ;=&gt; 3/4  (an exact ratio)
 (/ 3.0 4)  ;=&gt; 0.75
+(double (/ 3 4)) ;=&gt; 0.75 (convert a ratio to a double)
 
 (inc 5)    ;=&gt; 6
 (dec 5)    ;=&gt; 4
@@ -94,17 +115,26 @@ your source code's <code>ns</code> macro:</p><pre><code class="clojure">(:requir
 docs for
 <a href="https://clojuredocs.org/clojure.core/quot">quot</a>,
 <a href="https://clojuredocs.org/clojure.core/rem">rem</a>, and
-<a href="https://clojuredocs.org/clojure.core/mod">mod</a>.</p><p>For exponents, square roots, rounding, ceiling, floor, absolute value,
-and greatest/least common multiples, see the <a href="https://clojure.github.io/math.numeric-tower/">docs for
-math.numeric-tower</a>.</p><h3 id="trigonometry">Trigonometry</h3><p>Use what the Java platform provides, for example:</p><pre><code class="clojure">Math/PI       ;=&gt; 3.14159...
-(Math/sin x)
-(Math/cos x)
-(Math/tan x)
-</code></pre><p>There are many more functions available, which you can read about in
-the <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html">docs for
-java.lang.Math</a>.</p><h3 id="combinatorics">Combinatorics</h3><p>For combinatoric functions (such as <code>combinations</code> and
-<code>permutations</code>), see the <a href="https://clojure.github.io/math.combinatorics/">docs for
-math.combinatorics</a>.</p>
+<a href="https://clojuredocs.org/clojure.core/mod">mod</a>, which are all provided
+in <code>clojure.core</code>.</p><p><code>abs</code>, <code>min</code>, and <code>max</code> are also provided in <code>clojure.core</code> and are optimized
+for both <code>long</code> and <code>double</code> primitive types, as well as working with boxed
+numbers.</p><p>For exponents, square roots, rounding, ceiling, floor, etc, see the
+<a href="https://clojure.github.io/clojure/clojure.math-api.html"><code>clojure.math</code> namespace</a>:</p><pre><code class="clojure">(math/pow 2 3)   ;=&gt; 8.0
+(math/sqrt 9)    ;=&gt; 3.0
+(math/round 3.4) ;=&gt; 3
+(math/round 3.6) ;=&gt; 4
+(math/ceil 3.4)  ;=&gt; 4.0
+(math/floor 3.6) ;=&gt; 3.0
+</code></pre><p>Prior to Clojure 1.11, you could use the Java platform's <code>java.lang.Math</code> class
+for these operations, e.g., <code>(Math/pow 2 3)</code>.</p><h3 id="trigonometry">Trigonometry</h3><p>Use what <code>clojure.math</code> provides, for example:</p><pre><code class="clojure">math/PI       ;=&gt; 3.14159...
+(math/sin x)
+(math/cos x)
+(math/tan x)
+</code></pre><p>As with <strong>Simple Math</strong> above, prior to Clojure 1.11, you could use the Java
+platform's <code>java.lang.Math</code> class for these operations, e.g., <code>(Math/sin x)</code>.</p><h3 id="combinatorics">Combinatorics</h3><p>For combinatoric functions (such as <code>combinations</code> and
+<code>permutations</code>), see the
+<a href="https://clojure.github.io/math.combinatorics/">math.combinatorics</a>
+contrib library.</p>
 
     <div id="prev-next">
         
