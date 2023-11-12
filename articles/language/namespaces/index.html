@@ -112,7 +112,7 @@ to <em>refer</em> to certain functions:</p><pre><code class="clojure">(ns megaco
 
 ;; Now it is possible to do:
 ;; (difference #{1 2 3} #{3 4 5})
-</code></pre><p>The <code>:refer</code> feature of the <code>:require</code> form is new in Clojure 1.4.</p><p>It is possible to refer to all functions in a namespace (usually not necessary):</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
+</code></pre><p>The <code>:refer</code> feature of the <code>:require</code> form was added in Clojure 1.4.</p><p>It is possible to refer to all functions in a namespace (usually not necessary):</p><pre><code class="clojure">(ns megacorp.profitd.scheduling
   (:require [clojure.set :refer :all]))
 
 ;; Now it is possible to do:

@@ -90,8 +90,10 @@ file will yield empty strings (<code>""</code>)).</p><h3 id="write-a-long-string
 multi-line string.
 Bye.")
 </code></pre><p>Overwrites the file if it already exists. To append, use</p><pre><code class="clojure">(spit "foo.txt" "file content" :append true)
-</code></pre><h3 id="write-a-file-one-line-at-a-time">Write a file one line at a time</h3><p>Suppose you'd like to write out every item in a vector, one item per
-line:</p><pre><code class="clojure">(with-open [wrtr (io/writer "foo.txt")]
+</code></pre><h3 id="write-a-file-one-line-at-a-time">Write a file one line at a time</h3><p>Although you could do this by calling <code>spit</code> with <code>:append true</code> for
+each line, that would be inefficient (opening the file for appending
+for each call). Instead, use <code>with-open</code> to keep a file open while
+writing each line to it:</p><pre><code class="clojure">(with-open [wrtr (io/writer "foo.txt")]
   (doseq [i my-vec]
     (.write wrtr (str i "\n"))))
 </code></pre><h3 id="check-if-a-file-exists">Check if a file exists</h3><pre><code class="clojure">(.exists (io/file "filename.txt"))
