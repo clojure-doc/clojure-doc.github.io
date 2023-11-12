@@ -311,7 +311,7 @@ This cookbook covers:
  * Other operations on files and directories
 
 
-### [Middleware](/articles/cookbooks/middleware/) (incomplete)
+### [Middleware](/articles/cookbooks/middleware/)
 
 This guide covers:
 
