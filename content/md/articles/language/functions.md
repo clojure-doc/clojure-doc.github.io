@@ -569,7 +569,7 @@ because everything but `false` and `nil` evaluates to `true` in Clojure.
 
 ## Clojure Functions As Comparators
 
-Clojure functions implement the [java.util.Comparator](https://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html)
+Clojure functions implement the [java.util.Comparator](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html)
 interface and can be used as comparators.
 
 

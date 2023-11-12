@@ -49,12 +49,14 @@ and return the resulting sequence:
 
 ``` clojure
 (with-open [rdr (io/reader "foo.txt")]
-  (doall (map my-func (line-seq rdr))))
+  (mapv my-func (line-seq rdr)))
 ```
 
-The `doall` is needed because the `map` call is lazy. The lines that
+Note: `mapv` is eager and returns a vector. If you use `map` here, the reader
+will be closed before the whole sequence is realized so you would need to
+wrap the call to `map` in a call to `doall` anyway. The lines that
 `line-seq` gives you have no trailing newlines (and empty lines in the
-file will yield empty strings ("")).
+file will yield empty strings (`""`)).
 
 
 ### Write a long string out to a new file
@@ -97,7 +99,7 @@ Is it a directory? :
 (.isDirectory (io/file "path/to/something"))
 ```
 
-An io/file is a java.io.File object (a file or a directory). You can
+An `io/file` is a `java.io.File` object (a file or a directory). You can
 call a number of functions on it, including:
 
     exists        Does the file exist?
@@ -107,8 +109,8 @@ call a number of functions on it, including:
     getPath       Filename with directory.
     mkdir         Create this directory on disk.
 
-To read about more available methods, see [the java.io.File
-docs](https://docs.oracle.com/javase/7/docs/api/java/io/File.html).
+To read about more available methods, see [the `java.io.File`
+docs](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html).
 
 
 ### Get a list of the files and dirs in a given directory

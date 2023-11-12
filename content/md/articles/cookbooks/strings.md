@@ -15,7 +15,7 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 ## Overview
 
 * Strings are [plain Java
-strings](https://docs.oracle.com/javase/7/docs/api/java/lang/String.html).
+strings](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html).
 You can use anything which operates on them.
 * Java strings are immutable, so they're convenient to use in Clojure.
 * You can't add metadata to Java strings.
@@ -29,7 +29,7 @@ You can use anything which operates on them.
 
 * **Caveat:** Human brains and electronic computers are rather different
 devices. So Java strings (sequences of [UTF-16
-characters](https://docs.oracle.com/javase/7/docs/api/java/lang/Character.html#unicode))
+characters](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html#unicode))
 don't always map nicely to user-perceived characters. For example, a
 single Unicode "code point" doesn't necessarily equal a user-perceived
 character. (Like Korean Hangul Jamo, where user-perceived characters
@@ -144,7 +144,7 @@ Regexes offer a boost in string-matching power. You can express ideas
 like repetition, alternatives, etc.
 
 [Regex
-reference.](https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html)
+reference.](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html)
 
 **Groups:** Regex groups are useful, when we want to match more than
 one substring. (Or refer to matches later.) In the regex `#"(group-1)
@@ -297,7 +297,7 @@ nested functions*, and get the resulting string at the end.
 #### Format strings
 
 Java's templating mini-language helps you build many strings
-conveniently. [Reference.](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html)
+conveniently. [Reference.](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html)
 
 ``` clojure
 ;; %s is most commonly used to print args. Escape %'s with %%.

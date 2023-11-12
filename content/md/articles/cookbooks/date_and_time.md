@@ -138,7 +138,7 @@ of the `java.time.LocalDate`, `java.time.LocalTime` and
 ```
 
 For more formatting patterns check out the
-[DateTimeFormatter](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)
+[DateTimeFormatter](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html)
 class, the table **Predefined Formatters** is where the `:iso-date` came from
 although note it is written as `ISO_DATE` in the **Formatted** column.
 
