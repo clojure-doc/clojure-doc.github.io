@@ -140,7 +140,7 @@ to *refer* to certain functions:
 ;; (difference #{1 2 3} #{3 4 5})
 ```
 
-The `:refer` feature of the `:require` form is new in Clojure 1.4.
+The `:refer` feature of the `:require` form was added in Clojure 1.4.
 
 It is possible to refer to all functions in a namespace (usually not necessary):
 

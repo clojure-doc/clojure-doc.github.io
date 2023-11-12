@@ -85,6 +85,17 @@ or else in the repl you've loaded it:
 (.indexOf "foo" "oo")         ;=> 1
 (.indexOf "foo" "x")          ;=> -1
 (.lastIndexOf "foo" (int \o)) ;=> 2
+```
+
+As of Clojure 1.8, `clojure.string` has functions for both of those but they
+return `nil` for no match:
+
+``` clojure
+(str/index-of "foo" "oo")    ;=> 1
+(str/index-of "foo" "x")     ;=> nil
+(str/last-index-of "foo" \o) ;=> 2 - can find string or character, not int
+(str/last-index-of "foo" (int \o))
+;; Execution error: java.lang.Integer cannot be cast to java.lang.String
 
 ;; Substring
 (subs "0123" 1)       ;=> "123"
@@ -112,14 +123,24 @@ bar")                             ;=> ["foo" "bar"]
 ;; (The output will likely have a different number than "3c3660".)
 (.getBytes "foo" "UTF-8") ;=> #object["[B" 0x39666e42 "[B@39666e42"]
 
-;; Parsing keywords
+;; Making keywords
 (keyword "foo")    ;=> :foo
 
 ;; Parsing numbers
 (bigint "20000000000000000000000000000") ;=> 20000000000000000000000000000N
 (bigdec "20000000000000000000.00000000") ;=> 20000000000000000000.00000000M
-(Integer/parseInt "2")                   ;=> 2
-(Float/parseFloat "2")                   ;=> 2.0
+(Integer/parseInt "2")                   ;=> 2 - java.lang.Integer
+(Float/parseFloat "2")                   ;=> 2.0 - java.lang.Float
+(Long/parseLong "2")                     ;=> 2 - java.lang.Long
+(Double/parseDouble "2")                 ;=> 2.0 - java.lang.Double
+```
+
+As of Clojure 1.11, `clojure.core` has parsing functions for numbers, Booleans,
+and UUIDs:
+
+``` clojure
+(parse-long "2")                         ;=> 2 - java.lang.Long
+(parse-double "2")                       ;=> 2.0 - java.lang.Double
 
 ;; Parsing edn, a subset of Clojure forms.
 (edn/read-string "0xffff") ;=> 65535
@@ -218,7 +239,7 @@ tested nor a featureful parser. Use
 
 ``` clojure
 ;; Your project.clj should contain this (you may need to restart your JVM):
-;;   :dependencies [[instaparse "1.2.4"]]
+;;   :dependencies [[instaparse "1.4.12"]]
 ;;
 ;;  We'll assume your ns macro contains:
 ;;   (:require [instaparse.core :as insta])

@@ -77,8 +77,10 @@ Overwrites the file if it already exists. To append, use
 
 ### Write a file one line at a time
 
-Suppose you'd like to write out every item in a vector, one item per
-line:
+Although you could do this by calling `spit` with `:append true` for
+each line, that would be inefficient (opening the file for appending
+for each call). Instead, use `with-open` to keep a file open while
+writing each line to it:
 
 ``` clojure
 (with-open [wrtr (io/writer "foo.txt")]

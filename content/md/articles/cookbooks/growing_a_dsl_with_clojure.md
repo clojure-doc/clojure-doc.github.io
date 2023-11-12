@@ -98,7 +98,7 @@ ambrose@ambrose-desktop> echo asdf
 asdf
 ```
 
-clojure.core also contains a function `println` that has similar semantics to Bash's `echo`.
+`clojure.core` also contains a function `println` that has similar semantics to Bash's `echo`.
 
 ```klipse-clojure
 (println "asdf")
