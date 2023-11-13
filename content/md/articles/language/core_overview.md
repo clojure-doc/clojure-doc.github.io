@@ -1415,23 +1415,23 @@ lazy sequence, the remaining items will be used in the last list.
 lazy sequence of vectors instead of a lazy sequence of lists.
 
 ### filter
-See: [filter](filter_desc)
+See: [filter](#filter_desc)
 ### filterv
-See: [filterv](filterv_desc)
+See: [filterv](#filterv_desc)
 ### remove
-See: [remove](remove_desc)
+See: [remove](#remove_desc)
 ### for
-See: [for](for_desc)
+See: [for](#for_desc)
 ### map
-See: [map](map_desc)
+See: [map](#map_desc)
 ### mapv
-See: [mapv](mapv_desc)
+See: [mapv](#mapv_desc)
 ### remove
-See: [remove](remove_desc)
+See: [remove](#remove_desc)
 ### empty?
-See: [empty](empty?_desc)
+See: [empty](#empty?_desc)
 ### not-empty
-See: [not-empty](not-empty_desc)
+See: [not-empty](#not-empty_desc)
 
 ## Function Composition and Application
 
