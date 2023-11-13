@@ -1100,8 +1100,9 @@ collection.
 `take-while` returns a lazy sequence of sequential items until the
 function returns nil/false value for that item.
 
-```clojure
-TBD: example
+```klipse-clojure
+(take-while pos? (range 5 -5 -1))
+;; => (5 4 3 2 1)
 ```
 
 <a id="drop-while_desc"></a>
@@ -1192,8 +1193,21 @@ collection.
 `keep` returns a lazy sequence of non-nil results of the function
 applied to each item in the collection in sequence.
 
-```clojure
-TBD: examples
+```klipse-clojure
+;; naive attempt: returns a sequence of true/false
+(keep even? (range 10))
+;; => (true false true false true false true false true false)
+```
+
+```klipse-clojure
+;; return even? item or nil:
+(keep #(when (even? %) %) (range 10))
+;; => (0 2 4 6 8)
+```
+
+```klipse-clojure
+(keep not-empty ["" "Sean" "" "Corfield" ""])
+;; => ("Sean" "Corfield")
 ```
 
 <a id="remove_desc"></a>
@@ -1332,8 +1346,22 @@ If there is no padding collection provided and there is not enough
 items to fill the last list in the returned lazy sequence, those items
 will be not used.
 
-```clojure
-TBD: example
+```klipse-clojure
+;; divide the sequence into pairs, the value 4 is dropped:
+(partition 2 (range 5))
+;; => ((0 1) (2 3))
+```
+
+```klipse-clojure
+;; staggered pairs can be useful (and the value 4 is included):
+(partition 2 1 (range 5))
+;; => ((0 1) (1 2) (2 3) (3 4))
+```
+
+```klipse-clojure
+;; divide the sequence into pairs and pad the last pair with -1:
+(partition 2 2 [-1] (range 5))
+;; => ((0 1) (2 3) (4 -1))
 ```
 
 <a id="partitionv_desc"></a>
@@ -1369,8 +1397,10 @@ list.
 If there are not enough items to fill the last list in the returned
 lazy sequence, the remaining items will be used in the last list.
 
-```clojure
-TBD: example
+```klipse-clojure
+;; divide the sequence into pairs, the value 4 is not dropped:
+(partition-all 2 (range 5))
+;; => ((0 1) (2 3) (4))
 ```
 
 <a id="partitionv-all_desc"></a>
@@ -1421,11 +1451,10 @@ See: [not-empty](not-empty_desc)
 `juxt` returns a function that will return a vector consisting of the
 result of applying each of those functions to a provided argument.
 
-```clojure
-TBD: examples
+```klipse-clojure
+;; turn a sequence of database rows into a map from ID to row:
+(into {} (map (juxt :id identity)) [{:id 1 :name "Sean"} {:id 2 :name "Jay"}])
 ```
-
-
 
 <a id="comp_desc"></a>
 ### comp

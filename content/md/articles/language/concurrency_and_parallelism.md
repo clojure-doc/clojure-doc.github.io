@@ -327,8 +327,19 @@ by setting them to a specific value. This is what `clojure.core/reset!` does. It
 `reset!` may be useful in test suites to reset an atom's state between test executions, but it should be
 used sparingly in your implementation code. Consider using `swap!` first.
 
-*TBD: demonstrate retries under high update rates*
+By using an impure `swap!` function, we can see how it can retry when there
+is contention:
 
+``` clojure
+(let [a (atom 0)
+      q (mapv #(future (swap! a (fn [n] (println %) (inc n))))
+              (range 10))]
+  (mapv deref q))
+```
+
+This will return a vector of 10 values, `1` to `10`, in some arbitrary order,
+and it will print the numbers `0` to `9` at least once each -- but probably
+print several of them more than once, indicating that `swap!` was retried.
 
 #### Summary and Use Cases
 
@@ -1054,8 +1065,9 @@ _This section will need revisiting when Virtual Threads become more common._
 
 ## Reducers (Clojure 1.5+)
 
-*TBD*
-
+* The [original blog post introducing reducers](https://www.clojure.org/news/2012/05/08/reducers)
+* The [official `clojure.org` reference on reducers](https://clojure.org/reference/reducers)
+* The [official API docs for the `clojure.core.reducers` namespace](https://clojure.github.io/clojure/clojure.core-api.html#clojure.core.reducers)
 
 ## java.util.concurrent
 
