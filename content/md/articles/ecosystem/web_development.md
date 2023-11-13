@@ -172,7 +172,7 @@ supports OpenAPI.
 
 ### Pedestal
 
-Another option for backend services is [Pedestal](https://pedestal.io/),
+Another option for backend services is [Pedestal](http://pedestal.io/),
 a sturdy and reliable base for services and APIs. It provides its own
 routing and interceptor-based approach to web development, but is based
 on Ring under the hood and uses Jetty 9 (currently an older 9.4.18,

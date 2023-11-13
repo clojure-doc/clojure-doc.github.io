@@ -45,7 +45,7 @@ application library. It:
     as a regular Clojure hashmap, and likewise makes it so that you
     can return a response as a hashmap.
   * provides [a
-    spec](https://github.com/ring-clojure/ring/blob/master/SPEC)
+    spec](https://github.com/ring-clojure/ring/blob/master/SPEC.md)
     describing exactly what those request and response maps should
     look like.
   * brings along a web server
