@@ -461,7 +461,8 @@ number, the entire collection is returned lazily.</p><p><a id="drop_desc"></a></
 </code></pre><p><code>drop</code> takes a number and a collection.</p><p><code>drop</code> returns a lazy sequence starting at the nth item of the collection.</p><p><a id="take-while_desc"></a></p><h3 id="take-while">take-while</h3><pre><code class="clojure">([pred coll])
 </code></pre><p><code>take-while</code> takes a function that accepts a single-argument and a
 collection.</p><p><code>take-while</code> returns a lazy sequence of sequential items until the
-function returns nil/false value for that item.</p><pre><code class="clojure">TBD: example
+function returns nil/false value for that item.</p><pre><code class="klipse-clojure nohighlight">(take-while pos? (range 5 -5 -1))
+;; =&gt; (5 4 3 2 1)
 </code></pre><p><a id="drop-while_desc"></a></p><h3 id="drop-while">drop-while</h3><pre><code class="clojure">([pred coll])
 </code></pre><p>'drop-while` takes a function that accepts a single-argument and a
 collection.</p><p><code>drop-while</code> returns a lazy sequence starting at the first item in the
@@ -489,7 +490,14 @@ will be omitted.</p><pre><code class="klipse-clojure nohighlight">(filterv #{:no
 ;; ⇒ [:nothing :something]
 </code></pre><p><a id="keep_desc"></a></p><h3 id="keep">keep</h3><p><code>(keep f coll)</code></p><p><code>keep</code> takes a function that accepts a single argument and a
 collection.</p><p><code>keep</code> returns a lazy sequence of non-nil results of the function
-applied to each item in the collection in sequence.</p><pre><code class="clojure">TBD: examples
+applied to each item in the collection in sequence.</p><pre><code class="klipse-clojure nohighlight">;; naive attempt: returns a sequence of true/false
+(keep even? (range 10))
+;; =&gt; (true false true false true false true false true false)
+</code></pre><pre><code class="klipse-clojure nohighlight">;; return even? item or nil:
+(keep #(when (even? %) %) (range 10))
+;; =&gt; (0 2 4 6 8)
+</code></pre><pre><code class="klipse-clojure nohighlight">(keep not-empty ["" "Sean" "" "Corfield" ""])
+;; =&gt; ("Sean" "Corfield")
 </code></pre><p><a id="remove_desc"></a></p><h3 id="remove">remove</h3><pre><code class="clojure">([pred coll])
 </code></pre><p><code>remove</code> takes a function that accepts a single argument and a
 collection.</p><p><code>remove</code> returns a lazy sequence of items that return <code>false</code> or <code>nil</code>
@@ -540,7 +548,15 @@ list.</p><p>If a padding collection is provided, the last item in the returned
 lazy sequence will be padded with the padding collection to achieve
 the desired partitioning size.</p><p>If there is no padding collection provided and there is not enough
 items to fill the last list in the returned lazy sequence, those items
-will be not used.</p><pre><code class="clojure">TBD: example
+will be not used.</p><pre><code class="klipse-clojure nohighlight">;; divide the sequence into pairs, the value 4 is dropped:
+(partition 2 (range 5))
+;; =&gt; ((0 1) (2 3))
+</code></pre><pre><code class="klipse-clojure nohighlight">;; staggered pairs can be useful (and the value 4 is included):
+(partition 2 1 (range 5))
+;; =&gt; ((0 1) (1 2) (2 3) (3 4))
+</code></pre><pre><code class="klipse-clojure nohighlight">;; divide the sequence into pairs and pad the last pair with -1:
+(partition 2 2 [-1] (range 5))
+;; =&gt; ((0 1) (2 3) (4 -1))
 </code></pre><p><a id="partitionv_desc"></a></p><h3 id="partitionv">partitionv</h3><pre><code class="clojure">([n coll])
 ([n step coll])
 ([n step pad coll])
@@ -552,7 +568,9 @@ collection in sequence and puts them into lists. This lazy sequence of
 lists is returned.</p><p>If a step is provided, the lists in the returned lazy sequence start
 at offsets in the provided collection of that number items in the
 list.</p><p>If there are not enough items to fill the last list in the returned
-lazy sequence, the remaining items will be used in the last list.</p><pre><code class="clojure">TBD: example
+lazy sequence, the remaining items will be used in the last list.</p><pre><code class="klipse-clojure nohighlight">;; divide the sequence into pairs, the value 4 is not dropped:
+(partition-all 2 (range 5))
+;; =&gt; ((0 1) (2 3) (4))
 </code></pre><p><a id="partitionv-all_desc"></a></p><h3 id="partitionv-all">partitionv-all</h3><pre><code class="clojure">([n coll])
 ([n step coll])
 </code></pre><p><code>partitionv-all</code> is just like <code>partition-all</code> above, except it returns a
@@ -562,7 +580,8 @@ lazy sequence of vectors instead of a lazy sequence of lists.</p><h3 id="filter-
 ([f g h])
 ([f1 f2 f3 &amp; fs])
 </code></pre><p><code>juxt</code> takes a variable number of functions.</p><p><code>juxt</code> returns a function that will return a vector consisting of the
-result of applying each of those functions to a provided argument.</p><pre><code class="clojure">TBD: examples
+result of applying each of those functions to a provided argument.</p><pre><code class="klipse-clojure nohighlight">;; turn a sequence of database rows into a map from ID to row:
+(into {} (map (juxt :id identity)) [{:id 1 :name "Sean"} {:id 2 :name "Jay"}])
 </code></pre><p><a id="comp_desc"></a></p><h3 id="comp">comp</h3><pre><code class="clojure">([])
 ([f])
 ([f g])

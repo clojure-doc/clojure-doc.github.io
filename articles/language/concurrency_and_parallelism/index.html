@@ -156,7 +156,14 @@ by setting them to a specific value. This is what <code>clojure.core/reset!</cod
 @currently-connected
 ;; ⇒ []
 </code></pre><p><code>reset!</code> may be useful in test suites to reset an atom's state between test executions, but it should be
-used sparingly in your implementation code. Consider using <code>swap!</code> first.</p><p><em>TBD: demonstrate retries under high update rates</em></p><h4 id="summary-and-use-cases">Summary and Use Cases</h4><p>Atoms is the most commonly used concurrent feature in Clojure. It covers many cases and lets developers
+used sparingly in your implementation code. Consider using <code>swap!</code> first.</p><p>By using an impure <code>swap!</code> function, we can see how it can retry when there
+is contention:</p><pre><code class="clojure">(let [a (atom 0)
+      q (mapv #(future (swap! a (fn [n] (println %) (inc n))))
+              (range 10))]
+  (mapv deref q))
+</code></pre><p>This will return a vector of 10 values, <code>1</code> to <code>10</code>, in some arbitrary order,
+and it will print the numbers <code>0</code> to <code>9</code> at least once each -- but probably
+print several of them more than once, indicating that <code>swap!</code> was retried.</p><h4 id="summary-and-use-cases">Summary and Use Cases</h4><p>Atoms is the most commonly used concurrent feature in Clojure. It covers many cases and lets developers
 avoid explicit locking. Atoms cover a lot of use cases and are very fast. It's fair to say that
 when you need uncoordinated reference types (e.g., not Software Transactional Memory), the rule of
 thumb is, "start with an atom, then see".</p><p>It is not uncommon to initialize an atom in a local and then return it from the function and share
@@ -537,7 +544,7 @@ the <code>clojure.core/locking</code> macro:</p><pre><code class="clojure">(let 
   l)
 ;; ⇒ [10]
 </code></pre><p>Note that for immutable Clojure data structures, explicit locking is effectively
-not necessary.</p><p><em>This section will need revisiting when Virtual Threads become more common.</em></p><h3 id="synchronization-on-clojure-record-fields">Synchronization on Clojure Record Fields</h3><p><em>TBD</em></p><h2 id="reducers-clojure-15">Reducers (Clojure 1.5+)</h2><p><em>TBD</em></p><h2 id="javautilconcurrent">java.util.concurrent</h2><h3 id="overview-2">Overview</h3><p><code>java.util.concurrent</code> (sometimes abbreviated as <code>j.u.c.</code>) is a group of
+not necessary.</p><p><em>This section will need revisiting when Virtual Threads become more common.</em></p><h3 id="synchronization-on-clojure-record-fields">Synchronization on Clojure Record Fields</h3><p><em>TBD</em></p><h2 id="reducers-clojure-15">Reducers (Clojure 1.5+)</h2><ul><li>The <a href="https://www.clojure.org/news/2012/05/08/reducers">original blog post introducing reducers</a></li><li>The <a href="https://clojure.org/reference/reducers">official <code>clojure.org</code> reference on reducers</a></li><li>The <a href="https://clojure.github.io/clojure/clojure.core-api.html#clojure.core.reducers">official API docs for the <code>clojure.core.reducers</code> namespace</a></li></ul><h2 id="javautilconcurrent">java.util.concurrent</h2><h3 id="overview-2">Overview</h3><p><code>java.util.concurrent</code> (sometimes abbreviated as <code>j.u.c.</code>) is a group of
 <em>concurrency utilities</em> in the JDK. Originally introduced in JDK 5 in 2004,
 they are developed and maintained by some of the experts in concurrency.
 <code>j.u.c.</code> is a mature library that has been heavily battle tested for
