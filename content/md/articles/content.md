@@ -69,7 +69,7 @@ This guide covers:
  * Other topics related to functions
 
 
-### [clojure.core Overview](/articles/language/core_overview/) (incomplete)
+### [clojure.core Overview](/articles/language/core_overview/)
 
 `clojure.core` is the core Clojure library.
 
@@ -153,7 +153,7 @@ This guide covers:
  * Other topics related to metaprogramming
 
 
-### [Laziness and Lazy Sequences](/articles/language/laziness/) (incomplete)
+### [Laziness and Lazy Sequences](/articles/language/laziness/)
 
 This guide covers:
 
@@ -226,7 +226,7 @@ This is a well-maintained directory of libraries, organized by category, and is 
   * How to develop plugins
   * How to distribute plugins
 
-### [Web Development Overview](/articles/ecosystem/web_development/) (incomplete)
+### [Web Development Overview](/articles/ecosystem/web_development/)
 
 This guide provides a partial overview of the more
 popular tools and libraries for web development.
