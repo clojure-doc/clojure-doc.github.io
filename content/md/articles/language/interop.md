@@ -10,6 +10,9 @@ This guide covers:
  * How to implement Java interfaces with reify
  * How to generate Java classes with gen-class
  * Other topics related to interop
+ 
+This guide does not cover how to include java files in clojure projects.
+For that, head to [Including java code in a Clojure project](/articles/cookbooks/cli_build_projects.md#Including-java-code-in-a-Clojure-project)
 
 This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
