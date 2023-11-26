@@ -63,7 +63,7 @@ for others to use or application .jar files to run on servers or in containers."
     <div id="page-header">
         <h2>Building Projects: tools.build and the Clojure CLI</h2>
     </div>
-    <ol class="toc"><li><a href="#toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</a></li><ol><li><a href="#executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</a></li><ol><li><a href="#-x-execute-function">-X eXecute function</a></li><li><a href="#-t-execute-tooling">-T execute Tooling</a></li></ol></ol><li><a href="#the-toolsbuild-library">The <code>tools.build</code> Library</a></li><li><a href="#running-tasks-based-on-aliases">Running Tasks based on Aliases</a></li><li><a href="#multi-version-testing">Multi-Version Testing</a></li><li><a href="#tips-for-building-jar-files">Tips for Building JAR Files</a></li><li><a href="#the-generated-pomxml-file">The Generated <code>pom.xml</code> File</a></li><li><a href="#continuous-integration-pipelines">Continuous Integration Pipelines</a></li><li><a href="#automating-deployments">Automating deployments</a></li><li><a href="#using-a-build-repl">Using a "build REPL"</a></li><li><a href="#working-with-multiple-subprojects">Working with Multiple Subprojects</a></li></ol>
+    <ol class="toc"><li><a href="#toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</a></li><ol><li><a href="#executing-functions-with-the-clojure-cli">Executing functions with the Clojure CLI</a></li><ol><li><a href="#-x-execute-function">-X eXecute function</a></li><li><a href="#-t-execute-tooling">-T execute Tooling</a></li></ol></ol><li><a href="#the-toolsbuild-library">The <code>tools.build</code> Library</a></li><li><a href="#running-tasks-based-on-aliases">Running Tasks based on Aliases</a></li><li><a href="#multi-version-testing">Multi-Version Testing</a></li><li><a href="#tips-for-building-jar-files">Tips for Building JAR Files</a></li><li><a href="#the-generated-pomxml-file">The Generated <code>pom.xml</code> File</a></li><li><a href="#continuous-integration-pipelines">Continuous Integration Pipelines</a></li><li><a href="#automating-deployments">Automating deployments</a></li><li><a href="#using-a-build-repl">Using a "build REPL"</a></li><li><a href="#working-with-multiple-subprojects">Working with Multiple Subprojects</a></li><li><a href="#including-java-code-in-a-clojure-project">Including Java code in a Clojure project</a></li></ol>
     <h2 id="toolsbuild-and-the-clojure-cli"><code>tools.build</code> and the Clojure CLI</h2><p><a href="https://github.com/clojure/tools.build"><code>tools.build</code></a>
 is a library for building artifacts in Clojure projects, which are typically
 library <code>.jar</code> files for deployment to repositories like <a href="https://clojars.org">Clojars</a>
@@ -474,7 +474,30 @@ The <code>deploy</code> task function
 and calls <code>jar</code> which uses
 <a href="https://github.com/polyfy/polylith/blob/9053b190d5f3b0680ac4fe5c5f1851f7c0d40830/build.clj#L146-L147">both <code>with-dir</code> and <code>with-project-root</code></a>
 to set the project root while performing <code>tools.deps</code> and <code>tools.build</code>
-operations.</p>
+operations.</p><h2 id="including-java-code-in-a-clojure-project">Including Java code in a Clojure project</h2><p>Some Clojure projects may decide to implement some functionality directly in Java, which then requires a compilation step for those Java files.</p><p>First, run <code>mkdir -p java/src/mypackage</code>, where <code>mypackage</code> is the package name you wish to use, in the root of your Clojure project.
+Then, create "Hello.java" in said directory:</p><pre><code class="java">package mypackage; // Replace with your package name.
+
+public class Hello {
+    public static String sayHello(){
+        return "Hello from Java!";
+    }
+}
+</code></pre><p>The Java file needs to be compiled. Add this to <code>build.clj</code>:</p><pre><code class="clojure">(defn compile-java [_]
+  (b/javac {:src-dirs ["java"]
+            :class-dir class-dir
+            :javac-opts ["-source" "17" "-target" "17"]})) ;; Change the Java version as desired.
+</code></pre><p>And run <code>clj -T:build compile-java</code> to create <code>target/classes/mypackage/Hello.class</code>.
+Re-run the compile command anytime the java file changes.</p><p>When Clojure is run, the <code>target/classes</code> directory must be included.
+Do this by adding "target/classes" to the <code>:paths</code> key in <code>deps.edn</code>:</p><pre><code class="clojure">{:paths ["src" "resources" "target/classes"]
+    [...]}
+</code></pre><p>Finally, restart any Clojure REPLs you might have running.
+You can now call your Java code from Clojure:</p><pre><code class="clojure">user=&gt; (mypackage.Hello/sayHello)
+"Hello from Java!"
+</code></pre><p>or import it</p><pre><code class="clojure">user=&gt; (import '[mypackage Hello])
+mypackage.Hello
+user=&gt; (Hello/sayHello)
+"Hello from Java!"
+</code></pre>
 
     <div id="prev-next">
         
