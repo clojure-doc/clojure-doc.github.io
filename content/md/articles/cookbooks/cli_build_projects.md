@@ -772,3 +772,48 @@ and calls `jar` which uses
 [both `with-dir` and `with-project-root`](https://github.com/polyfy/polylith/blob/9053b190d5f3b0680ac4fe5c5f1851f7c0d40830/build.clj#L146-L147)
 to set the project root while performing `tools.deps` and `tools.build`
 operations.
+
+## Including Java code in a Clojure project
+Some Clojure projects may decide to implement some functionality directly in Java, which then requires a compilation step for those Java files.
+
+First, run `mkdir -p java/src/mypackage`, where `mypackage` is the package name you wish to use, in the root of your Clojure project.
+Then, create "Hello.java" in said directory:
+``` java
+package mypackage; // Replace with your package name.
+
+public class Hello {
+    public static String sayHello(){
+        return "Hello from Java!";
+    }
+}
+```
+
+The Java file needs to be compiled. Add this to `build.clj`:
+``` clojure
+(defn compile-java [_]
+  (b/javac {:src-dirs ["java"]
+            :class-dir class-dir
+            :javac-opts ["-source" "17" "-target" "17"]})) ;; Change the Java version as desired.
+```
+And run `clj -T:build compile-java` to create `target/classes/mypackage/Hello.class`.
+Re-run the compile command anytime the java file changes.
+
+When Clojure is run, the `target/classes` directory must be included.
+Do this by adding "target/classes" to the `:paths` key in `deps.edn`:
+``` clojure
+{:paths ["src" "resources" "target/classes"]
+    [...]}
+```
+Finally, restart any Clojure REPLs you might have running.
+You can now call your Java code from Clojure:
+``` clojure
+user=> (mypackage.Hello/sayHello)
+"Hello from Java!"
+```
+or import it 
+``` clojure
+user=> (import '[mypackage Hello])
+mypackage.Hello
+user=> (Hello/sayHello)
+"Hello from Java!"
+```
