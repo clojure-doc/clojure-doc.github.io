@@ -312,7 +312,8 @@ need it, it is a good idea to let `(:use ...)` go.
 
 ### The :gen-class Helper Form
 
-*TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)*
+See [`gen-class` and how to implement Java classes in Clojure](interop.md#gen-class-and-how-to-implement-java-classes-in-clojure)
+in the **Language: Java Interop** guide.
 
 
 ### Documentation and Metadata
