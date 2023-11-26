@@ -12,7 +12,7 @@ This guide covers:
  * Other topics related to interop
 
 This guide does not cover how to include Java files in Clojure projects.
-For that, head to [including Java code in a Clojure project](/articles/cookbooks/cli_build_projects.md#including-java-code-in-a-clojure-project)
+For that, head to [including Java code in a Clojure project](/articles/cookbooks/cli_build_projects/#including-java-code-in-a-clojure-project)
 
 This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images & stylesheets). The source is available [on Github](https://github.com/clojure-doc/clojure-doc.github.io).
