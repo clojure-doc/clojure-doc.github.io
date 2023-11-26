@@ -385,7 +385,8 @@ instead.
 
 ## Namespaces and Class Generation
 
-*TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)*
+See [`gen-class` and how to implement Java classes in Clojure](interop.md#gen-class-and-how-to-implement-java-classes-in-clojure)
+in the **Language: Java Interop** guide.
 
 
 ## Namespaces and Code Compilation in Clojure
