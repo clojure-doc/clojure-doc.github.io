@@ -643,73 +643,17 @@ It takes a number of options:
  * `:prefix` (string, default: `"-"`): methods will call functions named as `(str prefix method-name)`, e.g. `-getName` for `getName`.
  * `:main` (boolean): if `true`, a public static main method will be generated for the class. It will delegate
                       to a function named main with the prefix (`(str prefix "main")`), `-main` by default
- * `:exposes`: TBD
- * `:exposes-methods`: TBD
- * `:factory`: TBD
- * `:load-impl-ns`: TBD
- * `:impl-ns`: TBD
+ * `:exposes` (map): if supplied, a map of protected fields names to getter/setter names so the generated class implementation can access those protected fields
+ * `:exposes-methods` (map): if supplied, a map of superclass methods names to local method names so the generated class implementation can call those superclass methods (since the implementation may contain implementations of those methods that would hide the superclass methods)
+ * `:factory` (symbol): if supplied, a name to be used for a (set of) public static factory methods that will be generated that match the class's constructors
+ * `:load-impl-ns` (boolean, default `true`): if `true`, the static initializer for the generated class will load the implementation namespace; if `false`, the static initializer will not load the implementation namespace and users would need to load the implementation namespace manually
+ * `:impl-ns` (symbol, default: the current namespace): if supplied, the namespace to look in for implementations of the generated class's methods
 
-#### The :name Option
-
-TBD
-
-#### The :extends Option
-
-TBD
-
-#### The :implements Option
-
-TBD
-
-#### The :constructors Option
-
-TBD
-
-#### The :methods Option
-
-TBD
-
-#### The :init Option
-
-TBD
-
-#### The :post-init Option
-
-TBD
-
-#### The :state Option
-
-TBD
-
-#### The :prefix Option
-
-TBD
-
-#### The :main Option
-
-TBD
-
-#### The :exposes Option
-
-TBD
-
-#### The :exposes-methods Option
-
-TBD
-
-#### The :factory Option
-
-TBD
-
-#### The :load-impl-ns Option
-
-TBD
-
-#### The :impl-ns Option
-
-TBD
-
-
+ For more details, see the [generated API documentation for `gen-class`](https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-class),
+ the [community-contributed examples](https://clojuredocs.org/clojure.core/gen-class)
+ on clojuredocs.org, and the
+ [official reference for Class Generation](https://clojuredocs.org/clojure.core/gen-class)
+ on clojure.org.
 
 ### gen-class In The ns Macro
 
