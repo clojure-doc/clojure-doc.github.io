@@ -192,7 +192,8 @@ functions that will be referred:</p><pre><code class="clojure">(ns megacorp.prof
 </code></pre><p>It is highly recommended to use <code>(:require ...)</code> (optionally with <code>... :refer [...]</code>) in modern Clojure code.
 <code>(:use ...)</code> is a thing of the past and now that
 <code>(:require ...)</code> with <code>:refer</code> is capable of doing the same thing when you
-need it, it is a good idea to let <code>(:use ...)</code> go.</p><h3 id="the-gen-class-helper-form">The :gen-class Helper Form</h3><p><em>TBD: <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></em></p><h3 id="documentation-and-metadata">Documentation and Metadata</h3><p>Namespaces can have documentation strings. You can add one after
+need it, it is a good idea to let <code>(:use ...)</code> go.</p><h3 id="the-gen-class-helper-form">The :gen-class Helper Form</h3><p>See <a href="interop.md#gen-class-and-how-to-implement-java-classes-in-clojure"><code>gen-class</code> and how to implement Java classes in Clojure</a>
+in the <strong>Language: Java Interop</strong> guide.</p><h3 id="documentation-and-metadata">Documentation and Metadata</h3><p>Namespaces can have documentation strings. You can add one after
 the namespace name in the <code>ns</code> macro:</p><pre><code class="clojure">(ns superlib.core
   "Core functionality of Superlib.
 
