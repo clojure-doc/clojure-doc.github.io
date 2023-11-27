@@ -88,8 +88,19 @@ that it returns `clojure.lang.MapEntry`.
 
 ### evaluator
 
-*todo*
+Clojure's evaluation starts with a data structure, produced by the
+[reader](#reader). Literals evaluate to themselves. Symbols are resolved to their values.
+Lists are treated as function calls, with the first element being the
+function to call, and the rest of the elements being the arguments to that
+function. Functions that are macros are expanded, recursively.
 
+In general, the next step is to compile this resolved and expanded expression
+to bytecode, and then execute the bytecode. There are some exceptions to this
+process, such as special forms, or some expressions that the REPL interprets
+directly instead of compiling and executing.
+
+See [the official evalation reference](https://clojure.org/reference/evaluation)
+on clojure.org for more details.
 
 
 ### form
@@ -204,8 +215,28 @@ See also [binding form](#binding_form)
 <a name="libspec"></a>
 ### libspec
 
-*todo*
+The docstring of `require` defines a libspec as:
 
+> A libspec is a lib name or a vector containing a lib name followed by options expressed as sequential keywords and arguments.
+
+A lib name is in turn defined thus:
+
+> Lib names are symbols and each lib is associated with a Clojure namespace and a Java package that share its name. A lib's name also locates its root directory within classpath using Java's package name to classpath-relative path mapping.
+
+Examples of libspecs:
+
+```clojure
+    clojure.string
+    [clojure.string :as str]
+    [clojure.string :refer [join split]]
+    [clojure.string :as-alias s] ;; :as-alias is new in Clojure 1.11
+```
+
+When these appear in a `require` function call, or in the `:require` clause
+of an `ns` form, the first three forms cause the named library to be loaded
+and either aliased or have its vars referred into the current namespace. The
+fourth form establishes an alias for the library in the current namespace, but
+does not cause the library to be loaded.
 
 
 ### macro
@@ -291,8 +322,14 @@ the function.  Pure functions are also
 
 ### reader
 
-*todo*
+The reader, in Clojure, turns text into data structures. When the string
+`"(+ 2 x)"` is read in, the reader will return the data structure `(+ 2 x)`: a list
+with three elements: the symbol `+`, the number `2`, and the symbol `x`.
+At this point, it is just data and the symbols are not yet resolved to
+their values.
 
+See [the official reader reference](https://clojure.org/reference/reader)
+on clojure.org for more details.
 
 
 ### reader macro
