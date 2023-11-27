@@ -81,7 +81,15 @@ also <a href="#binding-form">binding-form</a> and <a href="/articles/language/fu
 the functions
 guide</a>.</p><h3 id="dereference">dereference</h3><p>To get the value of a reference type. You can use the <code>deref</code> function
 for this, or else some syntactic sugar: <code>@some-ref-type</code>.</p><h3 id="entry">entry</h3><p>A key/value pair in a map. Try <code>(type (first {:a 1 :b 2}))</code> and see
-that it returns <code>clojure.lang.MapEntry</code>.</p><h3 id="evaluator">evaluator</h3><p><em>todo</em></p><h3 id="form">form</h3><p>A valid s-expression. For example: <code>(+ 1 1)</code> and <code>(defn foo [x] (* x x))</code>.</p><h3 id="head-retention">head retention</h3><p><a href="#lazy">Lazy</a> sequences are still <a href="#persistence">persistent</a>. If you
+that it returns <code>clojure.lang.MapEntry</code>.</p><h3 id="evaluator">evaluator</h3><p>Clojure's evaluation starts with a data structure, produced by the
+<a href="#reader">reader</a>. Literals evaluate to themselves. Symbols are resolved to their values.
+Lists are treated as function calls, with the first element being the
+function to call, and the rest of the elements being the arguments to that
+function. Functions that are macros are expanded, recursively.</p><p>In general, the next step is to compile this resolved and expanded expression
+to bytecode, and then execute the bytecode. There are some exceptions to this
+process, such as special forms, or some expressions that the REPL interprets
+directly instead of compiling and executing.</p><p>See <a href="https://clojure.org/reference/evaluation">the official evalation reference</a>
+on clojure.org for more details.</p><h3 id="form">form</h3><p>A valid s-expression. For example: <code>(+ 1 1)</code> and <code>(defn foo [x] (* x x))</code>.</p><h3 id="head-retention">head retention</h3><p><a href="#lazy">Lazy</a> sequences are still <a href="#persistence">persistent</a>. If you
 make <em>another</em> data structure using one, the original lazy sequence
 will be kept around and not garbage-collected. If the lazy sequence in
 infinite, and grows very large, it can cause performance problems or
@@ -119,7 +127,15 @@ list, but particular values in them are only computed the moment you
 ask for them --- not sooner.</p><p>This has the added benefit that you can easily create infinite
 sequences that don't consume infinite memory.</p><p>Many of the built-in Clojure functions return lazy sequences.</p><p>See also <a href="#realize">realize</a>.</p><h3 id="let-binding">let-binding</h3><p>AKA, "binding vector", or just "bindings": in a <code>let</code> (and expressions
 that work like let, for example, <code>defn</code>, <code>loop</code>, <code>loop</code>, &amp; <code>fn</code>), the
-vector that comes first where you specify lexical bindings.</p><p>See also <a href="#binding_form">binding form</a></p><p><a name="libspec"></a></p><h3 id="libspec">libspec</h3><p><em>todo</em></p><h3 id="macro">macro</h3><p>A special type of function which is transforms a S-Expression read in
+vector that comes first where you specify lexical bindings.</p><p>See also <a href="#binding_form">binding form</a></p><p><a name="libspec"></a></p><h3 id="libspec">libspec</h3><p>The docstring of <code>require</code> defines a libspec as:</p><blockquote><p>A libspec is a lib name or a vector containing a lib name followed by options expressed as sequential keywords and arguments.</p></blockquote><p>A lib name is in turn defined thus:</p><blockquote><p>Lib names are symbols and each lib is associated with a Clojure namespace and a Java package that share its name. A lib's name also locates its root directory within classpath using Java's package name to classpath-relative path mapping.</p></blockquote><p>Examples of libspecs:</p><pre><code class="clojure">    clojure.string
+    [clojure.string :as str]
+    [clojure.string :refer [join split]]
+    [clojure.string :as-alias s] ;; :as-alias is new in Clojure 1.11
+</code></pre><p>When these appear in a <code>require</code> function call, or in the <code>:require</code> clause
+of an <code>ns</code> form, the first three forms cause the named library to be loaded
+and either aliased or have its vars referred into the current namespace. The
+fourth form establishes an alias for the library in the current namespace, but
+does not cause the library to be loaded.</p><h3 id="macro">macro</h3><p>A special type of function which is transforms a S-Expression read in
 and applies a transformation to the S-Expression resulting in a new
 form.  This process is called macro-expansion, and is done as part
 of the Clojure reader.</p><h3 id="map">map</h3><p>Either refers to the built in <code>map</code> function, or else means "a
@@ -146,7 +162,12 @@ as arguments to the function. A pure function's result also cannot change
 during the execution of the program or between executions of the program,
 as the dependency on outside state can lead to changes in the result of
 the function.  Pure functions are also
-<a href="#referential-transparency">referentially transparent.</a></p><h3 id="reader">reader</h3><p><em>todo</em></p><h3 id="reader-macro">reader macro</h3><p>Syntax that the Clojure reader recognizes as special syntactic sugar,
+<a href="#referential-transparency">referentially transparent.</a></p><h3 id="reader">reader</h3><p>The reader, in Clojure, turns text into data structures. When the string
+<code>"(+ 2 x)"</code> is read in, the reader will return the data structure <code>(+ 2 x)</code>: a list
+with three elements: the symbol <code>+</code>, the number <code>2</code>, and the symbol <code>x</code>.
+At this point, it is just data and the symbols are not yet resolved to
+their values.</p><p>See <a href="https://clojure.org/reference/reader">the official reader reference</a>
+on clojure.org for more details.</p><h3 id="reader-macro">reader macro</h3><p>Syntax that the Clojure reader recognizes as special syntactic sugar,
 for example, <code>#""</code>, <code>#{}</code>, quoting, etc.</p><h3 id="realize">realize</h3><p>When the next value in a <a href="#lazy">lazy</a> sequence is accessed for the
 first time, and is computed so as to made available, it is said to
 have been "realized".  This term is also used to refer to the status of <a href="/articles/language/concurrency_and_parallelism#promises">promises</a>, <a href="/articles/language/concurrency_and_parallelism#futures">futures</a>, and <a href="/articles/language/concurrency_and_parallelism#delays">delays</a>.  That is, if a promise (for example) is realized then that means its value has been delivered and is accessible via <a href="#dereference">dereferencing</a>.</p><h3 id="reference-types">reference types</h3><p>Vars, atoms, refs, and agents are all reference types. They are
