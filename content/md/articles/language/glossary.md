@@ -367,7 +367,11 @@ various compilier optimizations.
 
 ### reify
 
-*todo*
+A verb meaning "to make something more concrete or real".
+In programming, this typically means taking an abstract concept and
+converting it into a concrete implementation.  In Clojure, the `reify`
+macro is used to create an object -- as an instance of an anonymous
+class -- that implements one or more protocols and/or interfaces.
 
 
 
@@ -461,8 +465,17 @@ curious.
 <a name="transaction"></a>
 ### transaction
 
-*todo*
+A transaction is a unit of work that is guaranteed to be completed
+atomically.
 
+In the context of databases, a transaction is a sequence
+of database operations that are performed as if it were one single
+operation. If any of the operations in the transaction fail, the
+transaction is aborted and the database is left unchanged.
+
+In the context of Clojure, a transaction is a sequence of operations
+on `ref`s performed inside `dosync` that are guaranteed to be all completed
+or none completed, in the event of an exception.
 
 
 ### type erasure
