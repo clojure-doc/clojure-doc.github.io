@@ -176,7 +176,11 @@ Clojure provides thread-safe mechanisms for doing so.</p><h3 id="referential-tra
 given, and can be substituted for the resulting value, without
 effecting the program.  The advantage of referential transparent
 expressions is that they can be memoized, and be the subject of
-various compilier optimizations.</p><h3 id="reify">reify</h3><p><em>todo</em></p><h3 id="repl">REPL</h3><p>Short for: "Read, Eval, Print, Loop".  The REPL reads in text through
+various compilier optimizations.</p><h3 id="reify">reify</h3><p>A verb meaning "to make something more concrete or real".
+In programming, this typically means taking an abstract concept and
+converting it into a concrete implementation.  In Clojure, the <code>reify</code>
+macro is used to create an object -- as an instance of an anonymous
+class -- that implements one or more protocols and/or interfaces.</p><h3 id="repl">REPL</h3><p>Short for: "Read, Eval, Print, Loop".  The REPL reads in text through
 the <a href="#reader">reader</a> transforming it into a Clojure data structure,
 <a href="#evaluator">evaluates</a> the data structure as code, prints the result
 of the evaluation, and loops back waiting to read the next input string.</p><h3 id="rest-args">rest args</h3><p>The extra args passed to a <a href="#variadic">variadic</a> function, for example
@@ -208,7 +212,13 @@ refers to how they pass values to each subsequent argument in the
 macro, not concurrency.</p><h3 id="thrush">thrush</h3><p>A combinator. Not the same thing as the <a href="#threading-macros">thread-first
 macro</a>.  More info at
 <a href="http://blog.fogus.me/2010/09/28/thrush-in-clojure-redux/">http://blog.fogus.me/2010/09/28/thrush-in-clojure-redux/</a> if you're
-curious.</p><p><a name="transaction"></a></p><h3 id="transaction">transaction</h3><p><em>todo</em></p><h3 id="type-erasure">type erasure</h3><p>Java-related: Java generics allow you to specify a type for a
+curious.</p><p><a name="transaction"></a></p><h3 id="transaction">transaction</h3><p>A transaction is a unit of work that is guaranteed to be completed
+atomically.</p><p>In the context of databases, a transaction is a sequence
+of database operations that are performed as if it were one single
+operation. If any of the operations in the transaction fail, the
+transaction is aborted and the database is left unchanged.</p><p>In the context of Clojure, a transaction is a sequence of operations
+on <code>ref</code>s performed inside <code>dosync</code> that are guaranteed to be all completed
+or none completed, in the event of an exception.</p><h3 id="type-erasure">type erasure</h3><p>Java-related: Java generics allow you to specify a type for a
 collection.  This way you don't have to cast every object you pull out
 of an ArrayList like in the old days. This is a courtesy of the java
 compiler. The java runtime doesn't know about generics --- the
