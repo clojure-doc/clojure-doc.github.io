@@ -23,6 +23,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
   * [Clojure Q&A](https://ask.clojure.org/)
   * [Clojurians Discord](https://discord.gg/discljord)
   * [clj.social](https://clj.social/)
+  * [Clojure Camp](https://clojure.camp/) -- aimed at Clojure beginners, this offers a fun community of mentors and fellow learners, via Discord, Meetup.com, and offers study groups, pairing, and 1:1 mentoring
   * See also the [Clojure Discussion section on clojure.org](https://clojure.org/community/resources) for more online communities
 
 ## Clojure Mailing List
