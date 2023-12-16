@@ -67,7 +67,7 @@ Github.What Version of Clojure Does This Guide Cover?">
     <p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.4 and Leiningen 2.x.</p><h2 id="overview">Overview</h2><p>Try as you might, XML is difficult to avoid. This is particularly true
+Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11 and Leiningen 2.x.</p><h2 id="overview">Overview</h2><p>Try as you might, XML is difficult to avoid. This is particularly true
 in the Java ecosystem. This guide will show you how to parse XML with
 the minimum amount of pain using the excellent tools available in
 Clojure.</p><h2 id="parsing-nzb-files">Parsing NZB files</h2><p>For the purpose of the tutorial I have chosen a simple and fairly well
@@ -80,8 +80,8 @@ Leiningen, see <a href="https://codeberg.org/leiningen/leiningen/src/branch/stab
   :url ""
   :license {:name "Eclipse Public License"
             :url "https://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.4.0"]
-                 [org.clojure/data.zip "0.1.1"]])
+  :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/data.zip "1.0.0"]])
 </code></pre><p>We are including a dependency on
 <a href="https://github.com/clojure/data.zip">clojure.data.zip</a>, which is a
 "system for filtering trees, and XML trees in particular".</p><p>Make a dir called <code>dev-resources</code> at the root of your project, and
@@ -135,7 +135,11 @@ the following:</p><pre><code class="clojure">(ns nzb.core-test
 </code></pre><p>This should be fairly self-explanatory, I have directly translated the
 XML into Clojure data structures of maps and vectors. If we were to
 just use the <code>clojure.xml</code> library to parse the NZB file, we get a
-tree based representation. For example:</p><pre><code class="clojure">(-&gt; "example.nzb" io/resource io/file xml/parse)
+tree based representation. For example:</p><pre><code class="clojure">$ lein repl
+...
+user=&gt; (require '[clojure.java.io :as io] '[clojure.xml :as xml])
+nil
+user=&gt; (-&gt; "example.nzb" io/resource io/file xml/parse clojure.pprint/pprint)
 {:tag :nzb,
  :attrs {:xmlns "http://www.newzbin.com/DTD/2003/nzb"},
  :content
@@ -146,9 +150,9 @@ tree based representation. For example:</p><pre><code class="clojure">(-&gt; "ex
     {:tag :meta, :attrs {:type "tag"}, :content ["Example"]}]}
   {:tag :file,
    :attrs
-   {:poster "Joe Bloggs &lt;bloggs@nowhere.example&gt;",
+   {:subject "Here's your file!  abc-mr2a.r01 (1/2)",
     :date "1071674882",
-    :subject "Here's your file!  abc-mr2a.r01 (1/2)"},
+    :poster "Joe Bloggs &lt;bloggs@nowhere.example&gt;"},
    :content
    [{:tag :groups,
      :attrs nil,
@@ -159,11 +163,12 @@ tree based representation. For example:</p><pre><code class="clojure">(-&gt; "ex
      :attrs nil,
      :content
      [{:tag :segment,
-       :attrs {:bytes "102394", :number "1"},
+       :attrs {:number "1", :bytes "102394"},
        :content ["123456789abcdef@news.newzbin.com"]}
       {:tag :segment,
-       :attrs {:bytes "4501", :number "2"},
+       :attrs {:number "2", :bytes "4501"},
        :content ["987654321fedbca@news.newzbin.com"]}]}]}]}
+nil
 </code></pre><p>That's great, and can sometimes be enough. But I would rather work
 with the representation I have in the test. To do that, we need a way
 of traversing this tree and picking out the pieces of information we
@@ -271,7 +276,13 @@ feature to not validate the DTD. Here's how:</p><p>Update the <code>ns</code> de
                  zip/xml-zip)]
     {:meta  (meta-&gt;map root)
      :files (mapv file-&gt;map (zip-xml/xml-&gt; root :file))}))
-</code></pre><p>Yay, our test passes again.</p><h2 id="query-predicates">Query Predicates</h2><p>There are a few other useful functions in the <code>clojure.data.zip.xml</code>
+</code></pre><p>Yay, our test passes again.</p><pre><code class="clojure">$ lein test
+
+lein test nzb.core-test
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+</code></pre><h2 id="query-predicates">Query Predicates</h2><p>There are a few other useful functions in the <code>clojure.data.zip.xml</code>
 ns we haven't yet looked at, namely: <code>text=</code>, <code>attr=</code>, and <code>tag=</code>.
 These functions allow you to construct query predicates to run against
 a given node. As an example, let's pull out the first file segment
@@ -279,7 +290,7 @@ from the <code>example.nzb</code> file using the <code>attr=</code> function:</p
                 :file
                 :segments
                 :segment
-                (zip-xml/attr= :number "1"))
+                (zip-xml/attr= :number "1")
                 zip-xml/text)
 "123456789abcdef@news.newzbin.com"
 </code></pre><p>From the root node of the document we reach down into <code>:file</code>,
@@ -329,7 +340,7 @@ achieve this using our general function:</p><pre><code class="clojure">(zip-xml/
   [attrname val]
   (attr-fn attrname &gt; val #(Long/valueOf %)))
 
-(zip-xml/xml-&gt; doc
+(zip-xml/xml-&gt; root
                :file
                :segments
                :segment
@@ -338,7 +349,8 @@ achieve this using our general function:</p><pre><code class="clojure">(zip-xml/
 </code></pre><p>We could build a whole suite of helper functions for examining XML
 nodes, if we are unlucky enough to be required to do so :)</p><h2 id="conclusion">Conclusion</h2><p>I hope these simple examples have given you an idea of the ease with
 which you can process XML using Clojure, and how simple it is to
-extend the tools already provded in interesting directions.</p><h2 id="contributors">Contributors</h2><p>Gareth Jones, 2012 (original author)</p>
+extend the tools already provided in interesting directions.</p><h2 id="contributors">Contributors</h2><p>Gareth Jones, 2012 (original author)
+Sean Corfield, 2023 (updated to Clojure 1.11 etc)</p>
 
     <div id="prev-next">
         
