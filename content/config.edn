@@ -19,7 +19,7 @@
  :sass-path                    "sass"
  :theme                        "blue"
  :resources                    ["img" "assets"]
- :keep-files                   [".git" ".github" "README.md" "Klipse.md" "CNAME" "CONTRIBUTING.md"]
+ :keep-files                   [".git" ".github" "README.md" "Klipse.md" "CNAME" "CONTRIBUTING.md" "favicon.ico"]
  :disqus?                      false
  :disqus-shortname             ""
  :ignored-files                [#"\.#.*" #".*\.swp$"]
