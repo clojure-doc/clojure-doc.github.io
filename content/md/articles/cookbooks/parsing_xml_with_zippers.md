@@ -11,7 +11,7 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.4 and Leiningen 2.x.
+This guide covers Clojure 1.11 and Leiningen 2.x.
 
 
 ## Overview
@@ -44,8 +44,8 @@ Now edit `project.clj` to contain the following:
   :url ""
   :license {:name "Eclipse Public License"
             :url "https://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.4.0"]
-                 [org.clojure/data.zip "0.1.1"]])
+  :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/data.zip "1.0.0"]])
 ```
 
 We are including a dependency on
@@ -120,7 +120,11 @@ just use the `clojure.xml` library to parse the NZB file, we get a
 tree based representation. For example:
 
 ```clojure
-(-> "example.nzb" io/resource io/file xml/parse)
+$ lein repl
+...
+user=> (require '[clojure.java.io :as io] '[clojure.xml :as xml])
+nil
+user=> (-> "example.nzb" io/resource io/file xml/parse clojure.pprint/pprint)
 {:tag :nzb,
  :attrs {:xmlns "http://www.newzbin.com/DTD/2003/nzb"},
  :content
@@ -131,9 +135,9 @@ tree based representation. For example:
     {:tag :meta, :attrs {:type "tag"}, :content ["Example"]}]}
   {:tag :file,
    :attrs
-   {:poster "Joe Bloggs <bloggs@nowhere.example>",
+   {:subject "Here's your file!  abc-mr2a.r01 (1/2)",
     :date "1071674882",
-    :subject "Here's your file!  abc-mr2a.r01 (1/2)"},
+    :poster "Joe Bloggs <bloggs@nowhere.example>"},
    :content
    [{:tag :groups,
      :attrs nil,
@@ -144,11 +148,12 @@ tree based representation. For example:
      :attrs nil,
      :content
      [{:tag :segment,
-       :attrs {:bytes "102394", :number "1"},
+       :attrs {:number "1", :bytes "102394"},
        :content ["123456789abcdef@news.newzbin.com"]}
       {:tag :segment,
-       :attrs {:bytes "4501", :number "2"},
+       :attrs {:number "2", :bytes "4501"},
        :content ["987654321fedbca@news.newzbin.com"]}]}]}]}
+nil
 ```
 
 That's great, and can sometimes be enough. But I would rather work
@@ -334,6 +339,15 @@ Update our nzb->map definition to use it:
 
 Yay, our test passes again.
 
+```clojure
+$ lein test
+
+lein test nzb.core-test
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+```
+
 ## Query Predicates
 
 There are a few other useful functions in the `clojure.data.zip.xml`
@@ -347,7 +361,7 @@ from the `example.nzb` file using the `attr=` function:
                 :file
                 :segments
                 :segment
-                (zip-xml/attr= :number "1"))
+                (zip-xml/attr= :number "1")
                 zip-xml/text)
 "123456789abcdef@news.newzbin.com"
 ```
@@ -430,7 +444,7 @@ Let's provide a helper for this to make the syntax clearer:
   [attrname val]
   (attr-fn attrname > val #(Long/valueOf %)))
 
-(zip-xml/xml-> doc
+(zip-xml/xml-> root
                :file
                :segments
                :segment
@@ -450,3 +464,4 @@ extend the tools already provded in interesting directions.
 ## Contributors
 
 Gareth Jones, 2012 (original author)
+Sean Corfield, 2023 (updated to Clojure 1.11 etc)
