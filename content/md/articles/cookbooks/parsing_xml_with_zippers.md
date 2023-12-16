@@ -459,7 +459,7 @@ nodes, if we are unlucky enough to be required to do so :)
 
 I hope these simple examples have given you an idea of the ease with
 which you can process XML using Clojure, and how simple it is to
-extend the tools already provded in interesting directions.
+extend the tools already provided in interesting directions.
 
 ## Contributors
 
