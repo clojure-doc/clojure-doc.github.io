@@ -372,7 +372,7 @@ projects for details.</p><h2 id="the-generated-pomxml-file">The Generated <code>
 &lt;/project&gt;
 </code></pre><p>While you can pass <code>:scm</code> as an option, as shown above, there are several other fields that
 you might well want in the generated <code>pom.xml</code> before you upload it to Clojars,
-especially in light of this upcoming change to
+including <code>&lt;licenses&gt;</code> -- see
 <a href="https://github.com/clojars/clojars-web/wiki/Pushing#licenses">Clojars policy about license information in <code>pom.xml</code> files</a>.</p><p>Luckily, <code>b/write-pom</code> allows you to provide additional information via the
 <code>:src-pom</code> option or, as of <code>tools.build</code> 0.9.6, the <code>:pom-data</code> option.
 The <code>:src-pom</code> option allows you to specify a "template" <code>pom.xml</code> file for
