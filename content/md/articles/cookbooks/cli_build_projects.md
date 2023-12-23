@@ -548,7 +548,7 @@ By default, `b/write-pom` will generate a minimal `pom.xml` file that includes
 
 While you can pass `:scm` as an option, as shown above, there are several other fields that
 you might well want in the generated `pom.xml` before you upload it to Clojars,
-especially in light of this upcoming change to
+including `<licenses>` -- see
 [Clojars policy about license information in `pom.xml` files](https://github.com/clojars/clojars-web/wiki/Pushing#licenses).
 
 Luckily, `b/write-pom` allows you to provide additional information via the
@@ -810,7 +810,7 @@ You can now call your Java code from Clojure:
 user=> (mypackage.Hello/sayHello)
 "Hello from Java!"
 ```
-or import it 
+or import it
 ``` clojure
 user=> (import '[mypackage Hello])
 mypackage.Hello
