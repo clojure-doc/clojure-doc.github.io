@@ -149,8 +149,11 @@ pre, code, .hljs {
         padding: 30px 20px;
     }
     .navbar-default .navbar-brand {
-        font-size: 36px;
-        padding: 25px 15px;
+      font-size: 36px;
+      padding: 25px 15px;
+    }
+    .navbar-default .navbar-logo {
+      height: 70px;
     }
     #content{
         margin-top: 30px;
@@ -165,6 +168,9 @@ pre, code, .hljs {
     .navbar-default .navbar-brand {
         font-size: 30px;
     }
+    .navbar-default .navbar-logo {
+      height: 50px;
+    }
     #content{
         padding: 15px;
     }
@@ -172,4 +178,10 @@ pre, code, .hljs {
         float:left;
         text-align: left;
     }
+}
+
+@media (max-width: 333px) {
+  .navbar-default .navbar-logo {
+    height: 0px;
+  }
 }
