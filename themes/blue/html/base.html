@@ -59,8 +59,14 @@
             <div id="sidebar">
                 <h3>Links</h3>
                 <ul id="links">
-                    {% for page in sidebar-pages %}{% if not page.sidebar-omit? %}
-                    <li><a href="{{page.uri}}">{{page.title}}</a></li>
+                    {% for sidebar-page in sidebar-pages %}{% if not sidebar-page.sidebar-omit? %}
+                    <li>
+                        {% if page.uri = sidebar-page.uri %}
+                        <span style="font-weight: bold;">{{sidebar-page.title}}</span>
+                        {% else %}
+                        <a href="{{sidebar-page.uri}}">{{sidebar-page.title}}</a>
+                        {% endif %}
+                    </li>
                     {% endif %}{% endfor %}
                 </ul>
                 {% if latest-posts|not-empty %}
