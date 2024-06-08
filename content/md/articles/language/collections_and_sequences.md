@@ -790,7 +790,7 @@ Do not confuse `empty?` with `empty`. This can be a source of great confusion:
 
 ### contains?
 
-`contains` returns true if the provided *key* is present in a collection. `contains` is similar to `get` in that vectors treat the key as an index. `contains` will always return false for lists.
+`contains?` returns true if the provided *key* is present in a collection. `contains?` is similar to `get` in that vectors treat the key as an index. `contains?` does not work for lists.
 
 ```klipse-clojure
 (contains? {:a 1 :b 2 :c 3} :c)
