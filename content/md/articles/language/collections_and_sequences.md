@@ -996,6 +996,85 @@ returns falsey. This is because if the item is present in the set it is returned
 ;; ⇒ (:things :someone nil false :pigeons)
 ```
 
+### sort, sort-by
+
+`sort` and `sort-by` are flexible higher-order functions for sorting sequential collections like lists and vectors. Both take an optional `Comparator` which defaults to `compare`, and `sort-by` takes a function that transforms each value before comparison.
+
+#### sort
+
+`sort` using the default comparator can handle numbers...
+```klipse-clojure
+(sort [0.0 -1 1.3 nil 0.18 7])
+;; ⇒ (nil -1 0.0 0.18 1.3 7)
+```
+... and strings
+```klipse-clojure
+(sort ["the case matters" "lexicographic ordering" "The case matters" nil "%%"])
+;; ⇒ (nil "%%" "The case matters" "lexicographic ordering" "the case matters")
+```
+... and vectors whose elements are element-wise comparable
+```klipse-clojure
+(sort [[1 "banana"] [1 "apple"] [0 "grapefruit"]])
+;; ⇒ ([0 "grapefruit"] [1 "apple"] [1 "banana"])
+```
+... but it can't "cross" types.
+```klipse-clojure
+; `compare` doesn't know how to compare Strings and numbers
+(sort [5 1.0 "abc"])
+;; Execution error (ClassCastException)...
+;; class java.lang.Double cannot be cast to class java.lang.String
+```
+
+In order to do more complicated sorting, we can create our own `Comparator`. There's a wealth of information
+about comparators in the [clojure.org comparators guide](https://www.clojure.org/guides/comparators), but for now, one possible comparator is a 
+function that takes two arguments and returns a negative, positive, or zero integer when the first argument is 'less than', 'greater than', or equal to (respectively) the second argument.
+
+```klipse-clojure
+(letfn [(strings-before-numbers 
+          [x y]
+          (cond
+            ; string is 'less than' number
+            (and (string? x) (number? y)) -1
+            ; number is 'greater than' string
+            (and (number? x) (string? y))  1
+            ; otherwise we can use `compare`
+            :else (compare x y)))]
+  (sort strings-before-numbers [1 0.0 nil "abc"]))
+;; ⇒ (nil "abc" 0.0 1)
+```
+
+A common way to reverse a sort is to `comp` the `-` function with a comparator that returns a number, which effectively 
+swaps 'greater than' and 'less than' returns.
+
+```klipse-clojure
+(sort (comp - compare) ["charlie" "delta" "alpha" "bravo"])
+;; ⇒ ("delta" "charlie" "bravo" "alpha")
+```
+
+#### sort-by
+
+`sort-by` takes a `keyfn` function and uses `sort` based on the result of appying `keyfn` to the values to be sorted.
+It's typically a good candidate for sorting collections of maps/records/objects.
+
+```klipse-clojure
+(sort-by :last [{:first "Fred" :last "Mertz"}
+                {:first "Lucy" :last "Ricardo"}
+                {:first "Ricky" :last "Ricardo"}
+                {:first "Ethel" :last  "Mertz"}])
+;; ⇒ ({:first "Fred", :last "Mertz"}
+;;     {:first "Ethel", :last "Mertz"}
+;;     {:first "Lucy", :last "Ricardo"}
+;;     {:first "Ricky", :last "Ricardo"})
+```
+
+Because `compare` compares vectors element-wise, it's possible to use `juxt` to effectively sort by a few values without a custom comparator.
+
+Sort the strings from shortest to longest, and then alphabetically (ignoring case):
+```klipse-clojure
+(sort-by (juxt count clojure.string/lower-case) ["Alpha" "bravo" "Charlie" "Delta" "echo"])
+;; ⇒ ("echo" "Alpha" "bravo" "Delta" "Charlie")
+```
+
 ### iterate
 
 `iterate` takes a function and an initial value, returns the result of
