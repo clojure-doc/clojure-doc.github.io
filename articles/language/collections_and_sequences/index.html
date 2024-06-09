@@ -321,7 +321,7 @@ end of the vector.</p><pre><code class="klipse-clojure nohighlight">(assoc [1 2 
 ;; ⇒ (:mice :elephants :children)
 </code></pre><pre><code class="klipse-clojure nohighlight">(not-empty '())
 ;; ⇒ nil
-</code></pre><h3 id="contains">contains?</h3><p><code>contains</code> returns true if the provided <em>key</em> is present in a collection. <code>contains</code> is similar to <code>get</code> in that vectors treat the key as an index. <code>contains</code> will always return false for lists.</p><pre><code class="klipse-clojure nohighlight">(contains? {:a 1 :b 2 :c 3} :c)
+</code></pre><h3 id="contains">contains?</h3><p><code>contains?</code> returns true if the provided <em>key</em> is present in a collection. <code>contains?</code> is similar to <code>get</code> in that vectors treat the key as an index. <code>contains?</code> does not work for lists.</p><pre><code class="klipse-clojure nohighlight">(contains? {:a 1 :b 2 :c 3} :c)
 ;; ⇒ true
 </code></pre><pre><code class="klipse-clojure nohighlight">;; true if index 2 exists
 (contains? ["John" "Mary" "Paul"] 2)
@@ -405,6 +405,43 @@ item will not be removed -- the item will be included in the returned lazy seque
 returns falsey. This is because if the item is present in the set it is returned.</p><pre><code class="klipse-clojure nohighlight">(remove #{:nothing :something nil false}
         [:nothing :something :things :someone nil false :pigeons])
 ;; ⇒ (:things :someone nil false :pigeons)
+</code></pre><h3 id="sort-sort-by">sort, sort-by</h3><p><code>sort</code> and <code>sort-by</code> are flexible higher-order functions for sorting sequential collections like lists and vectors. Both take an optional <code>Comparator</code> which defaults to <code>compare</code>, and <code>sort-by</code> takes a function that transforms each value before comparison.</p><h4 id="sort">sort</h4><p><code>sort</code> using the default comparator can handle numbers...</p><pre><code class="klipse-clojure nohighlight">(sort [0.0 -1 1.3 nil 0.18 7])
+;; ⇒ (nil -1 0.0 0.18 1.3 7)
+</code></pre><p>... and strings</p><pre><code class="klipse-clojure nohighlight">(sort ["the case matters" "lexicographic ordering" "The case matters" nil "%%"])
+;; ⇒ (nil "%%" "The case matters" "lexicographic ordering" "the case matters")
+</code></pre><p>... and vectors whose elements are element-wise comparable</p><pre><code class="klipse-clojure nohighlight">(sort [[1 "banana"] [1 "apple"] [0 "grapefruit"]])
+;; ⇒ ([0 "grapefruit"] [1 "apple"] [1 "banana"])
+</code></pre><p>... but it can't "cross" types.</p><pre><code class="klipse-clojure nohighlight">; `compare` doesn't know how to compare Strings and numbers
+(sort [5 1.0 "abc"])
+;; Execution error (ClassCastException)...
+;; class java.lang.Double cannot be cast to class java.lang.String
+</code></pre><p>In order to do more complicated sorting, we can create our own <code>Comparator</code>. There's a wealth of information
+about comparators in the <a href="https://www.clojure.org/guides/comparators">clojure.org comparators guide</a>, but for now, one possible comparator is a
+function that takes two arguments and returns a negative, positive, or zero integer when the first argument is 'less than', 'greater than', or equal to (respectively) the second argument.</p><pre><code class="klipse-clojure nohighlight">(letfn [(strings-before-numbers 
+          [x y]
+          (cond
+            ; string is 'less than' number
+            (and (string? x) (number? y)) -1
+            ; number is 'greater than' string
+            (and (number? x) (string? y))  1
+            ; otherwise we can use `compare`
+            :else (compare x y)))]
+  (sort strings-before-numbers [1 0.0 nil "abc"]))
+;; ⇒ (nil "abc" 0.0 1)
+</code></pre><p>A common way to reverse a sort is to <code>comp</code> the <code>-</code> function with a comparator that returns a number, which effectively
+swaps 'greater than' and 'less than' returns.</p><pre><code class="klipse-clojure nohighlight">(sort (comp - compare) ["charlie" "delta" "alpha" "bravo"])
+;; ⇒ ("delta" "charlie" "bravo" "alpha")
+</code></pre><h4 id="sort-by">sort-by</h4><p><code>sort-by</code> takes a <code>keyfn</code> function and uses <code>sort</code> based on the result of appying <code>keyfn</code> to the values to be sorted.
+It's typically a good candidate for sorting collections of maps/records/objects.</p><pre><code class="klipse-clojure nohighlight">(sort-by :last [{:first "Fred" :last "Mertz"}
+                {:first "Lucy" :last "Ricardo"}
+                {:first "Ricky" :last "Ricardo"}
+                {:first "Ethel" :last  "Mertz"}])
+;; ⇒ ({:first "Fred", :last "Mertz"}
+;;     {:first "Ethel", :last "Mertz"}
+;;     {:first "Lucy", :last "Ricardo"}
+;;     {:first "Ricky", :last "Ricardo"})
+</code></pre><p>Because <code>compare</code> compares vectors element-wise, it's possible to use <code>juxt</code> to effectively sort by a few values without a custom comparator.</p><p>Sort the strings from shortest to longest, and then alphabetically (ignoring case):</p><pre><code class="klipse-clojure nohighlight">(sort-by (juxt count clojure.string/lower-case) ["Alpha" "bravo" "Charlie" "Delta" "echo"])
+;; ⇒ ("echo" "Alpha" "bravo" "Delta" "Charlie")
 </code></pre><h3 id="iterate">iterate</h3><p><code>iterate</code> takes a function and an initial value, returns the result of
 applying the function on that initial value, then applies the function
 again on the resultant value, and repeats forever, lazily. Note that the
