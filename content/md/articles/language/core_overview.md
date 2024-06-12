@@ -80,11 +80,26 @@ pages.
 ```
 
 `def` takes a symbol, an optional docstring, and an optional init value
-(although it is very rare that you would omit the init value), and creates (if it doesn't already exist) a var in the current namespace with the name of the symbol.
-
-If an init value is supplied, the root binding of the var is assigned to that value. Redefining a var with an init value will re-assign the root binding.
+(although it is very rare that you would omit the init value), and creates
+(or re-assigns) a var in the current namespace with the name of the symbol.
+If an init value is supplied, the root binding of the var is assigned to that 
+value. Redefining a var with an init value will re-assign the root binding. 
+If no init value is supplied and the var is newly-created, it will be 'unbound',
+otherwise the var already exists and its value is unchanged.
 
 A root binding is a value that is shared across all threads.
+
+```clojure
+(def x)
+x ; x is an 'unbound' var, or nil in clojurescript
+; => #object [clojure.lang.Var$Unbound 0x1de19fc6 "Unbound: #'user/x"]
+(def x 7)
+x ; x is now 7
+; => 7
+(def x)
+x ; x is still 7, deffing with no value doesn't unbind an existing value
+; => 7
+```
 
 ### def vs let
 
@@ -192,19 +207,17 @@ the final expression. It is often used when it's necessary to treat multiple exp
 (if test then else?)
 ```
 
-`if` takes two or three expressions -- a condition expression followed by one
-or two result expressions. If the third expression is not supplied, it defaults to `nil`.
+`if` takes two or three expressions -- a condition expression, a 'then' expression, and optionally an 'else' expression. If the 'else' expression is not supplied, it defaults to `nil`.
 
-`if` is the primary method of conditional execution and other conditionals are built upon `if`.
+`if` is the primary method of conditional execution, and other conditionals are built upon `if`.
 
-If the return value of the first expression is truthy -- anything except `nil`
-or `false` -- the second expression is evaluated and the result returned
-(and the third expression is not evaluated).
+The condition is evaluated, and if its value is truthy -- anything except `nil`
+or `false` -- the 'then' expression is evaluated and the result returned
+(the 'else' expression is not evaluated).
 
 If the first expression returns `nil` or
-`false` the third expression is evaluated and returned
-(and the second expression is not evaluated).
-
+`false` the 'else' expression is evaluated and returned
+(the 'then' expression is not evaluated).
 
 ```klipse-clojure
 (if 0 "second") ; 0 is a 'true' value. Only false or nil are 'false'
@@ -245,8 +258,12 @@ If the first expression returns `nil` or
 (when test body*)
 ```
 
-`when` takes a test and zero or more `body` expressions. If the test returns a truthy value, all the `body` 
-expressions are evaluated in an implicit `do`. If the test is not truthy, `nil` is returned.
+`when` takes a test and zero or more `body` expressions. If the test returns a truthy
+value, all the `body` expressions are evaluated in an implicit `do`, and the last return
+value is the return value of `when`. If the test is not truthy, `nil` is returned (the 
+body expressions are not evaluated at all).
+
+Put another way, `(when test body)` is transformed to `(if test (do body))`.
 
 ```klipse-clojure
 ;; (= 1 2) is false so the other expressions are not evaluated
@@ -256,6 +273,12 @@ expressions are evaluated in an implicit `do`. If the test is not truthy, `nil` 
 ```klipse-clojure
 ;; (< 10 11) is true so both expressions are evaluated and the last value returned
 (when (< 10 11) (println "hey") 10)
+```
+
+There might be some unfamiliar syntax, but this demo shows that the `when` is transformed to an `if` expression (this is an example of a [macro](/articles/language/macros)). 
+
+```klipse-clojure
+(macroexpand '(when (< 3 4) (println "true text") (println "more true text")))
 ```
 
 ## Looping
