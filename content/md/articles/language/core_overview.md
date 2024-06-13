@@ -215,7 +215,7 @@ The condition is evaluated, and if its value is truthy -- anything except `nil`
 or `false` -- the 'then' expression is evaluated and the result returned
 (the 'else' expression is not evaluated).
 
-If the first expression returns `nil` or
+If the condition returns `nil` or
 `false` the 'else' expression is evaluated and returned
 (the 'then' expression is not evaluated).
 
