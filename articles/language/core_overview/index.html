@@ -65,21 +65,45 @@
     <p>This guide covers:</p><ul><li>Key functions of <code>clojure.core</code></li><li>Key macros of <code>clojure.core</code></li><li>Key vars of <code>clojure.core</code></li><li>Essential special forms</li></ul><p>This guide is <strong>by no means comprehensive</strong> and does not try to explain each function/macro/form in depth. It is an overview,
 the goal is to briefly explain the purpose of each item and provide links to other articles with more information.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
 (including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="binding">Binding</h2><p><a id="let_desc"></a></p><h3 id="let">let</h3><pre><code class="clojure">(let [bindings*] exprs*)
-</code></pre><p><code>let</code> takes a vector of symbol value pairs followed by a variable number of expressions.</p><p><code>let</code> allows binding of locals (roughly equivalent to variables in many other languages) and defines an explicit scope for those bindings.</p><p>The body of a <code>let</code> statement also provides an implicit <code>do</code> that allows for multiple statements in the body of <code>let</code>.</p><p>A basic example:</p><pre><code class="klipse-clojure nohighlight">(let [x 1 y 2]
+</code></pre><p><code>let</code> takes a vector of symbol/expression pairs (bindings) followed by a variable number of expressions.</p><p><code>let</code> allows binding of locals (roughly equivalent to variables in many other languages), and evaluates the expressions (with those bindings in scope).</p><p>The body of a <code>let</code> statement also provides an <a href="#do">implicit <code>do</code></a> that allows for multiple statements in the body of <code>let</code>.</p><p>A basic example:</p><pre><code class="klipse-clojure nohighlight">(let [x 1 y 2]
   (println x y))
-</code></pre><p><code>let</code> can be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.</p><p>This example basically demonstrates the lexical scoping of the let form.</p><pre><code class="klipse-clojure nohighlight">(let [x 1]
+</code></pre><p><code>let</code> does its bindings sequentially, meaning it's possible to reference previous bindings:</p><pre><code class="klipse-clojure nohighlight">(let [a 5
+      b (* a 2)
+      c (+ a b)]
+  (println "c is" c))
+</code></pre><p><code>let</code> can also be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.</p><p>This example demonstrates the lexical scoping of the let form.</p><pre><code class="klipse-clojure nohighlight">(let [x 1]
   (println x) ; prints 1
   (let [x 2]
-    (println x))) ; prints 2
+    (println x)) ; prints 2
+  (println x)) ; outside the nested let, prints 1 again
 </code></pre><p><code>let</code> bindings are immutable and can be destructured.</p><p>See: Sections about destructuring in
 <a href="/articles/tutorials/introduction/#destructuring">Introduction</a> and
 <a href="/articles/language/functions/#destructuring-of-function-arguments">Functions</a>
 pages.</p><p><a id="def_desc"></a></p><h3 id="def">def</h3><pre><code class="clojure">(def symbol doc-string? init?)
 </code></pre><p><code>def</code> takes a symbol, an optional docstring, and an optional init value
-(although it is very rare that you would omit the init value).</p><p>If an init value is supplied, the root binding of the var is assigned to that value. Redefining a var with an init value will re-assign the root binding.</p><p>A root binding is a value that is shared across all threads.</p><p>The <code>let</code> form is the preferred method of creating local bindings. It is strongly suggested to prefer it where possible, and never use <code>def</code> within another form.</p><p>See <a href="https://clojure.org/reference/vars">Vars and the Global Environment</a> in
+(although it is very rare that you would omit the init value), and creates
+(or re-assigns) a var in the current namespace with the name of the symbol.
+If an init value is supplied, the root binding of the var is assigned to that
+value. Redefining a var with an init value will re-assign the root binding.
+If no init value is supplied and the var is newly-created, it will be 'unbound',
+otherwise the var already exists and its value is unchanged.</p><p>A root binding is a value that is shared across all threads.</p><pre><code class="clojure">(def x)
+x ; x is an 'unbound' var, or nil in clojurescript
+; =&gt; #object [clojure.lang.Var$Unbound 0x1de19fc6 "Unbound: #'user/x"]
+(def x 7)
+x ; x is now 7
+; =&gt; 7
+(def x)
+x ; x is still 7, deffing with no value doesn't unbind an existing value
+; =&gt; 7
+</code></pre><h3 id="def-vs-let">def vs let</h3><p>Superficially, <code>def</code> and <code>let</code> both give names to values. A key difference is that <code>let</code> bindings are scoped and don't have a namespace, while vars created with <code>def</code> are 'global' and qualified to a namespace. A name/binding that should only exist within (for example) a function should be created with <code>let</code>, and it's very rarely needed/advisable to use <code>def</code> within a function or other form.</p><pre><code class="klipse-clojure nohighlight">; def creates (and returns) vars in the current namespace
+(def my-secret-number 5)
+(def my-secret-string "hi")
+(let [my-secret-number 7] ; this is a local that's not available outside the let block
+  (vector my-secret-number cljs.user/my-secret-number my-secret-string))  
+</code></pre><p>In the output of this example:</p><ul><li><code>my-secret-number</code> resolves to the local from the surrounding <code>let</code></li><li><code>cljs.user/my-secret-number</code> resolves to the var created by <code>def</code> (because the <code>let</code> binding doesn't have a namespace)</li><li><code>my-secret-string</code> resolves to the var - since there's no local named <code>my-secret-string</code>, clojure looks for bindings available in the current namespace.</li></ul><p>See <a href="https://clojure.org/reference/vars">Vars and the Global Environment</a> in
 the official Clojure reference documentation for more details, which also
-covers how to attach metadata to such Vars.</p><p><a id="declare_desc"></a></p><h3 id="declare">declare</h3><pre><code class="clojure">([&amp; names])
-</code></pre><p><code>declare</code> takes one or more symbols and behaves as if you had used <code>def</code> on
+covers how to attach metadata to such Vars.</p><p><a id="declare_desc"></a></p><h3 id="declare">declare</h3><pre><code class="clojure">(declare names*)
+</code></pre><p><code>declare</code> takes zero or more symbols and behaves as if you had used <code>def</code> on
 each without an init value.</p><p><code>declare</code> provides a simple way of creating 'forward declarations'.
 This allows for referencing of a var before it has been supplied a value.</p><p>There are much better methods of value-based dispatch or code architecture in
 general, but this presents a simple situation forward declarations would be necessary.</p><pre><code class="klipse-clojure nohighlight">(declare func&lt;10 func&lt;20)
@@ -98,50 +122,51 @@ general, but this presents a simple situation forward declarations would be nece
    (&lt; x 10) (func&lt;10 x)
    (&lt; x 20) "More than 10, less than 20"
    :else "too far!"))
-</code></pre><p>No matter which order you put func&lt;10 and func&lt;20 in, there will be a reference to a var that does not yet exist when the compiler does the initial evaluation of top-level forms.</p><p><code>declare</code> defines the var with no binding so that the the var exists when it is referenced later in the code.</p><p><a id="defn_desc"></a></p><h3 id="defn">defn</h3><pre><code class="clojure">([name doc-string? attr-map? [params*] prepost-map? body] [name doc-string? attr-map? ([params*] prepost-map? body) + attr-map?])
+</code></pre><p>No matter which order you put func&lt;10 and func&lt;20 in, there will be a reference to a var that does not yet exist when the compiler does the initial evaluation of top-level forms.</p><p><code>declare</code> defines the var with no binding so that the the var exists when it is referenced later in the code.</p><p><a id="defn_desc"></a></p><h3 id="defn">defn</h3><pre><code class="clojure">(defn name doc-string? attr-map? [params*] prepost-map? body)
+(defn name doc-string? attr-map? ([params*] prepost-map? body)+ attr-map?)
 </code></pre><p><code>defn</code> takes a symbol, an optional doc string, an optional meta-data
 map, a vector of arguments and a variable number of expressions.</p><p><code>defn</code> is the primary way of defining functions. It allows for
 convenient definition of metadata about its argslist and documentation
 (docstrings). <code>defn</code> inherently allows for quick documentation of
 functions that can be retrieved with <code>doc</code>. This feature should be
-used almost universally.</p><p>Without <code>defn</code>, a var could be directly bound to a function definition
-and explicit metadata about the doc string and argslist could be added
-manually:</p><pre><code class="clojure">(def func (fn [x] x))
-
-;; same as:
-(defn func [x]
+used almost universally.</p><pre><code class="klipse-clojure nohighlight">(defn func [x]
   x)
-
-;; with metadata added by defn
-(def ^{:doc "documentation!"} ^{:arglists '([x])} func (fn [x] x))
-
-;;same as
-(defn func
-  "documentation!"
-  [x]
-  x)
-</code></pre><p>See the <a href="https://clojure.org/reference/special_forms#def"><code>def</code> Special Form</a>
+(func 7)
+</code></pre><p>Because <code>defn</code> has multiple forms and a handful of optional parameters, there's a separate section
+that does a deep dive on defining <a href="/articles/language/functions">functions</a>.</p><p>See the <a href="https://clojure.org/reference/special_forms#def"><code>def</code> Special Form</a>
 for more detail about how <code>defn</code> provides additional metadata and convenience
-over <code>def</code>.</p><h2 id="branching">Branching</h2><p><a id="if_desc"></a></p><h3 id="if">if</h3><pre><code class="clojure">(if test then else?)
-</code></pre><p><code>if</code> takes two or three expressions -- a condition expression followed by one
-or two result expressions.</p><p><code>if</code> is the primary method of conditional execution and other conditionals are built upon <code>if</code>.</p><p>If the return value of the first expression is truthy -- anything except <code>nil</code>
-or <code>false</code> -- the second expression is evaluated and the result returned
-(and the third expression, if present, is not evaluated).</p><p>If a third expression is provided and the first expression returns <code>nil</code> or
-<code>false</code> the third expression is evaluated and returned
-(and the second expression is not evaluated).</p><pre><code class="klipse-clojure nohighlight">(if 0 "second") ; 0 is a 'true' value. Only false or nil are 'false'
+over <code>def</code>.</p><h2 id="branchinggrouping">Branching/Grouping</h2><h3 id="do">do</h3><pre><code class="clojure">(do exprs*)
+</code></pre><p><code>do</code> is used to 'group' expressions together. It executes the expressions in order and returns the return value of
+the final expression. It is often used when it's necessary to treat multiple expressions as one 'block', like an argument to <code>if</code>.</p><p><a id="if_desc"></a></p><h3 id="if">if</h3><pre><code class="clojure">(if test then else?)
+</code></pre><p><code>if</code> takes two or three expressions -- a condition expression, a 'then' expression, and optionally an 'else' expression. If the 'else' expression is not supplied, it defaults to <code>nil</code>.</p><p><code>if</code> is the primary method of conditional execution, and other conditionals are built upon <code>if</code>.</p><p>The condition is evaluated, and if its value is truthy -- anything except <code>nil</code>
+or <code>false</code> -- the 'then' expression is evaluated and the result returned
+(the 'else' expression is not evaluated).</p><p>If the condition returns <code>nil</code> or
+<code>false</code> the 'else' expression is evaluated and returned
+(the 'then' expression is not evaluated).</p><pre><code class="klipse-clojure nohighlight">(if 0 "second") ; 0 is a 'true' value. Only false or nil are 'false'
 </code></pre><pre><code class="klipse-clojure nohighlight">(if nil "second" "third")
-</code></pre><pre><code class="klipse-clojure nohighlight">(if (&lt; 10 9) "second" "third") ; (&lt; 9 10) returns false
-</code></pre><pre><code class="klipse-clojure nohighlight">(if (seq '()) "second") ; seq returns nil for an empty sequence
+</code></pre><pre><code class="klipse-clojure nohighlight">(if (&lt; 10 9) "second" "third") ; (&lt; 10 9) returns false
+</code></pre><pre><code class="klipse-clojure nohighlight">; seq returns nil for an empty sequence, 
+; so the third expression (defaulted to nil) is returned
+(if (seq '()) "second")
 </code></pre><pre><code class="klipse-clojure nohighlight">(if (nil? (= 1 2)) "second" "third") ; differentiate between nil and false if needed
-</code></pre><p><a id="when_desc"></a></p><h3 id="when">when</h3><pre><code class="clojure">([test &amp; body])
-</code></pre><p><code>when</code> takes one or more expressions.</p><p><code>when</code> provides an implicit <code>do</code> form that wraps the second and any subsequent
-expressions, and is evaluated if the first expression returns truthy --
-anything except <code>nil</code> or <code>false</code> -- otherwise <code>nil</code> is returned.</p><pre><code class="klipse-clojure nohighlight">;; (= 1 2) is false so the other expressions are not evaluated
-(when (= 1 2) (print "hey") 10)
+</code></pre><pre><code class="klipse-clojure nohighlight">; to do multiple things based on the condition, use a `do`
+(if (&gt; 4 3)
+  (do
+    (println "4 is greater than 3...")
+    (println "so 3 is less than 4")
+    "4!")
+  (println "Uh oh, math is broken."))
+</code></pre><p><a id="when_desc"></a></p><h3 id="when">when</h3><pre><code class="clojure">(when test body*)
+</code></pre><p><code>when</code> takes a test and zero or more <code>body</code> expressions. If the test returns a truthy
+value, all the <code>body</code> expressions are evaluated in an implicit <code>do</code>, and the last return
+value is the return value of <code>when</code>. If the test is not truthy, <code>nil</code> is returned (the
+body expressions are not evaluated at all).</p><p>Put another way, <code>(when test body)</code> is transformed to <code>(if test (do body))</code>.</p><pre><code class="klipse-clojure nohighlight">;; (= 1 2) is false so the other expressions are not evaluated
+(when (= 1 2) (println "hey") 10)
 </code></pre><pre><code class="klipse-clojure nohighlight">;; (&lt; 10 11) is true so both expressions are evaluated and the last value returned
-(when (&lt; 10 11) (print "hey") 10)
-</code></pre><h3 id="for">for</h3><p>See: <a href="#for_desc">for</a> under <strong>Looping</strong> below.</p><h3 id="doseq">doseq</h3><p>See: <a href="#doseq_desc">doseq</a> under <strong>Looping</strong> below.</p><h2 id="looping">Looping</h2><p><a id="recur_desc"></a></p><h3 id="recur">recur</h3><pre><code class="clojure">(recur exprs*)
-</code></pre><p><code>recur</code> allows for self-recursion without consuming stack space proportional to the number of recursive calls made. Due to the lack of tail-call optimization on the JVM currently, this is the only method of recursion that does not consume excess stack space.</p><p><code>recur</code> takes a number of arguments identical to the point of recursion. <code>recur</code> will evaluate those arguments, rebind them at the point of recursion and resume execution at that point.</p><p>The point of recursion is the nearest function (<code>defn</code>, <code>fn</code>) or <code>loop</code> form determined lexically.</p><p><code>recur</code> must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined and.</p><p><code>recur</code> does not bind <code>&amp;</code> in variadic functions and in these situations an empty seq must be passed by <code>recur</code>.</p><pre><code class="klipse-clojure nohighlight">(defn count-up
+(when (&lt; 10 11) (println "hey") 10)
+</code></pre><p>There might be some unfamiliar syntax, but this demo shows that the <code>when</code> is transformed to an <code>if</code> expression (this is an example of a <a href="/articles/language/macros">macro</a>).</p><pre><code class="klipse-clojure nohighlight">(macroexpand '(when (&lt; 3 4) (println "true text") (println "more true text")))
+</code></pre><h2 id="looping">Looping</h2><p><a id="recur_desc"></a></p><h3 id="recur">recur</h3><pre><code class="clojure">(recur exprs*)
+</code></pre><p><code>recur</code> allows for self-recursion without consuming stack space proportional to the number of recursive calls made. Due to the lack of tail-call optimization on the JVM currently, this is the only method of recursion that does not consume excess stack space.</p><p><code>recur</code> takes a number of arguments identical to the point of recursion. <code>recur</code> will evaluate those arguments, rebind them at the point of recursion and resume execution at that point.</p><p>The point of recursion is the nearest function (<code>defn</code>, <code>fn</code>) or <code>loop</code> form determined lexically.</p><p><code>recur</code> must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined.</p><p><code>recur</code> does not bind <code>&amp;</code> in variadic functions and in these situations an empty seq must be passed by <code>recur</code>.</p><pre><code class="klipse-clojure nohighlight">(defn count-up
   [result x y]
   (if (= x y)
     result
@@ -198,7 +223,7 @@ anything except <code>nil</code> or <code>false</code> -- otherwise <code>nil</c
 ;; delete #_ to run the example:
 #_(trampoline count-up1 [] 0 10)
 ;; ⇒ [0 1 2 3 4 5 6 7 8 9]
-</code></pre><p><a id="for_desc"></a></p><h3 id="for-1">for</h3><pre><code class="clojure">([seq-exprs body-expr])
+</code></pre><p><a id="for_desc"></a></p><h3 id="for">for</h3><pre><code class="clojure">([seq-exprs body-expr])
 </code></pre><p><code>for</code> takes a vector of pairs of [binding collection].</p><p><code>for</code> allows for list comprehensions. <code>for</code>  assigns each sequential value in the collection to the binding form and evaluates them rightmost first. The results are returned in a lazy sequence.</p><p><code>for</code> allows for explicit let, when and while through use of <code>:let []</code>, <code>:when (expression)</code>, and <code>:while (expression)</code> in the binding vector.</p><pre><code class="klipse-clojure nohighlight">(for [x [1 2 3] y [4 5 6]]
   [x y])
 ;; ⇒ ([1 4] [1 5] [1 6] [2 4] [2 5] [2 6] [3 4] [3 5] [3 6])
@@ -212,7 +237,7 @@ anything except <code>nil</code> or <code>false</code> -- otherwise <code>nil</c
       :while (&lt; x 2)]
   [x y])
 ;; ⇒ ([1 4] [1 5] [1 6])
-</code></pre><p><a id="doseq_desc"></a></p><h3 id="doseq-1">doseq</h3><pre><code class="clojure">([seq-exprs &amp; body])
+</code></pre><p><a id="doseq_desc"></a></p><h3 id="doseq">doseq</h3><pre><code class="clojure">([seq-exprs &amp; body])
 </code></pre><p><code>doseq</code> takes a vector of pairs of <code>[binding collection]</code>
 and then one or more expressions as the <code>body</code>.</p><p><code>doseq</code> is similar to <code>for</code> except it does not return a sequence of results. <code>doseq</code> is generally intended for execution of side-effects in the body, and thus returns <code>nil</code>.</p><p><code>doseq</code> supports the same bindings as for - <code>:let</code>, <code>:when</code>, <code>:while</code>. For examples of those, see <code>for</code> above.</p><pre><code class="klipse-clojure nohighlight">(doseq [x [1 2 3] y [4 5 6]]
   (println [x y]))
@@ -578,7 +603,7 @@ lazy sequence, the remaining items will be used in the last list.</p><pre><code 
 </code></pre><p><a id="partitionv-all_desc"></a></p><h3 id="partitionv-all">partitionv-all</h3><pre><code class="clojure">([n coll])
 ([n step coll])
 </code></pre><p><code>partitionv-all</code> is just like <code>partition-all</code> above, except it returns a
-lazy sequence of vectors instead of a lazy sequence of lists.</p><h3 id="filter-1">filter</h3><p>See: <a href="#filter_desc">filter</a></p><h3 id="filterv-1">filterv</h3><p>See: <a href="#filterv_desc">filterv</a></p><h3 id="remove-1">remove</h3><p>See: <a href="#remove_desc">remove</a></p><h3 id="for-2">for</h3><p>See: <a href="#for_desc">for</a></p><h3 id="map-1">map</h3><p>See: <a href="#map_desc">map</a></p><h3 id="mapv-1">mapv</h3><p>See: <a href="#mapv_desc">mapv</a></p><h3 id="remove-2">remove</h3><p>See: <a href="#remove_desc">remove</a></p><h3 id="empty-2">empty?</h3><p>See: <a href="#empty?_desc">empty</a></p><h3 id="not-empty-1">not-empty</h3><p>See: <a href="#not-empty_desc">not-empty</a></p><h2 id="function-composition-and-application">Function Composition and Application</h2><p><a id="juxt_desc"></a></p><h3 id="juxt">juxt</h3><pre><code class="clojure">([])
+lazy sequence of vectors instead of a lazy sequence of lists.</p><h3 id="filter-1">filter</h3><p>See: <a href="#filter_desc">filter</a></p><h3 id="filterv-1">filterv</h3><p>See: <a href="#filterv_desc">filterv</a></p><h3 id="remove-1">remove</h3><p>See: <a href="#remove_desc">remove</a></p><h3 id="for-1">for</h3><p>See: <a href="#for_desc">for</a></p><h3 id="map-1">map</h3><p>See: <a href="#map_desc">map</a></p><h3 id="mapv-1">mapv</h3><p>See: <a href="#mapv_desc">mapv</a></p><h3 id="remove-2">remove</h3><p>See: <a href="#remove_desc">remove</a></p><h3 id="empty-2">empty?</h3><p>See: <a href="#empty?_desc">empty</a></p><h3 id="not-empty-1">not-empty</h3><p>See: <a href="#not-empty_desc">not-empty</a></p><h2 id="function-composition-and-application">Function Composition and Application</h2><p><a id="juxt_desc"></a></p><h3 id="juxt">juxt</h3><pre><code class="clojure">([])
 ([f])
 ([f g])
 ([f g h])
