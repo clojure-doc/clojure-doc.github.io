@@ -30,11 +30,11 @@ This guide covers Clojure 1.11.
 (let [bindings*] exprs*)
 ```
 
-`let` takes a vector of symbol value pairs followed by a variable number of expressions.
+`let` takes a vector of symbol/expression pairs (bindings) followed by a variable number of expressions.
 
-`let` allows binding of locals (roughly equivalent to variables in many other languages) and defines an explicit scope for those bindings.
+`let` allows binding of locals (roughly equivalent to variables in many other languages), and evaluates the expressions (with those bindings in scope).
 
-The body of a `let` statement also provides an implicit `do` that allows for multiple statements in the body of `let`.
+The body of a `let` statement also provides an [implicit `do`](#do) that allows for multiple statements in the body of `let`.
 
 A basic example:
 
@@ -43,15 +43,25 @@ A basic example:
   (println x y))
 ```
 
-`let` can be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.
+`let` does its bindings sequentially, meaning it's possible to reference previous bindings:
 
-This example basically demonstrates the lexical scoping of the let form.
+```klipse-clojure
+(let [a 5
+      b (* a 2)
+      c (+ a b)]
+  (println "c is" c))
+```
+
+`let` can also be nested, and the scope is lexically determined. This means that a binding's value is determined by the nearest binding form for that symbol.
+
+This example demonstrates the lexical scoping of the let form.
 
 ```klipse-clojure
 (let [x 1]
   (println x) ; prints 1
   (let [x 2]
-    (println x))) ; prints 2
+    (println x)) ; prints 2
+  (println x)) ; outside the nested let, prints 1 again
 ```
 
 `let` bindings are immutable and can be destructured.
@@ -70,13 +80,43 @@ pages.
 ```
 
 `def` takes a symbol, an optional docstring, and an optional init value
-(although it is very rare that you would omit the init value).
-
-If an init value is supplied, the root binding of the var is assigned to that value. Redefining a var with an init value will re-assign the root binding.
+(although it is very rare that you would omit the init value), and creates
+(or re-assigns) a var in the current namespace with the name of the symbol.
+If an init value is supplied, the root binding of the var is assigned to that 
+value. Redefining a var with an init value will re-assign the root binding. 
+If no init value is supplied and the var is newly-created, it will be 'unbound',
+otherwise the var already exists and its value is unchanged.
 
 A root binding is a value that is shared across all threads.
 
-The `let` form is the preferred method of creating local bindings. It is strongly suggested to prefer it where possible, and never use `def` within another form.
+```clojure
+(def x)
+x ; x is an 'unbound' var, or nil in clojurescript
+; => #object [clojure.lang.Var$Unbound 0x1de19fc6 "Unbound: #'user/x"]
+(def x 7)
+x ; x is now 7
+; => 7
+(def x)
+x ; x is still 7, deffing with no value doesn't unbind an existing value
+; => 7
+```
+
+### def vs let
+
+Superficially, `def` and `let` both give names to values. A key difference is that `let` bindings are scoped and don't have a namespace, while vars created with `def` are 'global' and qualified to a namespace. A name/binding that should only exist within (for example) a function should be created with `let`, and it's very rarely needed/advisable to use `def` within a function or other form.
+
+```klipse-clojure
+; def creates (and returns) vars in the current namespace
+(def my-secret-number 5)
+(def my-secret-string "hi")
+(let [my-secret-number 7] ; this is a local that's not available outside the let block
+  (vector my-secret-number cljs.user/my-secret-number my-secret-string))  
+```
+
+In the output of this example:
+- `my-secret-number` resolves to the local from the surrounding `let`
+- `cljs.user/my-secret-number` resolves to the var created by `def` (because the `let` binding doesn't have a namespace)
+- `my-secret-string` resolves to the var - since there's no local named `my-secret-string`, clojure looks for bindings available in the current namespace.
 
 See [Vars and the Global Environment](https://clojure.org/reference/vars) in
 the official Clojure reference documentation for more details, which also
@@ -86,10 +126,10 @@ covers how to attach metadata to such Vars.
 ### declare
 
 ```clojure
-([& names])
+(declare names*)
 ```
 
-`declare` takes one or more symbols and behaves as if you had used `def` on
+`declare` takes zero or more symbols and behaves as if you had used `def` on
 each without an init value.
 
 `declare` provides a simple way of creating 'forward declarations'.
@@ -125,7 +165,8 @@ No matter which order you put func<10 and func<20 in, there will be a reference 
 ### defn
 
 ```clojure
-([name doc-string? attr-map? [params*] prepost-map? body] [name doc-string? attr-map? ([params*] prepost-map? body) + attr-map?])
+(defn name doc-string? attr-map? [params*] prepost-map? body)
+(defn name doc-string? attr-map? ([params*] prepost-map? body)+ attr-map?)
 ```
 
 `defn` takes a symbol, an optional doc string, an optional meta-data
@@ -137,32 +178,27 @@ convenient definition of metadata about its argslist and documentation
 functions that can be retrieved with `doc`. This feature should be
 used almost universally.
 
-Without `defn`, a var could be directly bound to a function definition
-and explicit metadata about the doc string and argslist could be added
-manually:
-
-``` clojure
-(def func (fn [x] x))
-
-;; same as:
+```klipse-clojure
 (defn func [x]
   x)
-
-;; with metadata added by defn
-(def ^{:doc "documentation!"} ^{:arglists '([x])} func (fn [x] x))
-
-;;same as
-(defn func
-  "documentation!"
-  [x]
-  x)
+(func 7)
 ```
+Because `defn` has multiple forms and a handful of optional parameters, there's a separate section
+that does a deep dive on defining [functions](/articles/language/functions).
 
 See the [`def` Special Form](https://clojure.org/reference/special_forms#def)
 for more detail about how `defn` provides additional metadata and convenience
 over `def`.
 
-## Branching
+## Branching/Grouping
+
+### do
+
+```clojure
+(do exprs*)
+```
+`do` is used to 'group' expressions together. It executes the expressions in order and returns the return value of 
+the final expression. It is often used when it's necessary to treat multiple expressions as one 'block', like an argument to `if`.
 
 <a id="if_desc"></a>
 ### if
@@ -171,19 +207,17 @@ over `def`.
 (if test then else?)
 ```
 
-`if` takes two or three expressions -- a condition expression followed by one
-or two result expressions.
+`if` takes two or three expressions -- a condition expression, a 'then' expression, and optionally an 'else' expression. If the 'else' expression is not supplied, it defaults to `nil`.
 
-`if` is the primary method of conditional execution and other conditionals are built upon `if`.
+`if` is the primary method of conditional execution, and other conditionals are built upon `if`.
 
-If the return value of the first expression is truthy -- anything except `nil`
-or `false` -- the second expression is evaluated and the result returned
-(and the third expression, if present, is not evaluated).
+The condition is evaluated, and if its value is truthy -- anything except `nil`
+or `false` -- the 'then' expression is evaluated and the result returned
+(the 'else' expression is not evaluated).
 
-If a third expression is provided and the first expression returns `nil` or
-`false` the third expression is evaluated and returned
-(and the second expression is not evaluated).
-
+If the condition returns `nil` or
+`false` the 'else' expression is evaluated and returned
+(the 'then' expression is not evaluated).
 
 ```klipse-clojure
 (if 0 "second") ; 0 is a 'true' value. Only false or nil are 'false'
@@ -194,47 +228,58 @@ If a third expression is provided and the first expression returns `nil` or
 ```
 
 ```klipse-clojure
-(if (< 10 9) "second" "third") ; (< 9 10) returns false
+(if (< 10 9) "second" "third") ; (< 10 9) returns false
 ```
 
 ```klipse-clojure
-(if (seq '()) "second") ; seq returns nil for an empty sequence
+; seq returns nil for an empty sequence, 
+; so the third expression (defaulted to nil) is returned
+(if (seq '()) "second")
 ```
 
 ```klipse-clojure
 (if (nil? (= 1 2)) "second" "third") ; differentiate between nil and false if needed
 ```
 
+```klipse-clojure
+; to do multiple things based on the condition, use a `do`
+(if (> 4 3)
+  (do
+    (println "4 is greater than 3...")
+    (println "so 3 is less than 4")
+    "4!")
+  (println "Uh oh, math is broken."))
+```
+
 <a id="when_desc"></a>
 ### when
 
 ```clojure
-([test & body])
+(when test body*)
 ```
 
-`when` takes one or more expressions.
+`when` takes a test and zero or more `body` expressions. If the test returns a truthy
+value, all the `body` expressions are evaluated in an implicit `do`, and the last return
+value is the return value of `when`. If the test is not truthy, `nil` is returned (the 
+body expressions are not evaluated at all).
 
-`when` provides an implicit `do` form that wraps the second and any subsequent
-expressions, and is evaluated if the first expression returns truthy --
-anything except `nil` or `false` -- otherwise `nil` is returned.
+Put another way, `(when test body)` is transformed to `(if test (do body))`.
 
 ```klipse-clojure
 ;; (= 1 2) is false so the other expressions are not evaluated
-(when (= 1 2) (print "hey") 10)
+(when (= 1 2) (println "hey") 10)
 ```
 
 ```klipse-clojure
 ;; (< 10 11) is true so both expressions are evaluated and the last value returned
-(when (< 10 11) (print "hey") 10)
+(when (< 10 11) (println "hey") 10)
 ```
 
-### for
+There might be some unfamiliar syntax, but this demo shows that the `when` is transformed to an `if` expression (this is an example of a [macro](/articles/language/macros)). 
 
-See: [for](#for_desc) under **Looping** below.
-
-### doseq
-
-See: [doseq](#doseq_desc) under **Looping** below.
+```klipse-clojure
+(macroexpand '(when (< 3 4) (println "true text") (println "more true text")))
+```
 
 ## Looping
 
@@ -251,7 +296,7 @@ See: [doseq](#doseq_desc) under **Looping** below.
 
 The point of recursion is the nearest function (`defn`, `fn`) or `loop` form determined lexically.
 
-`recur` must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined and.
+`recur` must be in the tail position of the recursion point expression. The tail position is the point in the expression where a return value would otherwise be determined.
 
 `recur` does not bind `&` in variadic functions and in these situations an empty seq must be passed by `recur`.
 
