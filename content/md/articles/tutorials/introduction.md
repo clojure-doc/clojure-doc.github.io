@@ -192,6 +192,7 @@ it.
 ``` clojure
 #"^foo\d?$"   ; A regular expression.
 :foo          ; A keyword.
+:foo/bar      ; A namespaced keyword.
 ```
 
 We'll have more to say about [regular
@@ -203,7 +204,8 @@ where in other languages you might use little strings as identifiers
 next section ([Data Structures](#data-structures)).
 
 ``` clojure
-'foo   ; A symbol.
+'foo     ; A symbol.
+'foo/bar ; A namespaced symbol.
 ```
 
 A *symbol* is an object that represents the *name* of something. The
@@ -240,8 +242,17 @@ core data structures:
 ```
 
 A hashmap is your typical hash/dictionary data structure. In the above
-example, the keys are :a and :b, and the values are 1 and 2. One key-value
+example, the keys are `:a` and `:b`, and the values are 1 and 2. One key-value
 pair in a map is called an *entry*.
+
+Using namespaced keywords as keys is a common practice in Clojure applications,
+as it provides more context to the key and helps avoid key collisions:
+
+```clojure
+{:customer/id 123 :invoice/id "INV-456" :invoice/total 95.99}
+```
+
+> Note: if you have a hashmap where all the keys have the same namespace prefix, such as `{:invoice/id "INV-456" :invoice/total 95.99}`, the REPL will print it using a shorthand syntax, where the prefix is shown in front of the hashmap and the keys are shown without the prefix: `#:invoice{:id "INV-456", :total 95.99}`. This is just a shorthand syntax for printing the hashmap and doesn't affect how you use the hashmap in your code.
 
 Although it's most common to use keywords (as shown above) for hashmap
 keys, you can use any values you like for the keys as well as the

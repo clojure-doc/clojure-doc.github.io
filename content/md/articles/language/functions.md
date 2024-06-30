@@ -317,7 +317,7 @@ When destructuring multiple keys at once, it is more convenient to use a slightl
 ```
 
 The example above assumes that map keys will be keywords and we are interested in two values: `currency`
-and `amount`. The same can be done for strings:
+and `:amount`. The same can be done for strings:
 
 ``` clojure
 (defn currency-of
@@ -335,6 +335,23 @@ and symbols:
 
 In practice, keywords are very commonly used for map keys so destructuring with `{:keys [...]}` is very common
 as well.
+
+If you want to destructure a map that has namespaced keys, you can either
+specify the prefix on each name in the binding or as a prefix on `:keys` itself:
+
+``` clojure
+;; instead of {:currency "GBP" :amount 95.99} let's assume we have namespaced
+;; keys: {:invoice/currency "GBP" :invoice/amount 95.99}
+(defn currency-of
+  [{:keys [invoice/currency invoice/amount]}] ; prefixed names
+  currency) ; bind to unprefixed symbols
+
+;; or
+
+(defn currency-of
+  [{:invoice/keys [currency amount]}] ; prefixed :keys
+  currency) ; bind to unprefixed symbols
+```
 
 Map destructuring also lets us specify default values for keys that may be missing:
 
