@@ -73,7 +73,7 @@ repositories) without needing JAR files to be built and deployed.
 > Since the release of the official Clojure CLI, usage of Leiningen has dropped
 as the community adopted the new CLI and associated libraries such as
 `tools.deps` and `tools.build`.
-_[See [State of Clojure 2022 Survey Results](https://clojure.org/news/2022/06/02/state-of-clojure-2022)]_
+_[See [State of Clojure 2022 Survey Results](https://clojure.org/news/2022/06/02/state-of-clojure-2022) -- and a year later the CLI usage exceeded 70% while Leiningen had dropped to around 60%]_
 >
 > **Too Much Information! What Should I Use?**
 >
