@@ -148,11 +148,13 @@ evaluated. These too:</p><pre><code class="clojure">1        ; integer
 you want to include a double-quote mark in a string, backslash-escape
 it.</p><pre><code class="clojure">#"^foo\d?$"   ; A regular expression.
 :foo          ; A keyword.
+:foo/bar      ; A namespaced keyword.
 </code></pre><p>We'll have more to say about <a href="#regular-expressions">regular
 expressions</a> later on.</p><p>Keywords are just scalars that evaluate to themselves and are useful
 where in other languages you might use little strings as identifiers
 (for example, as the keys in a hashmap). More about keywords in the
-next section (<a href="#data-structures">Data Structures</a>).</p><pre><code class="clojure">'foo   ; A symbol.
+next section (<a href="#data-structures">Data Structures</a>).</p><pre><code class="clojure">'foo     ; A symbol.
+'foo/bar ; A namespaced symbol.
 </code></pre><p>A <em>symbol</em> is an object that represents the <em>name</em> of something. The
 single quote mark is there to keep Clojure from trying to figure out
 to what the symbol refers (the quote isn't part of the identifier of
@@ -172,8 +174,10 @@ core data structures:</p><pre><code class="clojure">[1 2 3]            ; A vecto
 [1 :two "three"]   ; Put anything into them you like.
 {:a 1 :b 2}        ; A hashmap (or just "map", for short).
 </code></pre><p>A hashmap is your typical hash/dictionary data structure. In the above
-example, the keys are :a and :b, and the values are 1 and 2. One key-value
-pair in a map is called an <em>entry</em>.</p><p>Although it's most common to use keywords (as shown above) for hashmap
+example, the keys are <code>:a</code> and <code>:b</code>, and the values are 1 and 2. One key-value
+pair in a map is called an <em>entry</em>.</p><p>Using namespaced keywords as keys is a common practice in Clojure applications,
+as it provides more context to the key and helps avoid key collisions:</p><pre><code class="clojure">{:customer/id 123 :invoice/id "INV-456" :invoice/total 95.99}
+</code></pre><blockquote><p>Note: if you have a hashmap where all the keys have the same namespace prefix, such as <code>{:invoice/id "INV-456" :invoice/total 95.99}</code>, the REPL will print it using a shorthand syntax, where the prefix is shown in front of the hashmap and the keys are shown without the prefix: <code>#:invoice{:id "INV-456", :total 95.99}</code>. This is just a shorthand syntax for printing the hashmap and doesn't affect how you use the hashmap in your code.</p></blockquote><p>Although it's most common to use keywords (as shown above) for hashmap
 keys, you can use any values you like for the keys as well as the
 values.</p><pre><code class="clojure">#{:a :b :c}        ; A set (unordered, and contains no duplicates).
 '(1 2 3)           ; A list (linked-list)

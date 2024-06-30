@@ -190,14 +190,26 @@ keywords:</p><pre><code class="clojure">(defn currency-of
   [{:keys [currency amount]}]
   currency)
 </code></pre><p>The example above assumes that map keys will be keywords and we are interested in two values: <code>currency</code>
-and <code>amount</code>. The same can be done for strings:</p><pre><code class="clojure">(defn currency-of
+and <code>:amount</code>. The same can be done for strings:</p><pre><code class="clojure">(defn currency-of
   [{:strs [currency amount]}]
   currency)
 </code></pre><p>and symbols:</p><pre><code class="clojure">(defn currency-of
   [{:syms [currency amount]}]
   currency)
 </code></pre><p>In practice, keywords are very commonly used for map keys so destructuring with <code>{:keys [...]}</code> is very common
-as well.</p><p>Map destructuring also lets us specify default values for keys that may be missing:</p><pre><code class="clojure">(defn currency-of
+as well.</p><p>If you want to destructure a map that has namespaced keys, you can either
+specify the prefix on each name in the binding or as a prefix on <code>:keys</code> itself:</p><pre><code class="clojure">;; instead of {:currency "GBP" :amount 95.99} let's assume we have namespaced
+;; keys: {:invoice/currency "GBP" :invoice/amount 95.99}
+(defn currency-of
+  [{:keys [invoice/currency invoice/amount]}] ; prefixed names
+  currency) ; bind to unprefixed symbols
+
+;; or
+
+(defn currency-of
+  [{:invoice/keys [currency amount]}] ; prefixed :keys
+  currency) ; bind to unprefixed symbols
+</code></pre><p>Map destructuring also lets us specify default values for keys that may be missing:</p><pre><code class="clojure">(defn currency-of
   [{:keys [currency amount] :or {currency :gbp}}]
   currency)
 </code></pre><p>This is very commonly used for implementing functions that take "extra options" (faking named arguments support).</p><p>Just like with positional destructuring, map destructuring works exactly the same way for let bindings:</p><pre><code class="klipse-clojure nohighlight">(let [money               {:currency :gbp :amount 10}
