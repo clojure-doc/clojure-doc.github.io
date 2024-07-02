@@ -144,21 +144,23 @@ The `deps.edn` file should have the following contents:
 ```clojure
 {:paths ["src" "resources"]
  :deps {;; basic Ring and web server:
-        ring/ring-core {:mvn/version "1.9.6"}
-        ring/ring-jetty-adapter {:mvn/version "1.9.6"}
+        ring/ring-core {:mvn/version "1.12.2"}
+        ring/ring-jetty-adapter {:mvn/version "1.12.2"}
+        ;; logging, required by jetty:
+        org.slf4j/slf4j-simple {:mvn/version "2.0.13"}
 
         ;; routing:
-        compojure/compojure {:mvn/version "1.7.0"}
+        compojure/compojure {:mvn/version "1.7.1"}
 
         ;; convenient package of "default" middleware:
-        ring/ring-defaults {:mvn/version "0.3.4"}
+        ring/ring-defaults {:mvn/version "0.5.0"}
 
         ;; to generate HTML:
         hiccup/hiccup {:mvn/version "1.0.5"}
 
         ;; for the database:
-        com.github.seancorfield/next.jdbc {:mvn/version "1.3.862"}
-        com.h2database/h2 {:mvn/version "2.1.214"}}}
+        com.github.seancorfield/next.jdbc {:mvn/version "1.3.939"}
+        com.h2database/h2 {:mvn/version "2.2.224"}}}
 ```
 
 Now we'll create the first version of our source file:
@@ -199,10 +201,10 @@ tells Clojure that we want it to run the `-main` function in that namespace.
 It will output something like this (and then "hang" while the web server is running):
 
 ```
-2023-03-24 14:03:21.305:INFO::main: Logging initialized @2337ms to org.eclipse.jetty.util.log.StdErrLog
-2023-03-24 14:03:21.752:INFO:oejs.Server:main: jetty-9.4.48.v20220622; built: 2022-06-21T20:42:25.880Z; git: 6b67c5719d1f4371b33655ff2d047d24e171e49a; jvm 19.0.2+7
-2023-03-24 14:03:21.783:INFO:oejs.AbstractConnector:main: Started ServerConnector@43201f84{HTTP/1.1, (http/1.1)}{0.0.0.0:3000}
-2023-03-24 14:03:21.783:INFO:oejs.Server:main: Started @2815ms
+[main] INFO org.eclipse.jetty.server.Server - jetty-11.0.21; built: 2024-05-14T03:19:28.958Z; git: 996cd61addad9cb033e0e3eba6fa3f0fa3dc270d; jvm 21.0.1+12-LTS
+[main] INFO org.eclipse.jetty.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@677274e7{/,null,AVAILABLE}
+[main] INFO org.eclipse.jetty.server.AbstractConnector - Started ServerConnector@5570ee6d{HTTP/1.1, (http/1.1)}{0.0.0.0:3000}
+[main] INFO org.eclipse.jetty.server.Server - Started Server@729d1428{STARTING}[11.0.21,sto=0] @4321ms
 ```
 
 > Note: you can stop this program running by pressing `^C` (control-c) on macOS or Linux, or by pressing `^Z` (control-z) on Windows.
@@ -589,7 +591,7 @@ In your `dep.edn` file add the following, after the `:deps` hash map:
 ```clojure
  :aliases
  {;; Run with clj -T:build function-in-build
-  :build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
           :ns-default build}}
 ```
 
@@ -598,24 +600,26 @@ The whole `deps.edn` file should now look like this:
 ```clojure
 {:paths ["src" "resources"]
  :deps {;; basic Ring and web server:
-        ring/ring-core {:mvn/version "1.9.6"}
-        ring/ring-jetty-adapter {:mvn/version "1.9.6"}
+        ring/ring-core {:mvn/version "1.12.2"}
+        ring/ring-jetty-adapter {:mvn/version "1.12.2"}
+        ;; logging, required by jetty:
+        org.slf4j/slf4j-simple {:mvn/version "2.0.13"}
 
         ;; routing:
-        compojure/compojure {:mvn/version "1.7.0"}
+        compojure/compojure {:mvn/version "1.7.1"}
 
         ;; convenient package of "default" middleware:
-        ring/ring-defaults {:mvn/version "0.3.4"}
+        ring/ring-defaults {:mvn/version "0.5.0"}
 
         ;; to generate HTML:
         hiccup/hiccup {:mvn/version "1.0.5"}
 
         ;; for the database:
-        com.github.seancorfield/next.jdbc {:mvn/version "1.3.862"}
-        com.h2database/h2 {:mvn/version "2.1.214"}}
+        com.github.seancorfield/next.jdbc {:mvn/version "1.3.939"}
+        com.h2database/h2 {:mvn/version "2.2.224"}}
  :aliases
  {;; Run with clj -T:build function-in-build
-  :build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
           :ns-default build}}}
 ```
 
