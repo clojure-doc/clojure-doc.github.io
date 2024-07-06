@@ -66,16 +66,13 @@
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
 Github</a>.</p><h2 id="overview">Overview</h2><p>Clojure is a wonderfully simple language and you are going to love
-it.</p><p>To quickly get started, first make sure you've got Java installed.</p><p>Then install the <a href="https://clojure.org/guides/install_clojure">official Clojure CLI</a>.</p><p>For macOS, Linux, and Windows with WSL2, the <a href="https://clojure.org/guides/install_clojure#_posix_instructions">POSIX</a>
+it.</p><p>To quickly get started, first make sure you've got
+<a href="https://clojure.org/guides/install_clojure#java">Java installed</a>.</p><p>Then install the <a href="https://clojure.org/guides/install_clojure">official Clojure CLI</a>.</p><p>For macOS, Linux, and Windows with WSL2, the <a href="https://clojure.org/guides/install_clojure#_posix_instructions">POSIX</a>
 or <a href="https://clojure.org/guides/install_clojure#_linux_instructions">Linux</a>
 instructions will work. For the small percentage of Clojure users on Windows
 planning to use Powershell or <code>cmd.exe</code>, the
 <a href="https://github.com/casselc/clj-msi">MSI installer</a> provided by the community
-is probably your easiest route.</p><p>A useful shortcut to get the latest stable version is to use the script name
-without the version number:</p><pre><code class="shell">curl -O https://download.clojure.org/install/posix-install.sh
-# or:
-curl -O https://download.clojure.org/install/linux-install.sh
-</code></pre><blockquote><p>For macOS and Linux, <a href="https://brew.sh/"><code>brew</code></a> (or <a href="https://docs.brew.sh/Homebrew-on-Linux">Homebrew on Linux</a>) are also reasonable options.</p></blockquote><p>Clojure programs are typically developed inside their own project
+is probably your easiest route.</p><blockquote><p>For macOS and Linux, <a href="https://brew.sh/"><code>brew</code></a> (or <a href="https://docs.brew.sh/Homebrew-on-Linux">Homebrew on Linux</a>) are also reasonable options.</p></blockquote><p>Clojure programs are typically developed inside their own project
 directory, with a <code>deps.edn</code> file at the top level and a <code>src</code> directory
 containing one or more source files (Clojure scripts). The CLI takes care of
 pulling in dependencies (including Clojure itself), running the REPL,
