@@ -67,6 +67,9 @@ The Practical.li website also has an excellent
 classic [Clojure for the Brave and True](https://www.braveclojure.com/)
 (although that is showing its age a bit at this point).
 
+When you're ready to move beyond experimenting in the REPL, you can read about
+[Creating New Projects](https://clojure-doc.org/articles/ecosystem/libraries_authoring/#creating-new-projects)
+later in this guide.
 
 ## The Basics
 

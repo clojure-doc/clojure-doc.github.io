@@ -120,6 +120,8 @@ $ clojure -M -e '(clojure-version)'
 
 The `-e` option prints the value returned by the expression (if it is not `nil`).
 
+> Note: you can find more detailed information about [Creating New Projects](https://clojure-doc.org/articles/ecosystem/libraries_authoring/#creating-new-projects) later in this guide.
+
 ### Working in the REPL
 
 In your project directory, start up a repl (`clj`) and
