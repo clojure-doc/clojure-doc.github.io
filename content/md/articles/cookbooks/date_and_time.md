@@ -4,7 +4,7 @@
 This cookbook covers working with Java's `java.time` package in two styles, the
 first with interop and the second using libraries.
 
-This guide covers Clojure 1.11.1 and Java 8 or later.
+This guide covers Clojure 1.11.3 and Java 8 or later.
 
 This work is licensed under a <a rel="license"
 href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution
@@ -56,7 +56,7 @@ TBD
 The examples below assume the following `deps.edn`
 ``` clojure
 {:paths ["src"]
- :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+ :deps {org.clojure/clojure {:mvn/version "1.11.3"}
         clojure.java-time/clojure.java-time {:mvn/version "1.3.0"}
         com.widdindustries/cljc.java-time {:mvn/version "0.1.21"}}}
 ```

@@ -155,8 +155,7 @@ typically declare a `:build` alias in `deps.edn` for this:
  :aliases
  {
   ;; add this to :aliases in deps.edn:
-  :build {:deps {io.github.clojure/tools.build
-                 {:git/tag "v0.9.4" :git/sha "76b78fe"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
           :ns-default build}
  }}
 ```
@@ -243,7 +242,7 @@ We can run this with:
 
     clojure -T:build run
 
-and we'll see the version of Clojure we're running: `"1.11.1"`.
+and we'll see the version of Clojure we're running: `"1.11.3"`.
 
 **Error Handling**
 
@@ -367,7 +366,7 @@ Add these aliases to `deps.edn`:
 ```clojure
   :1.9  {:override-deps {org.clojure/clojure {:mvn/version "1.9.0"}}}
   :1.10 {:override-deps {org.clojure/clojure {:mvn/version "1.10.3"}}}
-  :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.1"}}}
+  :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.3"}}}
 ```
 
 When these aliases are used in combination with other aliases, the default
@@ -425,7 +424,7 @@ Test with Clojure :1.11
 Running tests in #{"test"}
 
 Testing example-test
-1.11.1
+1.11.3
 
 Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
@@ -476,13 +475,14 @@ You might end up with something like:
 
 ```clojure
 (defn- jar-opts [opts]
-  (let [lib     'my/lib
+  (let [lib     'my/lib ; group/artifact
         version "1.2.3"
         target  "target"
         classes (str target "/classes")]
     (assoc opts
            :lib        lib
            :version    version
+           ;; group/artifact-version.jar is the expected naming convention:
            :jar-file   (format "target/%s-%s.jar" lib version)
            :scm  {:tag (str "v" version)}
            :basis      (b/create-basis {})
@@ -534,7 +534,7 @@ By default, `b/write-pom` will generate a minimal `pom.xml` file that includes
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.11.1</version>
+      <version>1.11.3</version>
     </dependency>
   </dependencies>
   <repositories>
@@ -664,6 +664,8 @@ And add the following task to your `build.clj` file:
                 :pom-file (b/pom-path (select-keys opts [:lib :class-dir]))}))
   opts)
 ```
+
+> Note: the expected naming convention for JAR files on Clojars is `group/artifact-version.jar` so you should ensure that your `:lib` and `:version` values are set up correctly in your `jar-opts` function (see above).
 
 **Clojars credentials**
 

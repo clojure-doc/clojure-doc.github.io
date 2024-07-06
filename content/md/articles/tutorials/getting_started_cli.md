@@ -53,7 +53,7 @@ You should be greeted with the Clojure version and a "`user=>`" prompt. Try it o
 
 ```clojure
 $ clj
-Clojure 1.11.1
+Clojure 1.11.3
 user=> (+ 1 1)
 ;; ⇒ 2
 user=> (distinct [:a :b :a :c :a :d])
@@ -115,7 +115,7 @@ or:
 
 ```
 $ clojure -M -e '(clojure-version)'
-"1.11.1"
+"1.11.3"
 ```
 
 The `-e` option prints the value returned by the expression (if it is not `nil`).
@@ -126,7 +126,7 @@ In your project directory, start up a repl (`clj`) and
 run your `-main` function to see its output in the repl:
 
     $ clj
-    Clojure 1.11.1
+    Clojure 1.11.3
     user=> (require 'my.proj)
     nil
     user=> (my.proj/-main)
