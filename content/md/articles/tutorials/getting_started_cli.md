@@ -20,7 +20,8 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 Clojure is a wonderfully simple language and you are going to love
 it.
 
-To quickly get started, first make sure you've got Java installed.
+To quickly get started, first make sure you've got
+[Java installed](https://clojure.org/guides/install_clojure#java).
 
 Then install the [official Clojure CLI](https://clojure.org/guides/install_clojure).
 
@@ -30,15 +31,6 @@ instructions will work. For the small percentage of Clojure users on Windows
 planning to use Powershell or `cmd.exe`, the
 [MSI installer](https://github.com/casselc/clj-msi) provided by the community
 is probably your easiest route.
-
-A useful shortcut to get the latest stable version is to use the script name
-without the version number:
-
-```shell
-curl -O https://download.clojure.org/install/posix-install.sh
-# or:
-curl -O https://download.clojure.org/install/linux-install.sh
-```
 
 > For macOS and Linux, [`brew`](https://brew.sh/) (or [Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux)) are also reasonable options.
 
