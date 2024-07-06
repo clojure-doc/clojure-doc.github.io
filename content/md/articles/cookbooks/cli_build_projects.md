@@ -558,7 +558,7 @@ The `:src-pom` option allows you to specify a "template" `pom.xml` file for
 The newer `:pom-data` option allows you to specify those extra fields
 as Hiccup-style data in your `build.clj` file.
 
-> Note: if you use `:src-pom`, you need to be aware that quite a bit of tooling out there expects the top-level `pom.xml` file in a project to be the "complete" version, so you will either want to put your "template" `pom.xml` file in a subdirectory or name it something like `pom-template.xml` so it won't be considered as a top-level `pom.xml` file, and then specify the path to that file as `:src-pom` in your call to `b/write-pom`. If you use `:pom-data`, you don't have to worry about this.
+> Note: if you use `:src-pom`, you need to be aware that quite a bit of tooling out there expects the top-level `pom.xml` file in a project to be the "complete" version, so you will either want to put your "template" `pom.xml` file in a subdirectory or name it something like `pom-template.xml` so it won't be considered as a top-level `pom.xml` file, and then specify the path to that file as `:src-pom` in your call to `b/write-pom`. In addition, your "template" `pom.xml` _must_ include `<modelVersion>4.0.0</modelVersion>` _and_ `<packaging>jar</packaging>`. If you use `:pom-data`, you don't have to worry about this.
 
 Tools like [`deps-new`](https://github.com/seancorfield/deps-new) and Leiningen
 generate projects that produce a more complete `pom.xml` file, so you
