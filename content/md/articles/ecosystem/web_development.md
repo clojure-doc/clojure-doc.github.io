@@ -60,16 +60,12 @@ Compojure. To get started, see the [basic web development
 tutorial](/articles/tutorials/basic_web_development/).
 
 In addition to the long-established [Ring server library](https://github.com/ring-clojure/ring),
-which has an adapter for Jetty 9.4.x as the underlying web server,
+which has an adapter for Jetty 11.x as the underlying web server, with WebSocket support built-in,
 here are some alternatives:
 
 * [http-kit](https://github.com/http-kit/http-kit) - simple, high-performance, Ring-compatible web server
 * [aleph](https://github.com/clj-commons/aleph) - asynchronous communication server, including a Ring-compatible web server
 * [sunng87 ring adapter](https://github.com/sunng87/ring-jetty9-adapter) - Ring adapter for Jetty 12 and 11
-
-All three of those alternatives also support WebSockets (Ring 1.10 does not).
-As of this writing, Ring 1.11 is in development and will have an adapter for Jetty 11,
-as well as WebSocket support.
 
 For routing, while [Compojure](https://github.com/weavejester/compojure) is the most
 well-established and maybe most popular option, it is based on macros and
@@ -105,6 +101,8 @@ libraries, there are a few "framework"-like options that are popular as
 "batteries-included" choices for web development.
 
 ### Luminus
+
+_See **Kit** below for a more modern alternative!_
 
 Probably the most well-established choice in this category is
 [Luminus](http://www.luminusweb.net/), which is driven by [a Leiningen
