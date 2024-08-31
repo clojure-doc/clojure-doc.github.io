@@ -242,7 +242,7 @@ We can run this with:
 
     clojure -T:build run
 
-and we'll see the version of Clojure we're running: `"1.11.3"`.
+and we'll see the version of Clojure we're running: `"1.11.4"`.
 
 **Error Handling**
 
@@ -366,7 +366,7 @@ Add these aliases to `deps.edn`:
 ```clojure
   :1.9  {:override-deps {org.clojure/clojure {:mvn/version "1.9.0"}}}
   :1.10 {:override-deps {org.clojure/clojure {:mvn/version "1.10.3"}}}
-  :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.3"}}}
+  :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.4"}}}
 ```
 
 When these aliases are used in combination with other aliases, the default
@@ -424,7 +424,7 @@ Test with Clojure :1.11
 Running tests in #{"test"}
 
 Testing example-test
-1.11.3
+1.11.4
 
 Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
@@ -534,7 +534,7 @@ By default, `b/write-pom` will generate a minimal `pom.xml` file that includes
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.11.3</version>
+      <version>1.11.4</version>
     </dependency>
   </dependencies>
   <repositories>

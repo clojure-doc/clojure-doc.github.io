@@ -18,7 +18,7 @@ Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
-This guide uses Clojure 1.11.3, as well as current versions of the
+This guide uses Clojure 1.11.4, as well as current versions of the
 component libraries noted below.
 
 
@@ -353,7 +353,7 @@ if you like:
 
 ```clojure
 clj
-Clojure 1.11.3
+Clojure 1.11.4
 user=> (require 'my-webapp.db)
 nil
 ;; you must require a namespace before you go into it:

@@ -44,7 +44,7 @@ Now edit `project.clj` to contain the following:
   :url ""
   :license {:name "Eclipse Public License"
             :url "https://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.11.3"]
+  :dependencies [[org.clojure/clojure "1.11.4"]
                  [org.clojure/data.zip "1.0.0"]])
 ```
 
