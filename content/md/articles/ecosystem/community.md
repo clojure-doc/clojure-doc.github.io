@@ -20,15 +20,15 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
   * [Clojurians Zulip](https://clojurians.zulipchat.com/) -- free, open source community, includes an archive of most channels from the Clojurians Slack (via `@zulip-mirror-bot` on Slack)
   * [Clojure SubReddit](https://www.reddit.com/r/Clojure/) -- r/Clojure -- the right-hand sidebar has links to many Clojure resources
   * [ClojureVerse](https://clojureverse.org) -- online forum
-  * [Clojure Q&A](https://ask.clojure.org/)
+  * [Clojure Q&A](https://ask.clojure.org/) -- the official Clojure question and answer site
   * [Clojurians Discord](https://discord.gg/discljord)
-  * [clj.social](https://clj.social/)
+  * [clj.social](https://clj.social/) -- a Clojure-specific Mastodon instance
   * [Clojure Camp](https://clojure.camp/) -- aimed at Clojure beginners, this offers a fun community of mentors and fellow learners, via Discord, Meetup.com, and offers study groups, pairing, and 1:1 mentoring
   * See also the [Clojure Discussion section on clojure.org](https://clojure.org/community/resources) for more online communities
 
 ## Clojure Mailing List
 
-  * [Clojure users mailing list](https://groups.google.com/g/clojure)
+  * [Clojure users mailing list](https://groups.google.com/g/clojure) -- this is the original and still active mailing list for Clojure users (but not as active as the Slack community)
 
 
 ## Clojure IRC Channels
@@ -37,10 +37,10 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Documentation
 
-  * Official [clojure.org Guides](https://clojure.org/guides/guides)
-  * Official [clojure.org Reference documentation](https://clojure.org/reference/documentation)
+  * Official [clojure.org Guides](https://clojure.org/guides/getting_started)
+  * Official [clojure.org Reference documentation](https://clojure.org/reference/reader)
   * Official [clojure.org API documentation](https://clojure.org/api/api)
-  * [ClojureDocs](https://clojuredocs.org/): Clojre API reference, with examples
+  * [ClojureDocs](https://clojuredocs.org/): Clojure API reference, with examples
   * [Clojure-Doc](https://clojure-doc.org/): Clojure tutorials, cookbooks, etc
   * [Clojure API Cheatsheet](https://clojure.org/api/cheatsheet) (hosted on clojure.org)
   * Community [Clojure Style Guide](https://guide.clojure.style/)
@@ -78,13 +78,15 @@ Videos of talks about Clojure are often made available on [InfoQ](https://www.in
  * [Cognicast](https://cognitect.com/cognicast/) by Craig Andera often discusses topics relevant to Clojure and ClojureScript.
  * [Clojure Design Club](https://clojuredesign.club/) by Christoph Neumann and Nate Jones -- Functional Design in Clojure: Group therapy for recovering object-oriented developers.
  * [ClojureStream](https://clojure.stream/podcast) by Jacek Schae -- Explore unusually expressive programming language with Lisp roots that runs on JavaScript, Java Virtual Machine, and CLR.
-* [The REPL](https://www.therepl.net/episodes/) by Daniel Compton -- A weekly newsletter and podcast diving into Clojure programs and libraries.
+ * [The REPL](https://www.therepl.net/episodes/) by Daniel Compton -- A weekly newsletter and podcast diving into Clojure programs and libraries.
+ * [Lost In Lambduhhs](https://podcasters.spotify.com/pod/show/lostinlambduhhs/) by Jordan Miller -- Featuring interviews with a myriad of guests from all sectors of tech with a special focus on the languages Clojure and Clojurescript
+ * [Parens of the Dead](https://www.parens-of-the-dead.com/) by Magnar Sveen and Christian Johansen -- A screencast series of zombie-themed games written with Clojure and ClojureScript
 
 ## Code Repositories
 
 Most folks host their projects at
 [GitHub](https://github.com/search?l=Clojure&q=clojure&type=Repositories), and most pure Clojure
-library distributions (with the exception of contrib) are available at
+library distributions (with the exception of Contrib) are available at
 [Clojars](https://clojars.org/).
 
 
