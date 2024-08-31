@@ -15,6 +15,10 @@ closest to what you are currently using, unless your editor is listed on
 the [Clojure Tools page](https://clojure.org/community/tools) with an active
 Clojure integration.
 
+If you are coming to Clojure as a beginner, and don't have a history with any
+of these editors, you might consider starting with VS Code and Calva, which
+has a very low barrier to entry.
+
 Despite the popularity of Emacs within the
 Clojure world, you don't want to be learning _both_ Clojure _and_ Emacs
 at the same time!
@@ -43,7 +47,7 @@ You can also get static analysis and refactoring support via
 it should also work out-of-the-box with [`eglot`](https://github.com/joaotavora/eglot/),
 which is built into Emacs 29 and above).
 
-See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_emacs_most_popular_most_customizable) for more links.
+See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_emacs_most_popular_most_customizable) for more links ("most customizable").
 
 ## IntelliJ/Cursive
 
@@ -51,7 +55,7 @@ See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_emacs
 This is a great choice if you are already familiar with IntelliJ and/or you
 plan to work with both Clojure and Java (or other JVM-based languages).
 
-See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_intellij_clojure_with_a_java_tilt) for more links.
+See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_intellij_clojure_with_a_java_tilt) for more links ("Java tilt").
 
 ## VS Code
 
@@ -62,7 +66,7 @@ language analysis features in addition to the dynamic features available
 via [nREPL](https://github.com/nrepl/nREPL)
 and [cider-nrepl](https://github.com/clojure-emacs/cider-nrepl).
 
-See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vs_code_rapidly_evolving_beginner_friendly) for more links.
+See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vs_code_rapidly_evolving_beginner_friendly) for more links ("beginner friendly").
 
 ## Vim/Neovim
 
@@ -71,7 +75,7 @@ The main options here are:
 * [vim-iced](https://liquidz.github.io/vim-iced/) (for Vim/Neovim)
 * [Conjure](https://github.com/Olical/conjure) (for Neovim): [Getting Started](https://oli.me.uk/getting-started-with-clojure-neovim-and-conjure-in-minutes/), [Conjure/Neovim on Practical.li](https://practical.li/neovim/)
 
-See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vim_highly_efficient_text_editing) for more links.
+See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vim_highly_efficient_text_editing) for more links ("highly efficient").
 
 ## Additional Tools
 
