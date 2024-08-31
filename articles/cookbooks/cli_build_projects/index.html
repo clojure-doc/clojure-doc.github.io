@@ -183,7 +183,7 @@ parameterize it using aliases in <code>deps.edn</code>:</p><pre><code class="clo
                              :main-args ["-e" "(clojure-version)"]})]
     (b/process cmd)))
 </code></pre><p>We can run this with:</p><pre><code>clojure -T:build run
-</code></pre><p>and we'll see the version of Clojure we're running: <code>"1.11.3"</code>.</p><p><strong>Error Handling</strong></p><p>Since we will generally want the build to fail if the command exits with
+</code></pre><p>and we'll see the version of Clojure we're running: <code>"1.11.4"</code>.</p><p><strong>Error Handling</strong></p><p>Since we will generally want the build to fail if the command exits with
 a non-zero status, we'll check the return value of <code>b/process</code> and throw
 an exception if the exit status is non-zero:</p><pre><code class="clojure">    (when-not (zero? (:exit (b/process cmd)))
       (throw (ex-info (str "run failed for " aliases) opts)))
@@ -242,7 +242,7 @@ run our tests for multiple versions of Clojure. We'll add aliases to <code>deps.
 that specify versions of Clojure to test against, and then use those in a
 new <code>test-multi</code> function in <code>build.clj</code>.</p><p>Add these aliases to <code>deps.edn</code>:</p><pre><code class="clojure">  :1.9  {:override-deps {org.clojure/clojure {:mvn/version "1.9.0"}}}
   :1.10 {:override-deps {org.clojure/clojure {:mvn/version "1.10.3"}}}
-  :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.3"}}}
+  :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.4"}}}
 </code></pre><p>When these aliases are used in combination with other aliases, the default
 version of Clojure will be overridden with the specified version. We can see
 this by running <code>clojure -T:build run :aliases '[:1.9]'</code> and seeing <code>"1.9.0"</code>
@@ -283,7 +283,7 @@ Test with Clojure :1.11
 Running tests in #{"test"}
 
 Testing example-test
-1.11.3
+1.11.4
 
 Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
@@ -360,7 +360,7 @@ projects for details.</p><h2 id="the-generated-pomxml-file">The Generated <code>
     &lt;dependency&gt;
       &lt;groupId&gt;org.clojure&lt;/groupId&gt;
       &lt;artifactId&gt;clojure&lt;/artifactId&gt;
-      &lt;version&gt;1.11.3&lt;/version&gt;
+      &lt;version&gt;1.11.4&lt;/version&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;
   &lt;repositories&gt;
