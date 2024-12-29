@@ -80,7 +80,7 @@ and running your program. Run <code>clojure -h</code> to
 see the list of all the options available.</p><h2 id="trying-out-the-repl">Trying out the REPL</h2><p>Once you have the Clojure CLI installed, you can run it from anywhere you like
 to get a REPL:</p><pre><code>$ clj
 </code></pre><p>You should be greeted with the Clojure version and a "<code>user=&gt;</code>" prompt. Try it out:</p><pre><code class="clojure">$ clj
-Clojure 1.11.4
+Clojure 1.12.0
 user=&gt; (+ 1 1)
 ;; ⇒ 2
 user=&gt; (distinct [:a :b :a :c :a :d])
@@ -109,10 +109,10 @@ The <code>-m my.proj</code> option tells <code>clojure.main</code> that we want 
 <code>clojure.main</code> can also evaluate expressions:</p><pre><code>$ clojure -M -e '(println "Hello, Command!")'
 Hello, Command!
 </code></pre><p>or:</p><pre><code>$ clojure -M -e '(clojure-version)'
-"1.11.4"
+"1.12.0"
 </code></pre><p>The <code>-e</code> option prints the value returned by the expression (if it is not <code>nil</code>).</p><blockquote><p>Note: you can find more detailed information about <a href="https://clojure-doc.org/articles/ecosystem/libraries_authoring/#creating-new-projects">Creating New Projects</a> later in this guide.</p></blockquote><h3 id="working-in-the-repl">Working in the REPL</h3><p>In your project directory, start up a repl (<code>clj</code>) and
 run your <code>-main</code> function to see its output in the repl:</p><pre><code>$ clj
-Clojure 1.11.4
+Clojure 1.12.0
 user=&gt; (require 'my.proj)
 nil
 user=&gt; (my.proj/-main)

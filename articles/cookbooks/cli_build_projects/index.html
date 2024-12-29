@@ -148,7 +148,7 @@ typically declare a <code>:build</code> alias in <code>deps.edn</code> for this:
  :aliases
  {
   ;; add this to :aliases in deps.edn:
-  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
           :ns-default build}
  }}
 </code></pre><p>The <code>-T</code> option implicitly sets <code>:paths ["."]</code> (as opposed to <code>:paths ["src"]</code>
@@ -183,7 +183,7 @@ parameterize it using aliases in <code>deps.edn</code>:</p><pre><code class="clo
                              :main-args ["-e" "(clojure-version)"]})]
     (b/process cmd)))
 </code></pre><p>We can run this with:</p><pre><code>clojure -T:build run
-</code></pre><p>and we'll see the version of Clojure we're running: <code>"1.11.4"</code>.</p><p><strong>Error Handling</strong></p><p>Since we will generally want the build to fail if the command exits with
+</code></pre><p>and we'll see the version of Clojure we're running, for example: <code>"1.12.0"</code>.</p><p><strong>Error Handling</strong></p><p>Since we will generally want the build to fail if the command exits with
 a non-zero status, we'll check the return value of <code>b/process</code> and throw
 an exception if the exit status is non-zero:</p><pre><code class="clojure">    (when-not (zero? (:exit (b/process cmd)))
       (throw (ex-info (str "run failed for " aliases) opts)))
@@ -243,11 +243,12 @@ that specify versions of Clojure to test against, and then use those in a
 new <code>test-multi</code> function in <code>build.clj</code>.</p><p>Add these aliases to <code>deps.edn</code>:</p><pre><code class="clojure">  :1.9  {:override-deps {org.clojure/clojure {:mvn/version "1.9.0"}}}
   :1.10 {:override-deps {org.clojure/clojure {:mvn/version "1.10.3"}}}
   :1.11 {:override-deps {org.clojure/clojure {:mvn/version "1.11.4"}}}
+  :1.12 {:override-deps {org.clojure/clojure {:mvn/version "1.12.0"}}}
 </code></pre><p>When these aliases are used in combination with other aliases, the default
 version of Clojure will be overridden with the specified version. We can see
 this by running <code>clojure -T:build run :aliases '[:1.9]'</code> and seeing <code>"1.9.0"</code>
 for example.</p><p>Here's our <code>test-multi</code> function:</p><pre><code class="clojure">(defn test-multi [opts]
-  (doseq [v [:1.9 :1.10 :1.11]]
+  (doseq [v [:1.9 :1.10 :1.11 :1.12]]
     (println "\nTest with Clojure" v)
     (test (update opts :aliases conj v)))
   opts)
@@ -284,6 +285,16 @@ Running tests in #{"test"}
 
 Testing example-test
 1.11.4
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+
+Test with Clojure :1.12
+
+Running tests in #{"test"}
+
+Testing example-test
+1.12.0
 
 Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
@@ -360,7 +371,7 @@ projects for details.</p><h2 id="the-generated-pomxml-file">The Generated <code>
     &lt;dependency&gt;
       &lt;groupId&gt;org.clojure&lt;/groupId&gt;
       &lt;artifactId&gt;clojure&lt;/artifactId&gt;
-      &lt;version&gt;1.11.4&lt;/version&gt;
+      &lt;version&gt;1.12.0&lt;/version&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;
   &lt;repositories&gt;

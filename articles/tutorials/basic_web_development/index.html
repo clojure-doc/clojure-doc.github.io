@@ -80,7 +80,7 @@ not, see the <a href="/articles/tutorials/getting_started/">Getting Started</a> 
 <a href="/articles/tutorials/introduction/">Introduction</a> guides.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><p>This guide uses Clojure 1.11.4, as well as current versions of the
+Github</a>.</p><p>This guide uses Clojure 1.12.0, as well as current versions of the
 component libraries noted below.</p><h2 id="conceptual-overview-of-components">Conceptual Overview of Components</h2><p>We'll use four major components (briefly described below) for our
 little webapp:</p><ul><li>Ring</li><li>Compojure</li><li>Hiccup</li><li>H2</li></ul><h3 id="ring">Ring</h3><p><a href="https://github.com/ring-clojure/ring">Ring</a> (<a href="https://clojars.org/ring">at
 clojars</a>) is a foundational Clojure web
@@ -115,8 +115,8 @@ so you can how see how all the moving parts work.</p><p>In a new folder, perhaps
 file to specify the libraries we want to use, and a couple of folders: one
 for CSS files and one for your source code.</p><p>The <code>deps.edn</code> file should have the following contents:</p><pre><code class="clojure">{:paths ["src" "resources"]
  :deps {;; basic Ring and web server:
-        ring/ring-core {:mvn/version "1.12.2"}
-        ring/ring-jetty-adapter {:mvn/version "1.12.2"}
+        ring/ring-core {:mvn/version "1.13.0"}
+        ring/ring-jetty-adapter {:mvn/version "1.13.0"}
         ;; logging, required by jetty:
         org.slf4j/slf4j-simple {:mvn/version "2.0.13"}
 
@@ -236,7 +236,7 @@ entry's key is a column name (as a Clojure keyword), and its value is
 the value for that column.</p><p>You can try the code out in the <code>comment</code> form by evaluating each expression
 in it, and you should see the same results as the inline comments show.</p><p>You can also try those calls yourself in a standalone REPL,
 if you like:</p><pre><code class="clojure">clj
-Clojure 1.11.4
+Clojure 1.12.0
 user=&gt; (require 'my-webapp.db)
 nil
 ;; you must require a namespace before you go into it:
@@ -400,12 +400,12 @@ your application on the web.</p><p>In order to produce this <code>.jar</code> fi
 <a href="https://clojure.org/guides/tools_build"><code>tools.build</code> guide</a> for more details.</p><p>To make your webapp suitable for deployment, make the following
 changes:</p><h3 id="changes-in-depsedn">Changes in deps.edn</h3><p>In your <code>dep.edn</code> file add the following, after the <code>:deps</code> hash map:</p><pre><code class="clojure"> :aliases
  {;; Run with clj -T:build function-in-build
-  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
           :ns-default build}}
 </code></pre><p>The whole <code>deps.edn</code> file should now look like this:</p><pre><code class="clojure">{:paths ["src" "resources"]
  :deps {;; basic Ring and web server:
-        ring/ring-core {:mvn/version "1.12.2"}
-        ring/ring-jetty-adapter {:mvn/version "1.12.2"}
+        ring/ring-core {:mvn/version "1.13.0"}
+        ring/ring-jetty-adapter {:mvn/version "1.13.0"}
         ;; logging, required by jetty:
         org.slf4j/slf4j-simple {:mvn/version "2.0.13"}
 
@@ -423,7 +423,7 @@ changes:</p><h3 id="changes-in-depsedn">Changes in deps.edn</h3><p>In your <code
         com.h2database/h2 {:mvn/version "2.2.224"}}
  :aliases
  {;; Run with clj -T:build function-in-build
-  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
           :ns-default build}}}
 </code></pre><h3 id="add-a-buildclj-file">Add a build.clj file</h3><p>The <code>tools.build</code> library is intended to be used with a <code>build.clj</code> script
 which typically lives in the root of your project and is invoked via the
