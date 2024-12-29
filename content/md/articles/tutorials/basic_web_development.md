@@ -18,7 +18,7 @@ Attribution 3.0 Unported License</a> (including images &
 stylesheets). The source is available [on
 Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
-This guide uses Clojure 1.11.4, as well as current versions of the
+This guide uses Clojure 1.12.0, as well as current versions of the
 component libraries noted below.
 
 
@@ -144,8 +144,8 @@ The `deps.edn` file should have the following contents:
 ```clojure
 {:paths ["src" "resources"]
  :deps {;; basic Ring and web server:
-        ring/ring-core {:mvn/version "1.12.2"}
-        ring/ring-jetty-adapter {:mvn/version "1.12.2"}
+        ring/ring-core {:mvn/version "1.13.0"}
+        ring/ring-jetty-adapter {:mvn/version "1.13.0"}
         ;; logging, required by jetty:
         org.slf4j/slf4j-simple {:mvn/version "2.0.13"}
 
@@ -353,7 +353,7 @@ if you like:
 
 ```clojure
 clj
-Clojure 1.11.4
+Clojure 1.12.0
 user=> (require 'my-webapp.db)
 nil
 ;; you must require a namespace before you go into it:
@@ -591,7 +591,7 @@ In your `dep.edn` file add the following, after the `:deps` hash map:
 ```clojure
  :aliases
  {;; Run with clj -T:build function-in-build
-  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
           :ns-default build}}
 ```
 
@@ -600,8 +600,8 @@ The whole `deps.edn` file should now look like this:
 ```clojure
 {:paths ["src" "resources"]
  :deps {;; basic Ring and web server:
-        ring/ring-core {:mvn/version "1.12.2"}
-        ring/ring-jetty-adapter {:mvn/version "1.12.2"}
+        ring/ring-core {:mvn/version "1.13.0"}
+        ring/ring-jetty-adapter {:mvn/version "1.13.0"}
         ;; logging, required by jetty:
         org.slf4j/slf4j-simple {:mvn/version "2.0.13"}
 
@@ -619,7 +619,7 @@ The whole `deps.edn` file should now look like this:
         com.h2database/h2 {:mvn/version "2.2.224"}}
  :aliases
  {;; Run with clj -T:build function-in-build
-  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.4"}}
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
           :ns-default build}}}
 ```
 

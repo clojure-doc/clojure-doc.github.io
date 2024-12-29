@@ -17,8 +17,8 @@ as the name of the new project we create and publish here, but you
 can use whatever name you want -- just remember to substitute that
 wherever you see `my-cool-lib` in this guide.
 
-This guide uses Clojure 1.11 and a recent version of the Clojure CLI
-(at least 1.11.1.1139; current version is 1.11.4.1474 as of August 2024),
+This guide uses Clojure 1.12 and a recent version of the Clojure CLI
+(at least 1.12.0.1479; current version is 1.12.0.1488 as of December 2024),
 and requires you have `git`
 installed (though very little familiarity with `git` is required).
 
@@ -335,7 +335,7 @@ Remember to add a note at the top of each file indicating copyright
 For example:
 
 ```clojure
-;; copyright (c) 2023 -- Sean Corfield, all rights reserved.
+;; copyright (c) 2024 -- Sean Corfield, all rights reserved.
 ```
 
 
