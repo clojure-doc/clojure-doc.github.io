@@ -17,7 +17,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.11.
+This guide covers Clojure 1.12.
 
 
 ## Overview
@@ -112,6 +112,7 @@ In the example above, we use preconditions to check that both arguments are not
 nil. The `not-nil?` macro (or function) is not
 demonstrated in this example and assumed to be implemented elsewhere.
 
+> Note: pre- and post-conditions produce `AssertionError` exceptions when the fail. They are not intended to be caught/handled by code, and should be considered purely a debugging aid, and not for argument validation in production code.
 
 ## Anonymous Functions
 
@@ -148,6 +149,7 @@ The `%` in the example above means "the first argument". To refer to more than o
 
 Please **use this reader macro sparingly**; excessive use may lead to unreadable code.
 
+> Note: in the `fn` form, you can provide a name for the "anonymous" function -- between `fn` and the argument list -- that will be used in stack traces and debugging output.
 
 ## How To Invoke Functions
 
@@ -357,8 +359,20 @@ Map destructuring also lets us specify default values for keys that may be missi
 
 ``` clojure
 (defn currency-of
+  ;; unqualified keys:
   [{:keys [currency amount] :or {currency :gbp}}]
   currency)
+
+;; or:
+
+(defn currency-of
+  ;; qualified keys -- note the currency symbol is not qualified:
+  [{:invoice/keys [currency amount] :or {currency :gbp}}]
+  currency)
+
+;; invocation without currency key:
+(currency-of {})
+;; => :gbp
 ```
 
 This is very commonly used for implementing functions that take "extra options" (faking named arguments support).
@@ -453,7 +467,7 @@ Using the function looks like this:
 
 Without the use of a variadic argument list, you would have to call the function with a single map argument such as `{:name "Robert" :job "Engineer}`.
 
-As of Clojure 1.11, you can also pass named parameters as a map:
+As of Clojure 1.11, you can also pass named parameters as a map, or a mix of named parameters followed by a map:
 
 ``` clojure
 (job-info {:name "Robert" :job "Engineer"})
@@ -461,7 +475,12 @@ As of Clojure 1.11, you can also pass named parameters as a map:
 ```
 
 ``` clojure
-(job-info {}:job "Engineer"})
+(job-info :name "Robert" {:job "Engineer"})
+;;=> ["Robert" "Engineer" "$0.00"]
+```
+
+``` clojure
+(job-info {:job "Engineer"})
 ;;=> No name specified
 ```
 
@@ -524,6 +543,12 @@ and the `->` macro:
 ;; ⇒ "Joe"
 ```
 
+Like with `get`, a "not found" value can be specified:
+
+```klipse-clojure
+(:age {:name "Michael"} :unknown)
+; ⇒ :unknown
+```
 
 ## Maps as Functions
 
@@ -542,6 +567,13 @@ Clojure maps are also functions that take keys and look up values for them:
 ```klipse-clojure
 ({:age 42 :name "Joe"} :unknown)
 ; ⇒ nil
+```
+
+Like with `get`, a "not found" value can be specified:
+
+```klipse-clojure
+({:age 42 :name "Joe"} :unknown :not-found)
+; ⇒ :not-found
 ```
 
 Note that this is **not true** for Clojure records, which are almost identical to maps in other
@@ -570,6 +602,13 @@ cases.
 ; ⇒ nil
 ```
 
+And, as you might expect from the previous examples, a "not found" value can be specified:
+
+```klipse-clojure
+(#{:us :au :ru :uk} :cn :not-found)
+; ⇒ :not-found
+```
+
 This is often used to check if a value is in a set:
 
 ``` clojure
@@ -589,6 +628,7 @@ because everything but `false` and `nil` evaluates to `true` in Clojure.
 Clojure functions implement the [java.util.Comparator](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html)
 interface and can be used as comparators.
 
+See [the official Clojure guide to Comparators](https://clojure.org/guides/comparators) for more details.
 
 ## Wrapping Up
 
@@ -606,3 +646,5 @@ code.
 ## Contributors
 
 Michael Klishin <michael@defprotocol.org>, 2012 (original author)
+
+Sean Corfield <sean@corfield.org>, 2023-2024 (updates to Clojure 1.11 and later)

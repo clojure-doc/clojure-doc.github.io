@@ -147,7 +147,7 @@ The `deps.edn` file should have the following contents:
         ring/ring-core {:mvn/version "1.13.0"}
         ring/ring-jetty-adapter {:mvn/version "1.13.0"}
         ;; logging, required by jetty:
-        org.slf4j/slf4j-simple {:mvn/version "2.0.13"}
+        org.slf4j/slf4j-simple {:mvn/version "2.0.16"}
 
         ;; routing:
         compojure/compojure {:mvn/version "1.7.1"}
@@ -159,8 +159,8 @@ The `deps.edn` file should have the following contents:
         hiccup/hiccup {:mvn/version "1.0.5"}
 
         ;; for the database:
-        com.github.seancorfield/next.jdbc {:mvn/version "1.3.939"}
-        com.h2database/h2 {:mvn/version "2.2.224"}}}
+        com.github.seancorfield/next.jdbc {:mvn/version "1.3.981"}
+        com.h2database/h2 {:mvn/version "2.3.232"}}}
 ```
 
 Now we'll create the first version of our source file:
@@ -201,10 +201,10 @@ tells Clojure that we want it to run the `-main` function in that namespace.
 It will output something like this (and then "hang" while the web server is running):
 
 ```
-[main] INFO org.eclipse.jetty.server.Server - jetty-11.0.21; built: 2024-05-14T03:19:28.958Z; git: 996cd61addad9cb033e0e3eba6fa3f0fa3dc270d; jvm 21.0.1+12-LTS
-[main] INFO org.eclipse.jetty.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@677274e7{/,null,AVAILABLE}
-[main] INFO org.eclipse.jetty.server.AbstractConnector - Started ServerConnector@5570ee6d{HTTP/1.1, (http/1.1)}{0.0.0.0:3000}
-[main] INFO org.eclipse.jetty.server.Server - Started Server@729d1428{STARTING}[11.0.21,sto=0] @4321ms
+[main] INFO org.eclipse.jetty.server.Server - jetty-11.0.24; built: 2024-08-26T18:11:22.448Z; git: 5dfc59a691b748796f922208956bd1f2794bcd16; jvm 23+37-2369
+[main] INFO org.eclipse.jetty.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@73a88711{/,null,AVAILABLE}
+[main] INFO org.eclipse.jetty.server.AbstractConnector - Started ServerConnector@18ab513d{HTTP/1.1, (http/1.1)}{0.0.0.0:3000}
+[main] INFO org.eclipse.jetty.server.Server - Started Server@304704ae{STARTING}[11.0.24,sto=0] @3537ms
 ```
 
 > Note: you can stop this program running by pressing `^C` (control-c) on macOS or Linux, or by pressing `^Z` (control-z) on Windows.
@@ -238,7 +238,7 @@ Create the folder structure `resources/public/css` and add a `styles.css`
 file this with contents like:
 
 ```css
-// resources/public/css/styles.css
+/* resources/public/css/styles.css */
 body {
     background-color: Cornsilk;
 }
