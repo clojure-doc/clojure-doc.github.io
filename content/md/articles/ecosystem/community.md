@@ -16,7 +16,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Online Communities
 
-  * [Clojurians Slack](https://clojurians.slack.com) -- currently the most active online community, generously sponsored by Slack -- [self-signup at clojurians.net](http://clojurians.net) -- [partial archive of channels](https://clojurians-log.clojureverse.org/) (via `@logbot` on Slack)
+  * [Clojurians Slack](https://clojurians.slack.com) -- currently the most active online community, generously sponsored by Salesforce (owners of Slack) -- [self-signup at clojurians.net](http://clojurians.net) -- [partial archive of channels](https://clojurians-log.clojureverse.org/) (via `@logbot` on Slack)
   * [Clojurians Zulip](https://clojurians.zulipchat.com/) -- free, open source community, includes an archive of most channels from the Clojurians Slack (via `@zulip-mirror-bot` on Slack)
   * [Clojure SubReddit](https://www.reddit.com/r/Clojure/) -- r/Clojure -- the right-hand sidebar has links to many Clojure resources
   * [ClojureVerse](https://clojureverse.org) -- online forum
@@ -28,7 +28,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Clojure Mailing List
 
-  * [Clojure users mailing list](https://groups.google.com/g/clojure) -- this is the original and still active mailing list for Clojure users (but not as active as the Slack community)
+  * [Clojure users mailing list](https://groups.google.com/g/clojure) -- this is the original and still occasionally active mailing list for Clojure users
 
 
 ## Clojure IRC Channels
@@ -63,7 +63,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Videos About Clojure
 
-Videos of talks about Clojure are often made available on [InfoQ](https://www.infoq.com/clojure), and [Clojure YouTube channel](https://www.youtube.com/user/ClojureTV).
+Videos of talks about Clojure are often made available on [InfoQ](https://www.infoq.com/clojure), and [Clojure YouTube channel](https://www.youtube.com/user/ClojureTV). In addition, here are some other video learning resources:
 
  * [Full Disclojure](https://vimeo.com/channels/fulldisclojure/videos) is a series of screencasts about Clojure
  * [Clojure Concurrency Tutorial](https://pluralsight.com/training/Courses/TableOfContents/clojure-concurrency-tutorial)

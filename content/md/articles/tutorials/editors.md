@@ -86,7 +86,7 @@ Clojure and evaluating code:
 
 * [Portal](https://github.com/djblue/portal)
 * [Reveal](https://github.com/vlaaad/reveal)
-* [Cognitect REBL](https://docs.datomic.com/cloud/other-tools/REBL.html)
+* [Morse](https://github.com/nubank/morse) from nubank (evolved from Cognitect's REBL)
 
 ## Additional Editor Guides
 
