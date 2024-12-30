@@ -63,7 +63,7 @@
     </div>
     
     <p>This guide covers:</p><ul><li>How to define functions</li><li>How to invoke functions</li><li>Multi-arity functions</li><li>Variadic functions</li><li>Higher order functions</li><li>Other topics related to functions</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="overview">Overview</h2><p>Clojure is a functional programming language. Naturally, functions are very important part of Clojure.</p><h2 id="how-to-define-functions">How To Define Functions</h2><p>Functions are typically defined using the <a href="https://clojuredocs.org/clojure.core/defn">defn</a> macro:</p><pre><code class="clojure">(defn round
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.12.</p><h2 id="overview">Overview</h2><p>Clojure is a functional programming language. Naturally, functions are very important part of Clojure.</p><h2 id="how-to-define-functions">How To Define Functions</h2><p>Functions are typically defined using the <a href="https://clojuredocs.org/clojure.core/defn">defn</a> macro:</p><pre><code class="clojure">(defn round
   [d precision]
   (let [factor (Math/pow 10 precision)]
     (/ (Math/floor (* d factor)) factor)))
@@ -109,7 +109,7 @@ the value function returns:</p><pre><code class="clojure">(require '[clojure.mat
     (/ (math/floor (* d factor)) factor)))
 </code></pre><p>In the example above, we use preconditions to check that both arguments are not
 nil. The <code>not-nil?</code> macro (or function) is not
-demonstrated in this example and assumed to be implemented elsewhere.</p><h2 id="anonymous-functions">Anonymous Functions</h2><p>Anonymous functions are defined using the <code>fn</code> special form:</p><pre><code class="clojure">(fn [x]
+demonstrated in this example and assumed to be implemented elsewhere.</p><blockquote><p>Note: pre- and post-conditions produce <code>AssertionError</code> exceptions when the fail. They are not intended to be caught/handled by code, and should be considered purely a debugging aid, and not for argument validation in production code.</p></blockquote><h2 id="anonymous-functions">Anonymous Functions</h2><p>Anonymous functions are defined using the <code>fn</code> special form:</p><pre><code class="clojure">(fn [x]
   (* 2 x))
 </code></pre><p>Anonymous functions can be bound to locals, passed between functions (higher order functions are covered later in this document)
 and returned from functions:</p><pre><code class="klipse-clojure nohighlight">(let [f (fn [x]
@@ -120,7 +120,7 @@ and returned from functions:</p><pre><code class="klipse-clojure nohighlight">(l
 </code></pre><p>The <code>%</code> in the example above means "the first argument". To refer to more than one argument, use <code>%1</code>, <code>%2</code> and so on:</p><pre><code class="klipse-clojure nohighlight">;; an anonymous function that takes 3 arguments and adds them together
 (let [f #(+ %1 %2 %3)]
   (f 1 2 3))
-</code></pre><p>Please <strong>use this reader macro sparingly</strong>; excessive use may lead to unreadable code.</p><h2 id="how-to-invoke-functions">How To Invoke Functions</h2><p>Functions are invoked by placing a function in the leading position (<em>the calling position</em>) of a list:</p><pre style="visibility:hidden; height:0;"><code class="klipse-clojure nohighlight">
+</code></pre><p>Please <strong>use this reader macro sparingly</strong>; excessive use may lead to unreadable code.</p><blockquote><p>Note: in the <code>fn</code> form, you can provide a name for the "anonymous" function -- between <code>fn</code> and the argument list -- that will be used in stack traces and debugging output.</p></blockquote><h2 id="how-to-invoke-functions">How To Invoke Functions</h2><p>Functions are invoked by placing a function in the leading position (<em>the calling position</em>) of a list:</p><pre style="visibility:hidden; height:0;"><code class="klipse-clojure nohighlight">
 (import '(goog.string format))
 </code></pre><pre><code class="klipse-clojure nohighlight">(format "Hello, %s" "world")
 </code></pre><p>This works also if you have a function stored in a local, a var or passed as an argument:</p><pre><code class="klipse-clojure nohighlight">(let [f format]
@@ -210,8 +210,20 @@ specify the prefix on each name in the binding or as a prefix on <code>:keys</co
   [{:invoice/keys [currency amount]}] ; prefixed :keys
   currency) ; bind to unprefixed symbols
 </code></pre><p>Map destructuring also lets us specify default values for keys that may be missing:</p><pre><code class="clojure">(defn currency-of
+  ;; unqualified keys:
   [{:keys [currency amount] :or {currency :gbp}}]
   currency)
+
+;; or:
+
+(defn currency-of
+  ;; qualified keys -- note the currency symbol is not qualified:
+  [{:invoice/keys [currency amount] :or {currency :gbp}}]
+  currency)
+
+;; invocation without currency key:
+(currency-of {})
+;; =&gt; :gbp
 </code></pre><p>This is very commonly used for implementing functions that take "extra options" (faking named arguments support).</p><p>Just like with positional destructuring, map destructuring works exactly the same way for let bindings:</p><pre><code class="klipse-clojure nohighlight">(let [money               {:currency :gbp :amount 10}
      {currency :currency} money]
   currency)
@@ -245,9 +257,11 @@ This is an example of named parameters:</p><pre><code class="klipse-clojure nohi
 ;; ["Robert" "Engineer" "$0.00"]
 </code></pre><pre><code class="klipse-clojure nohighlight">(job-info :job "Engineer")
 ;; No name specified
-</code></pre><p>Without the use of a variadic argument list, you would have to call the function with a single map argument such as <code>{:name "Robert" :job "Engineer}</code>.</p><p>As of Clojure 1.11, you can also pass named parameters as a map:</p><pre><code class="clojure">(job-info {:name "Robert" :job "Engineer"})
+</code></pre><p>Without the use of a variadic argument list, you would have to call the function with a single map argument such as <code>{:name "Robert" :job "Engineer}</code>.</p><p>As of Clojure 1.11, you can also pass named parameters as a map, or a mix of named parameters followed by a map:</p><pre><code class="clojure">(job-info {:name "Robert" :job "Engineer"})
 ;;=&gt; ["Robert" "Engineer" "$0.00"]
-</code></pre><pre><code class="clojure">(job-info {}:job "Engineer"})
+</code></pre><pre><code class="clojure">(job-info :name "Robert" {:job "Engineer"})
+;;=&gt; ["Robert" "Engineer" "$0.00"]
+</code></pre><pre><code class="clojure">(job-info {:job "Engineer"})
 ;;=&gt; No name specified
 </code></pre><p>This allows for easier programmatic invocation of functions with named parameters
 where you might be building a map of parameters and passing it through your code.</p><p>Keyword default values are assigned by use of the <code>:or</code> keyword followed by a map of keywords to their default value.
@@ -265,12 +279,16 @@ that satisfy a condition (a predicate). In Clojure, this function is called <cod
     first
     :name)
 ;; ⇒ "Joe"
+</code></pre><p>Like with <code>get</code>, a "not found" value can be specified:</p><pre><code class="klipse-clojure nohighlight">(:age {:name "Michael"} :unknown)
+; ⇒ :unknown
 </code></pre><h2 id="maps-as-functions">Maps as Functions</h2><p>Clojure maps are also functions that take keys and look up values for them:</p><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :name)
 ; ⇒ "Joe"
 </code></pre><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :age)
 ; ⇒ 42
 </code></pre><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :unknown)
 ; ⇒ nil
+</code></pre><p>Like with <code>get</code>, a "not found" value can be specified:</p><pre><code class="klipse-clojure nohighlight">({:age 42 :name "Joe"} :unknown :not-found)
+; ⇒ :not-found
 </code></pre><p>Note that this is <strong>not true</strong> for Clojure records, which are almost identical to maps in other
 cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="klipse-clojure nohighlight">(#{1 2 3} 1)
 ; ⇒ 1
@@ -280,6 +298,8 @@ cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="kli
 ; ⇒ :uk
 </code></pre><pre><code class="klipse-clojure nohighlight">(#{:us :au :ru :uk} :cn)
 ; ⇒ nil
+</code></pre><p>And, as you might expect from the previous examples, a "not found" value can be specified:</p><pre><code class="klipse-clojure nohighlight">(#{:us :au :ru :uk} :cn :not-found)
+; ⇒ :not-found
 </code></pre><p>This is often used to check if a value is in a set:</p><pre><code class="clojure">(when (countries :in)
   (comment ...))
 
@@ -287,11 +307,11 @@ cases.</p><h2 id="sets-as-functions">Sets as Functions</h2><pre><code class="kli
   (comment Implement positive case)
   (comment Implement negative case))
 </code></pre><p>because everything but <code>false</code> and <code>nil</code> evaluates to <code>true</code> in Clojure.</p><h2 id="clojure-functions-as-comparators">Clojure Functions As Comparators</h2><p>Clojure functions implement the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Comparator.html">java.util.Comparator</a>
-interface and can be used as comparators.</p><h2 id="wrapping-up">Wrapping Up</h2><p>Functions are at the heart of Clojure. They are defined using the <code>defn</code> macro, can have multiple arities,
+interface and can be used as comparators.</p><p>See <a href="https://clojure.org/guides/comparators">the official Clojure guide to Comparators</a> for more details.</p><h2 id="wrapping-up">Wrapping Up</h2><p>Functions are at the heart of Clojure. They are defined using the <code>defn</code> macro, can have multiple arities,
 be variadic and support parameter destructuring. Function arguments and return value can optionally be
 type hinted.</p><p>Functions are first class values and can be passed to other functions (called Higher Order Functions or HOFs).
 This is fundamental to functional programming techniques.</p><p>Several core data types behave like functions. When used reasonably, this can lead to more concise, readable
-code.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a>, 2012 (original author)</p>
+code.</p><h2 id="contributors">Contributors</h2><p>Michael Klishin <a href="mailto:michael@defprotocol.org">michael@defprotocol.org</a>, 2012 (original author)</p><p>Sean Corfield <a href="mailto:sean@corfield.org">sean@corfield.org</a>, 2023-2024 (updates to Clojure 1.11 and later)</p>
 
     <div id="prev-next">
         
