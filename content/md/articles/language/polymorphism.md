@@ -15,7 +15,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.11.
+This guide covers Clojure 1.12.
 
 
 ## Overview
@@ -203,7 +203,7 @@ To use `superlib.url-like/path-of` and other functions, you require them as regu
 
 ``` clojure
 (ns myapp
-  (:require [superlib.url-like] :refer [host-of scheme-of]))
+  (:require [superlib.url-like :refer [host-of port-of]]))
 
 (host-of (java.net.URI. "https://twitter.com/cnn/"))
 ```
