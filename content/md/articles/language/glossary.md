@@ -443,7 +443,7 @@ choosing/devising. It's in this way that you can *tag* a literal to be
 handled specially by the reader.
 
 For more info, see [the "Tagged Literals" section of the reader
-doc](http://clojure.org/reader).
+doc](https://clojure.org/reader).
 
 
 

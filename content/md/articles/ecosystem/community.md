@@ -53,7 +53,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## Courses
 
-  * See the list of [courses and training on clojure.org](https://www.clojure.org/community/training)
+  * See the list of [courses and training on clojure.org](https://clojure.org/community/training)
 
 ## User Groups
 

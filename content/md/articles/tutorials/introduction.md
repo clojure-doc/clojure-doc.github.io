@@ -121,7 +121,7 @@ example, a literal syntax for specifying regular expressions) that we
 will cover as we go along.
 
 Throughout this tutorial, we will liberally reference and lean on the
-marvelous [Clojure Cheatsheet](http://clojure.org/cheatsheet). Aside
+marvelous [Clojure Cheatsheet](https://clojure.org/cheatsheet). Aside
 from being a great organizational aide, it also handily includes links
 to the relevant [Clojuredocs](http://clojuredocs.org/) pages where you
 can find docs for and examples of the various Clojure functions.
@@ -648,7 +648,7 @@ m   ; ⇒ is still {:a 1 :b 2}
 s   ; ⇒ is still #{:a :b}
 ```
 
-See the [cheatsheet](http://clojure.org/cheatsheet) for much more
+See the [cheatsheet](https://clojure.org/cheatsheet) for much more
 you can do with these core data structures.
 
 
@@ -800,7 +800,7 @@ become clear as we continue.
 
 Clojure has most of the usual control structures you'd expect to find,
 for example: `if`, `and`, `or`, and `cond`.  You can find them listed
-in the [Cheatsheet](http://clojure.org/cheatsheet).
+in the [Cheatsheet](https://clojure.org/cheatsheet).
 
 Note that they are all *expressions* in Clojure, and evaluate to
 something.  So, for example, this `if` expression:

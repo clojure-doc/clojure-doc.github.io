@@ -1065,7 +1065,7 @@ _This section will need revisiting when Virtual Threads become more common._
 
 ## Reducers (Clojure 1.5+)
 
-* The [original blog post introducing reducers](https://www.clojure.org/news/2012/05/08/reducers)
+* The [original blog post introducing reducers](https://clojure.org/news/2012/05/08/reducers)
 * The [official `clojure.org` reference on reducers](https://clojure.org/reference/reducers)
 * The [official API docs for the `clojure.core.reducers` namespace](https://clojure.github.io/clojure/clojure.core-api.html#clojure.core.reducers)
 

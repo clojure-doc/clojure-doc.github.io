@@ -459,7 +459,7 @@ follow the principle of least surprise. In real world projects, however, the dif
 algorithmic complexity and other runtime characteristics of various collection types often cannot
 be ignored. Keep this in mind.
 
-You can find more information in the [clojure.core Overview](/articles/language/core_overview/) and [Clojure cheatsheet](http://clojure.org/cheatsheet).
+You can find more information in the [clojure.core Overview](/articles/language/core_overview/) and [Clojure cheatsheet](https://clojure.org/cheatsheet).
 
 
 ### count
@@ -1026,11 +1026,11 @@ returns falsey. This is because if the item is present in the set it is returned
 ```
 
 In order to do more complicated sorting, we can create our own `Comparator`. There's a wealth of information
-about comparators in the [clojure.org comparators guide](https://www.clojure.org/guides/comparators), but for now, one possible comparator is a 
+about comparators in the [clojure.org comparators guide](https://clojure.org/guides/comparators), but for now, one possible comparator is a
 function that takes two arguments and returns a negative, positive, or zero integer when the first argument is 'less than', 'greater than', or equal to (respectively) the second argument.
 
 ```klipse-clojure
-(letfn [(strings-before-numbers 
+(letfn [(strings-before-numbers
           [x y]
           (cond
             ; string is 'less than' number
@@ -1043,7 +1043,7 @@ function that takes two arguments and returns a negative, positive, or zero inte
 ;; ⇒ (nil "abc" 0.0 1)
 ```
 
-A common way to reverse a sort is to `comp` the `-` function with a comparator that returns a number, which effectively 
+A common way to reverse a sort is to `comp` the `-` function with a comparator that returns a number, which effectively
 swaps 'greater than' and 'less than' returns.
 
 ```klipse-clojure
