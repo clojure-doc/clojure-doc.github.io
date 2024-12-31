@@ -112,7 +112,7 @@ call a number of functions on it, including:
     mkdir         Create this directory on disk.
 
 To read about more available methods, see [the `java.io.File`
-docs](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html).
+docs](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html).
 
 
 ### Get a list of the files and dirs in a given directory

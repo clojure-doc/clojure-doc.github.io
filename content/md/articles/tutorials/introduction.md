@@ -661,7 +661,7 @@ expressions: `#"regex here"`. Clojure uses the same regular expression
 syntax as Java, which is nearly the same as what Perl 5 (and Python,
 and Ruby) uses. You can read more about the specifics in the Java
 [java.util.regex Pattern
-docs](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html).
+docs](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/regex/Pattern.html).
 
 Clojure provides a number of functions for working with strings, and a
 number of those can make use of regexes. See the next section for some
