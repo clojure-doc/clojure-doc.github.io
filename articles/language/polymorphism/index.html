@@ -63,7 +63,7 @@
     </div>
     
     <p>This guide covers:</p><ul><li>What are polymorphic functions</li><li>Type-based polymorphism with protocols</li><li>Ad-hoc polymorphism with multimethods</li><li>How to create your own data types that behave like core Clojure data types</li></ul><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>
-(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11.</p><h2 id="overview">Overview</h2><p>According to Wikipedia,</p><blockquote><p>In computer science, polymorphism is a programming language feature that allows values of different data types to be handled using a uniform interface.</p></blockquote><p>Polymorphism is not at all unique to object-oriented programming languages. Clojure has excellent support for
+(including images &amp; stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.12.</p><h2 id="overview">Overview</h2><p>According to Wikipedia,</p><blockquote><p>In computer science, polymorphism is a programming language feature that allows values of different data types to be handled using a uniform interface.</p></blockquote><p>Polymorphism is not at all unique to object-oriented programming languages. Clojure has excellent support for
 polymorphism.</p><p>For example, when a function can be used on multiple data types or behave differently based on the arguments
 (often called <em>dispatch value</em>), that function is <em>polymorphic</em>. A simple example of such function is a function that
 serializes its input to JSON (or other format).</p><p>Ideally, developers would like to use the same function regardless of the input, and be able to extend
@@ -181,7 +181,7 @@ namespace that looks like this</p><pre><code class="clojure">(ns superlib.url-li
   (fragment-of [^URL input]
     (.getRef input)))
 </code></pre><p>To use <code>superlib.url-like/path-of</code> and other functions, you require them as regular functions:</p><pre><code class="clojure">(ns myapp
-  (:require [superlib.url-like] :refer [host-of scheme-of]))
+  (:require [superlib.url-like :refer [host-of port-of]]))
 
 (host-of (java.net.URI. "https://twitter.com/cnn/"))
 </code></pre><h3 id="extending-protocols-for-core-clojure-data-types">Extending Protocols For Core Clojure Data Types</h3><p>TBD</p><h3 id="protocols-and-custom-data-types">Protocols and Custom Data Types</h3><p>TBD: cover extend-type, extend</p><h3 id="partial-implementation-of-protocols">Partial Implementation of Protocols</h3><p>With protocols, it is possible to only implement certain functions for certain types.</p><h2 id="ad-hoc-polymorphism-with-multimethods">Ad-hoc Polymorphism with Multimethods</h2><h3 id="first-example-shapes">First Example: Shapes</h3><p>Lets start with a simple problem definition. We have 3 shapes: square, circle and triangle, and
