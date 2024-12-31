@@ -19,7 +19,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.11.
+This guide covers Clojure 1.12.
 
 
 ## Overview
@@ -127,11 +127,33 @@ It is possible to use fully qualified names (e.g. `java.util.Date`) or short nam
 (Date.)  ; ⇒ #inst "2012-10-09T21:24:27.229-00:00"
 ```
 
+As of Clojure 1.12, you can use the following syntax:
+
+``` clojure
+(java.util.Date/new)
+
+;; or, if you have imported the class:
+
+(Date/new)
+```
+
 An example with constructor arguments:
 
 ``` clojure
-(java.net.URI. "http://clojure.org")
-;;⇒ #object[java.net.URI 0x8bd076a "http://clojure.org"]
+(java.net.URI. "https://clojure.org")
+;;⇒ #object[java.net.URI 0x8bd076a "https://clojure.org"]
+
+;; or, in Clojure 1.12:
+
+(java.net.URI/new "https://clojure.org")
+```
+
+In Clojure 1.12, `SomeClass/new` is a "function value" and can be treated like
+a regular Clojure function:
+
+``` clojure
+(map (fn [f] (f "https://clojure.org")) [java.net.URI/new count clojure.string/upper-case])
+;;=> (#object[java.net.URI 0x7ec25216 "https://clojure.org"] 19 "HTTPS://CLOJURE.ORG")
 ```
 
 ## How to Invoke Java Methods
@@ -152,6 +174,14 @@ Just like with object instantiation, it is much more common to see an alternativ
   (.getTime d))  ; ⇒ 1349819873183
 ```
 
+In Clojure 1.12, `SomeClass/.methodName` is a "function value" and can be treated like
+a regular Clojure function:
+
+``` clojure
+;; assuming (import java.util.Date):
+(map Date/.getTime [(Date.) (Date/new) #inst "2024-12-30"])
+;;⇒ (1735603851861 1735603851861 1735516800000)
+```
 
 ### Static Methods
 
@@ -170,6 +200,13 @@ or (typically) the sugared version, `ClassName/methodName`:
 (Boolean/valueOf "true")   ; ⇒ true
 ```
 
+In Clojure 1.12, `SomeClass/.methodName` is a "function value" and can be treated like
+a regular Clojure function:
+
+``` clojure
+(map Boolean/valueOf ["true" "false" "what?"])
+;;⇒ (true false false)
+```
 
 ### Chained Calls With The Double Dot Form
 
@@ -195,13 +232,13 @@ can use the `doto` macro:
 
 (let [pt (Point. 0 0)]
   (doto pt
-    (.move  10 0)))
+    (.move 10 0)))
 ;;⇒ #object[java.awt.Point 0x1084ac45 "java.awt.Point[x=10,y=0]"]
 
 (let [pt (Point. 0 0)]
   (doto pt
-    (.move  10 0)
-    (.translate  0 10)))
+    (.move 10 0)
+    (.translate 0 10)))
 ;;⇒ #object[java.awt.Point 0x7bc6935c "java.awt.Point[x=10,y=10]"]
 ```
 
@@ -316,22 +353,25 @@ To obtain a class reference by its string name (fully qualified), use `Class/for
 JVM has what is called **primitive types** (numerics, chars, booleans) that are not "real" objects.
 In addition, array types have pretty obscure internal names.
 
-An array of `String`, has a name of `"[Ljava.lang.String;"`.
+An array of `String`, has an internal name of `"[Ljava.lang.String;"`.
 You can construct an array of `String` using `into-array`:
 
 ``` clojure
 (class (into-array String ["foo" "bar" "baz"]))
-;; ⇒ [Ljava.lang.String;
+;;=> java.lang.String/1 ; Clojure 1.12
+;; but in earlier versions of Clojure:
+;;⇒ [Ljava.lang.String;
 ```
 
-If you need to obtain a reference to
-an array of primitives, for example longs, pass `"[J"` to `Class/forName`. Below is the full table:
+In Clojure 1.12, you can `SomeClass/N` to get a class reference to an N-dimensional array of the class,
+but prior to 1.12, you had to use `Class/forName` and the internal name of the array type:
 
 <table class="table-striped table-bordered table">
   <thead>
     <tr>
       <th>Internal JVM class name</th>
       <th>Array of ? (type)</th>
+      <th>Clojure 1.12 type</th>
     </tr>
   </thead>
 
@@ -339,34 +379,41 @@ an array of primitives, for example longs, pass `"[J"` to `Class/forName`. Below
     <tr>
       <td><pre>"[S"</pre></td>
       <td>short</td>
+      <td>short/1</td>
     </tr>
     <tr>
       <td><pre>"[I"</pre></td>
       <td>integer</td>
+      <td>integer/1</td>
     </tr>
     <tr>
       <td><pre>"[J"</pre></td>
       <td>long</td>
+      <td>long/1</td>
     </tr>
     <tr>
       <td><pre>"[F"</pre></td>
       <td>float</td>
+      <td>float/1</td>
     </tr>
     <tr>
       <td><pre>"[D"</pre></td>
       <td>double</td>
+      <td>double/1</td>
     </tr>
     <tr>
       <td><pre>"[B"</pre></td>
       <td>byte</td>
+      <td>byte/1</td>
     </tr>
     <tr>
       <td><pre>"[C"</pre></td>
       <td>char</td>
+      <td>char/1</td>
     </tr>
     <tr>
       <td><pre>"[Z"</pre></td>
-      <td>boolean</td>
+      <td>boolean/1</td>
     </tr>
   </tbody>
 </table>
@@ -459,6 +506,26 @@ the interface:
   (instance? java.io.FileFilter ff))  ; ⇒ true
 ```
 
+In Clojure 1.12, a Java interface that is declared `@FunctionalInterface` can
+be inferred from from the context and can be satisfied with a regular Clojure
+function. `java.io.FilenameFilter` is such an interface, so you can pass a
+Clojure function directly to a Java method that expects a `FilenameFilter`:
+
+``` clojure
+(seq (.list (java.io.File. ".") #(str/starts-with? %2 ".")))
+;;⇒ (".cpcache" ".portal" ".clj-kondo" ".lsp" ".calva")
+```
+
+In earlier versions of Clojure, you would have to use `reify` for that:
+
+``` clojure
+(seq (.list (java.io.File. ".")
+            (reify java.io.FilenameFilter
+              (accept [this dir name]
+                (str/starts-with? name ".")))))
+;;⇒ (".cpcache" ".portal" ".clj-kondo" ".lsp" ".calva")
+```
+
 ### reify, Parameter Destructuring and Varargs
 
 `reify` does not support destructuring or variadic arguments in method signatures. You will not always get an error from the compiler if you try to use them, but the resulting code will not work the way you expect.
@@ -496,7 +563,7 @@ as regular Java objects:
 methods delegate to Clojure functions. The same example, rewritten with delegation:
 
 ``` clojure
-user> (import java.io.File)
+(import java.io.File)
 
 ;; a file filter implementation that keeps only .edn files
 (let [f  (fn [_dir name]
@@ -509,12 +576,20 @@ user> (import java.io.File)
 ;; ⇒ [#object[java.io.File 0x5d512ddb "/home/sean/oss/clojure-doc.github.io/deps.edn"]]
 ```
 
-We have used `clojure.string/ends-with?` so that no type hints
-are required: unlike in the "inline" implementation (above),
-the Clojure compiler would not be able to infer the types of
-`_dir` and `name` parameters in the function that does the filtering.
-When methods are implemented "inline", types can be inferred from
-method signatures in the interface.
+As above, in Clojure 1.12, because `java.io.FilenameFilter` is a functional interface, you can pass a Clojure function directly:
+
+``` clojure
+(import java.io.File)
+
+;; a file filter implementation that keeps only .edn files
+(let [^java.io.FilenameFilter
+      f  (fn [_dir name]
+           (str/ends-with? name ".edn"))
+    dir  (File. "/home/sean/oss/clojure-doc.github.io/")]
+  (into [] (.listFiles dir f)))
+```
+
+> Note: we need the type hint on `f` here because `.listFiles` has multiple overloads for the same arity, and we need to distinguish a `FilenameFilter` from a `FileFilter`.
 
 
 ## Extending Java Classes With proxy
@@ -959,3 +1034,4 @@ TBD: [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#ho
 Michael Klishin <michael@defprotocol.org> (original author)
 Lee Hinman <lee@writequit.org>
 gsnewmark <gsnewmark@meta.ua>
+Sean Corfield <sean@corfield.org> (updated to Clojure 1.12)
