@@ -116,7 +116,10 @@ to see this:</p><pre><code class="clojure">(java.util.Date.)     ; ⇒ #inst "20
 </code></pre><p>In Clojure 1.12, <code>SomeClass/new</code> is a "function value" and can be treated like
 a regular Clojure function:</p><pre><code class="clojure">(map (fn [f] (f "https://clojure.org")) [java.net.URI/new count clojure.string/upper-case])
 ;;=&gt; (#object[java.net.URI 0x7ec25216 "https://clojure.org"] 19 "HTTPS://CLOJURE.ORG")
-</code></pre><h2 id="how-to-invoke-java-methods">How to Invoke Java Methods</h2><h3 id="instance-methods">Instance Methods</h3><p>Instance methods are invoked using the <code>.</code> special form:</p><pre><code class="clojure">(let [d (java.util.Date.)]
+</code></pre><h2 id="how-to-invoke-java-methods">How to Invoke Java Methods</h2><p>This guide does not cover type hints. See the official
+<a href="https://clojure.org/reference/java_interop#typehints">Java interop type hints</a>
+and <a href="https://clojure.org/reference/java_interop#paramtags">param-tags reference</a>
+documentation for more details (since this area changed significantly in Clojure 1.12).</p><h3 id="instance-methods">Instance Methods</h3><p>Instance methods are invoked using the <code>.</code> special form:</p><pre><code class="clojure">(let [d (java.util.Date.)]
   (. d getTime))  ; ⇒ 1349819873183
 </code></pre><p>Just like with object instantiation, it is much more common to see an alternative version:</p><pre><code class="clojure">(let [d (java.util.Date.)]
   (.getTime d))  ; ⇒ 1349819873183
@@ -132,7 +135,7 @@ a regular Clojure function:</p><pre><code class="clojure">;; assuming (import ja
 </code></pre><p>In Clojure 1.12, <code>SomeClass/.methodName</code> is a "function value" and can be treated like
 a regular Clojure function:</p><pre><code class="clojure">(map Boolean/valueOf ["true" "false" "what?"])
 ;;⇒ (true false false)
-</code></pre><h3 id="chained-calls-with-the-double-dot-form">Chained Calls With The Double Dot Form</h3><p>It is possible to chain method calls using the <code>..</code> special form:</p><pre><code class="clojure">(.. (java.util.Date.) getTime toString)  ; ⇒ "1693344712616"
+</code></pre><blockquote><p>Note: Clojure 1.11 introduced <code>parse-boolean</code> but it is somewhat stricter than <code>Boolean/valueOf</code> and will return <code>nil</code> for strings it does not recognize, including <code>"TRUE"</code> and <code>"FALSE"</code> (which <code>Boolean/valueOf</code> does recognize).</p></blockquote><h3 id="chained-calls-with-the-double-dot-form">Chained Calls With The Double Dot Form</h3><p>It is possible to chain method calls using the <code>..</code> special form:</p><pre><code class="clojure">(.. (java.util.Date.) getTime toString)  ; ⇒ "1693344712616"
 </code></pre><h3 id="multiple-calls-on-the-same-object">Multiple Calls On the Same Object</h3><p>If you need to call several methods on the same (mutable) object, you
 can use the <code>doto</code> macro:</p><pre><code class="clojure">(doto (java.util.Stack.)
   (.push 42)
@@ -203,7 +206,7 @@ You can construct an array of <code>String</code> using <code>into-array</code>:
 ;; but in earlier versions of Clojure:
 ;;⇒ [Ljava.lang.String;
 </code></pre><p>In Clojure 1.12, you can <code>SomeClass/N</code> to get a class reference to an N-dimensional array of the class,
-but prior to 1.12, you had to use <code>Class/forName</code> and the internal name of the array type:</p><table class="table-striped table-bordered table"><thead><tr><th>Internal JVM class name</th><th>Array of ? (type)</th><th>Clojure 1.12 type</th></tr></thead><tbody><tr><td><pre>"[S"</pre></td><td>short</td><td>short/1</td></tr><tr><td><pre>"[I"</pre></td><td>integer</td><td>integer/1</td></tr><tr><td><pre>"[J"</pre></td><td>long</td><td>long/1</td></tr><tr><td><pre>"[F"</pre></td><td>float</td><td>float/1</td></tr><tr><td><pre>"[D"</pre></td><td>double</td><td>double/1</td></tr><tr><td><pre>"[B"</pre></td><td>byte</td><td>byte/1</td></tr><tr><td><pre>"[C"</pre></td><td>char</td><td>char/1</td></tr><tr><td><pre>"[Z"</pre></td><td>boolean/1</td></tr></tbody></table><p>For convenience, Clojure has <code>*-array</code> functions for each of the above
+but prior to 1.12, you had to use <code>Class/forName</code> and the internal name of the array type:</p><table class="table-striped table-bordered table"><thead><tr><th>Internal JVM class name</th><th>Array of ? (type)</th><th>Clojure 1.12 type</th></tr></thead><tbody><tr><td><pre>"[S"</pre></td><td>short</td><td>short/1</td></tr><tr><td><pre>"[I"</pre></td><td>integer</td><td>integer/1</td></tr><tr><td><pre>"[J"</pre></td><td>long</td><td>long/1</td></tr><tr><td><pre>"[F"</pre></td><td>float</td><td>float/1</td></tr><tr><td><pre>"[D"</pre></td><td>double</td><td>double/1</td></tr><tr><td><pre>"[B"</pre></td><td>byte</td><td>byte/1</td></tr><tr><td><pre>"[C"</pre></td><td>char</td><td>char/1</td></tr><tr><td><pre>"[Z"</pre></td><td>boolean</td><td>boolean/1</td></tr></tbody></table><p>For convenience, Clojure has <code>*-array</code> functions for each of the above
 types that help you create an array of primitive values:</p><pre><code class="clojure">user=&gt; (char-array [\h \e \l \l \o])
 #object["[C" 0x7df60067 "[C@7df60067"]
 user=&gt; (apply str *1)

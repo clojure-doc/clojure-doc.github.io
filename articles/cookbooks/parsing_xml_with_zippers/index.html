@@ -71,7 +71,7 @@ Github.What Version of Clojure Does This Guide Cover?">
     <p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.11 and Leiningen 2.x.</p><h2 id="overview">Overview</h2><p>Try as you might, XML is difficult to avoid. This is particularly true
+Github</a>.</p><h2 id="what-version-of-clojure-does-this-guide-cover">What Version of Clojure Does This Guide Cover?</h2><p>This guide covers Clojure 1.12 and Leiningen 2.x.</p><h2 id="overview">Overview</h2><p>Try as you might, XML is difficult to avoid. This is particularly true
 in the Java ecosystem. This guide will show you how to parse XML with
 the minimum amount of pain using the excellent tools available in
 Clojure.</p><h2 id="parsing-nzb-files">Parsing NZB files</h2><p>For the purpose of the tutorial I have chosen a simple and fairly well
@@ -242,14 +242,14 @@ currently <code>OutputStream</code>, <code>File</code>, <code>URI</code>, <code>
 <a href="https://clojure.github.io/clojure/clojure.java.io-api.html">clojure.java.io</a>
 docs for details.</p><p>Now let's fill in the <code>file-&gt;map</code> function:</p><pre><code class="clojure">(defn segment-&gt;map
   [seg]
-  {:bytes  (Long/valueOf (zip-xml/attr seg :bytes))
-   :number (Integer/valueOf (zip-xml/attr seg :number))
+  {:bytes  (parse-long (zip-xml/attr seg :bytes))
+   :number (parse-long (zip-xml/attr seg :number))
    :id     (zip-xml/xml1-&gt; seg zip-xml/text)})
 
 (defn file-&gt;map
   [file]
   {:poster   (zip-xml/attr file :poster)
-   :date     (Long/valueOf (zip-xml/attr file :date))
+   :date     (parse-long (zip-xml/attr file :date))
    :subject  (zip-xml/attr file :subject)
    :groups   (vec (zip-xml/xml-&gt; file :groups :group zip-xml/text))
    :segments (mapv segment-&gt;map
@@ -338,11 +338,11 @@ achieve this using our general function:</p><pre><code class="clojure">(zip-xml/
                :file
                :segments
                :segment
-               (attr-fn :number &gt; 75 #(Long/valueOf %))
+               (attr-fn :number &gt; 75 parse-long)
                zip-xml/text)
 </code></pre><p>Let's provide a helper for this to make the syntax clearer:</p><pre><code class="clojure">(defn attr&gt;
   [attrname val]
-  (attr-fn attrname &gt; val #(Long/valueOf %)))
+  (attr-fn attrname &gt; val parse-long))
 
 (zip-xml/xml-&gt; root
                :file
