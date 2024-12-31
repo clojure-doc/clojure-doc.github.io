@@ -77,13 +77,13 @@ functions, standard and contrib libraries, and parts of the JDK via
 interoperability.</p><p>This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
 Attribution 3.0 Unported License</a> (including images &amp;
 stylesheets). The source is available <a href="https://github.com/clojure-doc/clojure-doc.github.io">on
-Github</a>.</p><h2 id="overview">Overview</h2><ul><li>Strings are <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">plain Java
+Github</a>.</p><h2 id="overview">Overview</h2><ul><li>Strings are <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html">plain Java
 strings</a>.
 You can use anything which operates on them.</li><li>Java strings are immutable, so they're convenient to use in Clojure.</li><li>You can't add metadata to Java strings.</li><li>Clojure supports some convenient notations:</li></ul><pre><code>    "foo"    java.lang.String
     #"\d"    java.util.regex.Pattern (in this case, one which matches a single digit)
     \f       java.lang.Character (in this case, the letter 'f')
 </code></pre><ul><li><strong>Caveat:</strong> Human brains and electronic computers are rather different
-devices. So Java strings (sequences of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html#unicode">UTF-16
+devices. So Java strings (sequences of <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Character.html#unicode">UTF-16
 characters</a>)
 don't always map nicely to user-perceived characters. For example, a
 single Unicode "code point" doesn't necessarily equal a user-perceived
@@ -179,7 +179,7 @@ and UUIDs:</p><pre><code class="clojure">(parse-long "2")                       
   (read-string "#\"[abc]\""))
 ;=&gt; #"[abc]"
 </code></pre><h3 id="parsing-complex-strings">Parsing complex strings</h3><h4 id="regexes">Regexes</h4><p>Regexes offer a boost in string-matching power. You can express ideas
-like repetition, alternatives, etc.</p><p><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html">Regex
+like repetition, alternatives, etc.</p><p><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/regex/Pattern.html">Regex
 reference.</a></p><p><strong>Groups:</strong> Regex groups are useful, when we want to match more than
 one substring. (Or refer to matches later.) In the regex <code>#"(group-1) (group-2)"</code>, the 0th group is the whole match. The 1st group is
 started by the left-most <code>(</code>, the 2nd group is started by the
@@ -291,7 +291,7 @@ nested functions</em>, and get the resulting string at the end.</p><pre><code cl
     (print "...")))
 ;=&gt; "We have shrimp-kabobs, shrimp creole, shrimp gumbo..."
 </code></pre><h4 id="format-strings">Format strings</h4><p>Java's templating mini-language helps you build many strings
-conveniently. <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html">Reference.</a></p><pre><code class="clojure">;; %s is most commonly used to print args. Escape %'s with %%.
+conveniently. <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html">Reference.</a></p><pre><code class="clojure">;; %s is most commonly used to print args. Escape %'s with %%.
 (format "%s enjoyed %s%%." "Mozambique" 19.8) ;=&gt; "Mozambique enjoyed 19.8%."
 
 ;; The 1$ prefix allows you to keep referring to the first arg.

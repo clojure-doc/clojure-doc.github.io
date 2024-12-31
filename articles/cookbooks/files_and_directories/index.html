@@ -109,7 +109,7 @@ getName       The basename of the file.
 getParent     The dirname of the file.
 getPath       Filename with directory.
 mkdir         Create this directory on disk.
-</code></pre><p>To read about more available methods, see <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html">the <code>java.io.File</code>
+</code></pre><p>To read about more available methods, see <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html">the <code>java.io.File</code>
 docs</a>.</p><h3 id="get-a-list-of-the-files-and-dirs-in-a-given-directory">Get a list of the files and dirs in a given directory</h3><p>As <code>File</code> objects:</p><pre><code class="clojure">(.listFiles (io/file "path/to/some-dir"))
 </code></pre><p>Same, but just the <em>names</em> (strings), not File objects:</p><pre><code class="clojure">(.list (io/file "path/to/some-dir"))
 </code></pre><p>The results of those calls are seqable.</p><h2 id="see-also">See also</h2><ul><li><a href="https://github.com/clj-commons/fs">https://github.com/clj-commons/fs</a></li><li>the I/O section of the <a href="https://clojure.org/api/cheatsheet">cheatsheet</a></li></ul>

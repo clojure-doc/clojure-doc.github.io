@@ -201,7 +201,7 @@ make sense in the context of maps and other associative data structures (for exa
 collection implementation details and won't be the same for vectors and lists.</p><p>In general, Clojure design emphasizes that operations on collections and sequences should be uniform and
 follow the principle of least surprise. In real world projects, however, the difference between
 algorithmic complexity and other runtime characteristics of various collection types often cannot
-be ignored. Keep this in mind.</p><p>You can find more information in the <a href="/articles/language/core_overview/">clojure.core Overview</a> and <a href="http://clojure.org/cheatsheet">Clojure cheatsheet</a>.</p><h3 id="count">count</h3><p>Returns a count of the number of items in a collection. An argument of nil returns 0.</p><pre><code class="klipse-clojure nohighlight">(count "Hello")
+be ignored. Keep this in mind.</p><p>You can find more information in the <a href="/articles/language/core_overview/">clojure.core Overview</a> and <a href="https://clojure.org/cheatsheet">Clojure cheatsheet</a>.</p><h3 id="count">count</h3><p>Returns a count of the number of items in a collection. An argument of nil returns 0.</p><pre><code class="klipse-clojure nohighlight">(count "Hello")
 ;; ⇒ 5
 </code></pre><pre><code class="klipse-clojure nohighlight">(count [1 2 3 4 5 6 7])
 ;; ⇒ 7
@@ -416,8 +416,8 @@ returns falsey. This is because if the item is present in the set it is returned
 ;; Execution error (ClassCastException)...
 ;; class java.lang.Double cannot be cast to class java.lang.String
 </code></pre><p>In order to do more complicated sorting, we can create our own <code>Comparator</code>. There's a wealth of information
-about comparators in the <a href="https://www.clojure.org/guides/comparators">clojure.org comparators guide</a>, but for now, one possible comparator is a
-function that takes two arguments and returns a negative, positive, or zero integer when the first argument is 'less than', 'greater than', or equal to (respectively) the second argument.</p><pre><code class="klipse-clojure nohighlight">(letfn [(strings-before-numbers 
+about comparators in the <a href="https://clojure.org/guides/comparators">clojure.org comparators guide</a>, but for now, one possible comparator is a
+function that takes two arguments and returns a negative, positive, or zero integer when the first argument is 'less than', 'greater than', or equal to (respectively) the second argument.</p><pre><code class="klipse-clojure nohighlight">(letfn [(strings-before-numbers
           [x y]
           (cond
             ; string is 'less than' number
