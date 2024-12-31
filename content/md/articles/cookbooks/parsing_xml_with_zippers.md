@@ -11,7 +11,7 @@ Github](https://github.com/clojure-doc/clojure-doc.github.io).
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.11 and Leiningen 2.x.
+This guide covers Clojure 1.12 and Leiningen 2.x.
 
 
 ## Overview
@@ -271,14 +271,14 @@ Now let's fill in the `file->map` function:
 ```clojure
 (defn segment->map
   [seg]
-  {:bytes  (Long/valueOf (zip-xml/attr seg :bytes))
-   :number (Integer/valueOf (zip-xml/attr seg :number))
+  {:bytes  (parse-long (zip-xml/attr seg :bytes))
+   :number (parse-long (zip-xml/attr seg :number))
    :id     (zip-xml/xml1-> seg zip-xml/text)})
 
 (defn file->map
   [file]
   {:poster   (zip-xml/attr file :poster)
-   :date     (Long/valueOf (zip-xml/attr file :date))
+   :date     (parse-long (zip-xml/attr file :date))
    :subject  (zip-xml/attr file :subject)
    :groups   (vec (zip-xml/xml-> file :groups :group zip-xml/text))
    :segments (mapv segment->map
@@ -433,7 +433,7 @@ achieve this using our general function:
                :file
                :segments
                :segment
-               (attr-fn :number > 75 #(Long/valueOf %))
+               (attr-fn :number > 75 parse-long)
                zip-xml/text)
 ```
 
@@ -442,7 +442,7 @@ Let's provide a helper for this to make the syntax clearer:
 ```clojure
 (defn attr>
   [attrname val]
-  (attr-fn attrname > val #(Long/valueOf %)))
+  (attr-fn attrname > val parse-long))
 
 (zip-xml/xml-> root
                :file

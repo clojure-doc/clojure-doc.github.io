@@ -158,6 +158,11 @@ a regular Clojure function:
 
 ## How to Invoke Java Methods
 
+This guide does not cover type hints. See the official
+[Java interop type hints](https://clojure.org/reference/java_interop#typehints)
+and [param-tags reference](https://clojure.org/reference/java_interop#paramtags)
+documentation for more details (since this area changed significantly in Clojure 1.12).
+
 ### Instance Methods
 
 Instance methods are invoked using the `.` special form:
@@ -207,6 +212,8 @@ a regular Clojure function:
 (map Boolean/valueOf ["true" "false" "what?"])
 ;;⇒ (true false false)
 ```
+
+> Note: Clojure 1.11 introduced `parse-boolean` but it is somewhat stricter than `Boolean/valueOf` and will return `nil` for strings it does not recognize, including `"TRUE"` and `"FALSE"` (which `Boolean/valueOf` does recognize).
 
 ### Chained Calls With The Double Dot Form
 
@@ -413,6 +420,7 @@ but prior to 1.12, you had to use `Class/forName` and the internal name of the a
     </tr>
     <tr>
       <td><pre>"[Z"</pre></td>
+      <td>boolean</td>
       <td>boolean/1</td>
     </tr>
   </tbody>
