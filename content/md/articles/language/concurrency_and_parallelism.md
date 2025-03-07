@@ -18,7 +18,7 @@ This work is licensed under a <a rel="license" href="https://creativecommons.org
 
 ## What Version of Clojure Does This Guide Cover?
 
-This guide covers Clojure 1.11.
+This guide covers Clojure 1.12.
 
 
 ## Before You Read This Guide
@@ -767,8 +767,8 @@ the example to spin up 3 threads and alter the var's value from them:
 ;; outputs "*url* is now https://en.wikipedia.org/wiki/Margarita"
 ;; ⇒ nil
 (.start (Thread. (fn []
-          (binding [*url* "https://en.wikipedia.org/wiki/Cointreau"]
-            (println (format "*url* is now %s" *url*))))))
+                   (binding [*url* "https://en.wikipedia.org/wiki/Cointreau"]
+                     (println (format "*url* is now %s" *url*))))))
 ;; outputs "*url* is now https://en.wikipedia.org/wiki/Cointreau"
 ;; ⇒ nil
 (.start (Thread. (fn []

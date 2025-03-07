@@ -205,7 +205,7 @@ or (typically) the sugared version, `ClassName/methodName`:
 (Boolean/valueOf "true")   ; ⇒ true
 ```
 
-In Clojure 1.12, `SomeClass/.methodName` is a "function value" and can be treated like
+In Clojure 1.12, `SomeClass/staticMethodName` is a "function value" and can be treated like
 a regular Clojure function:
 
 ``` clojure
