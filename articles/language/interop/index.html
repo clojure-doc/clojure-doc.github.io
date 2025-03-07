@@ -132,7 +132,7 @@ a regular Clojure function:</p><pre><code class="clojure">;; assuming (import ja
 
 (Boolean/valueOf "false")  ; ⇒ false
 (Boolean/valueOf "true")   ; ⇒ true
-</code></pre><p>In Clojure 1.12, <code>SomeClass/.methodName</code> is a "function value" and can be treated like
+</code></pre><p>In Clojure 1.12, <code>SomeClass/staticMethodName</code> is a "function value" and can be treated like
 a regular Clojure function:</p><pre><code class="clojure">(map Boolean/valueOf ["true" "false" "what?"])
 ;;⇒ (true false false)
 </code></pre><blockquote><p>Note: Clojure 1.11 introduced <code>parse-boolean</code> but it is somewhat stricter than <code>Boolean/valueOf</code> and will return <code>nil</code> for strings it does not recognize, including <code>"TRUE"</code> and <code>"FALSE"</code> (which <code>Boolean/valueOf</code> does recognize).</p></blockquote><h3 id="chained-calls-with-the-double-dot-form">Chained Calls With The Double Dot Form</h3><p>It is possible to chain method calls using the <code>..</code> special form:</p><pre><code class="clojure">(.. (java.util.Date.) getTime toString)  ; ⇒ "1693344712616"
@@ -751,7 +751,7 @@ Sean Corfield <a href="mailto:sean@corfield.org">sean@corfield.org</a> (updated 
             </div>
         </div>
     </div>
-    <footer>Copyright &copy; 2024 Multiple Authors
+    <footer>Copyright &copy; 2025 Multiple Authors
         <p style="text-align: center;">Powered by <a href="https://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
