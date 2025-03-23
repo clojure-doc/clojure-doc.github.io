@@ -954,7 +954,7 @@ single value.
 ```
 
 ```klipse-clojure
-(filter #(if (< (count %) 5) %) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
+(filter #(< (count %) 5) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
 ;; ⇒ ("Paul" "Rudd")
 ```
 
