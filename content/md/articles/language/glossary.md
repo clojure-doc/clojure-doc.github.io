@@ -99,7 +99,7 @@ to bytecode, and then execute the bytecode. There are some exceptions to this
 process, such as special forms, or some expressions that the REPL interprets
 directly instead of compiling and executing.
 
-See [the official evalation reference](https://clojure.org/reference/evaluation)
+See [the official evaluation reference](https://clojure.org/reference/evaluation)
 on clojure.org for more details.
 
 
