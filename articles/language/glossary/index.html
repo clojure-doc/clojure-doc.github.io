@@ -70,7 +70,7 @@ written to take a variable number of args, it's referred to as
 <a href="#variadic">variadic</a>.</p><p>Functions can have multiple arity (for example, a function might have
 2 different bodies: one for when 2 args are passed, and another when 3
 args are passed).</p><h3 id="binding-form">binding-form</h3><p>Could mean one of two things:</p><ol><li><p>the expression you're binding to in a
-<a href="#let_binding">let-binding</a>. It might be a simple name, or it
+<a href="#let-binding">let-binding</a>. It might be a simple name, or it
 might be a data structure used for
 <a href="#destructuring">destructuring</a>.</p></li><li><p>Clojure provides the <code>binding</code> macro, used for setting the
 thread-local value of a dynamic var. The whole expression (form)
@@ -79,7 +79,7 @@ part of the Java standard class library. May include jar files.</p><h3 id="compa
 depending whether the first arg is less than, equal to or greater than
 the second.  The stock comparator that Clojure.core comes with is
 <code>compare</code>.</p><h3 id="coordinates">coordinates</h3><p>The "group-id/artifact-id version-string" identifier used in your
-project.clj to indicate a particular dependency.</p><p>See also <a href="#libspec">libspec</a>.</p><h3 id="destructuring">destructuring</h3><p>The handy trick used in a <a href="#let_binding">let-binding</a> to "unpack" the
+project.clj to indicate a particular dependency.</p><p>See also <a href="#libspec">libspec</a>.</p><h3 id="destructuring">destructuring</h3><p>The handy trick used in a <a href="#let-binding">let-binding</a> to "unpack" the
 values from a data structure into the locals you're going to use.  See
 also <a href="#binding-form">binding-form</a> and <a href="/articles/language/functions#destructuring-of-function-arguments">the destructuring section in
 the functions
@@ -92,7 +92,7 @@ function to call, and the rest of the elements being the arguments to that
 function. Functions that are macros are expanded, recursively.</p><p>In general, the next step is to compile this resolved and expanded expression
 to bytecode, and then execute the bytecode. There are some exceptions to this
 process, such as special forms, or some expressions that the REPL interprets
-directly instead of compiling and executing.</p><p>See <a href="https://clojure.org/reference/evaluation">the official evalation reference</a>
+directly instead of compiling and executing.</p><p>See <a href="https://clojure.org/reference/evaluation">the official evaluation reference</a>
 on clojure.org for more details.</p><h3 id="form">form</h3><p>A valid s-expression. For example: <code>(+ 1 1)</code> and <code>(defn foo [x] (* x x))</code>.</p><h3 id="head-retention">head retention</h3><p><a href="#lazy">Lazy</a> sequences are still <a href="#persistence">persistent</a>. If you
 make <em>another</em> data structure using one, the original lazy sequence
 will be kept around and not garbage-collected. If the lazy sequence in
@@ -110,7 +110,7 @@ only produce the side effect once. An idempotent function is
 different than a pure function, in that a pure function will
 produce no side effects.</p><h3 id="identity">identity</h3><p>A logical entity in your program that may change over time --- it may
 take on different states at different times, but it still means the
-same logical entity. Clojure uses <a href="#reference_types">reference types</a>
+same logical entity. Clojure uses <a href="#reference-types">reference types</a>
 to represent identities.  This is not to be confused with the <code>identity</code> function that just returns the argument given to it.</p><h3 id="implicit-do">implicit do</h3><p>The bodies of some expressions act like <code>do</code> in that you can include
 multiple expressions in them, and the expressions will be evaluated in
 the order they appear, with the resulting value of the body being the
@@ -123,7 +123,7 @@ all instances of the string "clojure" will reference the exact same
 instance, instead of having multiple string objects with the same value
 of "clojure".</p><h3 id="keyword">keyword</h3><p>A Clojure scalar data type whose literal syntax looks <code>:like</code> <code>:this</code>.
 They are like numbers and strings in that they evaluate to themselves,
-and are most often seen being used as keys in <a href="#map">hash-maps</a>.</p><p>See also <a href="#namespaced_keyword">namespaced keyword</a></p><p>The term is also used when talking about functions that take "keyword
+and are most often seen being used as keys in <a href="#map">hash-maps</a>.</p><p>See also <a href="#namespaced-keyword">namespaced keyword</a></p><p>The term is also used when talking about functions that take "keyword
 arguments", for example, something like: <code>(my-func :speed 42 :mass 2)</code>
 (as opposed to <code>(my-func {:speed 42 :mass 2})</code>).</p><h3 id="lazy">lazy</h3><p>Clojure can (and often does) create sequences for you that aren't
 fully computed. Upon casual inspection they <em>look</em> just like a regular
@@ -131,7 +131,7 @@ list, but particular values in them are only computed the moment you
 ask for them --- not sooner.</p><p>This has the added benefit that you can easily create infinite
 sequences that don't consume infinite memory.</p><p>Many of the built-in Clojure functions return lazy sequences.</p><p>See also <a href="#realize">realize</a>.</p><h3 id="let-binding">let-binding</h3><p>AKA, "binding vector", or just "bindings": in a <code>let</code> (and expressions
 that work like let, for example, <code>defn</code>, <code>loop</code>, <code>loop</code>, &amp; <code>fn</code>), the
-vector that comes first where you specify lexical bindings.</p><p>See also <a href="#binding_form">binding form</a></p><p><a name="libspec"></a></p><h3 id="libspec">libspec</h3><p>The docstring of <code>require</code> defines a libspec as:</p><blockquote><p>A libspec is a lib name or a vector containing a lib name followed by options expressed as sequential keywords and arguments.</p></blockquote><p>A lib name is in turn defined thus:</p><blockquote><p>Lib names are symbols and each lib is associated with a Clojure namespace and a Java package that share its name. A lib's name also locates its root directory within classpath using Java's package name to classpath-relative path mapping.</p></blockquote><p>Examples of libspecs:</p><pre><code class="clojure">    clojure.string
+vector that comes first where you specify lexical bindings.</p><p>See also <a href="#binding-form">binding form</a></p><p><a name="libspec"></a></p><h3 id="libspec">libspec</h3><p>The docstring of <code>require</code> defines a libspec as:</p><blockquote><p>A libspec is a lib name or a vector containing a lib name followed by options expressed as sequential keywords and arguments.</p></blockquote><p>A lib name is in turn defined thus:</p><blockquote><p>Lib names are symbols and each lib is associated with a Clojure namespace and a Java package that share its name. A lib's name also locates its root directory within classpath using Java's package name to classpath-relative path mapping.</p></blockquote><p>Examples of libspecs:</p><pre><code class="clojure">    clojure.string
     [clojure.string :as str]
     [clojure.string :refer [join split]]
     [clojure.string :as-alias s] ;; :as-alias is new in Clojure 1.11
@@ -231,7 +231,7 @@ discarded at runtime. In Clojure, this discarding is referred to as
 type erasure.</p><h3 id="value">value</h3><p>An immutable object, such as the number 1, the character <code>\a</code>, the
 string "hello", or the vector <code>[1 2 3]</code>. In Clojure, all scalars and
 built-in core data structures are values.</p><h3 id="variadic">variadic</h3><p>A function that can take a variable number of arguments.
-See also <a href="#rest_args">rest args</a>.</p>
+See also <a href="#rest-args">rest args</a>.</p>
 
     <div id="prev-next">
         

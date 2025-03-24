@@ -245,9 +245,7 @@ index of a vector or for the value in a set. If the key is not present,
 </code></pre><pre><code class="klipse-clojure nohighlight">;; in a set, returns the value itself if present
 (get #{1 10 100 2 20 200} 1)
 ;; ⇒ 1
-
-```klipse-clojure
-;; returns nil if key is not present
+</code></pre><pre><code class="klipse-clojure nohighlight">;; returns nil if key is not present
 (get {:a 1 :b 2} :c)
 ;; ⇒ nil
 </code></pre><pre><code class="klipse-clojure nohighlight">;; vector does not have an _index_ of 4. nil is returned
@@ -389,7 +387,7 @@ single value.</p><pre><code class="klipse-clojure nohighlight">(def numbers
 ;; ⇒ (0 2 4 6 8)
 </code></pre><pre><code class="klipse-clojure nohighlight">(filterv even? (range 10))
 ;; ⇒ [0 2 4 6 8]
-</code></pre><pre><code class="klipse-clojure nohighlight">(filter #(if (&lt; (count %) 5) %) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
+</code></pre><pre><code class="klipse-clojure nohighlight">(filter #(&lt; (count %) 5) ["Paul" "Celery" "Computer" "Rudd" "Tayne"])
 ;; ⇒ ("Paul" "Rudd")
 </code></pre><p>When using sets with <code>filter</code>, remember that if nil or false is in the set and in the collection, then the predicate will return itself: <code>nil</code>.</p><p>In this example, when nil and false are tested with the predicate, the predicate returns nil. This is because if the item is present in the set it is returned. This will cause that item to /not/ be included in the returned lazy-sequence.</p><pre><code class="klipse-clojure nohighlight">(filter #{:nothing :something nil}
        [:nothing :something :things :someone nil false :pigeons])
@@ -473,9 +471,7 @@ returned.</p><pre><code class="klipse-clojure nohighlight">(def family
 ;; ⇒ 7
 </code></pre><pre><code class="klipse-clojure nohighlight">(get-in family [:son :pants])
 ;; ⇒ nil
-
-```klipse-clojure
-(def locations
+</code></pre><pre><code class="klipse-clojure nohighlight">(def locations
   [:office :home :school])
 
 (get-in locations [1])
