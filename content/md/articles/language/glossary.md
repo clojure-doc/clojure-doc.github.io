@@ -27,7 +27,7 @@ args are passed).
 Could mean one of two things:
 
  1. the expression you're binding to in a
-    [let-binding](#let_binding). It might be a simple name, or it
+    [let-binding](#let-binding). It might be a simple name, or it
     might be a data structure used for
     [destructuring](#destructuring).
 
@@ -63,7 +63,7 @@ See also [libspec](#libspec).
 
 ### destructuring
 
-The handy trick used in a [let-binding](#let_binding) to "unpack" the
+The handy trick used in a [let-binding](#let-binding) to "unpack" the
 values from a data structure into the locals you're going to use.  See
 also [binding-form](#binding-form) and [the destructuring section in
 the functions
@@ -99,7 +99,7 @@ to bytecode, and then execute the bytecode. There are some exceptions to this
 process, such as special forms, or some expressions that the REPL interprets
 directly instead of compiling and executing.
 
-See [the official evalation reference](https://clojure.org/reference/evaluation)
+See [the official evaluation reference](https://clojure.org/reference/evaluation)
 on clojure.org for more details.
 
 
@@ -146,7 +146,7 @@ produce no side effects.
 
 A logical entity in your program that may change over time --- it may
 take on different states at different times, but it still means the
-same logical entity. Clojure uses [reference types](#reference_types)
+same logical entity. Clojure uses [reference types](#reference-types)
 to represent identities.  This is not to be confused with the `identity` function that just returns the argument given to it.
 
 
@@ -179,7 +179,7 @@ A Clojure scalar data type whose literal syntax looks `:like` `:this`.
 They are like numbers and strings in that they evaluate to themselves,
 and are most often seen being used as keys in [hash-maps](#map).
 
-See also [namespaced keyword](#namespaced_keyword)
+See also [namespaced keyword](#namespaced-keyword)
 
 The term is also used when talking about functions that take "keyword
 arguments", for example, something like: `(my-func :speed 42 :mass 2)`
@@ -209,7 +209,7 @@ AKA, "binding vector", or just "bindings": in a `let` (and expressions
 that work like let, for example, `defn`, `loop`, `loop`, & `fn`), the
 vector that comes first where you specify lexical bindings.
 
-See also [binding form](#binding_form)
+See also [binding form](#binding-form)
 
 
 <a name="libspec"></a>
@@ -501,4 +501,4 @@ built-in core data structures are values.
 ### variadic
 
 A function that can take a variable number of arguments.
-See also [rest args](#rest_args).
+See also [rest args](#rest-args).
