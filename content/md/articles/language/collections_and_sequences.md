@@ -583,6 +583,7 @@ index of a vector or for the value in a set. If the key is not present,
 ;; in a set, returns the value itself if present
 (get #{1 10 100 2 20 200} 1)
 ;; ⇒ 1
+```
 
 ```klipse-clojure
 ;; returns nil if key is not present
@@ -1137,6 +1138,7 @@ returned.
 ```klipse-clojure
 (get-in family [:son :pants])
 ;; ⇒ nil
+```
 
 ```klipse-clojure
 (def locations
