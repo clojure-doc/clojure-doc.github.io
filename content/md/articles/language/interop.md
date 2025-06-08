@@ -1,5 +1,6 @@
 {:title "Language: Java Interop"
  :page-index 2500
+ :toc true
  :layout :page}
 
 This guide covers:

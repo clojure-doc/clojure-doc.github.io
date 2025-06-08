@@ -1,6 +1,6 @@
 {:title "Language: Collections and Sequences"
  :page-index 2300
- :klipse true
+ :klipse true :toc true
  :layout :page}
 
 This guide covers:

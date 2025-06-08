@@ -1,6 +1,6 @@
 {:title "Language: Functions"
  :page-index 2100
- :klipse true
+ :klipse true :toc true
  :layout :page}
 
 This guide covers:
