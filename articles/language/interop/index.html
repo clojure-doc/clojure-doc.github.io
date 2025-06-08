@@ -324,7 +324,34 @@ that delegates to a Clojure function:</p><pre><code class="clojure">(let [f   (f
               (f)))]
         (.run obj))  ; ⇒ nil
 ;; outputs "Executed from a function"
-</code></pre><p>TBD: more realistic examples | <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p><h2 id="clojure-functions-implement-runnable-and-callable">Clojure Functions Implement Runnable and Callable</h2><p>Note that Clojure functions implement <code>java.lang.Runnable</code> and
+</code></pre><p>TBD: more realistic examples | <a href="https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute">How to Contribute</a></p><h2 id="consuming-java-streams">Consuming Java Streams</h2><p>The <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html">Java Streams API</a>
+introduced in Java 8 provided a way to work with collections of data in a
+functional style: <code>filter</code>, <code>map</code>, <code>reduce</code>, <code>iterate</code>, and so on. We're used
+to this in Clojure because <code>clojure.core</code> provides these operations across
+sequences. In Clojure, that means we can apply those functions to anything
+that can be coerced into a sequence, such as vectors, lists, sets, maps, and
+anything in the Java world that implements
+<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Iterable.html"><code>java.lang.Iterable</code></a>.
+Unfortunately, Java Streams are not <code>Iterable</code> so they were hard to consume
+with Clojure until Clojure 1.12 added four functions that can consume them:</p><ul><li><code>(stream-seq! stream)</code> -- consume a Stream and produce a Clojure sequence,</li><li><code>(stream-reduce! f init stream)</code> -- reduce a Stream using <code>f</code> and the <code>init</code> value; <code>init</code> is optional,</li><li><code>(stream-transduce! xf f init stream)</code> -- transduce a Stream using <code>xf</code>, <code>f</code> and the <code>init</code> value; <code>init</code> is optional,</li><li><code>(stream-into! to-coll xf stream)</code> -- consume a Stream and add its elements to a collection <code>coll</code>; <code>xf</code> is optional.</li></ul><pre><code class="clojure">user=&gt; (import '(java.util.stream Stream))
+java.util.stream.Stream
+user=&gt; (Stream/iterate 0 inc) ; like Clojure's (iterate inc 0)
+#object[java.util.stream.ReferencePipeline$Head 0x3291cfad "java.util.stream.ReferencePipeline$Head@3291cfad"]
+user=&gt; (take 5 *1) ; streams are not coercible to sequences
+Error printing return value (IllegalArgumentException) at clojure.lang.RT/seqFrom (RT.java:577).
+Don't know how to create ISeq from: java.util.stream.ReferencePipeline$Head
+user=&gt; (Stream/iterate 0 inc)
+#object[java.util.stream.ReferencePipeline$Head 0x10fa7b74 "java.util.stream.ReferencePipeline$Head@10fa7b74"]
+user=&gt; (take 5 (stream-seq! *1)) ; consume the stream as a sequence
+(0 1 2 3 4)
+</code></pre><p>Several methods in the Java standard library produce Streams, for example:</p><pre><code class="clojure">user=&gt; (import '(java.nio.file Files Path))
+java.nio.file.Path
+user=&gt; (Files/lines (Path/of "deps.edn" (into-array String []))) ; =&gt; Stream
+#object[java.util.stream.ReferencePipeline$Head 0x3fbda43d "java.util.stream.ReferencePipeline$Head@3fbda43d"]
+user=&gt; (stream-into! [] (filter #(re-find #"deps" %)) *1)
+["{:deps {org.clojure/clojure {:mvn/version \"RELEASE\"}}"
+ "  :build {:deps {io.github.clojure/tools.build"]
+</code></pre><h2 id="clojure-functions-implement-runnable-and-callable">Clojure Functions Implement Runnable and Callable</h2><p>Note that Clojure functions implement <code>java.lang.Runnable</code> and
 <code>java.util.concurrent.Callable</code> directly so you can pass functions to
 methods found in various classes from the <code>java.util.concurrent</code> package.</p><p>For example, to run a function in a new thread:</p><pre><code class="clojure">(let [t (Thread. (fn []
                    (println "I am running in a separate thread")))]
