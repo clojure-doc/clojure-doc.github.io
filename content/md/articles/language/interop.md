@@ -515,6 +515,8 @@ the interface:
   (instance? java.io.FileFilter ff))  ; ⇒ true
 ```
 
+### Functional Interface
+
 In Clojure 1.12, a Java interface that is declared `@FunctionalInterface` can
 be inferred from from the context and can be satisfied with a regular Clojure
 function. `java.io.FilenameFilter` is such an interface, so you can pass a
@@ -550,7 +552,7 @@ This will compile without error but when called, the first argument to
 `accept` -- the directory object -- will be bound to `&` and the second
 argument to `accept` -- the filename string -- will be bound to `more`.
 
-### Example 1
+#### Example: reify
 
 The following example demonstrates how instances created with `reify` are passed around
 as regular Java objects:
@@ -585,6 +587,8 @@ methods delegate to Clojure functions. The same example, rewritten with delegati
 ;; ⇒ [#object[java.io.File 0x5d512ddb "/home/sean/oss/clojure-doc.github.io/deps.edn"]]
 ```
 
+#### Example: Functional Interface
+
 As above, in Clojure 1.12, because `java.io.FilenameFilter` is a functional interface, you can pass a Clojure function directly:
 
 ``` clojure
@@ -600,6 +604,28 @@ As above, in Clojure 1.12, because `java.io.FilenameFilter` is a functional inte
 
 > Note: we need the type hint on `f` here because `.listFiles` has multiple overloads for the same arity, and we need to distinguish a `FilenameFilter` from a `FileFilter`.
 
+#### Example: Supplier
+
+Another change in Clojure 1.12 was to implement the
+[Supplier Functional Interface](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html)
+for Clojure derefable types (`delay`, `future`, `atom`, etc). Prior to Clojure
+1.12, you would have to use `reify` to adapt these Clojure types, when passing
+such objects to Java methods that expect a `Supplier`. For example,
+[`java.util.logging.Logger/.log`](https://docs.oracle.com/en/java/javase/21/docs/api/java.logging/java/util/logging/Logger.html#log(java.util.logging.Level,java.util.function.Supplier)):
+
+``` clojure
+user=> (import '(java.util.logging Level Logger))
+java.util.logging.Logger
+user=> (def logger (Logger/getLogger (str *ns*)))
+#'user/logger
+user=> (.log logger Level/INFO (delay (str "Compute " "Me!")))
+Jun 07, 2025 9:01:47 PM clojure.lang.Reflector invokeMatchingMethod
+INFO: Compute Me!
+```
+
+The `Supplier` object is only dereferenced if the log message is actually
+produced (i.e., the log level is high enough to log the message), so this can
+be useful for deferring expensive computations until they are actually needed.
 
 ## Extending Java Classes With proxy
 
