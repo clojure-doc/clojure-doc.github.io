@@ -649,6 +649,50 @@ that delegates to a Clojure function:
 
 TBD: more realistic examples | [How to Contribute](https://github.com/clojure-doc/clojure-doc.github.io#how-to-contribute)
 
+## Consuming Java Streams
+
+The [Java Streams API](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html)
+introduced in Java 8 provided a way to work with collections of data in a
+functional style: `filter`, `map`, `reduce`, `iterate`, and so on. We're used
+to this in Clojure because `clojure.core` provides these operations across
+sequences. In Clojure, that means we can apply those functions to anything
+that can be coerced into a sequence, such as vectors, lists, sets, maps, and
+anything in the Java world that implements
+[`java.lang.Iterable`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Iterable.html).
+Unfortunately, Java Streams are not `Iterable` so they were hard to consume
+with Clojure until Clojure 1.12 added four functions that can consume them:
+
+* `(stream-seq! stream)` -- consume a Stream and produce a Clojure sequence,
+* `(stream-reduce! f init stream)` -- reduce a Stream using `f` and the `init` value; `init` is optional,
+* `(stream-transduce! xf f init stream)` -- transduce a Stream using `xf`, `f` and the `init` value; `init` is optional,
+* `(stream-into! to-coll xf stream)` -- consume a Stream and add its elements to a collection `coll`; `xf` is optional.
+
+``` clojure
+user=> (import '(java.util.stream Stream))
+java.util.stream.Stream
+user=> (Stream/iterate 0 inc) ; like Clojure's (iterate inc 0)
+#object[java.util.stream.ReferencePipeline$Head 0x3291cfad "java.util.stream.ReferencePipeline$Head@3291cfad"]
+user=> (take 5 *1) ; streams are not coercible to sequences
+Error printing return value (IllegalArgumentException) at clojure.lang.RT/seqFrom (RT.java:577).
+Don't know how to create ISeq from: java.util.stream.ReferencePipeline$Head
+user=> (Stream/iterate 0 inc)
+#object[java.util.stream.ReferencePipeline$Head 0x10fa7b74 "java.util.stream.ReferencePipeline$Head@10fa7b74"]
+user=> (take 5 (stream-seq! *1)) ; consume the stream as a sequence
+(0 1 2 3 4)
+```
+
+Several methods in the Java standard library produce Streams, for example:
+
+``` clojure
+user=> (import '(java.nio.file Files Path))
+java.nio.file.Path
+user=> (Files/lines (Path/of "deps.edn" (into-array String []))) ; => Stream
+#object[java.util.stream.ReferencePipeline$Head 0x3fbda43d "java.util.stream.ReferencePipeline$Head@3fbda43d"]
+user=> (stream-into! [] (filter #(re-find #"deps" %)) *1)
+["{:deps {org.clojure/clojure {:mvn/version \"RELEASE\"}}"
+ "  :build {:deps {io.github.clojure/tools.build"]
+```
+
 
 ## Clojure Functions Implement Runnable and Callable
 
