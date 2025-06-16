@@ -761,6 +761,19 @@ Syntax error (IllegalArgumentException) compiling . at (REPL:4:29).
 More than one matching method found: submit
 ```
 
+## Clojure Functions may act as Functional Interfaces
+
+Clojure developers can [invoke Java methods taking Functional Interfaces by passing functions](https://clojure.org/reference/java_interop#functional_interfaces) 
+with matching arity.
+
+Example:
+
+``` clojure
+(.list (io/as-file "/tmp") (fn [_ fname] (str/ends-with? fname ".csv")))
+
+;; Note: Here we need a type hint to help the compiler distinguish between FilenameFilter and FileFilter
+(.listFiles (io/file "/tmp") ^java.io.FilenameFilter (fn [_ fname] (str/ends-with? fname ".json")))
+```
 
 ## gen-class and How to Implement Java Classes in Clojure
 
