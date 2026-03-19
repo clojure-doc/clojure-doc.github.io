@@ -3,10 +3,10 @@
  :layout :page}
 
 The last
-["State of the Union" Clojure survey](https://clojure.org/news/2024/12/02/state-of-clojure-2024) indicated
+["State of the Union" Clojure survey](https://clojure.org/news/2026/02/18/state-of-clojure-2025) indicated
 that Emacs is still the most popular editing environment (although it has
-fallen to just under 40%), followed by IntelliJ/Cursive and VS Code
-(equal at 23%), and then Vim (around 12.5%).
+fallen to just under 38%), followed by VS Code (around 25%) and IntelliJ/Cursive
+(around 21%), and then Vim (around 12.5%).
 
 If you are already using one of these editors, follow one of the guides for that
 editor to integrate a REPL-based Clojure workflow, so that you can focus on
@@ -51,14 +51,6 @@ which is built into Emacs 29 and above).
 
 See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_emacs_most_popular_most_customizable) for more links ("most customizable").
 
-## IntelliJ/Cursive
-
-[Cursive](https://cursive-ide.com/) provides a full-featured IDE for Clojure.
-This is a great choice if you are already familiar with IntelliJ and/or you
-plan to work with both Clojure and Java (or other JVM-based languages).
-
-See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_intellij_clojure_with_a_java_tilt) for more links ("Java tilt").
-
 ## VS Code
 
 [Calva](https://calva.io/) is a comprehensive package for editing Clojure
@@ -69,6 +61,14 @@ via [nREPL](https://github.com/nrepl/nREPL)
 and [cider-nrepl](https://github.com/clojure-emacs/cider-nrepl).
 
 See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_vs_code_rapidly_evolving_beginner_friendly) for more links ("beginner friendly").
+
+## IntelliJ/Cursive
+
+[Cursive](https://cursive-ide.com/) provides a full-featured IDE for Clojure.
+This is a great choice if you are already familiar with IntelliJ and/or you
+plan to work with both Clojure and Java (or other JVM-based languages).
+
+See the [Editors guide on clojure.org](https://clojure.org/guides/editors#_intellij_clojure_with_a_java_tilt) for more links ("Java tilt").
 
 ## Vim/Neovim
 
