@@ -153,7 +153,7 @@ data transformations:
 Other getting started documentation you might find useful:
 
   * [Learn Clojure](https://clojure.org/guides/learn/clojure): the official guide to learning the language
-  * [Programming at the REPL](https://clojure.org/guides/learn/clojure): the official guide to working with the REPL
+  * [Programming at the REPL](https://clojure.org/guides/repl/introduction): the official guide to working with the REPL
   * [Clojure Editors](/articles/tutorials/editors/)
   * [Clojure Distilled](http://yogthos.github.io/ClojureDistilled.html):
     introduction to core concepts necessary for working with Clojure

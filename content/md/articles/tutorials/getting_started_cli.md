@@ -191,7 +191,7 @@ Other getting started documentation you might find useful:
 
   * [Getting Started](https://clojure.org/guides/getting_started): the official Clojure CLI guide
   * [Learn Clojure](https://clojure.org/guides/learn/clojure): the official guide to learning the language
-  * [Programming at the REPL](https://clojure.org/guides/learn/clojure): the official guide to working with the REPL
+  * [Programming at the REPL](https://clojure.org/guides/repl/introduction): the official guide to working with the REPL
   * [Clojure Editors](/articles/tutorials/editors/)
 
 
